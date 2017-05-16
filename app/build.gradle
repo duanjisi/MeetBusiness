@@ -3,10 +3,10 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 24
     buildToolsVersion "25.0.2"
-
+//    buildToolsVersion "23.0.1"
     defaultConfig {
         applicationId "com.boss66.meetbusiness"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
@@ -22,5 +22,12 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:24.2.1'
+//    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:appcompat-v7:24.1.1'
+//    compile 'com.android.support:appcompat-v7:19.+'
+//    compile 'com.android.support:appcompat-v7:23.2.0'
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
+    compile 'com.alibaba:fastjson:1.2.9'
+    compile 'net.jodah:typetools:0.4.0'
+    compile 'com.umeng.analytics:analytics:latest.integration'
 }

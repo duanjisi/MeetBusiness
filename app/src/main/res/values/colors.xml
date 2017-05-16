@@ -3,4 +3,44 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+
+    <color name="menu_text_color_default">#f69600</color>
+
+    <!-- 线条颜色 start -->
+    <color name="line_color_gray_d1">#d1d1d1</color>
+    <color name="line_color_gray_d2">#dddddd</color>
+    <color name="line_color_gray_c7">#c7c7c7</color>
+    <color name="ios7_white">#ffa8a8a8</color>
+    <color name="line_school">#d9d9d9</color>
+    <!-- 线条颜色 end -->
+
+    <!-- 字体颜色 start -->
+    <color name="text_color_black">#333333</color>
+    <color name="text_color_gray_6">#666666</color>
+    <color name="text_color_gray_9">#999999</color>
+    <color name="text_color_gray_a">#aaaaaa</color>
+    <color name="text_color_gray_b">#8D8D8D</color>
+    <color name="text_color_gray_c">#BCBCBC</color>
+    <color name="text_color_gray_d">#B3B3B3</color>
+    <color name="text_color_blue">#607398</color>
+    <!-- 字体颜色 end -->
+
+    <!-- 友盟相关 -->
+    <color name="umeng_socialize_comments_bg">#F4F4F4</color>
+    <color name="umeng_socialize_color_group">#2c3035</color>
+    <color name="umeng_socialize_list_item_textcolor">#333333</color>
+    <color name="umeng_socialize_list_item_bgcolor">#FFFFFF</color>
+    <color name="umeng_socialize_divider">#E6E6E6</color>
+    <color name="umeng_socialize_text_time">#999999</color>
+    <color name="umeng_socialize_text_title">#464f61</color>
+    <color name="umeng_socialize_text_friends_list">#959696</color>
+    <color name="umeng_socialize_text_share_content">#666666</color>
+    <color name="umeng_socialize_ucenter_bg">#EEEEEE</color>
+    <color name="umeng_socialize_text_ucenter">#595959</color>
+    <color name="umeng_socialize_edit_bg">#C4C4C4</color>
+    <color name="umeng_socialize_grid_divider_line">#F8F8F8</color>
+    <color name="umeng_socialize_web_bg">#F4F4F4</color>
+    <color name="umeng_socialize_shareactivity">#D4E0E5</color>
+    <color name="umeng_socialize_shareactivitydefault">#ffffff</color>
 </resources>

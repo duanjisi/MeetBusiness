@@ -1,3 +1,29 @@
 <resources>
     <string name="app_name">约淘</string>
+
+    <string name="loading">数据加载中， 请稍候&#8230;</string>
+
+    <!--QQ,微信开放平台-->
+    <string name="weixin_app_id2">wxac34006c18243289</string>
+    <string name="weixin_app_id">wxcd7d86f3f2c04077</string>
+    <string name="weixin_app_secret">dd51e4ff815cfe313551a86a6402e886</string>
+
+    <string name="qq_app_id">1105914390</string>
+    <string name="qq_app_key">SbGk2WdT16aUKe4Z</string>
+    <string name="alipay_app_id">2016092201948966</string>
+
+    <!-- 错误提示 start -->
+    <string name="error_generic_error">网络连接出现错误！</string>
+    <string name="error_generic_server_down">连接不上服务器，请重试！</string>
+    <string name="parse_json_erro">服务器数据异常!</string>
+    <string name="error_no_internet">没有连接到网络</string>
+    <string name="error_server_down">服务器异常，请稍候再试...</string>
+    <string name="other_login">使用其他方式登录</string>
+
+
+    <string name="main_setting">个人设置</string>
+    <string name="main_production">我的作品</string>
+    <string name="main_video">上传视频</string>
+    <string name="main_price">售货价</string>
+    <string name="main_shopping_cart">购物车</string>
 </resources>
