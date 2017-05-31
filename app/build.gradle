@@ -26,4 +26,5 @@ dependencies {
     compile 'com.alibaba:fastjson:1.2.9'
     compile 'net.jodah:typetools:0.4.0'
     compile 'com.umeng.analytics:analytics:latest.integration'
+    compile 'com.github.jdsjlzx:LRecyclerView:1.3.4'
 }
