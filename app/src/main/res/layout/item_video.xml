@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.boss66.meetbusiness.widget.RoundImageView
+        android:id="@+id/iv_bg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="11dp"
+        android:layout_marginRight="11dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/person" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/iv_bg"
+        android:layout_alignRight="@+id/iv_bg"
+        android:layout_below="@+id/iv_bg"
+        android:layout_marginTop="10dp">
+
+        <com.boss66.meetbusiness.widget.CircleImageView
+            android:id="@+id/iv_author"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_marginLeft="5.5dp"
+            android:src="@drawable/person" />
+
+        <TextView
+            android:id="@+id/tv_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5.5dp"
+            android:layout_toRightOf="@+id/iv_author"
+            android:drawablePadding="4dp"
+            android:drawableRight="@drawable/lady"
+            android:text="Andy"
+            android:textColor="#293d55"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_praiseNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5.5dp"
+            android:drawableLeft="@drawable/like"
+            android:drawablePadding="4dp"
+            android:text="9871"
+            android:textColor="#8e97a5"
+            android:textSize="13sp" />
+    </RelativeLayout>
+</RelativeLayout>

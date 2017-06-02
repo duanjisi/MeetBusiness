@@ -1,12 +1,29 @@
 <resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="AppTheme.Base">
+        <!-- Customize your theme here. -->
+        <item name="windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/material</item>
+        <item name="colorPrimaryDark">@color/material_dark</item>
+        <item name="colorAccent">@color/material</item>
+        <item name="drawerArrowStyle">@style/AppTheme.Base.DrawerArrowToggele</item>
+    </style>
+
+    <style name="AppTheme.Base.DrawerArrowToggele" parent="Base.Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/white</item>
+    </style>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
+    <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
+    <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+    <!--<item name="colorPrimary">@color/colorPrimary</item>-->
+    <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+    <!--<item name="colorAccent">@color/colorAccent</item>-->
+    <!--</style>-->
 
     <style name="VerticalWeight">
         <item name="android:layout_width">match_parent</item>
@@ -24,5 +41,24 @@
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:singleLine">true</item>
         <item name="android:textColor">@drawable/sel_main_menu_navigation_text</item>
+    </style>
+
+    <style name="HorizontalWeight">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="MessageRadioBtn" parent="@style/HorizontalWeight">
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">15.5sp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingRight">4dp</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:textColor">@drawable/sel_main_bottom_navigation_text</item>
     </style>
 </resources>
