@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="16dp"
+    android:paddingTop="32dp">
+
+    <com.boss66.meetbusiness.widget.CircleImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="83dp"
+        android:layout_height="83dp"
+        android:src="@drawable/person" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Andy"
+        android:textColor="@color/text_color_black"
+        android:textSize="16.5sp" />
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_top"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="32dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:drawablePadding="13.5dp"
+            android:drawableTop="@drawable/sel_main_active"
+            android:gravity="center_horizontal"
+            android:text="好友动态" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:drawablePadding="13.5dp"
+            android:drawableTop="@drawable/sel_main_msg"
+            android:gravity="center_horizontal"
+            android:text="消息" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:drawablePadding="13.5dp"
+            android:drawableTop="@drawable/sel_main_private"
+            android:gravity="center_horizontal"
+            android:text="私信" />
+    </LinearLayout>
+</LinearLayout>

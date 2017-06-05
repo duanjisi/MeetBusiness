@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/rb_setting"
+            android:icon="@drawable/sel_main_setting"
+            android:title="@string/main_setting" />
+        <item
+            android:id="@+id/rb_production"
+            android:icon="@drawable/sel_main_production"
+            android:title="@string/main_production" />
+        <item
+            android:id="@+id/rb_video"
+            android:icon="@drawable/sel_main_video"
+            android:title="@string/main_video" />
+
+        <item
+            android:id="@+id/rb_price"
+            android:icon="@drawable/sel_main_price"
+            android:title="@string/main_price" />
+        <item
+            android:id="@+id/rb_shopping"
+            android:icon="@drawable/sel_main_shopping"
+            android:title="@string/main_shopping_cart" />
+    </group>
+</menu>

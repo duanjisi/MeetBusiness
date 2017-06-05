@@ -3,10 +3,11 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-
+    <color name="white">#ffffff</color>
 
     <color name="menu_text_color_default">#f69600</color>
-
+    <color name="main_checked_color">#8e97a5</color>
+    <color name="main_default_color">#293d55</color>
     <!-- 线条颜色 start -->
     <color name="line_color_gray_d1">#d1d1d1</color>
     <color name="line_color_gray_d2">#dddddd</color>
@@ -43,4 +44,8 @@
     <color name="umeng_socialize_web_bg">#F4F4F4</color>
     <color name="umeng_socialize_shareactivity">#D4E0E5</color>
     <color name="umeng_socialize_shareactivitydefault">#ffffff</color>
+
+    <color name="material_dark">#303F9F</color>
+    <!-- toolbar-->
+    <color name="material">#3F51B5</color>
 </resources>
