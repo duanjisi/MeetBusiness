@@ -13,7 +13,7 @@ import com.boss66.meetbusiness.entity.VideoEntity;
 import com.boss66.meetbusiness.util.ImageLoaderUtils;
 import com.boss66.meetbusiness.util.UIUtils;
 import com.boss66.meetbusiness.widget.CircleImageView;
-import com.boss66.meetbusiness.widget.RoundImageView;
+import com.boss66.meetbusiness.widget.RoundImage;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -64,14 +64,14 @@ public class VideoAdapter extends BaseRecycleViewAdapter {
     }
 
     public static class VideoView extends RecyclerView.ViewHolder {
-        private RoundImageView ivBg;
+        private RoundImage ivBg;
         private CircleImageView ivAvatar;
         private TextView tvAuthor;
         private TextView tvPraiseNum;
 
         public VideoView(View itemView) {
             super(itemView);
-            ivBg = (RoundImageView) itemView.findViewById(R.id.iv_bg);
+            ivBg = (RoundImage) itemView.findViewById(R.id.iv_bg);
             ivAvatar = (CircleImageView) itemView.findViewById(R.id.iv_author);
             tvAuthor = (TextView) itemView.findViewById(R.id.tv_author);
             tvPraiseNum = (TextView) itemView.findViewById(R.id.tv_praiseNum);
