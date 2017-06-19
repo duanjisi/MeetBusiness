@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -12,7 +13,9 @@
         android:layout_marginLeft="11dp"
         android:layout_marginRight="11dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/person" />
+        android:src="@drawable/person"
+        app:round_borderRadius="8dp"
+        app:round_type="1" />
 
     <RelativeLayout
         android:layout_width="match_parent"
