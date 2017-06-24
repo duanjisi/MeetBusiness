@@ -1,6 +1,8 @@
 package com.boss66.meetbusiness.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 
 import com.boss66.meetbusiness.R;
 import com.boss66.meetbusiness.activity.base.BaseActivity;
+import com.boss66.meetbusiness.activity.shoppingCar.ShoppingCarActivity;
 import com.boss66.meetbusiness.fragment.MainDiscoverFragment;
 import com.boss66.meetbusiness.fragment.MainFocusFragment;
 import com.boss66.meetbusiness.fragment.MainFragment;
@@ -53,6 +56,9 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
     private MainFragment mainFocusFragment, mainDiscoverFragment, mainNearFragment;
     private RadioButton mFocus, mDiscover, mNear;
 
+    private RadioButton rb_shopping;
+    private Handler handler ;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +76,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
 
 
     private void initViews() {
+        handler= new Handler();
         imageLoader = ImageLoaderUtils.createImageLoader(context);
         mCursorIm = (ImageView) findViewById(R.id.im_cursor);
         mCursorImWidth = UIUtils.setCursorIm(context, rl_line, mCursorIm, PAGE_COUNT);
@@ -111,6 +118,8 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
         mViewPager.setAdapter(adapter);
         mViewPager.addOnPageChangeListener(new MyPageChangeListener());
         mViewPager.setCurrentItem(VIEW_PAGER_PAGE_1);
+
+        rb_shopping = (RadioButton) findViewById(R.id.rb_shopping);
     }
 
     @Override
@@ -220,7 +229,21 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
                     showToast("售货价", true);
                     break;
                 case R.id.rb_shopping:
-                    showToast("购物车", true);
+//                    showToast("购物车", true);
+                    rb_shopping.setChecked(false);
+
+
+                    Intent intent = new Intent(HomePagerActivity.this, ShoppingCarActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.activity_in, R.anim.activity_no);
+
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            drawerLayout.closeDrawer(rl_left);
+                        }
+                    },500);
+
                     break;
                 default:
                     break;
