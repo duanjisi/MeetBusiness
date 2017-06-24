@@ -1,4 +1,5 @@
 package com.boss66.meetbusiness.http;
+
 import com.alibaba.fastjson.TypeReference;
 
 /**

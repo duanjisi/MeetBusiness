@@ -5,13 +5,13 @@
 package com.boss66.meetbusiness.http;
 
 public class PreRspPojo {
-    public Integer code;
+    public Integer Code;
     public String msg;
 
     public Integer state;
-    public Integer status;
-    public String result;
+    public Integer Status;
+//    public String result;
 
     public String message;
-    public String data;
+    public String Data;
 }

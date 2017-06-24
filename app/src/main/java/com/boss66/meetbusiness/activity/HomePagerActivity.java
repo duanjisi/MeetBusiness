@@ -127,7 +127,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
 
                 break;
             case R.id.iv_avatar:
-
+                openActivity(testActivity.class);
                 break;
         }
     }

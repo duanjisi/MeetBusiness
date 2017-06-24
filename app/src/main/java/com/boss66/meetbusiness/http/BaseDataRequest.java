@@ -13,7 +13,6 @@ import com.boss66.meetbusiness.App;
 import com.boss66.meetbusiness.Constants;
 import com.boss66.meetbusiness.R;
 import com.boss66.meetbusiness.db.dao.JsonDao;
-import com.boss66.meetbusiness.entity.JsonEntity;
 import com.boss66.meetbusiness.util.MycsLog;
 import com.boss66.meetbusiness.util.NetworkUtil;
 import com.boss66.meetbusiness.util.ToastUtil;
@@ -35,29 +34,45 @@ public abstract class BaseDataRequest<T> {
     protected Object[] mParams;
     private JsonDao jsonDao;
 
+    public static final int REQUEST_METHOD_GET = 1000;
+    public static final int REQUEST_METHOD_POST = 1010;
+    public static final int REQUEST_METHOD_PUT = 1011;
+    public static final int REQUEST_METHOD_DELETE = 1100;
+
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
     protected BaseDataRequest(String tag, Object... params) {
         mGenericPojoClazz = (Class<T>) TypeResolver.resolveRawArgument(BaseDataRequest.class, getClass());
         mTag = tag;
         mParams = params;
-//        jsonDao = JsonDao.getInstance();
     }
 
 
     public void send(final RequestCallback callback) {
-        final Request request = new Request.Builder()
-                .url(getApiUrl())
-                .post(getBody())
-                .tag(mTag)
-                .build();
-//        String dbJson = dbRequest();
-//        MycsLog.v("存在缓存数据:" + dbJson);
-//        if (dbJson != null && !dbJson.equals("")) {//数据库存在数据
-//            updateRequest(request, dbJson, callback);//网络请求更新数据库里数据
-//        } else {
-//            netRequest(request, callback);//网络请求
-//        }
+        String url = getApiUrl();
+        final Request.Builder builder = new Request.Builder()
+                .url(url);
+        if (!url.contains("public")) {
+            if (App.getInstance().isLogin()) {
+                builder.addHeader("Authorization", App.getInstance().getToken());
+            }
+        }
+        Request request = null;
+        int method = getRequestMethod();
+        switch (method) {
+            case REQUEST_METHOD_GET:
+                request = builder.get().tag(mTag).build();
+                break;
+            case REQUEST_METHOD_POST:
+                request = builder.post(getBody()).tag(mTag).build();
+                break;
+            case REQUEST_METHOD_PUT:
+                request = builder.put(getBody()).tag(mTag).build();
+                break;
+            case REQUEST_METHOD_DELETE:
+                request = builder.delete(getBody()).tag(mTag).build();
+                break;
+        }
         netRequest(request, callback);//网络请求
     }
 
@@ -90,17 +105,16 @@ public abstract class BaseDataRequest<T> {
                 PreRspPojo preRspPojo = null;
                 try {
                     preRspPojo = JSON.parseObject(rspContent, PreRspPojo.class);
-                    MycsLog.d("返回的code为" + preRspPojo.code);
-                    switch (preRspPojo.code) {
-                        case 1://正常
+                    MycsLog.d("返回的code为" + preRspPojo.Code);
+                    switch (preRspPojo.Code) {
+                        case 0://正常
                             final T retT;
-//                            jsonDao.save(switchJsonEntity(rspContent));
                             if (BaseDataRequest.this instanceof PageDataRequest) {
-                                retT = (T) JSON.parseObject(preRspPojo.result,
+                                retT = (T) JSON.parseObject(preRspPojo.Data,
                                         ((PageDataRequest) BaseDataRequest.this).getSubPojoType());
                             } else {
                                 if (isParse()) {
-                                    retT = JSON.parseObject(preRspPojo.result, mGenericPojoClazz);
+                                    retT = JSON.parseObject(preRspPojo.Data, mGenericPojoClazz);
                                 } else {
                                     retT = JSON.parseObject(rspContent, mGenericPojoClazz);
                                 }
@@ -112,9 +126,6 @@ public abstract class BaseDataRequest<T> {
                                 }
                             });
                             break;
-//                        case 401://token无效，注销当前登录
-//                            deviceOutLine(preRspPojo.message);
-//                            break;
                         case 10011:
                             //新增错误返回码：10011，通知移动端最近登录设备改变取消用户登录状态
                             MycsLog.d("收到了退出消息");
@@ -122,7 +133,7 @@ public abstract class BaseDataRequest<T> {
                             break;
                         default:
                             final PreRspPojo finalPreRspPojo = preRspPojo;
-                            if (finalPreRspPojo.status == 401) {
+                            if (finalPreRspPojo.Status == 401) {
                                 deviceOutLine(finalPreRspPojo.message);
                             } else {
                                 mHandler.post(new Runnable() {
@@ -143,7 +154,6 @@ public abstract class BaseDataRequest<T> {
                             callback.onFailure(App.getInstance().getString(R.string.error_server_down));
                         }
                     });
-//                    MycsLog.e(e);
                 }
             }
         });
@@ -167,42 +177,42 @@ public abstract class BaseDataRequest<T> {
         ToastUtil.showLong(App.getInstance().getApplicationContext(), msg);
     }
 
-    private String dbRequest() {
-        Map<String, String> map = getParams();
-        String userId = "";
-//        if (map.containsKey(K.Request.USER_ID)) {
-//            userId = map.get(K.Request.USER_ID);
+//    private String dbRequest() {
+//        Map<String, String> map = getParams();
+//        String userId = "";
+////        if (map.containsKey(K.Request.USER_ID)) {
+////            userId = map.get(K.Request.USER_ID);
+////        }
+//        Map<String, String> authMap = HttpUtil.getEncryptionParams(map);
+//        String authKey = authMap.get("authKey");
+//        JsonEntity entity = jsonDao.QureJson(authKey, userId);
+//        String json = null;
+//        if (entity != null) {
+//            json = entity.getJson();
 //        }
-        Map<String, String> authMap = HttpUtil.getEncryptionParams(map);
-        String authKey = authMap.get("authKey");
-        JsonEntity entity = jsonDao.QureJson(authKey, userId);
-        String json = null;
-        if (entity != null) {
-            json = entity.getJson();
-        }
-        return json;
-    }
+//        return json;
+//    }
 
-    /**
-     * 转换缓存实体
-     *
-     * @param jsonStr
-     * @return
-     */
-    private JsonEntity switchJsonEntity(String jsonStr) {
-        JsonEntity entity = new JsonEntity();
-        Map<String, String> map = getParams();
-        String userId = "";
-//        if (map.containsKey(K.Request.USER_ID)) {
-//            userId = map.get(K.Request.USER_ID);
-//        }
-        Map<String, String> authMap = HttpUtil.getEncryptionParams(map);
-        String authKey = authMap.get("authKey");
-        entity.setUserId(userId);
-        entity.setAuthKey(authKey);
-        entity.setJson(jsonStr);
-        return entity;
-    }
+//    /**
+//     * 转换缓存实体
+//     *
+//     * @param jsonStr
+//     * @return
+//     */
+//    private JsonEntity switchJsonEntity(String jsonStr) {
+//        JsonEntity entity = new JsonEntity();
+//        Map<String, String> map = getParams();
+//        String userId = "";
+////        if (map.containsKey(K.Request.USER_ID)) {
+////            userId = map.get(K.Request.USER_ID);
+////        }
+//        Map<String, String> authMap = HttpUtil.getEncryptionParams(map);
+//        String authKey = authMap.get("authKey");
+//        entity.setUserId(userId);
+//        entity.setAuthKey(authKey);
+//        entity.setJson(jsonStr);
+//        return entity;
+//    }
 
     protected abstract boolean isParse();
 
@@ -210,19 +220,20 @@ public abstract class BaseDataRequest<T> {
 
     private RequestBody getBody() {
         FormEncodingBuilder formEncodingBuilder = new FormEncodingBuilder();
-        Map<String, String> encryptionParams = HttpUtil.getEncryptionParams(getParams());
-        MycsLog.v("获取到的encryptionParams" + encryptionParams);
-        for (Map.Entry<String, String> entry : encryptionParams.entrySet()) {
-            if (entry != null) {
-                formEncodingBuilder.add(entry.getKey(), entry.getValue());
-//                formEncodingBuilder.add()
+        Map<String, String> map = getParams();
+        if (map != null) {
+            Map<String, String> encryptionParams = HttpUtil.getEncryptionParams(map);
+            MycsLog.v("获取到的encryptionParams" + encryptionParams);
+            for (Map.Entry<String, String> entry : encryptionParams.entrySet()) {
+                if (entry != null) {
+                    formEncodingBuilder.add(entry.getKey(), entry.getValue());
+                }
             }
+            MycsLog.d("Request\nAPI:" + getApiUrl() + "?" + OkHttpUtil.formatParams(encryptionParams));
+        } else {
+            formEncodingBuilder.addEncoded("body", "123456");
         }
-
-        MycsLog.d("Request\nAPI:" + getApiUrl() + "?" + OkHttpUtil.formatParams(encryptionParams));
-
         RequestBody body = formEncodingBuilder.build();
-
         return body;
     }
 
@@ -232,6 +243,8 @@ public abstract class BaseDataRequest<T> {
     }
 
     protected abstract String getApiPath();
+
+    protected abstract int getRequestMethod();
 
     public String getApiUrl() {
         return getApiPath();
