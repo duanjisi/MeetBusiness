@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/dp_10">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="标题"
+            android:textColor="@color/text_color_gray_9" />
+
+        <EditText
+            android:id="@+id/et_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:background="@null"
+            android:hint="包含商品名称"
+            android:paddingBottom="@dimen/dp_18"
+            android:paddingRight="@dimen/dp_6"
+            android:paddingTop="@dimen/dp_18"
+            android:imeOptions="actionNext"
+            android:textColor="@color/text_color_black"
+            android:textCursorDrawable="@drawable/shape_edittext_cursor" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_color_gray_d2" />
+
+</LinearLayout>

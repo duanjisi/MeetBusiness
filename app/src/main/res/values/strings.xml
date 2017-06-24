@@ -24,9 +24,40 @@
     <string name="main_setting">个人设置</string>
     <string name="main_production">我的作品</string>
     <string name="main_video">上传视频</string>
-    <string name="main_price">售货价</string>
+    <string name="main_price">售货架</string>
     <string name="main_shopping_cart">购物车</string>
 
     <string name="open">open</string>
     <string name="close">close</string>
+
+    <string name="upload_goods">上传商品</string>
+    <string name="goods_attr_name">属性名称</string>
+    <string name="goods_attr_name_example">例如：颜色</string>
+    <string name="goods_attr_class">属性分类</string>
+    <string name="goods_attr_class_example">例如：红色、橙色、绿色</string>
+    <string name="add_goods_attr">添加属性</string>
+    <string name="add_goods_pic">添加图片</string>
+    <string name="goods_repertory">库存</string>
+    <string name="input_goods_price">填写商品单价</string>
+    <string name="goods_price">价格  ￥</string>
+    <string name="take_photos">拍照</string>
+    <string name="from_the_mobile_phone_photo_album_choice">从手机相册选择</string>
+
+    <!-- 相册多选 -->
+    <string name="mis_folder_all">所有图片</string>
+    <string name="mis_preview">预览</string>
+    <string name="mis_msg_no_camera">没有找到系统的相机</string>
+    <string name="mis_msg_amount_limit">所选图片超过了数量限制</string>
+    <string name="mis_action_done">完成</string>
+    <string name="mis_action_button_string">%1$s(%2$d/%3$d)</string>
+    <string name="mis_photo_unit">Shot</string>
+    <string name="mis_tip_take_photo">拍照</string>
+    <string name="mis_error_image_not_exist">Image error</string>
+    <string name="mis_error_no_permission">没有权限</string>
+    <string name="mis_permission_dialog_title">权限被拒绝</string>
+    <string name="mis_permission_dialog_ok">OK</string>
+    <string name="mis_permission_dialog_cancel">取消</string>
+    <string name="mis_permission_rationale">存储器读权限需要选择文件.</string>
+    <string name="mis_permission_rationale_write_storage">存储写入权限需要保存图像.</string>
+    <string name="giving_camera_permissions">没有相机权限！</string>
 </resources>
