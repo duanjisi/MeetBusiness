@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.boss66.meetbusiness.R;
 import com.boss66.meetbusiness.activity.base.BaseActivity;
+import com.boss66.meetbusiness.activity.vendingRack.VendingRackHomeActivity;
 import com.boss66.meetbusiness.activity.shoppingCar.ShoppingCarActivity;
 import com.boss66.meetbusiness.fragment.MainDiscoverFragment;
 import com.boss66.meetbusiness.fragment.MainFocusFragment;
@@ -135,7 +136,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
 
                 break;
             case R.id.iv_avatar:
-
+                openActivity(testActivity.class);
                 break;
         }
     }
@@ -226,7 +227,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
                     showToast("上传视频", true);
                     break;
                 case R.id.rb_price:
-                    showToast("售货价", true);
+                    openActivity(VendingRackHomeActivity.class);
                     break;
                 case R.id.rb_shopping:
 //                    showToast("购物车", true);

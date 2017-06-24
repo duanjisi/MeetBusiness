@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/tv_get"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="get请求"
+            android:textColor="@color/text_color_black" />
+
+        <Button
+            android:id="@+id/tv_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="post请求"
+            android:textColor="@color/text_color_black" />
+
+        <Button
+            android:id="@+id/tv_put"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="put请求"
+            android:textColor="@color/text_color_black" />
+
+        <Button
+            android:id="@+id/tv_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="delete请求"
+            android:textColor="@color/text_color_black" />
+
+        <Button
+            android:id="@+id/tv_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="登录请求"
+            android:textColor="@color/text_color_black" />
+
+        <Button
+            android:id="@+id/tv_praise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="点赞请求"
+            android:textColor="@color/text_color_black" />
+
+        <Button
+            android:id="@+id/tv_unpraise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="取消点赞请求"
+            android:textColor="@color/text_color_black" />
+    </LinearLayout>
+
+
+</RelativeLayout>
