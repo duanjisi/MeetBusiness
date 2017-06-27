@@ -46,8 +46,10 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
         <activity android:name=".activity.testActivity"></activity>
-        <activity android:name=".activity.shoppingCar.ShoppingCarActivity"
+        <activity
+            android:name=".activity.shoppingCar.ShoppingCarActivity"
             android:screenOrientation="portrait"></activity>
     </application>
 </manifest>

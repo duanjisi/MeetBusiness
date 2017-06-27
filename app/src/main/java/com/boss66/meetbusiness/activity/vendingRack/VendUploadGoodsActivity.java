@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.boss66.meetbusiness.R;
 import com.boss66.meetbusiness.adapter.VendUploadGoodsAdapter;
+import com.boss66.meetbusiness.entity.VendUploadEntity;
 import com.boss66.meetbusiness.listener.PermissionListener;
 import com.boss66.meetbusiness.util.FileUtils;
 import com.boss66.meetbusiness.util.KeyboardUtils;
@@ -68,7 +69,7 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
     private Button bt_upload;
     private LRecyclerViewAdapter mLRecyclerViewAdapter = null;
     private VendUploadGoodsAdapter adapter;
-    private List<String> list;
+    private List<VendUploadEntity> list;
     private int attrSize = 1;
 
     private LinearLayout ll_img;
@@ -113,7 +114,8 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
         adapter = new VendUploadGoodsAdapter(this);
         list = new LinkedList<>();
         for (int i = 0; i < attrSize; i++) {
-            list.add("库存：" + i);
+            VendUploadEntity entity = new VendUploadEntity();
+            list.add(entity);
         }
         adapter.setDataList(list);
         adapter.setOnDelListener(new VendUploadGoodsAdapter.onSwipeListener() {
@@ -121,11 +123,7 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
             public void onDel(int pos) {
                 Toast.makeText(VendUploadGoodsActivity.this, "删除:" + pos, Toast.LENGTH_SHORT).show();
                 attrSize--;
-                adapter.getDataList().remove(pos);
-                adapter.notifyItemRemoved(pos);
-                if (pos != (adapter.getDataList().size())) { // 如果移除的是最后一个，忽略
-                    adapter.notifyItemRangeChanged(pos, adapter.getDataList().size() - pos);
-                }
+                adapter.remove(pos);
                 if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
                     mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 }
@@ -138,7 +136,6 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
                 return false;
             }
         });
-
         rv_content.setLScrollListener(new LRecyclerView.LScrollListener() {
             @Override
             public void onScrollUp() {
@@ -238,7 +235,8 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
             case R.id.tv_add_attr:
                 KeyboardUtils.hideSoftInput(VendUploadGoodsActivity.this);
                 attrSize++;
-                list.add("库存：" + attrSize);
+                VendUploadEntity entity = new VendUploadEntity();
+                list.add(entity);
                 int size = attrSize + 1;
                 if (size >= 0)
                     adapter.add("cesss", 0);
@@ -259,7 +257,7 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
                     int size = adapter.getItemCount() - 1;
                     if (size >= 0) {
                         LinearLayoutManager layoutManager = (LinearLayoutManager) rv_content.getLayoutManager();
-                        layoutManager.scrollToPositionWithOffset(size, 0);
+                        layoutManager.scrollToPositionWithOffset(size, -100);
                         //layoutManager.setStackFromEnd(true);
                     }
                     break;
