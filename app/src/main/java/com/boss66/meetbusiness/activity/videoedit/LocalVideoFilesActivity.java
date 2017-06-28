@@ -27,6 +27,7 @@ import android.widget.TextView;
 import com.boss66.meetbusiness.R;
 import com.boss66.meetbusiness.activity.base.BaseActivity;
 import com.boss66.meetbusiness.adapter.BaseRecycleViewAdapter;
+import com.boss66.meetbusiness.domain.VideoEntity;
 import com.boss66.meetbusiness.util.ImageResizer;
 import com.boss66.meetbusiness.util.UIUtils;
 import com.boss66.meetbusiness.widget.RecyclingImageView;
@@ -72,7 +73,7 @@ public class LocalVideoFilesActivity extends BaseActivity {
         tv_title = (TextView) findViewById(R.id.tv_title);
         //gv_video = (GridView) findViewById(R.id.gv_video);
         tv_title.setText("选择本地视频");
-        rv_video.setLayoutManager(new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false));
+        rv_video.setLayoutManager(new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false));
 //        mImageThumbSize = getResources().getDimensionPixelSize(
 //                R.dimen.image_thumbnail_size);
 //        mImageThumbSpacing = getResources().getDimensionPixelSize(

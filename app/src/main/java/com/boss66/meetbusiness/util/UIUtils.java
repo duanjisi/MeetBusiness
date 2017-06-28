@@ -53,6 +53,14 @@ public final class UIUtils {
         return ScreenHeight;
     }
 
+    public static void showView(View v) {
+        v.setVisibility(View.VISIBLE);
+    }
+
+    public static void hindView(View v) {
+        v.setVisibility(View.GONE);
+    }
+
     public static int getScreenWidth(Context context) {
         if (context == null) {
             return 0;

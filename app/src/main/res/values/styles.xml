@@ -81,6 +81,18 @@
         <item name="android:textColor">@drawable/sel_main_bottom_navigation_text</item>
     </style>
 
+    <style name="editBtn" parent="@style/HorizontalWeight">
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">13.5sp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingRight">4dp</item>
+        <item name="android:drawablePadding">5dp</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:textColor">@drawable/sel_main_bottom_navigation_text</item>
+    </style>
     <!-- 自定义仿IOS的ActionSheet底部Dialog的样式 ，有模糊效果 -->
     <style name="ActionSheetDialogStyle" parent="@android:style/Theme.Dialog">
 

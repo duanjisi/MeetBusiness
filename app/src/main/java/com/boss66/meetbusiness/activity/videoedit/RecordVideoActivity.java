@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -193,11 +194,10 @@ public class RecordVideoActivity extends BaseActivity implements View.OnClickLis
                     if (data != null) {
                         String url = data.getStringExtra("filePath");
                         Log.i("info", "===============url:" + url);
-//                        Bundle bundle = new Bundle();
-//                        bundle.putInt("type", RECORD_VIDEO);
-//                        bundle.putString("sendType", "video");
-//                        bundle.putString("videoPath", url);
                         showToast("启动到编辑视频界面!", true);
+                        if (!TextUtils.isEmpty(url)) {
+                            EditVideoActivity.startActivity(this, url);
+                        }
                     }
                     break;
             }
