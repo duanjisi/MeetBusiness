@@ -8,15 +8,13 @@
     <RelativeLayout
         android:id="@+id/rl_item"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/shape_vend_item_bg_round">
-
+        android:layout_height="wrap_content">
+        <!--android:background="@drawable/shape_vend_item_bg_round"-->
         <ImageView
             android:id="@+id/iv_icon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/person" />
+            android:scaleType="fitXY"/>
 
         <ImageView
             android:id="@+id/iv_close"

@@ -1,18 +1,28 @@
 package com.boss66.meetbusiness.adapter;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.boss66.meetbusiness.R;
 import com.boss66.meetbusiness.adapter.base.ListBaseAdapter;
 import com.boss66.meetbusiness.adapter.base.SuperViewHolder;
+import com.boss66.meetbusiness.entity.VendUploadEntity;
 import com.boss66.meetbusiness.widget.SwipeMenuView;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by GMARUnity on 2017/6/19.
  */
-public class VendUploadGoodsAdapter extends ListBaseAdapter<String> {
+public class VendUploadGoodsAdapter extends ListBaseAdapter<VendUploadEntity> {
+
 
     public VendUploadGoodsAdapter(Context context) {
         super(context);
@@ -26,6 +36,70 @@ public class VendUploadGoodsAdapter extends ListBaseAdapter<String> {
     @Override
     public void onBindItemHolder(SuperViewHolder holder, final int position) {
         ImageView iv_delete = holder.getView(R.id.iv_delete);
+        final EditText et_title = holder.getView(R.id.et_title);
+        final EditText et_content = holder.getView(R.id.et_content);
+        final String title = et_title.getText().toString();
+        String content = et_content.getText().toString();
+        final VendUploadEntity entity = mDataList.get(position);
+        if (et_title.getTag() instanceof TextWatcher) {
+            et_title.removeTextChangedListener((TextWatcher) et_title.getTag());
+        }
+        if (et_content.getTag() instanceof TextWatcher) {
+            et_content.removeTextChangedListener((TextWatcher) et_content.getTag());
+        }
+        TextWatcher titlewatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable != null) {
+                    String s = editable.toString().trim();
+                    if (!TextUtils.isEmpty(s)) {
+                        entity.setTitle("" + s);
+                    }
+                    Log.i("title:", "et_title + afterTextChanged:" + s);
+                }
+
+                //confirmlist.get(position).setMessage(editable.toString());
+            }
+        };
+        TextWatcher contentwatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable != null) {
+                    String s = editable.toString().trim();
+                    if (!TextUtils.isEmpty(s)) {
+                        entity.setContent("" + s);
+                    }
+                    Log.i("title:", "et_content + afterTextChanged:" + s);
+                }
+                //confirmlist.get(position).setMessage(editable.toString());
+            }
+        };
+        et_title.addTextChangedListener(titlewatcher);
+        et_title.setTag(titlewatcher);
+        et_content.addTextChangedListener(contentwatcher);
+        et_content.setTag(contentwatcher);
+        et_title.setText(entity.getTitle());
+        et_content.setText(entity.getContent());
+        Log.i("title:", "" + title + "  position:" + position + "  size:" + getItemCount()
+                + "  list:" + mDataList.size());
 //
         //这句话关掉IOS阻塞式交互效果 并依次打开左滑右滑
         ((SwipeMenuView) holder.itemView).setIos(false).setLeftSwipe(true);
@@ -44,8 +118,14 @@ public class VendUploadGoodsAdapter extends ListBaseAdapter<String> {
     }
 
     public void add(String text, int position) {
-        mDataList.add(text);
-        notifyItemInserted(getItemCount());
+        int oldsize = getItemCount();
+        VendUploadEntity entity = new VendUploadEntity();
+        mDataList.add(entity);
+        int size = getItemCount();
+        notifyItemInserted(size);
+        if (size >= 0)
+            notifyItemRangeChanged(size, 1);
+        //notifyItemInserted(getItemCount());
     }
 
     /**

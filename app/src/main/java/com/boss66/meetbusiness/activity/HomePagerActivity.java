@@ -119,6 +119,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
         mViewPager.setAdapter(adapter);
         mViewPager.addOnPageChangeListener(new MyPageChangeListener());
         mViewPager.setCurrentItem(VIEW_PAGER_PAGE_1);
+
         rb_shopping = (RadioButton) findViewById(R.id.rb_shopping);
     }
 
@@ -129,6 +130,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
 
                 break;
             case R.id.tv_msg:
+                openActivity(MessageActivity.class);
 
                 break;
             case R.id.tv_info:
@@ -235,14 +237,14 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
 
                     Intent intent = new Intent(HomePagerActivity.this, ShoppingCarActivity.class);
                     startActivity(intent);
-                    overridePendingTransition(R.anim.activity_in, R.anim.activity_no);
-
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            drawerLayout.closeDrawer(rl_left);
-                        }
-                    }, 500);
+//                    overridePendingTransition(R.anim.activity_in, R.anim.activity_no);
+//
+//                    handler.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            drawerLayout.closeDrawer(rl_left);
+//                        }
+//                    },500);
 
                     break;
                 default:
