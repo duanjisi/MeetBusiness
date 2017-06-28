@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/top_navigation_bar_height">
+
+        <ImageView
+            android:id="@+id/iv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="11dp"
+            android:src="@drawable/nav_close" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="分享"
+            android:textColor="@color/main_default_color"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/tv_publish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="11dp"
+            android:background="@color/record_progress_red"
+            android:padding="10dp"
+            android:text="发布"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_color_gray_d1"></LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_11"
+        android:layout_marginRight="@dimen/dp_11"
+        android:layout_marginTop="@dimen/dp_11">
+
+        <ImageView
+            android:id="@+id/iv_video_bg"
+            android:layout_width="96dp"
+            android:layout_height="169dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/person" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/rl00"
+            android:layout_marginBottom="@dimen/dp_11"
+            android:layout_toRightOf="@+id/iv_video_bg"
+            android:background="@null"
+            android:gravity="start"
+            android:hint="写下此刻的想法"
+            android:padding="5.5dp"
+            android:textColorHint="@color/text_color_gray_6"
+            android:textSize="13.5sp" />
+
+        <RelativeLayout
+            android:id="@+id/rl00"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/iv_video_bg"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/iv_video_bg">
+
+            <TextView
+                android:id="@+id/tv_public"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="公开" />
+
+            <TextView
+                android:id="@+id/tv_friendy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dp_11"
+                android:layout_toLeftOf="@+id/tv_add_location"
+                android:text="好友" />
+
+            <TextView
+                android:id="@+id/tv_add_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="添加地理位置>" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_below="@+id/iv_video_bg"
+            android:layout_marginTop="@dimen/dp_11"
+            android:background="@color/line_color_gray_d1"></LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_11"
+        android:layout_marginRight="@dimen/dp_11"
+        android:layout_marginTop="22dp">
+
+        <TextView
+            android:id="@+id/tv_link_goods"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/selected"
+            android:drawablePadding="@dimen/dp_11"
+            android:text="添加关联商品" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_link_goods"
+            android:layout_below="@+id/tv_link_goods"
+            android:layout_marginTop="@dimen/dp_11">
+
+            <ImageView
+                android:id="@+id/iv_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/selected" />
+
+            <com.boss66.meetbusiness.widget.RoundImageView
+                android:id="@+id/iv_good_bg"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginLeft="@dimen/dp_11"
+                android:layout_toRightOf="@+id/iv_tag"
+                android:src="@drawable/person"
+                app:round_borderRadius="8dp"
+                app:round_type="1" />
+
+            <TextView
+                android:id="@+id/tv_good_describe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_11"
+                android:layout_toRightOf="@+id/iv_good_bg"
+                android:ellipsize="end"
+                android:lines="2"
+                android:text="适当放宽适当放宽四大皆空放假了的时间思考的方式房间"
+                android:textColor="@color/main_default_color"
+                android:textSize="13.5sp" />
+
+            <TextView
+                android:id="@+id/tv_good_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/tv_good_describe"
+                android:layout_below="@+id/tv_good_describe"
+                android:layout_marginTop="13dp"
+                android:text="化妆品净含量：100ml" />
+
+            <TextView
+                android:id="@+id/tv_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/tv_good_content"
+                android:layout_below="@+id/tv_good_content"
+                android:layout_marginTop="13dp"
+                android:text="113"
+                android:textColor="@color/edit_red" />
+
+            <TextView
+                android:id="@+id/tv_volum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/tv_good_content"
+                android:layout_marginTop="13dp"
+                android:text="库存：3000"
+                android:textColor="@color/text_color_gray_a" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RadioGroup
+        android:id="@+id/radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginTop="44dp"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <RadioButton
+            android:id="@+id/rb_qq"
+            style="@style/ShareBtn"
+            android:checked="true"
+            android:drawableTop="@drawable/sel_share_qq"
+            android:text="@string/share_platform_qq" />
+
+        <RadioButton
+            android:id="@+id/rb_zone"
+            style="@style/ShareBtn"
+            android:drawableTop="@drawable/sel_share_qzone"
+            android:text="@string/share_platform_zone" />
+
+        <RadioButton
+            android:id="@+id/rb_wx"
+            style="@style/ShareBtn"
+            android:drawableTop="@drawable/sel_share_wx"
+            android:text="@string/share_platform_wx" />
+
+        <RadioButton
+            android:id="@+id/rb_wx_circle"
+            style="@style/ShareBtn"
+            android:drawableTop="@drawable/sel_share_circle"
+            android:text="@string/share_platform_wx_circle" />
+    </RadioGroup>
+
+</LinearLayout>

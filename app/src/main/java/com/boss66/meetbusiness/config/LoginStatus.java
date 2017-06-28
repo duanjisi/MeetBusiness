@@ -18,7 +18,6 @@ public class LoginStatus {
     private static final String TOKEN = "Token";
     private static final String USERID = "UserId";
     private static final String USERNAME = "UserName";
-
     private static LoginStatus sLoginStatus;
     private SharedPreferences mPreferences;
 

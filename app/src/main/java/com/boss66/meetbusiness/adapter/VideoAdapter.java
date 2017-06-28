@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.boss66.meetbusiness.R;
-import com.boss66.meetbusiness.entity.VideoEntity;
 import com.boss66.meetbusiness.util.ImageLoaderUtils;
 import com.boss66.meetbusiness.util.UIUtils;
 import com.boss66.meetbusiness.widget.CircleImageView;

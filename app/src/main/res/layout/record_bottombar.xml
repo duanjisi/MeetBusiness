@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_record"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/shot_not_begin" />
+
+        <TextView
+            android:id="@+id/tv_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="21dp"
+            android:layout_toLeftOf="@+id/tv_next"
+            android:drawablePadding="6dp"
+            android:drawableTop="@drawable/shot_cleanup"
+            android:gravity="center_horizontal"
+            android:text="清除"
+            android:textColor="@color/white"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="21dp"
+            android:drawablePadding="6dp"
+            android:drawableTop="@drawable/shot_next_step"
+            android:text="下一步"
+            android:textColor="@color/white"
+            android:visibility="gone" />
+
+
+        <LinearLayout
+            android:id="@+id/ll_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="43dp"
+            android:layout_marginTop="4dp"
+            android:orientation="vertical">
+
+            <com.boss66.meetbusiness.widget.RoundImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/person"
+                app:round_borderRadius="8dp"
+                app:round_type="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="6dp"
+                android:text="相册"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <com.boss66.meetbusiness.widget.recordclip.RecordProgressView
+        android:id="@+id/record_progress"
+        android:layout_width="match_parent"
+        android:layout_height="16dp"
+        android:background="@color/white" />
+</LinearLayout>
