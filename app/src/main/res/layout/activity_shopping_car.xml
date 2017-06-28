@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/rl_top"
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="50dp">
@@ -14,7 +14,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:id="@+id/img_back"
-            android:src="@drawable/ic_launcher"
+            android:src="@drawable/nav_return"
             android:layout_width="40dp"
             android:layout_height="40dp" />
 
@@ -41,9 +41,77 @@
 
     </RelativeLayout>
 
-    <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
-        android:id="@+id/recycler_view"
+
+    <TextView
+        android:id="@+id/tv_delete"
+        android:textColor="@color/white"
+        android:background="@color/edit_red"
+        android:gravity="center"
+        android:text="删除"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_above="@id/tv_delete"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <View
+            android:background="@color/text_color_black"
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp">
+
+
+        </View>
+
+        <ImageView
+            android:id="@+id/img_choose"
+            android:src="@drawable/selected"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
+
+        <TextView
+
+            android:textSize="15sp"
+            android:layout_toRightOf="@id/img_choose"
+            android:layout_marginLeft="4dp"
+            android:text="全选"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textSize="15sp"
+                android:text="总计:  "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:textColor="@color/edit_red"
+                android:textSize="15sp"
+                android:text="¥ 111"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <com.github.jdsjlzx.recyclerview.LRecyclerView
+        android:layout_below="@id/rl_top"
+        android:layout_above="@id/rl_bottom"
+        android:id="@+id/rcv_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-</LinearLayout>
+        />
+</RelativeLayout>
