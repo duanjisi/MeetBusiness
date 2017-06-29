@@ -73,4 +73,13 @@
     <string name="main_focus">关注</string>
     <string name="main_discover">发现</string>
     <string name="main_near">附近</string>
+
+    <string name="share_platform_qq">QQ好友</string>
+    <string name="share_platform_zone">QQ空间</string>
+    <string name="share_platform_wx">微信好友</string>
+    <string name="share_platform_wx_circle">微信朋友圈</string>
+
+    <string name="video_yj">滤镜</string>
+    <string name="video_voice">音效</string>
+    <string name="video_bg">封面</string>
 </resources>

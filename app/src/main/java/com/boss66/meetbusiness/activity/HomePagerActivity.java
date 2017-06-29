@@ -16,11 +16,11 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.boss66.meetbusiness.R;
 import com.boss66.meetbusiness.activity.base.BaseActivity;
 import com.boss66.meetbusiness.activity.vendingRack.VendingRackHomeActivity;
 import com.boss66.meetbusiness.activity.shoppingCar.ShoppingCarActivity;
+import com.boss66.meetbusiness.activity.videoedit.RecordVideoActivity;
 import com.boss66.meetbusiness.fragment.MainDiscoverFragment;
 import com.boss66.meetbusiness.fragment.MainFocusFragment;
 import com.boss66.meetbusiness.fragment.MainFragment;
@@ -58,7 +58,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
     private RadioButton mFocus, mDiscover, mNear;
 
     private RadioButton rb_shopping;
-    private Handler handler ;
+    private Handler handler;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,7 +77,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
 
 
     private void initViews() {
-        handler= new Handler();
+        handler = new Handler();
         imageLoader = ImageLoaderUtils.createImageLoader(context);
         mCursorIm = (ImageView) findViewById(R.id.im_cursor);
         mCursorImWidth = UIUtils.setCursorIm(context, rl_line, mCursorIm, PAGE_COUNT);
@@ -130,6 +130,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
 
                 break;
             case R.id.tv_msg:
+                openActivity(MessageActivity.class);
 
                 break;
             case R.id.tv_info:
@@ -224,7 +225,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
                     showToast("我的作品", true);
                     break;
                 case R.id.rb_video:
-                    showToast("上传视频", true);
+                    openActivity(RecordVideoActivity.class);
                     break;
                 case R.id.rb_price:
                     openActivity(VendingRackHomeActivity.class);
@@ -236,14 +237,14 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
 
                     Intent intent = new Intent(HomePagerActivity.this, ShoppingCarActivity.class);
                     startActivity(intent);
-                    overridePendingTransition(R.anim.activity_in, R.anim.activity_no);
-
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            drawerLayout.closeDrawer(rl_left);
-                        }
-                    },500);
+//                    overridePendingTransition(R.anim.activity_in, R.anim.activity_no);
+//
+//                    handler.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            drawerLayout.closeDrawer(rl_left);
+//                        }
+//                    },500);
 
                     break;
                 default:

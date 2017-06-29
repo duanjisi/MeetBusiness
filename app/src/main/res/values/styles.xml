@@ -48,6 +48,20 @@
         <item name="android:textColor">@drawable/sel_main_menu_navigation_text</item>
     </style>
 
+    <style name="ShareBtn" parent="@style/HorizontalWeight">
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">13.5sp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:drawablePadding">16.5dp</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingRight">4dp</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:textColor">@drawable/sel_main_bottom_navigation_text</item>
+    </style>
+
     <style name="HorizontalWeight">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">match_parent</item>
@@ -67,6 +81,18 @@
         <item name="android:textColor">@drawable/sel_main_bottom_navigation_text</item>
     </style>
 
+    <style name="editBtn" parent="@style/HorizontalWeight">
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">13.5sp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingRight">4dp</item>
+        <item name="android:drawablePadding">5dp</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:textColor">@drawable/sel_main_bottom_navigation_text</item>
+    </style>
     <!-- 自定义仿IOS的ActionSheet底部Dialog的样式 ，有模糊效果 -->
     <style name="ActionSheetDialogStyle" parent="@android:style/Theme.Dialog">
 
@@ -91,5 +117,14 @@
     <style name="ActionSheetDialogAnimation" parent="@android:style/Animation.Dialog">
         <item name="android:windowEnterAnimation">@anim/actionsheet_in</item>
         <item name="android:windowExitAnimation">@anim/actionsheet_out</item>
+    </style>
+
+    <style name="dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item><!--边框-->
+        <item name="android:windowIsFloating">true</item><!--是否浮现在activity之上-->
+        <item name="android:windowIsTranslucent">false</item><!--半透明-->
+        <item name="android:windowNoTitle">true</item><!--无标题-->
+        <item name="android:windowBackground">@color/transparent</item><!--背景透明-->
+        <item name="android:backgroundDimEnabled">false</item><!--模糊-->
     </style>
 </resources>

@@ -2,24 +2,18 @@ package com.boss66.meetbusiness.activity.shoppingCar;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.boss66.meetbusiness.R;
 import com.boss66.meetbusiness.activity.base.BaseActivity;
-import com.boss66.meetbusiness.adapter.MenuViewTypeAdapter;
-import com.boss66.meetbusiness.entity.ViewTypeBean;
-import com.boss66.meetbusiness.listener.OnItemClickListener;
-import com.boss66.meetbusiness.widget.ListViewDecoration;
-import com.yanzhenjie.recyclerview.swipe.Closeable;
-import com.yanzhenjie.recyclerview.swipe.OnSwipeMenuItemClickListener;
-import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
-import com.yanzhenjie.recyclerview.swipe.SwipeMenuCreator;
-import com.yanzhenjie.recyclerview.swipe.SwipeMenuItem;
-import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
+import com.boss66.meetbusiness.activity.vendingRack.VendingRackHomeActivity;
+import com.boss66.meetbusiness.adapter.ShoppingCarAdapter;
+import com.boss66.meetbusiness.adapter.VendingRackHomeAdapter;
+import com.boss66.meetbusiness.entity.ShoopingEntity;
+import com.github.jdsjlzx.recyclerview.LRecyclerView;
+import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
+import com.github.jdsjlzx.recyclerview.ProgressStyle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +25,13 @@ import java.util.List;
 
 public class ShoppingCarActivity extends BaseActivity implements View.OnClickListener {
 
-    private List<ViewTypeBean> mViewTypeBeanList;
-    private MenuViewTypeAdapter menuAdapter;
+    private LRecyclerView rcv_content;
+    private LRecyclerViewAdapter mLRecyclerViewAdapter = null;
+    private ShoppingCarAdapter adapter;
+
+    private List<ShoopingEntity> datas;
+
+
 
 
 
@@ -45,34 +44,44 @@ public class ShoppingCarActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void initUI() {
+        rcv_content = (LRecyclerView) findViewById(R.id.rcv_content);
 
-        // 这里只是模拟数据，模拟Item的ViewType，根据ViewType决定显示什么菜单，到时候你可以根据你的数据来决定ViewType。
-        mViewTypeBeanList = new ArrayList<>();
-        for (int i = 0, j = 0; i < 30; i++, j++) {
-            ViewTypeBean viewTypeBean = new ViewTypeBean();
-            if (j == 0) {
-                viewTypeBean.setViewType(MenuViewTypeAdapter.VIEW_TYPE_MENU_NONE);
-                viewTypeBean.setContent("我没有菜单");
-            } else if (j == 1) {
-                viewTypeBean.setViewType(MenuViewTypeAdapter.VIEW_TYPE_MENU_SINGLE);
-                viewTypeBean.setContent("我有1个菜单");
-                j=-1;
+
+        adapter = new ShoppingCarAdapter(this);
+        datas =new ArrayList<>();
+        ShoopingEntity data1 = new ShoopingEntity();
+        data1.setType(1);
+        ShoopingEntity data2 = new ShoopingEntity();
+        data2.setType(2);
+        ShoopingEntity data3 = new ShoopingEntity();
+        data3.setType(1);
+
+        datas.add(data1);
+        datas.add(data2);
+        datas.add(data3);
+        adapter.setDataList(datas);
+        adapter.setOnDelListener(new ShoppingCarAdapter.onSwipeListener() {
+            @Override
+            public void onDel(int pos) {
+                Toast.makeText(ShoppingCarActivity.this, "删除:" + pos, Toast.LENGTH_SHORT).show();
+                adapter.getDataList().remove(pos);
+                adapter.notifyItemRemoved(pos);
+
+                if (pos != (adapter.getDataList().size())) {
+                    adapter.notifyItemRangeChanged(pos, adapter.getDataList().size() - pos);
+                }
+                //且如果想让侧滑菜单同时关闭，需要同时调用 ((CstSwipeDelMenu) holder.itemView).quickClose();
             }
-            mViewTypeBeanList.add(viewTypeBean);
-        }
-        SwipeMenuRecyclerView menuRecyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
-        menuRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        menuRecyclerView.addItemDecoration(new ListViewDecoration());
+        });
+        mLRecyclerViewAdapter = new LRecyclerViewAdapter(adapter);
+        rcv_content.setHeaderViewColor(R.color.material_dark, R.color.material, android.R.color.white);
+        rcv_content.setRefreshProgressStyle(ProgressStyle.Pacman); //设置下拉刷新Progress的样式
+        rcv_content.setFooterViewHint("拼命加载中", "我是有底线的", "网络不给力啊，点击再试一次吧");
+        //View empty = View.inflate(this, R.layout.item_vend_rack_empty, null);
+        rcv_content.setEmptyView(findViewById(R.id.empty_view));
+        rcv_content.setAdapter(mLRecyclerViewAdapter);
+        rcv_content.setLayoutManager(new LinearLayoutManager(this));
 
-        menuRecyclerView.setSwipeMenuCreator(swipeMenuCreator);
-        menuRecyclerView.setSwipeMenuItemClickListener(menuItemClickListener);
-
-        menuAdapter = new MenuViewTypeAdapter(mViewTypeBeanList);
-        menuAdapter.setOnItemClickListener(onItemClickListener);
-
-        menuRecyclerView.setAdapter(menuAdapter);
-
-        findViewById(R.id.img_back).setOnClickListener(this);
 
 
     }
@@ -80,70 +89,9 @@ public class ShoppingCarActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(0, R.anim.activity_out);
+//        overridePendingTransition(0, R.anim.activity_out);
     }
-    /**
-     * 菜单创建器。
-     */
-    private SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
-        @Override
-        public void onCreateMenu(SwipeMenu swipeLeftMenu, SwipeMenu swipeRightMenu, int viewType) {
-            int width = getResources().getDimensionPixelSize(R.dimen.item_height);
 
-            // MATCH_PARENT 自适应高度，保持和内容一样高；也可以指定菜单具体高度，也可以用WRAP_CONTENT。
-            int height = ViewGroup.LayoutParams.MATCH_PARENT;
-
-            if (viewType == MenuViewTypeAdapter.VIEW_TYPE_MENU_NONE) {// 根据Adapter的ViewType来决定菜单的样式、颜色等属性、或者是否添加菜单。
-                // Do nothing.
-            } else if (viewType == MenuViewTypeAdapter.VIEW_TYPE_MENU_SINGLE) {// 需要添加单个菜单的Item。
-                SwipeMenuItem wechatItem = new SwipeMenuItem(ShoppingCarActivity.this)
-                        .setBackgroundDrawable(R.drawable.selector_purple)
-                        .setImage(R.drawable.ic_launcher)
-                        .setText("删除")
-                        .setWidth(width)
-                        .setHeight(height);
-                swipeRightMenu.addMenuItem(wechatItem);
-
-            }
-        }
-    };
-
-    private OnItemClickListener onItemClickListener = new OnItemClickListener() {
-        @Override
-        public void onItemClick(int position) {
-            Toast.makeText(ShoppingCarActivity.this, "我是第" + position + "条。", Toast.LENGTH_SHORT).show();
-        }
-    };
-
-    /**
-     * 菜单点击监听。
-     */
-    private OnSwipeMenuItemClickListener menuItemClickListener = new OnSwipeMenuItemClickListener() {
-        @Override
-        public void onItemClick(Closeable closeable, int adapterPosition, int menuPosition, int direction) {
-            closeable.smoothCloseMenu();// 关闭被点击的菜单。
-
-            if (direction == SwipeMenuRecyclerView.RIGHT_DIRECTION) {
-                Toast.makeText(ShoppingCarActivity.this, "list第" + adapterPosition + "; 右侧菜单第" + menuPosition, Toast.LENGTH_SHORT).show();
-                mViewTypeBeanList.remove(adapterPosition);
-                menuAdapter.notifyItemRemoved(adapterPosition);
-
-                mViewTypeBeanList.remove(adapterPosition-1);
-                menuAdapter.notifyItemRemoved(adapterPosition-1);
-
-            } else if (direction == SwipeMenuRecyclerView.LEFT_DIRECTION) {
-                Toast.makeText(ShoppingCarActivity.this, "list第" + adapterPosition + "; 左侧菜单第" + menuPosition, Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-        }
-        return true;
-    }
 
     @Override
     public void onClick(View v) {

@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="white">#ffffff</color>
+    <color name="transparent">#00000000</color>
 
     <color name="menu_text_color_default">#f69600</color>
     <color name="main_checked_color">#8e97a5</color>
@@ -57,4 +58,20 @@
     <color name="purple_pressed">#9F79EE</color>
     <color name="edit_red">#ED6356</color>
 
+
+    <color name="record_progress_black">#2c2c2c</color>
+    <color name="record_progress_bg">#2c2c2c</color>
+    <color name="record_progress_blue">#368ca8</color>
+    <color name="record_progress_pause">#2c2c2c</color>
+    <color name="record_progress_red">#e85932</color>
+
+    <color name="record_text_default">#ff000000</color>
+    <color name="record_text_selected">#DC143C</color>
+    <color name="record_title_white">#ffffff</color>
+    <color name="record_title_bg_default">#919191</color>
+    <color name="record_title_bg_selected">#616060</color>
+
+
+    <color name="btn_white_normal">#f7f8f8</color>
+    <color name="btn_white_pressed">#b5b5b6</color>
 </resources>
