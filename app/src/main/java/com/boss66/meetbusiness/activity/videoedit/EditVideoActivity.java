@@ -187,8 +187,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
 
         mRadioGroup = (RadioGroup) findViewById(R.id.radio_group);
         mRadioGroup.setOnCheckedChangeListener(new CheckListener());
-
-
         mSeekBarChangedObsesrver = new SeekBarChangedObserver();
         mOriginAudioVolumeSeekBar = (AppCompatSeekBar) findViewById(R.id.origin_audio_volume);
         mOriginAudioVolumeSeekBar.setOnSeekBarChangeListener(mSeekBarChangedObsesrver);
@@ -816,23 +814,5 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                 }
             }
         }
-    }
-
-    public void onResume() {
-        super.onResume();
-        mEditKit.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mEditKit.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mEditKit.stopEditPreview();
-        mEditKit.release();
     }
 }
