@@ -42,6 +42,7 @@
     <string name="goods_price">价格  ￥</string>
     <string name="take_photos">拍照</string>
     <string name="from_the_mobile_phone_photo_album_choice">从手机相册选择</string>
+    <string name="my_order">我的订单</string>
 
     <!-- 相册多选 -->
     <string name="mis_folder_all">所有图片</string>

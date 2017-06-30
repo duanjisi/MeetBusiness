@@ -1,8 +1,6 @@
 package com.boss66.meetbusiness.activity.vendingRack;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -92,7 +90,8 @@ public class VendingRackHomeActivity extends AppCompatActivity implements View.O
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_upload:
-                openActivity(VendUploadGoodsActivity.class, null);
+                openActivity(MyOrderActivity.class, null);
+                //openActivity(VendUploadGoodsActivity.class, null);
                 break;
             case R.id.tv_back:
                 finish();

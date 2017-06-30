@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_18"
+        android:background="#F2F6F9"
+        android:paddingBottom="@dimen/dp_18"
+        android:paddingTop="@dimen/dp_18">
+
+        <TextView
+            android:id="@+id/tv_all_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="￥11"
+            android:textColor="@color/actionsheet_red" />
+
+        <TextView
+            android:id="@+id/tv_all_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/tv_all_price"
+            android:text="共1件：合计"
+            android:textColor="@color/ios7_white" />
+
+        <Button
+            android:id="@+id/bt_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tv_all_price"
+            android:layout_marginTop="@dimen/dp_10"
+            android:background="@drawable/shape_order_round_blue"
+            android:text="退款"
+            android:textColor="@color/umeng_socialize_shareactivitydefault" />
+
+        <Button
+            android:id="@+id/bt_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/bt_1"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_toLeftOf="@id/bt_1"
+            android:background="@drawable/shape_order_round_gary"
+            android:text="退款"
+            android:textColor="@color/text_color_black" />
+
+        <Button
+            android:id="@+id/bt_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/bt_1"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_toLeftOf="@id/bt_2"
+            android:background="@drawable/shape_order_round_gary"
+            android:text="退款"
+            android:textColor="@color/text_color_black" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/dp_18"
+        android:background="@color/line_color_gray_d2" />
+
+</LinearLayout>

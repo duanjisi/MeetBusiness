@@ -16,47 +16,53 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:minHeight="?attr/actionBarSize"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
+            android:paddingBottom="9dp"
+            android:paddingRight="@dimen/dp_10"
+            android:paddingTop="9dp"
             app:layout_scrollFlags="scroll|enterAlways">
 
             <TextView
                 android:id="@+id/tv_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:background="@drawable/nav_close" />
+                android:background="@drawable/nav_return" />
 
             <TextView
                 style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/upload_goods"
+                android:text="@string/my_order"
                 android:textColor="@color/text_color_black"
                 android:textSize="21sp" />
 
         </android.support.v7.widget.Toolbar>
 
+        <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1px"-->
+        <!--android:background="@color/line_color_gray_d2" />-->
     </android.support.design.widget.AppBarLayout>
 
-    <com.github.jdsjlzx.recyclerview.LRecyclerView
-        android:id="@+id/rv_content"
+    <!--<com.github.jdsjlzx.recyclerview.LRecyclerView-->
+    <!--android:id="@+id/rv_content"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:clipToPadding="false"-->
+    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tablayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabIndicatorColor="@color/text_color_black" />
 
-    <Button
-        android:id="@+id/bt_upload"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#ed6356"
-        android:text="提交"
-        android:textColor="@color/white"
-        app:behavior_hideable="true"
-        app:layout_behavior="@string/bottom_sheet_behavior" />
+    </android.support.v4.view.ViewPager>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/mainLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/gallery"
+        android:layout_margin="17.5dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible"></LinearLayout>
+
+    <!--<Gallery-->
+    <!--android:id="@+id/gallery"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="61dp"-->
+    <!--android:layout_above="@+id/ll_bar"-->
+    <!--android:layout_marginLeft="@dimen/dp_11"-->
+    <!--android:layout_marginRight="@dimen/dp_11"></Gallery>-->
+    <HorizontalScrollView
+        android:id="@+id/gallery"
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:layout_above="@+id/ll_bar"
+        android:layout_marginBottom="@dimen/dp_11"
+        android:layout_marginLeft="@dimen/dp_11"
+        android:layout_marginRight="@dimen/dp_11"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/container"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <LinearLayout
+        android:id="@+id/ll_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dp_11"
+        android:layout_marginLeft="@dimen/dp_11"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_edit_00"
+            android:gravity="center"
+            android:text="T"
+            android:textColor="@color/white"
+            android:textSize="40sp" />
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="@dimen/dp_11"
+            android:background="@drawable/bg_edit_01"
+            android:gravity="center"
+            android:text="T"
+            android:textColor="@color/white"
+            android:textSize="40sp" />
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="@dimen/dp_11"
+            android:background="@drawable/bg_edit_02"
+            android:gravity="center"
+            android:text="T"
+            android:textColor="@color/white"
+            android:textSize="40sp" />
+    </LinearLayout>
+</RelativeLayout>
