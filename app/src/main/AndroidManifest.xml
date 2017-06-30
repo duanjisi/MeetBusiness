@@ -78,5 +78,8 @@
         <activity
             android:name=".activity.videoedit.LocalVideoFilesActivity"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.videoedit.LocalMusicActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 </manifest>
