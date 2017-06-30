@@ -12,9 +12,10 @@
         <ImageView
             android:id="@+id/iv_close"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="11dp"
+            android:paddingLeft="@dimen/dp_11"
+            android:paddingRight="@dimen/dp_11"
             android:src="@drawable/nav_close" />
 
         <TextView
@@ -59,6 +60,7 @@
             android:src="@drawable/person" />
 
         <EditText
+            android:id="@+id/et_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/rl00"
