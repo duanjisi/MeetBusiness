@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSeekBar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
@@ -14,8 +17,14 @@ import android.widget.TextView;
 
 import com.boss66.meetbusiness.R;
 import com.boss66.meetbusiness.activity.base.BaseActivity;
+import com.boss66.meetbusiness.adapter.FilterAdapter;
+import com.boss66.meetbusiness.entity.FilterEntity;
 import com.boss66.meetbusiness.util.UIUtils;
 import com.ksyun.media.shortvideo.kit.KSYEditKit;
+import com.ksyun.media.streamer.filter.imgtex.ImgBeautyToneCurveFilter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Johnny on 2017/6/26.
@@ -33,7 +42,13 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     private ImageView ivClose;
     private TextView tvNext, tvSwitcher, tvRecord, tvNative;
 
+    private RecyclerView rv_filter;
+
     public final static String SRC_URL = "srcurl";
+
+    private List<FilterEntity> datas;
+
+    private ImgBeautyToneCurveFilter acvFilter;
 
     public static void startActivity(Context context, String srcurl) {
         Intent intent = new Intent(context, EditVideoActivity.class);
@@ -71,12 +86,120 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         mRadioGroup = (RadioGroup) findViewById(R.id.radio_group);
         mRadioGroup.setOnCheckedChangeListener(new CheckListener());
 
+
         mSeekBarChangedObsesrver = new SeekBarChangedObserver();
         mOriginAudioVolumeSeekBar = (AppCompatSeekBar) findViewById(R.id.origin_audio_volume);
         mOriginAudioVolumeSeekBar.setOnSeekBarChangeListener(mSeekBarChangedObsesrver);
         mBgmVolumeSeekBar = (AppCompatSeekBar) findViewById(R.id.music_audio_volume);
         mBgmVolumeSeekBar.setOnSeekBarChangeListener(mSeekBarChangedObsesrver);
         startEditPreview();
+
+        //先显示滤镜
+        UIUtils.showView(vFilter);
+        UIUtils.hindView(vSound);
+
+        rv_filter = (RecyclerView) findViewById(R.id.rv_filter);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rv_filter.setLayoutManager(manager);
+
+        initData();
+        FilterAdapter adapter = new FilterAdapter(this);
+        adapter.setDataList(datas);
+        rv_filter.setAdapter(adapter);
+        adapter.setItemClickListener(new FilterAdapter.onItemClickListener() {
+            @Override
+            public void onItemClick(int postion) {
+                Log.i("liwya","setItemClickListener"+postion);
+
+                switch (postion) {
+
+                    case 0:
+                        break;
+                    case 1:
+                        acvFilter = new ImgBeautyToneCurveFilter(mEditKit
+                                .getGLRender());
+                        acvFilter.setFromCurveFileInputStream(
+                                EditVideoActivity.this.getResources().openRawResource(R.raw.bohe));
+                        mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
+                        break;
+                    case 2:
+                        acvFilter = new ImgBeautyToneCurveFilter(mEditKit
+                                .getGLRender());
+                        acvFilter.setFromCurveFileInputStream(
+                                EditVideoActivity.this.getResources().openRawResource(R.raw.fugu));
+                        mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
+                        break;
+                    case 3:
+                        acvFilter = new ImgBeautyToneCurveFilter(mEditKit
+                                .getGLRender());
+                        acvFilter.setFromCurveFileInputStream(
+                                EditVideoActivity.this.getResources().openRawResource(R.raw.jiaopian));
+                        mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
+                        break;
+                    case 4:
+                        acvFilter = new ImgBeautyToneCurveFilter(mEditKit
+                                .getGLRender());
+                        acvFilter.setFromCurveFileInputStream(
+                                EditVideoActivity.this.getResources().openRawResource(R.raw.langman));
+                        mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
+                        break;
+                    case 5:
+                        acvFilter = new ImgBeautyToneCurveFilter(mEditKit
+                                .getGLRender());
+                        acvFilter.setFromCurveFileInputStream(
+                                EditVideoActivity.this.getResources().openRawResource(R.raw.mihuan));
+                        mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
+                        break;
+                    case 6:
+                        acvFilter = new ImgBeautyToneCurveFilter(mEditKit
+                                .getGLRender());
+                        acvFilter.setFromCurveFileInputStream(
+                                EditVideoActivity.this.getResources().openRawResource(R.raw.nianhua));
+                        mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
+                        break;
+                    case 7:
+                        acvFilter = new ImgBeautyToneCurveFilter(mEditKit
+                                .getGLRender());
+                        acvFilter.setFromCurveFileInputStream(
+                                EditVideoActivity.this.getResources().openRawResource(R.raw.s1874));
+                        mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
+                        break;
+                    case 8:
+                        acvFilter = new ImgBeautyToneCurveFilter(mEditKit
+                                .getGLRender());
+                        acvFilter.setFromCurveFileInputStream(
+                                EditVideoActivity.this.getResources().openRawResource(R.raw.yinxiang));
+                        mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
+                        break;
+                    case 9:
+                        acvFilter = new ImgBeautyToneCurveFilter(mEditKit
+                                .getGLRender());
+                        acvFilter.setFromCurveFileInputStream(
+                                EditVideoActivity.this.getResources().openRawResource(R.raw.yinyue));
+                        mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
+                        break;
+
+
+                }
+            }
+        });
+
+
+    }
+
+    private void initData() {
+        datas = new ArrayList<>();
+        datas.add(new FilterEntity(R.drawable.wu, "无"));
+        datas.add(new FilterEntity(R.drawable.bohe, "薄荷"));
+        datas.add(new FilterEntity(R.drawable.fugu, "复古"));
+        datas.add(new FilterEntity(R.drawable.jiaopian, "胶片"));
+        datas.add(new FilterEntity(R.drawable.langman, "浪漫"));
+        datas.add(new FilterEntity(R.drawable.mihuan, "迷幻"));
+        datas.add(new FilterEntity(R.drawable.nianhua, "年华"));
+        datas.add(new FilterEntity(R.drawable.s1874, "1874"));
+        datas.add(new FilterEntity(R.drawable.yinxiang, "印象"));
+        datas.add(new FilterEntity(R.drawable.yinyue, "银月"));
     }
 
     private void initEditKit() {
@@ -177,5 +300,24 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                     break;
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mEditKit.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mEditKit.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mEditKit.stopEditPreview();
+        mEditKit.release();
     }
 }
