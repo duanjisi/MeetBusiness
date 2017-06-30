@@ -10,23 +10,19 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.boss66.meetbusiness.R;
 import com.boss66.meetbusiness.activity.base.BaseActivity;
@@ -35,15 +31,9 @@ import com.boss66.meetbusiness.photoedit.OperateUtils;
 import com.boss66.meetbusiness.photoedit.OperateView;
 import com.boss66.meetbusiness.photoedit.TextObject;
 import com.boss66.meetbusiness.util.UIUtils;
-import com.czt.mp3recorder.MP3Recorder;
 import com.boss66.meetbusiness.videorange.VideoThumbnailInfo;
 import com.boss66.meetbusiness.videorange.VideoThumbnailTask;
 import com.ksyun.media.shortvideo.kit.KSYEditKit;
-import com.shuyu.waveview.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.UUID;
 import com.ksyun.media.shortvideo.utils.ShortVideoConstants;
 
 /**
@@ -87,7 +77,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     private boolean isOriginalVoice = false;
     private BottomSheetDialog sheetDialog;
     private boolean mIsRecord = false;
-    private MP3Recorder mRecorder;
+    //    private MP3Recorder mRecorder;
     private int nowTime, allTime = 8;
     private ProgressBar pb_progress_bar;
     private ImageView iv_record;
@@ -249,10 +239,10 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
 
                 break;
             case R.id.iv_record_colse:
-                resolveStopRecord();
+//                resolveStopRecord();
                 break;
             case R.id.iv_record_ok:
-                resolveStopRecord();
+//                resolveStopRecord();
                 if (!TextUtils.isEmpty(filePath))
                     mEditKit.changeBgmMusic(filePath);
                 break;
@@ -346,15 +336,15 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                             Message message = handler.obtainMessage(1);
                             handler.sendMessageDelayed(message, 1000);
                             if (mIsRecord) {
-                                resolvePause();
+//                                resolvePause();
                             } else {
-                                resolveRecord();
+//                                resolveRecord();
                             }
                             break;
                         case MotionEvent.ACTION_UP:
                             isTouch = false;
                             iv_record.setSelected(false);
-                            resolvePause();
+//                            resolvePause();
                             break;
                     }
                     return true;
@@ -384,73 +374,73 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     /**
      * 开始录音
      */
-    private void resolveRecord() {
-        filePath = FileUtils.getAppPath();
-        File file = new File(filePath);
-        if (!file.exists()) {
-            if (!file.mkdirs()) {
-                Toast.makeText(this, "创建文件失败", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }
-        filePath = FileUtils.getAppPath() + UUID.randomUUID().toString() + ".mp3";
-        mRecorder = new MP3Recorder(new File(filePath));
-        mRecorder.setErrorHandler(new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                if (msg.what == MP3Recorder.ERROR_TYPE) {
-                    Toast.makeText(EditVideoActivity.this, "没有麦克风权限", Toast.LENGTH_SHORT).show();
-                    resolveError();
-                }
-            }
-        });
-        try {
-            mRecorder.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Toast.makeText(EditVideoActivity.this, "录音出现异常", Toast.LENGTH_SHORT).show();
-            resolveError();
-            return;
-        }
-        mIsRecord = true;
-    }
-
-    /**
-     * 停止录音
-     */
-    private void resolveStopRecord() {
-        if (sheetDialog != null && sheetDialog.isShowing()) {
-            sheetDialog.dismiss();
-        }
-        if (mRecorder != null && mRecorder.isRecording()) {
-            mRecorder.setPause(false);
-            mRecorder.stop();
-        }
-        mIsRecord = false;
-    }
-
-    //录音异常
-    private void resolveError() {
-        FileUtils.deleteFile(filePath);
-        filePath = "";
-        if (mRecorder != null && mRecorder.isRecording()) {
-            mRecorder.stop();
-        }
-    }
-
-    /**
-     * 暂停
-     */
-    private void resolvePause() {
-        if (!mIsRecord)
-            return;
-        if (mRecorder.isPause()) {
-            mRecorder.setPause(false);
-        } else {
-            mRecorder.setPause(true);
-        }
-    }
+//    private void resolveRecord() {
+//        filePath = FileUtils.getAppPath();
+//        File file = new File(filePath);
+//        if (!file.exists()) {
+//            if (!file.mkdirs()) {
+//                Toast.makeText(this, "创建文件失败", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//        }
+//        filePath = FileUtils.getAppPath() + UUID.randomUUID().toString() + ".mp3";
+//        mRecorder = new MP3Recorder(new File(filePath));
+//        mRecorder.setErrorHandler(new Handler() {
+//            @Override
+//            public void handleMessage(Message msg) {
+//                super.handleMessage(msg);
+//                if (msg.what == MP3Recorder.ERROR_TYPE) {
+//                    Toast.makeText(EditVideoActivity.this, "没有麦克风权限", Toast.LENGTH_SHORT).show();
+//                    resolveError();
+//                }
+//            }
+//        });
+//        try {
+//            mRecorder.start();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            Toast.makeText(EditVideoActivity.this, "录音出现异常", Toast.LENGTH_SHORT).show();
+//            resolveError();
+//            return;
+//        }
+//        mIsRecord = true;
+//    }
+//
+//    /**
+//     * 停止录音
+//     */
+//    private void resolveStopRecord() {
+//        if (sheetDialog != null && sheetDialog.isShowing()) {
+//            sheetDialog.dismiss();
+//        }
+//        if (mRecorder != null && mRecorder.isRecording()) {
+//            mRecorder.setPause(false);
+//            mRecorder.stop();
+//        }
+//        mIsRecord = false;
+//    }
+//
+//    //录音异常
+//    private void resolveError() {
+//        FileUtils.deleteFile(filePath);
+//        filePath = "";
+//        if (mRecorder != null && mRecorder.isRecording()) {
+//            mRecorder.stop();
+//        }
+//    }
+//
+//    /**
+//     * 暂停
+//     */
+//    private void resolvePause() {
+//        if (!mIsRecord)
+//            return;
+//        if (mRecorder.isPause()) {
+//            mRecorder.setPause(false);
+//        } else {
+//            mRecorder.setPause(true);
+//        }
+//    }
 
     final Handler handler = new Handler() {
 
@@ -458,7 +448,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             switch (msg.what) {
                 case 1:
                     if (nowTime >= allTime) {
-                        resolveStopRecord();
+//                        resolveStopRecord();
                         if (!TextUtils.isEmpty(filePath))
                             mEditKit.changeBgmMusic(filePath);
                         Log.i("nowTime:", "filepath" + filePath);

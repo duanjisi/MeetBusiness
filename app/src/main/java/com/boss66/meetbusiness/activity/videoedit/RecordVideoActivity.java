@@ -47,7 +47,7 @@ import java.io.File;
  */
 public class RecordVideoActivity extends BaseActivity implements View.OnClickListener {
     private static String TAG = "RecordActivity";
-    public static final int MAX_DURATION = 20 * 60 * 1000;  //最长拍摄时长
+    public static final int MAX_DURATION = 5 * 60 * 1000;  //最长拍摄时长
     public static final int MIN_DURATION = 5 * 1000;  //最短拍摄时长
     private final static int PERMISSION_REQUEST_CAMERA_AUDIOREC = 1;
 
