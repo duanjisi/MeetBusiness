@@ -2,11 +2,7 @@ package com.boss66.meetbusiness.activity.videoedit;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,57 +11,38 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.widget.AppCompatSeekBar;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.boss66.meetbusiness.R;
 import com.boss66.meetbusiness.activity.base.BaseActivity;
 import com.boss66.meetbusiness.adapter.VideoThumbAdapter;
+import com.boss66.meetbusiness.photoedit.OperateUtils;
+import com.boss66.meetbusiness.photoedit.OperateView;
 import com.boss66.meetbusiness.photoedit.TextObject;
-import com.boss66.meetbusiness.util.FileUtils;
 import com.boss66.meetbusiness.util.UIUtils;
 import com.boss66.meetbusiness.videorange.VideoThumbnailInfo;
 import com.boss66.meetbusiness.videorange.VideoThumbnailTask;
-import com.boss66.meetbusiness.widget.Sticker.StickerView;
 import com.ksyun.media.shortvideo.kit.KSYEditKit;
 import com.ksyun.media.shortvideo.utils.ShortVideoConstants;
-
-import java.util.HashMap;
 
 /**
  * Created by Johnny on 2017/6/26.
  */
-public class EditVideoActivity extends BaseActivity implements View.OnClickListener, StickerView.OnStickerTouchListener {
-    private int[] bubbles = {R.drawable.bubble_00, R.drawable.bubble_01,
-            R.drawable.bubble_02, R.drawable.bubble_03,
-            R.drawable.bubble_04, R.drawable.bubble_05,
-            R.drawable.bubble_06, R.drawable.bubble_07,
-            R.drawable.bubble_08, R.drawable.bubble_09,
-            R.drawable.bubble_10, R.drawable.bubble_11};
-
-    private HashMap<Integer, int[]> maps = new HashMap<>();
+public class EditVideoActivity2 extends BaseActivity implements View.OnClickListener {
 
     private GLSurfaceView mEditPreviewView;
     private KSYEditKit mEditKit;
-    private StickerView stickerView;
     private AppCompatSeekBar mOriginAudioVolumeSeekBar;
     private AppCompatSeekBar mBgmVolumeSeekBar;
     private SeekBarChangedObserver mSeekBarChangedObsesrver;
@@ -75,26 +52,24 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     private RadioGroup mRadioGroup;
     private View vFilter, vSound, vTailor;
     private ImageView ivClose;
-    private TextView tvNext, tvSwitcher, tvRecord, tvNative, tvMore;
-    private RelativeLayout content_layout;
-    private ImageView iv_video_bg;
-    private PopupWindow popupWindow;
-    //    private OperateView operateView;
-    //    private OperateUtils operateUtils;
-//    private Bitmap resizeBmp = null;
-//    final Handler myHandler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            if (msg.what == 1) {
-//                if (content_layout.getWidth() != 0) {
-//                    fillContent();
-//                    addFont();
-//                }
-//            }
-//        }
-//    };
+    private TextView tvNext, tvSwitcher, tvRecord, tvNative;
+    private LinearLayout content_layout;
+    private OperateView operateView;
+    private OperateUtils operateUtils;
+    private Bitmap resizeBmp = null;
+    final Handler myHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 1) {
+                if (content_layout.getWidth() != 0) {
+                    fillContent();
+                    addFont();
+                }
+            }
+        }
+    };
     //    private Gallery gallery;
-    private LinearLayout linearLayout, ll_bubble;
+    private LinearLayout linearLayout;
     private VideoThumbAdapter mVideoThumbnailAdapter;
 
     public final static String SRC_URL = "srcurl";
@@ -111,46 +86,46 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
 
 
     public static void startActivity(Context context, String srcurl) {
-        Intent intent = new Intent(context, EditVideoActivity.class);
+        Intent intent = new Intent(context, EditVideoActivity2.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(SRC_URL, srcurl);
         context.startActivity(intent);
     }
 
-//    private void fillContent() {
-//        if (resizeBmp != null) {
-//            if (content_layout.getChildCount() != 0) {
-//                content_layout.removeAllViews();
-//            }
-//            operateView = new OperateView(context, resizeBmp);
-//            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-//                    resizeBmp.getWidth(), resizeBmp.getHeight());
-//            operateView.setLayoutParams(layoutParams);
-//            content_layout.addView(operateView);
-//            operateView.setMultiAdd(false); //设置此参数，可以添加多个文字
-//        }
-//    }
-//
-//    private void addFont() {
-//        if (operateView != null) {
-//            TextObject textObj = operateUtils.getTextObject("添加文字",
-//                    operateView, 5, 150, 150);
-//            if (textObj != null) {
-//                textObj.setTextSize(22);
-//                textObj.commit();
-//                operateView.addItem(textObj);
-//                operateView.setOnListener(new OperateView.MyListener() {
-//                    public void onClick(TextObject tObject) {
-//                        alert(tObject);
-//                    }
-//                });
-//            }
-////            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.bubble_normal_2);
-////            ImageObject imgObject = operateUtils.getImageObject(bmp, operateView,
-////                    5, 150, 100);
-////            operateView.addItem(imgObject);
-//        }
-//    }
+    private void fillContent() {
+        if (resizeBmp != null) {
+            if (content_layout.getChildCount() != 0) {
+                content_layout.removeAllViews();
+            }
+            operateView = new OperateView(context, resizeBmp);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    resizeBmp.getWidth(), resizeBmp.getHeight());
+            operateView.setLayoutParams(layoutParams);
+            content_layout.addView(operateView);
+            operateView.setMultiAdd(false); //设置此参数，可以添加多个文字
+        }
+    }
+
+    private void addFont() {
+        if (operateView != null) {
+            TextObject textObj = operateUtils.getTextObject("添加文字",
+                    operateView, 5, 150, 150);
+            if (textObj != null) {
+                textObj.setTextSize(22);
+                textObj.commit();
+                operateView.addItem(textObj);
+                operateView.setOnListener(new OperateView.MyListener() {
+                    public void onClick(TextObject tObject) {
+                        alert(tObject);
+                    }
+                });
+            }
+//            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.bubble_normal_2);
+//            ImageObject imgObject = operateUtils.getImageObject(bmp, operateView,
+//                    5, 150, 100);
+//            operateView.addItem(imgObject);
+        }
+    }
 
     private void alert(final TextObject tObject) {
 
@@ -169,10 +144,8 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         tvSwitcher = (TextView) findViewById(R.id.tv_switcher_voice);
         tvRecord = (TextView) findViewById(R.id.tv_record);
         tvNative = (TextView) findViewById(R.id.tv_native);
-        tvMore = (TextView) findViewById(R.id.tv_more);
 //        gallery = (Gallery) findViewById(R.id.gallery);
         linearLayout = (LinearLayout) findViewById(R.id.container);
-        ll_bubble = (LinearLayout) findViewById(R.id.ll_bubble);
         mEditPreviewView = (GLSurfaceView) findViewById(R.id.edit_preview);
 
         ivClose.setOnClickListener(this);
@@ -180,7 +153,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         tvSwitcher.setOnClickListener(this);
         tvRecord.setOnClickListener(this);
         tvNative.setOnClickListener(this);
-        tvMore.setOnClickListener(this);
+
         initEditKit();
 
         vFilter = findViewById(R.id.edit_video_filter);
@@ -194,12 +167,9 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         mOriginAudioVolumeSeekBar.setOnSeekBarChangeListener(mSeekBarChangedObsesrver);
         mBgmVolumeSeekBar = (AppCompatSeekBar) findViewById(R.id.music_audio_volume);
         mBgmVolumeSeekBar.setOnSeekBarChangeListener(mSeekBarChangedObsesrver);
-        content_layout = (RelativeLayout) findViewById(R.id.mainLayout);
-        iv_video_bg = (ImageView) findViewById(R.id.iv_video_bg);
-//        operateUtils = new OperateUtils(this);
+        content_layout = (LinearLayout) findViewById(R.id.mainLayout);
+        operateUtils = new OperateUtils(this);
         startEditPreview();
-//        addStikerTextView();
-        initBuble();
     }
 
     private void initEditKit() {
@@ -228,27 +198,24 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void intiVideoThumb(final Bitmap bitmap) {
-        if (bitmap != null) {
-            iv_video_bg.setImageBitmap(bitmap);
-        }
-//        new Thread() {
-//            @Override
-//            public void run() {
-//                super.run();
-//                try {
-//                    resizeBmp = operateUtils.compressionFiller(bitmap,
-//                            content_layout);
-//                    Log.i("info", "==========resizeBmp:" + resizeBmp);
-//                    if (resizeBmp != null) {
-//                        Message message = new Message();
-//                        message.what = 1;
-//                        myHandler.sendMessage(message);
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }.start();
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    resizeBmp = operateUtils.compressionFiller(bitmap,
+                            content_layout);
+                    Log.i("info", "==========resizeBmp:" + resizeBmp);
+                    if (resizeBmp != null) {
+                        Message message = new Message();
+                        message.what = 1;
+                        myHandler.sendMessage(message);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
     }
 
     @Override
@@ -268,19 +235,8 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             case R.id.tv_native://本地
                 openActvityForResult(LocalMusicActivity.class, 101);
                 break;
-            case R.id.tv_more://更多
-                if (ll_bubble.getVisibility() != View.VISIBLE) {
-                    ll_bubble.setVisibility(View.VISIBLE);
-                } else {
-                    ll_bubble.setVisibility(View.GONE);
-                }
-                break;
             case R.id.tv_next:
-                Bitmap bmp = FileUtils.getBitmapByView(content_layout);
-                if (bmp != null) {
-                    String mPath = FileUtils.saveBitmap(bmp, "sdas.png");
-                    Log.i("info", "==============mPath:" + mPath);
-                }
+
                 break;
             case R.id.iv_record_colse:
 //                resolveStopRecord();
@@ -679,9 +635,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             VideoThumbnailInfo info = listData[i];
             ImageView imageView = new ImageView(this);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(info.mWidth, LinearLayout.LayoutParams.MATCH_PARENT);
-            params.leftMargin = 5;
-            imageView.setLayoutParams(params);
+            imageView.setLayoutParams(new LinearLayout.LayoutParams(info.mWidth, LinearLayout.LayoutParams.MATCH_PARENT));
             Bitmap bitmap = info.mBitmap;
             if (bitmap != null) {
                 imageView.setImageBitmap(bitmap);
@@ -697,65 +651,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
-    private void initBuble() {
-        initMap();
-        for (int i = 0; i < bubbles.length; i++) {
-            ImageView imageView = new ImageView(this);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            params.leftMargin = 10;
-            imageView.setLayoutParams(params);
-            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            imageView.setImageResource(bubbles[i]);
-            imageView.setId(i);
-            imageView.setTag(bubbles[i]);
-            imageView.setOnClickListener(new clickBubbleListener());
-            ll_bubble.addView(imageView);
-        }
-    }
-
-    private void initMap() {
-        maps.put(0, new int[]{17, 20, 118, 68});
-        maps.put(1, new int[]{10, 20, 118, 85});
-        maps.put(2, new int[]{3, 19, 118, 53});
-        maps.put(3, new int[]{15, 10, 120, 60});
-        maps.put(4, new int[]{17, 20, 100, 80});
-        maps.put(5, new int[]{25, 25, 110, 72});
-        maps.put(6, new int[]{10, 25, 75, 90});
-        maps.put(7, new int[]{23, 10, 105, 71});
-        maps.put(8, new int[]{26, 20, 103, 80});
-        maps.put(9, new int[]{10, 20, 118, 60});
-        maps.put(10, new int[]{10, 20, 116, 60});
-        maps.put(11, new int[]{11, 16, 118, 56});
-    }
-
-    private class clickBubbleListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            int id = view.getId();
-            int res = (int) view.getTag();
-            if (content_layout.getChildCount() == 2) {
-                content_layout.removeView(stickerView);
-            }
-            stickerView = new StickerView(EditVideoActivity.this, true);
-            stickerView.setOnStickerTouchListener(EditVideoActivity.this);
-            RelativeLayout.LayoutParams rl = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT);
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), res);
-            int[] point = maps.get(id);
-            Log.i("info", "=================point[0]:" + point[0] + "\n" +
-                    "point[1]:" + point[1] + "\n" +
-                    "point[2]:" + point[2] + "\n" +
-                    "point[3]:" + point[3]);
-            stickerView.setTextDraw(bitmap, point[0], point[1], point[2], point[3]);
-            content_layout.addView(stickerView, rl);
-            if (popupWindow != null && popupWindow.isShowing()) {
-                popupWindow.dismiss();
-            } else {
-                showPopChat(context, getWindow().getDecorView());
-            }
-        }
-    }
 
     private class clickListener implements View.OnClickListener {
         @Override
@@ -786,131 +681,5 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         super.onDestroy();
         mEditKit.stopEditPreview();
         mEditKit.release();
-    }
-
-//    private void addStikerTextView() {
-//        stickerView = new StickerView(this, true);
-//        stickerView.setOnStickerTouchListener(this);
-//        RelativeLayout.LayoutParams rl = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-//        rl.addRule(RelativeLayout.CENTER_HORIZONTAL | RelativeLayout.CENTER_VERTICAL);
-//        rl.bottomMargin = 50;
-//        stickerView.setLayoutParams(rl);
-//        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bubble_lovely_1);
-//        stickerView.setTextDraw(bitmap, 10, 19.5f, 118, 85);
-//        content_layout.addView(stickerView);
-//    }
-
-    @Override
-    public void onCopy(StickerView stickerView) {
-    }
-
-    @Override
-    public void onDelete(StickerView stickerView) {
-    }
-
-    @Override
-    public void onMoveToHead(StickerView stickerView) {
-    }
-
-    @Override
-    public void onDoubleClick(StickerView sticker) {
-//        PrintUtils.println("双击调用");
-//        editLayout.setVisibility(View.VISIBLE);
-//        CommonUtils.showInputMethod(MainActivity.this, editText);
-        if (popupWindow != null && popupWindow.isShowing()) {
-            popupWindow.dismiss();
-        } else {
-            showPopChat(context, getWindow().getDecorView());
-        }
-    }
-
-
-    private void showPopChat(final Context context, View parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-        final View view = inflater.inflate(R.layout.popwindow_item_direct_chat, null);
-        popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.FILL_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT, false);
-        final InputMethodManager imm = (InputMethodManager) context.getSystemService(INPUT_METHOD_SERVICE);
-
-        popupWindow.setAnimationStyle(R.style.popwin_anim_style);
-
-        int[] location = new int[2];
-        parent.getLocationOnScreen(location);
-
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.setTouchable(true);
-        popupWindow.setFocusable(true);
-        popupWindow.setBackgroundDrawable(getDrawableFromRes(R.drawable.bg_popwindow));
-        final EditText editText = (EditText) view.findViewById(R.id.editText);
-        LinearLayout topArea = (LinearLayout) view.findViewById(R.id.top_area);
-
-        if (imm.isActive()) {
-            imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-            imm.showSoftInput(editText, 0);
-        } else {
-            imm.showSoftInput((View) editText.getWindowToken(),
-                    InputMethodManager.SHOW_FORCED);
-        }
-        String text = stickerView.getText();
-        if (text != null && !text.equals("")) {
-            editText.setText(text);
-            editText.setSelection(text.length());
-        }
-        editText.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-
-                return false;
-            }
-        });
-
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                tObject.setText(s.toString());
-//                tObject.commit();
-//                operateView.invalidate();
-                stickerView.resetText(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        topArea.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                if (popupWindow.isShowing()) {
-                    popupWindow.dismiss();
-                }
-                return false;
-            }
-        });
-
-        view.findViewById(R.id.btn_option).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                String msg = editText.getText().toString().trim();
-                if (popupWindow.isShowing()) {
-                    popupWindow.dismiss();
-                }
-            }
-        });
-        popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
-    }
-
-    private Drawable getDrawableFromRes(int resId) {
-        Resources res = getResources();
-        Bitmap bmp = BitmapFactory.decodeResource(res, resId);
-        return new BitmapDrawable(bmp);
     }
 }

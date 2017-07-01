@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -12,7 +12,14 @@
         android:layout_margin="17.5dp"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="visible"></LinearLayout>
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/iv_video_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/person" />
+    </RelativeLayout>
 
     <!--<Gallery-->
     <!--android:id="@+id/gallery"-->
@@ -40,42 +47,116 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <LinearLayout
+    <HorizontalScrollView
         android:id="@+id/ll_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/dp_11"
         android:layout_marginLeft="@dimen/dp_11"
-        android:orientation="horizontal">
+        android:scrollbars="none">
 
-        <TextView
-            android:layout_width="50dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@drawable/bg_edit_00"
-            android:gravity="center"
-            android:text="T"
-            android:textColor="@color/white"
-            android:textSize="40sp" />
+            android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="@dimen/dp_11"
-            android:background="@drawable/bg_edit_01"
-            android:gravity="center"
-            android:text="T"
-            android:textColor="@color/white"
-            android:textSize="40sp" />
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/bg_edit_00"
+                android:gravity="center"
+                android:text="T"
+                android:textColor="@color/white"
+                android:textSize="40sp" />
 
-        <TextView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="@dimen/dp_11"
-            android:background="@drawable/bg_edit_02"
-            android:gravity="center"
-            android:text="T"
-            android:textColor="@color/white"
-            android:textSize="40sp" />
-    </LinearLayout>
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="@dimen/dp_11"
+                android:background="@drawable/bg_edit_01"
+                android:gravity="center"
+                android:text="T"
+                android:textColor="@color/white"
+                android:textSize="40sp" />
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="@dimen/dp_11"
+                android:background="@drawable/bg_edit_02"
+                android:gravity="center"
+                android:text="T"
+                android:textColor="@color/white"
+                android:textSize="40sp" />
+
+            <TextView
+                android:id="@+id/tv_more"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="@dimen/dp_11"
+                android:background="@drawable/bg_edit_02"
+                android:gravity="center"
+                android:text="..."
+                android:textColor="@color/white"
+                android:textSize="40sp" />
+
+            <LinearLayout
+                android:id="@+id/ll_bubble"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+            </LinearLayout>
+        </LinearLayout>
+    </HorizontalScrollView>
+    <!--<LinearLayout-->
+    <!--android:id="@+id/ll_bar"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_marginBottom="@dimen/dp_11"-->
+    <!--android:layout_marginLeft="@dimen/dp_11"-->
+    <!--android:orientation="horizontal">-->
+
+    <!--<TextView-->
+    <!--android:layout_width="50dp"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:background="@drawable/bg_edit_00"-->
+    <!--android:gravity="center"-->
+    <!--android:text="T"-->
+    <!--android:textColor="@color/white"-->
+    <!--android:textSize="40sp" />-->
+
+    <!--<TextView-->
+    <!--android:layout_width="50dp"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:layout_marginLeft="@dimen/dp_11"-->
+    <!--android:background="@drawable/bg_edit_01"-->
+    <!--android:gravity="center"-->
+    <!--android:text="T"-->
+    <!--android:textColor="@color/white"-->
+    <!--android:textSize="40sp" />-->
+
+    <!--<TextView-->
+    <!--android:layout_width="50dp"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:layout_marginLeft="@dimen/dp_11"-->
+    <!--android:background="@drawable/bg_edit_02"-->
+    <!--android:gravity="center"-->
+    <!--android:text="T"-->
+    <!--android:textColor="@color/white"-->
+    <!--android:textSize="40sp" />-->
+
+    <!--<TextView-->
+    <!--android:layout_width="50dp"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:layout_marginLeft="@dimen/dp_11"-->
+    <!--android:background="@drawable/bg_edit_02"-->
+    <!--android:gravity="center"-->
+    <!--android:text="..."-->
+    <!--android:textColor="@color/white"-->
+    <!--android:textSize="40sp" />-->
+    <!--</LinearLayout>-->
 </RelativeLayout>
