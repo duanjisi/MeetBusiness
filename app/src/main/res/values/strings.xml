@@ -61,4 +61,5 @@
     <string name="mis_permission_rationale">存储器读权限需要选择文件.</string>
     <string name="mis_permission_rationale_write_storage">存储写入权限需要保存图像.</string>
     <string name="giving_camera_permissions">没有相机权限！</string>
+    <string name="giving_record_permissions">没有录音权限！</string>
 </resources>

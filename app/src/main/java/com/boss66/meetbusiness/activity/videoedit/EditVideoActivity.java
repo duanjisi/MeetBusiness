@@ -3,26 +3,28 @@ package com.boss66.meetbusiness.activity.videoedit;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.opengl.GLSurfaceView;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
-import android.os.Handler;
-import android.os.Message;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -31,20 +33,24 @@ import android.widget.Toast;
 import com.boss66.meetbusiness.R;
 import com.boss66.meetbusiness.activity.base.BaseActivity;
 import com.boss66.meetbusiness.adapter.VideoThumbAdapter;
+import com.boss66.meetbusiness.listener.PermissionListener;
 import com.boss66.meetbusiness.photoedit.OperateUtils;
 import com.boss66.meetbusiness.photoedit.OperateView;
 import com.boss66.meetbusiness.photoedit.TextObject;
+import com.boss66.meetbusiness.util.FileUtils;
+import com.boss66.meetbusiness.util.PermissonUtil.PermissionUtil;
+import com.boss66.meetbusiness.util.PhotoAlbumUtil.MultiImageSelector;
+import com.boss66.meetbusiness.util.ToastUtil;
 import com.boss66.meetbusiness.util.UIUtils;
-import com.czt.mp3recorder.MP3Recorder;
 import com.boss66.meetbusiness.videorange.VideoThumbnailInfo;
 import com.boss66.meetbusiness.videorange.VideoThumbnailTask;
+import com.czt.mp3recorder.MP3Recorder;
 import com.ksyun.media.shortvideo.kit.KSYEditKit;
-import com.shuyu.waveview.FileUtils;
+import com.ksyun.media.shortvideo.utils.ShortVideoConstants;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
-import com.ksyun.media.shortvideo.utils.ShortVideoConstants;
 
 /**
  * Created by Johnny on 2017/6/26.
@@ -93,6 +99,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     private ImageView iv_record;
     private boolean isTouch;
     private String filePath;
+    private PermissionListener permissionListener;
 
 
     public static void startActivity(Context context, String srcurl) {
@@ -240,7 +247,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                 onOriginAudioClick(isOriginalVoice);
                 break;
             case R.id.tv_record://录音
-                showBottomView();
+                getPermission();
                 break;
             case R.id.tv_native://本地
                 openActvityForResult(LocalMusicActivity.class, 101);
@@ -252,6 +259,8 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                 resolveStopRecord();
                 break;
             case R.id.iv_record_ok:
+                nowTime = 0;
+                pb_progress_bar.setProgress(0);
                 resolveStopRecord();
                 if (!TextUtils.isEmpty(filePath))
                     mEditKit.changeBgmMusic(filePath);
@@ -322,10 +331,15 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void onOriginAudioClick(boolean isCheck) {
+        if (!isCheck) {
+            tvSwitcher.setText("原音开");
+        } else {
+            tvSwitcher.setText("原音关");
+        }
         //是否删除原始音频
         mEditKit.enableOriginAudio(isCheck);
-
-        mOriginAudioVolumeSeekBar.setEnabled(isCheck);
+        boolean isEnable = isCheck ? false : true;
+        mOriginAudioVolumeSeekBar.setEnabled(isEnable);
     }
 
     private void showBottomView() {
@@ -355,6 +369,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                             isTouch = false;
                             iv_record.setSelected(false);
                             resolvePause();
+                            Log.i("nowTime:", "ACTION_DOWN:" + "filepath:" + filePath);
                             break;
                     }
                     return true;
@@ -461,6 +476,8 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                         resolveStopRecord();
                         if (!TextUtils.isEmpty(filePath))
                             mEditKit.changeBgmMusic(filePath);
+                        nowTime = 0;
+                        pb_progress_bar.setProgress(0);
                         Log.i("nowTime:", "filepath" + filePath);
                     } else {
                         if (isTouch) {
@@ -482,6 +499,35 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         if (requestCode == 101 && resultCode == RESULT_OK && data != null) {
             filePath = data.getStringExtra("filePath");
         }
+    }
+
+    private void getPermission() {
+        permissionListener = new PermissionListener() {
+            @Override
+            public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+                PermissionUtil.onRequestPermissionsResult(this, requestCode, permissions, permissionListener);
+            }
+
+            @Override
+            public void onRequestPermissionSuccess() {
+                showBottomView();
+            }
+
+            @Override
+            public void onRequestPermissionError() {
+                ToastUtil.showShort(EditVideoActivity.this, getString(R.string.giving_record_permissions));
+            }
+        };
+        PermissionUtil
+                .with(this)
+                .permissions(
+                        PermissionUtil.PERMISSIONS_GROUP_RECORD_AUDIO //相机权限
+                ).request(permissionListener);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        PermissionUtil.onRequestPermissionsResult(this, requestCode, permissions, permissionListener);
     }
 
     private KSYEditKit.OnErrorListener mOnErrorListener = new KSYEditKit.OnErrorListener() {

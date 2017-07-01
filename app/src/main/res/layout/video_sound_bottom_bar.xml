@@ -14,9 +14,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="15dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -31,7 +32,11 @@
         <android.support.v7.widget.AppCompatSeekBar
             android:id="@+id/origin_audio_volume"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:maxHeight="2dp"
+            android:minHeight="2dp"
+            android:progressDrawable="@drawable/shape_edit_voice_pb_bg"
+            android:thumb="@drawable/like" />
     </LinearLayout>
 
     <LinearLayout
@@ -54,7 +59,11 @@
         <android.support.v7.widget.AppCompatSeekBar
             android:id="@+id/music_audio_volume"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:maxHeight="2dp"
+            android:minHeight="2dp"
+            android:progressDrawable="@drawable/shape_edit_voice_pb_bg"
+            android:thumb="@drawable/like" />
     </LinearLayout>
 
     <RelativeLayout
