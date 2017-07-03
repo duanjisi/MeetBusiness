@@ -1,5 +1,6 @@
 package com.boss66.meetbusiness.activity.videoedit;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -8,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.opengl.GLSurfaceView;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -55,8 +57,12 @@ import com.boss66.meetbusiness.widget.Sticker.StickerView;
 import com.czt.mp3recorder.MP3Recorder;
 import com.ksyun.media.shortvideo.kit.KSYEditKit;
 import com.ksyun.media.shortvideo.utils.ShortVideoConstants;
+import com.ksyun.media.streamer.encoder.VideoEncodeFormat;
 import com.ksyun.media.streamer.filter.imgtex.ImgBeautyToneCurveFilter;
+import com.ksyun.media.streamer.framework.AVConst;
+import com.ksyun.media.streamer.kit.StreamerConstants;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,6 +77,14 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             R.drawable.bubble_06, R.drawable.bubble_07,
             R.drawable.bubble_08, R.drawable.bubble_09,
             R.drawable.bubble_10, R.drawable.bubble_11};
+
+    public final static int FRAME_RATE = 20;
+    public final static int VIDEO_BITRATE = 1000;
+    public final static int AUDIO_BITRATE = 64;
+    public final static int VIDEO_RESOLUTION = StreamerConstants.VIDEO_RESOLUTION_480P;
+    public final static int ENCODE_TYPE = AVConst.CODEC_ID_HEVC;
+    public final static int ENCODE_METHOD = StreamerConstants.ENCODE_METHOD_SOFTWARE;
+    public final static int ENCODE_PROFILE = VideoEncodeFormat.ENCODE_PROFILE_BALANCE;
 
     private HashMap<Integer, int[]> maps = new HashMap<>();
 
@@ -89,6 +103,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     private TextView tvNext, tvSwitcher, tvRecord, tvNative, tvMore;
     private RelativeLayout content_layout;
     private ImageView iv_video_bg;
+    private TextView tvContent, tv00, tv01, tv02;
     private PopupWindow popupWindow;
     //    private OperateView operateView;
     //    private OperateUtils operateUtils;
@@ -214,6 +229,14 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         mBgmVolumeSeekBar.setOnSeekBarChangeListener(mSeekBarChangedObsesrver);
         content_layout = (RelativeLayout) findViewById(R.id.mainLayout);
         iv_video_bg = (ImageView) findViewById(R.id.iv_video_bg);
+        tvContent = (TextView) findViewById(R.id.tv_content);
+        tv00 = (TextView) findViewById(R.id.tv00);
+        tv01 = (TextView) findViewById(R.id.tv01);
+        tv02 = (TextView) findViewById(R.id.tv02);
+        tvContent.setOnTouchListener(new touchListener());
+        tv00.setOnClickListener(this);
+        tv01.setOnClickListener(this);
+        tv02.setOnClickListener(this);
 //        operateUtils = new OperateUtils(this);
         startEditPreview();
 //        addStikerTextView();
@@ -374,6 +397,69 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
 //        }.start();
     }
 
+    private int lastY;
+    private final long doubleClickTimeLimit = 200;
+    private long preClicktime;
+
+    private class touchListener implements View.OnTouchListener {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            int ea = event.getAction();
+//            final int screenWidth = dm.widthPixels;
+//            final int screenHeight = dm.heightPixels;
+            switch (v.getId()) {
+                case R.id.tv_content:
+                    switch (ea) {
+                        case MotionEvent.ACTION_DOWN:
+//                            lastX = (int) event.getRawX();// 获取触摸事件触摸位置的原始X坐标
+                            lastY = (int) event.getRawY();
+                            long currentTime = System.currentTimeMillis();
+                            if (currentTime - preClicktime > doubleClickTimeLimit) {
+                                preClicktime = currentTime;
+                            } else {
+                                showBgFram();
+                            }
+                            break;
+                        case MotionEvent.ACTION_MOVE:
+                            int dx = (int) event.getRawX();
+                            int dy = (int) event.getRawY() - lastY;
+                            int l = v.getLeft();
+                            int b = v.getBottom() + dy;
+                            int r = v.getRight();
+                            int t = v.getTop() + dy;
+                            // 下面判断移动是否超出屏幕
+                            if (l < 0) {
+                                l = 0;
+                                r = l + v.getWidth();
+                            }
+                            if (t < 0) {
+                                t = 0;
+                                b = t + v.getHeight();
+                            }
+//                            if (r > screenWidth) {
+//                                r = screenWidth;
+//                                l = r - v.getWidth();
+//                            }
+//                            if (b > screenHeight) {
+//                                b = screenHeight;
+//                                t = b - v.getHeight();
+//                            }
+                            v.layout(l, t, r, b);
+                            lastY = (int) event.getRawY();
+                            v.postInvalidate();
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            break;
+                        default:
+                            break;
+                    }
+                default:
+                    break;
+            }
+            return true;
+        }
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -394,16 +480,13 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             case R.id.tv_more://更多
                 if (ll_bubble.getVisibility() != View.VISIBLE) {
                     ll_bubble.setVisibility(View.VISIBLE);
+                    tvMore.setVisibility(View.GONE);
                 } else {
                     ll_bubble.setVisibility(View.GONE);
                 }
                 break;
             case R.id.tv_next:
-                Bitmap bmp = FileUtils.getBitmapByView(content_layout);
-                if (bmp != null) {
-                    String mPath = FileUtils.saveBitmap(bmp, "sdas.png");
-                    Log.i("info", "==============mPath:" + mPath);
-                }
+
                 break;
             case R.id.iv_record_colse:
 //                resolveStopRecord();
@@ -416,6 +499,59 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                 if (!TextUtils.isEmpty(filePath))
                     mEditKit.changeBgmMusic(filePath);
                 break;
+            case R.id.tv00:
+                tvContent.setBackgroundColor(getResources().getColor(R.color.bg_color00));
+                showBgFram();
+                break;
+            case R.id.tv01:
+                tvContent.setBackgroundColor(getResources().getColor(R.color.bg_color01));
+                showBgFram();
+                break;
+            case R.id.tv02:
+                tvContent.setBackgroundColor(getResources().getColor(R.color.bg_color02));
+                showBgFram();
+                break;
+        }
+    }
+
+    private void onNextClick() {
+        if (stickerView != null) {
+            stickerView.setShowDrawController(false);
+        }
+        Bitmap bmp = FileUtils.getBitmapByView(content_layout);
+        if (bmp != null) {
+            String mPath = FileUtils.saveBitmap(bmp, "sdas.png");
+            Log.i("info", "==============mPath:" + mPath);
+        }
+
+
+        mEditKit.setTargetResolution(VIDEO_RESOLUTION);
+        mEditKit.setVideoFps(FRAME_RATE);
+        mEditKit.setVideoCodecId(ENCODE_TYPE);
+        mEditKit.setVideoEncodeProfile(ENCODE_PROFILE);
+        mEditKit.setAudioKBitrate(AUDIO_BITRATE);
+        mEditKit.setVideoKBitrate(VIDEO_BITRATE);
+        //设置合成路径
+//        String fileFolder = "/sdcard/ksy_sv_compose_test";
+        String fileFolder = "/sdcard/MeetBus";
+        File file = new File(fileFolder);
+        if (!file.exists()) {
+            file.mkdir();
+        }
+        String composeUrl = fileFolder + "/" + System.currentTimeMillis() + ".mp4";
+        //开始合成
+        mEditKit.startCompose(composeUrl);
+    }
+
+    private void showBgFram() {
+        if (content_layout.getChildCount() == 2) {
+            content_layout.removeView(stickerView);
+        }
+        UIUtils.showView(tvContent);
+        if (popupWindow != null && popupWindow.isShowing()) {
+            popupWindow.dismiss();
+        } else {
+            showPopChat(context, getWindow().getDecorView(), true);
         }
     }
 
@@ -770,6 +906,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
 //                    KS3ClientWrap.KS3UploadInfo bucketInfo = new KS3ClientWrap.KS3UploadInfo
 //                            ("ksvsdemo", mCurObjectKey, mPutObjectResponseHandler);
 //                    return bucketInfo;
+                    showToast("合成视频完成!", true);
                 }
                 case ShortVideoConstants.SHORTVIDEO_COMPOSE_ABORTED:
                     break;
@@ -879,6 +1016,29 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             imageView.setOnClickListener(new clickListener());
             linearLayout.addView(imageView);
         }
+        VideoThumbnailInfo info = listData[0];
+        if (info != null) {
+            Log.i("info", "================0000000000000000");
+//            VideoThumbnailTask.loadBitmap(this, iv_video_bg,
+//                    null, (long) (info.mCurrentTime * 1000), info,
+//                    mEditKit, null);
+            VideoThumbnailTask.loadBitmap(this, iv_video_bg,
+                    null, (long) (info.mCurrentTime * 1000), info,
+                    mEditKit, null, new VideoThumbnailTask.callback() {
+                        @Override
+                        public void size(final int width, final int height) {
+                            Log.i("info", "=============width:" + width + "\n" + "height:" + height);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, RelativeLayout.LayoutParams.WRAP_CONTENT);
+//                                    content_layout.setLayoutParams(params);
+                                    tvContent.setLayoutParams(params);
+                                }
+                            });
+                        }
+                    });
+        }
     }
 
     private void initBuble() {
@@ -914,6 +1074,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     }
 
     private class clickBubbleListener implements View.OnClickListener {
+        @TargetApi(Build.VERSION_CODES.M)
         @Override
         public void onClick(View view) {
             int id = view.getId();
@@ -923,21 +1084,17 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             }
             stickerView = new StickerView(EditVideoActivity.this, true);
             stickerView.setOnStickerTouchListener(EditVideoActivity.this);
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), res);
             RelativeLayout.LayoutParams rl = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                     RelativeLayout.LayoutParams.WRAP_CONTENT);
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), res);
             int[] point = maps.get(id);
-            Log.i("info", "=================point[0]:" + point[0] + "\n" +
-                    "point[1]:" + point[1] + "\n" +
-                    "point[2]:" + point[2] + "\n" +
-                    "point[3]:" + point[3]);
+            rl.addRule(RelativeLayout.CENTER_IN_PARENT);
+            stickerView.setLayoutParams(rl);
             stickerView.setTextDraw(bitmap, point[0], point[1], point[2], point[3]);
-            content_layout.addView(stickerView, rl);
-            if (popupWindow != null && popupWindow.isShowing()) {
-                popupWindow.dismiss();
-            } else {
-                showPopChat(context, getWindow().getDecorView());
+            if (tvContent.getVisibility() == View.VISIBLE) {
+                UIUtils.hindView(tvContent);
             }
+            content_layout.addView(stickerView);
         }
     }
 
@@ -985,12 +1142,12 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         if (popupWindow != null && popupWindow.isShowing()) {
             popupWindow.dismiss();
         } else {
-            showPopChat(context, getWindow().getDecorView());
+            showPopChat(context, getWindow().getDecorView(), false);
         }
     }
 
 
-    private void showPopChat(final Context context, View parent) {
+    private void showPopChat(final Context context, View parent, final boolean isBg) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
         final View view = inflater.inflate(R.layout.popwindow_item_direct_chat, null);
         popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.FILL_PARENT,
@@ -1016,7 +1173,12 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             imm.showSoftInput((View) editText.getWindowToken(),
                     InputMethodManager.SHOW_FORCED);
         }
-        String text = stickerView.getText();
+        String text;
+        if (isBg) {
+            text = getText(tvContent);
+        } else {
+            text = stickerView.getText();
+        }
         if (text != null && !text.equals("")) {
             editText.setText(text);
             editText.setSelection(text.length());
@@ -1040,7 +1202,11 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
 //                tObject.setText(s.toString());
 //                tObject.commit();
 //                operateView.invalidate();
-                stickerView.resetText(s.toString());
+                if (isBg) {
+                    tvContent.setText(s.toString());
+                } else {
+                    stickerView.resetText(s.toString());
+                }
             }
 
             @Override

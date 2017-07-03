@@ -27,6 +27,9 @@ public class VideoThumbnailTask extends AsyncTask<Long, Void, Bitmap> {
     private long mMS = 0;
     private VideoThumbnailInfo mVideoThumbnailData;
     private KSYEditKit mRetriever;
+    private callback callback;
+    private static int width = 0;
+    private static int height = 0;
 
     private final WeakReference<View> mNext;
 
@@ -34,6 +37,18 @@ public class VideoThumbnailTask extends AsyncTask<Long, Void, Bitmap> {
                               VideoThumbnailInfo videoThumbnailData, KSYEditKit retriever, View
                                       next) {
         mContext = context;
+        imageViewReference = new WeakReference<ImageView>(imageView);
+        mMS = ms;
+        mNext = new WeakReference<View>(next);
+        mVideoThumbnailData = videoThumbnailData;
+        mRetriever = retriever;
+    }
+
+    public VideoThumbnailTask(Context context, ImageView imageView, long ms,
+                              VideoThumbnailInfo videoThumbnailData, KSYEditKit retriever, View
+                                      next, callback callback) {
+        mContext = context;
+        this.callback = callback;
         imageViewReference = new WeakReference<ImageView>(imageView);
         mMS = ms;
         mNext = new WeakReference<View>(next);
@@ -61,6 +76,20 @@ public class VideoThumbnailTask extends AsyncTask<Long, Void, Bitmap> {
         }
     }
 
+    public static void loadBitmap(Context context, ImageView imageView, Bitmap defaultBitmap, long ms,
+                                  VideoThumbnailInfo videoThumbnailData, KSYEditKit retriever, View
+                                          next, callback callback) {
+        if (cancelPotentialWork(ms, imageView)) {
+            final VideoThumbnailTask task = new VideoThumbnailTask(context,
+                    imageView, ms, videoThumbnailData, retriever, next, callback);
+            mWorkTaskNum++;
+            final AsyncDrawable asyncDrawable =
+                    new AsyncDrawable(context.getResources(), defaultBitmap, task);
+            imageView.setImageDrawable(asyncDrawable);
+            task.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, ms);
+        }
+    }
+
     @Override
     protected Bitmap doInBackground(Long... params) {
 //        if(mContext == null || mContext.isFinishing()){
@@ -75,9 +104,10 @@ public class VideoThumbnailTask extends AsyncTask<Long, Void, Bitmap> {
 
             return null;
         }
-
         mVideoThumbnailData.mBitmap = bitmap;
-
+        if (callback != null) {
+            callback.size(bitmap.getWidth(), bitmap.getHeight());
+        }
         return bitmap;
     }
 
@@ -145,4 +175,7 @@ public class VideoThumbnailTask extends AsyncTask<Long, Void, Bitmap> {
         return true;
     }
 
+    public interface callback {
+        void size(int width, int height);
+    }
 }

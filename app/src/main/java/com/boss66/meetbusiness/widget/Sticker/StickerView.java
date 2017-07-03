@@ -90,6 +90,19 @@ public class StickerView extends View {
         super(context, attrs, defStyle);
         init(hasTxt);
     }
+//    public StickerView(Context context) {
+//        this(context, null);
+//    }
+//
+//    public StickerView(Context context, AttributeSet attrs) {
+//        this(context, attrs, 0);
+//    }
+//
+//    public StickerView(Context context, AttributeSet attrs, int defStyle) {
+//        super(context, attrs, defStyle);
+////        init(hasTxt);
+//        init();
+//    }
 
     private void init(boolean hasTxt) {
         this.hasTxt = hasTxt;
