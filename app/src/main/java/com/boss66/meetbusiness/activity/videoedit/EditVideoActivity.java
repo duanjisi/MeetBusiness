@@ -1079,4 +1079,5 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         Bitmap bmp = BitmapFactory.decodeResource(res, resId);
         return new BitmapDrawable(bmp);
     }
+
 }
