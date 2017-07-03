@@ -236,9 +236,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onItemClick(int postion) {
                 Log.i("liwya", "setItemClickListener" + postion);
-
                 switch (postion) {
-
                     case 0:
                         break;
                     case 1:
