@@ -42,7 +42,8 @@
         <item name="android:textSize">16.5sp</item>
         <item name="android:drawablePadding">19.8dp</item>
         <item name="android:background">@android:color/transparent</item>
-        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:singleLine">true</item>
         <item name="android:textColor">@drawable/sel_main_menu_navigation_text</item>

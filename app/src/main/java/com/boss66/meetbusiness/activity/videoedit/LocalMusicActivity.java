@@ -62,7 +62,7 @@ public class LocalMusicActivity extends BaseActivity {
             }
         });
         tv_title = (TextView) findViewById(R.id.tv_title);
-        tv_title.setText("选择本地视频");
+        tv_title.setText("选择本地音乐");
         rv_content = (RecyclerView) findViewById(R.id.rv_content);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -158,6 +158,10 @@ public class LocalMusicActivity extends BaseActivity {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 1 && list != null) {
+                LocalVoiceEntity vEntty = list.get(0);
+                if (vEntty != null) {
+                    filePath = vEntty.filePath;
+                }
                 adapter.notifyDataSetChanged();
             }
         }

@@ -3,6 +3,8 @@ package com.boss66.meetbusiness.fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.boss66.meetbusiness.activity.vendingRack.LogisticsActivity;
+import com.boss66.meetbusiness.activity.vendingRack.OrderEvaluateActivity;
 import com.boss66.meetbusiness.adapter.OrderAdapter;
 import com.boss66.meetbusiness.entity.OrderEntity;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
@@ -91,13 +93,16 @@ public class OrderEvaluateFragment extends BaseOrderFragment {
                     Log.i("OrderEntity:", "确认收货");
                 } else if (type == 2) {
                     Log.i("OrderEntity:", "查看物流");
+                    openActivity(LogisticsActivity.class);
                 }
                 break;
             case 3:
                 if (type == 1) {
                     Log.i("OrderEntity:", "评价");
+                    openActivity(OrderEvaluateActivity.class);
                 } else if (type == 2) {
                     Log.i("OrderEntity:", "查看物流");
+                    openActivity(LogisticsActivity.class);
                 } else {
                     int num = entity.getFootTag() - entity.getHeadTag();
                     int startPos = postion - num;
