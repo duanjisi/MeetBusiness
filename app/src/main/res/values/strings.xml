@@ -44,6 +44,9 @@
     <string name="take_photos">拍照</string>
     <string name="from_the_mobile_phone_photo_album_choice">从手机相册选择</string>
     <string name="my_order">我的订单</string>
+    <string name="order_evaluate">评价</string>
+    <string name="order_evaluate_publish">发布</string>
+    <string name="order_evaluate_tip">说说您使用后的效果感受，相信能帮助更多小伙伴。</string>
 
     <!-- 相册多选 -->
     <string name="mis_folder_all">所有图片</string>

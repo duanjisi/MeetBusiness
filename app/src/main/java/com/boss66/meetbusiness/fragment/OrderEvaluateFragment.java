@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.boss66.meetbusiness.activity.vendingRack.LogisticsActivity;
+import com.boss66.meetbusiness.activity.vendingRack.OrderEvaluateActivity;
 import com.boss66.meetbusiness.adapter.OrderAdapter;
 import com.boss66.meetbusiness.entity.OrderEntity;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
@@ -98,6 +99,7 @@ public class OrderEvaluateFragment extends BaseOrderFragment {
             case 3:
                 if (type == 1) {
                     Log.i("OrderEntity:", "评价");
+                    openActivity(OrderEvaluateActivity.class);
                 } else if (type == 2) {
                     Log.i("OrderEntity:", "查看物流");
                     openActivity(LogisticsActivity.class);

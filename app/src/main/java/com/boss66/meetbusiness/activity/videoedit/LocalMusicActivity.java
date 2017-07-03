@@ -62,7 +62,7 @@ public class LocalMusicActivity extends BaseActivity {
             }
         });
         tv_title = (TextView) findViewById(R.id.tv_title);
-        tv_title.setText("选择本地视频");
+        tv_title.setText("选择本地音乐");
         rv_content = (RecyclerView) findViewById(R.id.rv_content);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
