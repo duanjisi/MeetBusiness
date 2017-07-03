@@ -28,9 +28,13 @@ import android.widget.Toast;
 
 import com.boss66.meetbusiness.R;
 import com.boss66.meetbusiness.activity.base.BaseActivity;
+import com.boss66.meetbusiness.entity.AuthEntity;
+import com.boss66.meetbusiness.http.BaseDataRequest;
+import com.boss66.meetbusiness.http.request.AuthRequest;
 import com.boss66.meetbusiness.widget.recordclip.RecordProgressController;
 import com.boss66.meetbusiness.widget.recordclip.filter.ImgFaceunityFilter;
 import com.ksyun.media.shortvideo.kit.KSYRecordKit;
+import com.ksyun.media.shortvideo.utils.AuthInfoManager;
 import com.ksyun.media.streamer.capture.CameraCapture;
 import com.ksyun.media.streamer.capture.camera.CameraTouchHelper;
 import com.ksyun.media.streamer.encoder.VideoEncodeFormat;
@@ -133,6 +137,7 @@ public class RecordVideoActivity extends BaseActivity implements View.OnClickLis
         // set CameraHintView to show focus rect and zoom ratio
 //        cameraTouchHelper.setCameraHintView(mCameraHintView);
         startCameraPreviewWithPermCheck();
+        requestAuth();
     }
 
     private void initKSYRecorder() {
@@ -688,5 +693,48 @@ public class RecordVideoActivity extends BaseActivity implements View.OnClickLis
         mRecordProgressCtl.release();
         mKSYRecordKit.setOnLogEventListener(null);
         mKSYRecordKit.release();
+        AuthInfoManager.getInstance().removeAuthResultListener(mCheckAuthResultListener);
     }
+
+    private void requestAuth() {
+        AuthRequest request = new AuthRequest("sadasd");
+        request.send(new BaseDataRequest.RequestCallback<AuthEntity>() {
+            @Override
+            public void onSuccess(AuthEntity pojo) {
+                Log.i("info", "=================:" + pojo.toString());
+                //初始化鉴权信息
+                AuthInfoManager.getInstance().setAuthInfo(getApplicationContext(),
+                        pojo.getAuthorization(), pojo.getAmz());
+                //添加鉴权结果回调接口(不是必须)
+                AuthInfoManager.getInstance().addAuthResultListener(mCheckAuthResultListener);
+                //开始向KSServer申请鉴权
+                AuthInfoManager.getInstance().checkAuth();
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                showToast(msg, true);
+            }
+        });
+    }
+
+    private AuthInfoManager.CheckAuthResultListener mCheckAuthResultListener = new AuthInfoManager
+            .CheckAuthResultListener() {
+        @Override
+        public void onAuthResult(int result) {
+            mMainHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    AuthInfoManager.getInstance().removeAuthResultListener(mCheckAuthResultListener);
+                    if (AuthInfoManager.getInstance().getAuthState()) {
+                        Toast.makeText(context, "Auth Success", Toast.LENGTH_SHORT)
+                                .show();
+                    } else {
+                        Toast.makeText(context, "Auth Failed", Toast.LENGTH_SHORT)
+                                .show();
+                    }
+                }
+            });
+        }
+    };
 }
