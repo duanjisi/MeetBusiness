@@ -1,5 +1,6 @@
 package com.boss66.meetbusiness.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -49,4 +50,29 @@ public abstract class BaseOrderFragment extends Fragment {
     }
 
     protected abstract void setAdapterAndDecor(LRecyclerView list);
+
+    public void openActivity(Class<?> clazz) {
+        openActivity(clazz, null);
+    }
+
+    public void openActivity(Class<?> clazz, Bundle bundle) {
+        Intent intent = new Intent(getActivity(), clazz);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        startActivity(intent);
+    }
+
+    public void openActvityForResult(Class<?> clazz, int requestCode) {
+        Intent intent = new Intent(getActivity(), clazz);
+        startActivityForResult(intent, requestCode);
+    }
+
+    public void openActvityForResult(Class<?> clazz, int requestCode, Bundle bundle) {
+        Intent intent = new Intent(getActivity(), clazz);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        startActivityForResult(intent, requestCode);
+    }
 }

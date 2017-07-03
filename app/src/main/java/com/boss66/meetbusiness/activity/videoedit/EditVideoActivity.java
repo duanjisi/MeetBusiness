@@ -631,6 +631,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 101 && resultCode == RESULT_OK && data != null) {
             filePath = data.getStringExtra("filePath");
+            mEditKit.changeBgmMusic(filePath);
         }
     }
 

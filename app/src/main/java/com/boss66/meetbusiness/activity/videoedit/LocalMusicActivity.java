@@ -22,6 +22,7 @@ import com.boss66.meetbusiness.activity.base.BaseActivity;
 import com.boss66.meetbusiness.adapter.LocalMusicAdapter;
 import com.boss66.meetbusiness.entity.LocalVoiceEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ import java.util.List;
  */
 public class LocalMusicActivity extends BaseActivity {
 
-    private TextView tv_back, tv_title,tv_ok;
+    private TextView tv_back, tv_title, tv_ok;
     private RecyclerView rv_content;
     private LocalMusicAdapter adapter;
     private List<LocalVoiceEntity> list;
@@ -43,6 +44,7 @@ public class LocalMusicActivity extends BaseActivity {
     }
 
     private void initView() {
+        list = new ArrayList<>();
         tv_ok = (TextView) findViewById(R.id.tv_ok);
         tv_back = (TextView) findViewById(R.id.tv_back);
         tv_back.setOnClickListener(new View.OnClickListener() {
@@ -157,6 +159,10 @@ public class LocalMusicActivity extends BaseActivity {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 1 && list != null) {
+                LocalVoiceEntity vEntty = list.get(0);
+                if (vEntty != null) {
+                    filePath = vEntty.filePath;
+                }
                 adapter.notifyDataSetChanged();
             }
         }

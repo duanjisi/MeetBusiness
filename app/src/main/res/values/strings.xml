@@ -26,6 +26,7 @@
     <string name="main_video">上传视频</string>
     <string name="main_price">售货架</string>
     <string name="main_shopping_cart">购物车</string>
+    <string name="main_order">订单管理</string>
 
     <string name="open">open</string>
     <string name="close">close</string>

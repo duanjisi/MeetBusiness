@@ -3,6 +3,7 @@ package com.boss66.meetbusiness.fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.boss66.meetbusiness.activity.vendingRack.LogisticsActivity;
 import com.boss66.meetbusiness.adapter.OrderAdapter;
 import com.boss66.meetbusiness.entity.OrderEntity;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
@@ -83,6 +84,7 @@ public class OrderReceivingFragment extends BaseOrderFragment {
                     Log.i("OrderEntity:", "确认收货");
                 } else if (type == 2) {
                     Log.i("OrderEntity:", "查看物流");
+                    openActivity(LogisticsActivity.class);
                 }
                 break;
             case 3:
@@ -90,6 +92,7 @@ public class OrderReceivingFragment extends BaseOrderFragment {
                     Log.i("OrderEntity:", "评价");
                 } else if (type == 2) {
                     Log.i("OrderEntity:", "查看物流");
+                    openActivity(LogisticsActivity.class);
                 } else {
                     Log.i("OrderEntity:", "删除订单");
                 }
