@@ -78,10 +78,6 @@
         <activity
             android:name=".activity.videoedit.LocalVideoFilesActivity"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".activity.videoedit.LocalMusicActivity"></activity>
-        <activity
-            android:name=".activity.videoedit.EditVideoActivity"
-            android:screenOrientation="portrait"></activity>
         <!--<activity-->
         <!--android:name=".activity.shoppingCar.ShoppingCarActivity"-->
         <!--android:screenOrientation="portrait"></activity>-->

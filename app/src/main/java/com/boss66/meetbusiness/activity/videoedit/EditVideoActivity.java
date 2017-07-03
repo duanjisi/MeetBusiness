@@ -15,9 +15,9 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.widget.AppCompatSeekBar;
-import android.text.Editable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -33,7 +33,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
-import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -45,10 +44,7 @@ import com.boss66.meetbusiness.adapter.FilterAdapter;
 import com.boss66.meetbusiness.adapter.VideoThumbAdapter;
 import com.boss66.meetbusiness.entity.FilterEntity;
 import com.boss66.meetbusiness.listener.PermissionListener;
-import com.boss66.meetbusiness.photoedit.OperateUtils;
-import com.boss66.meetbusiness.photoedit.OperateView;
 import com.boss66.meetbusiness.photoedit.TextObject;
-import com.boss66.meetbusiness.util.FileUtils;
 import com.boss66.meetbusiness.util.FileUtils;
 import com.boss66.meetbusiness.util.PermissonUtil.PermissionUtil;
 import com.boss66.meetbusiness.util.ToastUtil;
@@ -59,16 +55,11 @@ import com.boss66.meetbusiness.widget.Sticker.StickerView;
 import com.czt.mp3recorder.MP3Recorder;
 import com.ksyun.media.shortvideo.kit.KSYEditKit;
 import com.ksyun.media.shortvideo.utils.ShortVideoConstants;
-import com.ksyun.media.shortvideo.utils.ShortVideoConstants;
 import com.ksyun.media.streamer.filter.imgtex.ImgBeautyToneCurveFilter;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Johnny on 2017/6/26.
@@ -128,7 +119,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     private boolean isOriginalVoice = false;
     private BottomSheetDialog sheetDialog;
     private boolean mIsRecord = false;
-    //    private MP3Recorder mRecorder;
+    private MP3Recorder mRecorder;
     private int nowTime, allTime = 8;
     private ProgressBar pb_progress_bar;
     private ImageView iv_record;
@@ -244,7 +235,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         adapter.setItemClickListener(new FilterAdapter.onItemClickListener() {
             @Override
             public void onItemClick(int postion) {
-                Log.i("liwya","setItemClickListener"+postion);
+                Log.i("liwya", "setItemClickListener" + postion);
 
                 switch (postion) {
 
@@ -613,41 +604,42 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
 //        mIsRecord = true;
 //    }
 //
-//    /**
-//     * 停止录音
-//     */
-//    private void resolveStopRecord() {
-//        if (sheetDialog != null && sheetDialog.isShowing()) {
-//            sheetDialog.dismiss();
-//        }
-//        if (mRecorder != null && mRecorder.isRecording()) {
-//            mRecorder.setPause(false);
-//            mRecorder.stop();
-//        }
-//        mIsRecord = false;
-//    }
-//
-//    //录音异常
-//    private void resolveError() {
-//        FileUtils.deleteFile(filePath);
-//        filePath = "";
-//        if (mRecorder != null && mRecorder.isRecording()) {
-//            mRecorder.stop();
-//        }
-//    }
-//
-//    /**
-//     * 暂停
-//     */
-//    private void resolvePause() {
-//        if (!mIsRecord)
-//            return;
-//        if (mRecorder.isPause()) {
-//            mRecorder.setPause(false);
-//        } else {
-//            mRecorder.setPause(true);
-//        }
-//    }
+
+    /**
+     * 停止录音
+     */
+    private void resolveStopRecord() {
+        if (sheetDialog != null && sheetDialog.isShowing()) {
+            sheetDialog.dismiss();
+        }
+        if (mRecorder != null && mRecorder.isRecording()) {
+            mRecorder.setPause(false);
+            mRecorder.stop();
+        }
+        mIsRecord = false;
+    }
+
+    //录音异常
+    private void resolveError() {
+        FileUtils.deleteFile(filePath);
+        filePath = "";
+        if (mRecorder != null && mRecorder.isRecording()) {
+            mRecorder.stop();
+        }
+    }
+
+    /**
+     * 暂停
+     */
+    private void resolvePause() {
+        if (!mIsRecord)
+            return;
+        if (mRecorder.isPause()) {
+            mRecorder.setPause(false);
+        } else {
+            mRecorder.setPause(true);
+        }
+    }
 
     final Handler handler = new Handler() {
 
@@ -963,25 +955,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             }
         }
     }
-
-    public void onResume() {
-        super.onResume();
-        mEditKit.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mEditKit.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mEditKit.stopEditPreview();
-        mEditKit.release();
-    }
-
 //    private void addStikerTextView() {
 //        stickerView = new StickerView(this, true);
 //        stickerView.setOnStickerTouchListener(this);
