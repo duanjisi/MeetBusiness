@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.boss66.meetbusiness.R;
 import com.boss66.meetbusiness.activity.base.BaseActivity;
+import com.boss66.meetbusiness.activity.vendingRack.MyOrderActivity;
 import com.boss66.meetbusiness.activity.vendingRack.VendingRackHomeActivity;
 import com.boss66.meetbusiness.activity.shoppingCar.ShoppingCarActivity;
 import com.boss66.meetbusiness.activity.videoedit.RecordVideoActivity;
@@ -246,6 +247,9 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
 //                        }
 //                    },500);
 
+                    break;
+                case R.id.rb_order:
+                    openActivity(MyOrderActivity.class, null);
                     break;
                 default:
                     break;

@@ -158,6 +158,10 @@ public class LocalMusicActivity extends BaseActivity {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 1 && list != null) {
+                LocalVoiceEntity vEntty = list.get(0);
+                if (vEntty != null) {
+                    filePath = vEntty.filePath;
+                }
                 adapter.notifyDataSetChanged();
             }
         }

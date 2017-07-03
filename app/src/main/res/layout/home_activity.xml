@@ -51,7 +51,7 @@
         <include
             layout="@layout/layout_menu"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"></include>
+            android:layout_height="match_parent"></include>
     </RelativeLayout>
 
 </android.support.v4.widget.DrawerLayout>

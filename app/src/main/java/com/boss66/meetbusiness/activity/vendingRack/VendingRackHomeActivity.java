@@ -90,8 +90,8 @@ public class VendingRackHomeActivity extends AppCompatActivity implements View.O
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_upload:
-                openActivity(MyOrderActivity.class, null);
-                //openActivity(VendUploadGoodsActivity.class, null);
+//                openActivity(MyOrderActivity.class, null);
+                openActivity(VendUploadGoodsActivity.class, null);
                 break;
             case R.id.tv_back:
                 finish();
