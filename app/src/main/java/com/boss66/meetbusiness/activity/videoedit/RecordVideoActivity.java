@@ -137,6 +137,7 @@ public class RecordVideoActivity extends BaseActivity implements View.OnClickLis
         // set CameraHintView to show focus rect and zoom ratio
 //        cameraTouchHelper.setCameraHintView(mCameraHintView);
         startCameraPreviewWithPermCheck();
+        requestAuth();
     }
 
     private void initKSYRecorder() {
@@ -692,6 +693,7 @@ public class RecordVideoActivity extends BaseActivity implements View.OnClickLis
         mRecordProgressCtl.release();
         mKSYRecordKit.setOnLogEventListener(null);
         mKSYRecordKit.release();
+        AuthInfoManager.getInstance().removeAuthResultListener(mCheckAuthResultListener);
     }
 
     private void requestAuth() {
@@ -699,6 +701,7 @@ public class RecordVideoActivity extends BaseActivity implements View.OnClickLis
         request.send(new BaseDataRequest.RequestCallback<AuthEntity>() {
             @Override
             public void onSuccess(AuthEntity pojo) {
+                Log.i("info", "=================:" + pojo.toString());
                 //初始化鉴权信息
                 AuthInfoManager.getInstance().setAuthInfo(getApplicationContext(),
                         pojo.getAuthorization(), pojo.getAmz());

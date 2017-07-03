@@ -486,7 +486,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                 }
                 break;
             case R.id.tv_next:
-
+                onNextClick();
                 break;
             case R.id.iv_record_colse:
 //                resolveStopRecord();
@@ -521,10 +521,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         Bitmap bmp = FileUtils.getBitmapByView(content_layout);
         if (bmp != null) {
             String mPath = FileUtils.saveBitmap(bmp, "sdas.png");
-            Log.i("info", "==============mPath:" + mPath);
         }
-
-
         mEditKit.setTargetResolution(VIDEO_RESOLUTION);
         mEditKit.setVideoFps(FRAME_RATE);
         mEditKit.setVideoCodecId(ENCODE_TYPE);
@@ -532,7 +529,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         mEditKit.setAudioKBitrate(AUDIO_BITRATE);
         mEditKit.setVideoKBitrate(VIDEO_BITRATE);
         //设置合成路径
-//        String fileFolder = "/sdcard/ksy_sv_compose_test";
         String fileFolder = "/sdcard/MeetBus";
         File file = new File(fileFolder);
         if (!file.exists()) {

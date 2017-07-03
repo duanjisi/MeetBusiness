@@ -43,4 +43,14 @@ public class AuthEntity {
     public void setRetCode(String retCode) {
         RetCode = retCode;
     }
+
+    @Override
+    public String toString() {
+        return "AuthEntity{" +
+                "RetMsg='" + RetMsg + '\'' +
+                ", amz='" + amz + '\'' +
+                ", Authorization='" + Authorization + '\'' +
+                ", RetCode='" + RetCode + '\'' +
+                '}';
+    }
 }
