@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.ColorDrawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,7 @@ public class MyStarView extends LinearLayout {
     private int stateResId;
     private float widthAndHeight;
     private float dividerWidth;
-    private boolean canEdit;
+    private boolean canEdit = true;
     private boolean differentSize;
 
     public MyStarView(Context context, AttributeSet attrs) {
@@ -32,14 +33,14 @@ public class MyStarView extends LinearLayout {
                 R.styleable.XlHRatingBar);
         countNum = typedArray.getInt(R.styleable.XlHRatingBar_starCount, 5);
         countSelected = typedArray.getInt(R.styleable.XlHRatingBar_countSelected, 0);
-        canEdit = typedArray.getBoolean(R.styleable.XlHRatingBar_canEdit, false);
+        //canEdit = typedArray.getBoolean(R.styleable.XlHRatingBar_canEdit, false);
         differentSize = typedArray.getBoolean(R.styleable.XlHRatingBar_differentSize, false);
         widthAndHeight = typedArray.getDimension(
                 R.styleable.XlHRatingBar_widthAndHeight,
                 UIUtils.dip2px(context, 0));
         dividerWidth = typedArray.getDimension(
                 R.styleable.XlHRatingBar_dividerWidth,
-                UIUtils.dip2px(context, 0));
+                UIUtils.dip2px(context, 10));
         stateResId = typedArray.getResourceId(
                 R.styleable.XlHRatingBar_stateResId, -1);
         initView();
@@ -97,6 +98,7 @@ public class MyStarView extends LinearLayout {
             } else if (i == countNum - 1) {
                 layoutParams.leftMargin = (int) dividerWidth;
             }
+            Log.i("dividerWidth:", "" + dividerWidth + " countNum:" + countNum + " canEdit:" + canEdit);
             addView(cb, layoutParams);
             cb.setButtonDrawable(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
             if (stateResId == -1) {
