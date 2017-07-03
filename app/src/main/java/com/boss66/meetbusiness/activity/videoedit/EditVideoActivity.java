@@ -16,6 +16,8 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.text.Editable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -31,6 +33,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -38,15 +41,32 @@ import android.widget.TextView;
 
 import com.boss66.meetbusiness.R;
 import com.boss66.meetbusiness.activity.base.BaseActivity;
+import com.boss66.meetbusiness.adapter.FilterAdapter;
 import com.boss66.meetbusiness.adapter.VideoThumbAdapter;
+import com.boss66.meetbusiness.entity.FilterEntity;
+import com.boss66.meetbusiness.listener.PermissionListener;
+import com.boss66.meetbusiness.photoedit.OperateUtils;
+import com.boss66.meetbusiness.photoedit.OperateView;
 import com.boss66.meetbusiness.photoedit.TextObject;
 import com.boss66.meetbusiness.util.FileUtils;
+import com.boss66.meetbusiness.util.FileUtils;
+import com.boss66.meetbusiness.util.PermissonUtil.PermissionUtil;
+import com.boss66.meetbusiness.util.ToastUtil;
 import com.boss66.meetbusiness.util.UIUtils;
 import com.boss66.meetbusiness.videorange.VideoThumbnailInfo;
 import com.boss66.meetbusiness.videorange.VideoThumbnailTask;
 import com.boss66.meetbusiness.widget.Sticker.StickerView;
+import com.czt.mp3recorder.MP3Recorder;
 import com.ksyun.media.shortvideo.kit.KSYEditKit;
 import com.ksyun.media.shortvideo.utils.ShortVideoConstants;
+import com.ksyun.media.shortvideo.utils.ShortVideoConstants;
+import com.ksyun.media.streamer.filter.imgtex.ImgBeautyToneCurveFilter;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 import java.util.HashMap;
 
@@ -97,7 +117,13 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     private LinearLayout linearLayout, ll_bubble;
     private VideoThumbAdapter mVideoThumbnailAdapter;
 
+    private RecyclerView rv_filter;
+
     public final static String SRC_URL = "srcurl";
+
+    private List<FilterEntity> datas;
+
+    private ImgBeautyToneCurveFilter acvFilter;
 
     private boolean isOriginalVoice = false;
     private BottomSheetDialog sheetDialog;
@@ -108,6 +134,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     private ImageView iv_record;
     private boolean isTouch;
     private String filePath;
+    private PermissionListener permissionListener;
 
 
     public static void startActivity(Context context, String srcurl) {
@@ -200,6 +227,113 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         startEditPreview();
 //        addStikerTextView();
         initBuble();
+
+        //先显示滤镜
+        UIUtils.showView(vFilter);
+        UIUtils.hindView(vSound);
+
+        rv_filter = (RecyclerView) findViewById(R.id.rv_filter);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rv_filter.setLayoutManager(manager);
+
+        initData();
+        FilterAdapter adapter = new FilterAdapter(this);
+        adapter.setDataList(datas);
+        rv_filter.setAdapter(adapter);
+        adapter.setItemClickListener(new FilterAdapter.onItemClickListener() {
+            @Override
+            public void onItemClick(int postion) {
+                Log.i("liwya","setItemClickListener"+postion);
+
+                switch (postion) {
+
+                    case 0:
+                        break;
+                    case 1:
+                        acvFilter = new ImgBeautyToneCurveFilter(mEditKit
+                                .getGLRender());
+                        acvFilter.setFromCurveFileInputStream(
+                                EditVideoActivity.this.getResources().openRawResource(R.raw.bohe));
+                        mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
+                        break;
+                    case 2:
+                        acvFilter = new ImgBeautyToneCurveFilter(mEditKit
+                                .getGLRender());
+                        acvFilter.setFromCurveFileInputStream(
+                                EditVideoActivity.this.getResources().openRawResource(R.raw.fugu));
+                        mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
+                        break;
+                    case 3:
+                        acvFilter = new ImgBeautyToneCurveFilter(mEditKit
+                                .getGLRender());
+                        acvFilter.setFromCurveFileInputStream(
+                                EditVideoActivity.this.getResources().openRawResource(R.raw.jiaopian));
+                        mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
+                        break;
+                    case 4:
+                        acvFilter = new ImgBeautyToneCurveFilter(mEditKit
+                                .getGLRender());
+                        acvFilter.setFromCurveFileInputStream(
+                                EditVideoActivity.this.getResources().openRawResource(R.raw.langman));
+                        mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
+                        break;
+                    case 5:
+                        acvFilter = new ImgBeautyToneCurveFilter(mEditKit
+                                .getGLRender());
+                        acvFilter.setFromCurveFileInputStream(
+                                EditVideoActivity.this.getResources().openRawResource(R.raw.mihuan));
+                        mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
+                        break;
+                    case 6:
+                        acvFilter = new ImgBeautyToneCurveFilter(mEditKit
+                                .getGLRender());
+                        acvFilter.setFromCurveFileInputStream(
+                                EditVideoActivity.this.getResources().openRawResource(R.raw.nianhua));
+                        mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
+                        break;
+                    case 7:
+                        acvFilter = new ImgBeautyToneCurveFilter(mEditKit
+                                .getGLRender());
+                        acvFilter.setFromCurveFileInputStream(
+                                EditVideoActivity.this.getResources().openRawResource(R.raw.s1874));
+                        mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
+                        break;
+                    case 8:
+                        acvFilter = new ImgBeautyToneCurveFilter(mEditKit
+                                .getGLRender());
+                        acvFilter.setFromCurveFileInputStream(
+                                EditVideoActivity.this.getResources().openRawResource(R.raw.yinxiang));
+                        mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
+                        break;
+                    case 9:
+                        acvFilter = new ImgBeautyToneCurveFilter(mEditKit
+                                .getGLRender());
+                        acvFilter.setFromCurveFileInputStream(
+                                EditVideoActivity.this.getResources().openRawResource(R.raw.yinyue));
+                        mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
+                        break;
+
+
+                }
+            }
+        });
+
+
+    }
+
+    private void initData() {
+        datas = new ArrayList<>();
+        datas.add(new FilterEntity(R.drawable.wu, "无"));
+        datas.add(new FilterEntity(R.drawable.bohe, "薄荷"));
+        datas.add(new FilterEntity(R.drawable.fugu, "复古"));
+        datas.add(new FilterEntity(R.drawable.jiaopian, "胶片"));
+        datas.add(new FilterEntity(R.drawable.langman, "浪漫"));
+        datas.add(new FilterEntity(R.drawable.mihuan, "迷幻"));
+        datas.add(new FilterEntity(R.drawable.nianhua, "年华"));
+        datas.add(new FilterEntity(R.drawable.s1874, "1874"));
+        datas.add(new FilterEntity(R.drawable.yinxiang, "印象"));
+        datas.add(new FilterEntity(R.drawable.yinyue, "银月"));
     }
 
     private void initEditKit() {
@@ -263,7 +397,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                 onOriginAudioClick(isOriginalVoice);
                 break;
             case R.id.tv_record://录音
-                showBottomView();
+                getPermission();
                 break;
             case R.id.tv_native://本地
                 openActvityForResult(LocalMusicActivity.class, 101);
@@ -287,6 +421,9 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.iv_record_ok:
 //                resolveStopRecord();
+                nowTime = 0;
+                pb_progress_bar.setProgress(0);
+                resolveStopRecord();
                 if (!TextUtils.isEmpty(filePath))
                     mEditKit.changeBgmMusic(filePath);
                 break;
@@ -355,11 +492,35 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mEditKit.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mEditKit.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mEditKit.stopEditPreview();
+        mEditKit.release();
+    }
+
     private void onOriginAudioClick(boolean isCheck) {
+        if (!isCheck) {
+            tvSwitcher.setText("原音开");
+        } else {
+            tvSwitcher.setText("原音关");
+        }
         //是否删除原始音频
         mEditKit.enableOriginAudio(isCheck);
-
-        mOriginAudioVolumeSeekBar.setEnabled(isCheck);
+        boolean isEnable = isCheck ? false : true;
+        mOriginAudioVolumeSeekBar.setEnabled(isEnable);
     }
 
     private void showBottomView() {
@@ -389,6 +550,8 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                             isTouch = false;
                             iv_record.setSelected(false);
 //                            resolvePause();
+                            resolvePause();
+                            Log.i("nowTime:", "ACTION_DOWN:" + "filepath:" + filePath);
                             break;
                     }
                     return true;
@@ -495,6 +658,8 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
 //                        resolveStopRecord();
                         if (!TextUtils.isEmpty(filePath))
                             mEditKit.changeBgmMusic(filePath);
+                        nowTime = 0;
+                        pb_progress_bar.setProgress(0);
                         Log.i("nowTime:", "filepath" + filePath);
                     } else {
                         if (isTouch) {
@@ -516,6 +681,35 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         if (requestCode == 101 && resultCode == RESULT_OK && data != null) {
             filePath = data.getStringExtra("filePath");
         }
+    }
+
+    private void getPermission() {
+        permissionListener = new PermissionListener() {
+            @Override
+            public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+                PermissionUtil.onRequestPermissionsResult(this, requestCode, permissions, permissionListener);
+            }
+
+            @Override
+            public void onRequestPermissionSuccess() {
+                showBottomView();
+            }
+
+            @Override
+            public void onRequestPermissionError() {
+                ToastUtil.showShort(EditVideoActivity.this, getString(R.string.giving_record_permissions));
+            }
+        };
+        PermissionUtil
+                .with(this)
+                .permissions(
+                        PermissionUtil.PERMISSIONS_GROUP_RECORD_AUDIO //相机权限
+                ).request(permissionListener);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        PermissionUtil.onRequestPermissionsResult(this, requestCode, permissions, permissionListener);
     }
 
     private KSYEditKit.OnErrorListener mOnErrorListener = new KSYEditKit.OnErrorListener() {
