@@ -4,14 +4,18 @@ import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.view.View;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import static com.nostra13.universalimageloader.utils.StorageUtils.getCacheDirectory;
@@ -168,6 +172,47 @@ public class FileUtils {
     public static boolean isMediaDocument(Uri uri) {
         return "com.android.providers.media.documents".equals(uri
                 .getAuthority());
+    }
+
+    // 将模板View的图片转化为Bitmap
+    public static Bitmap getBitmapByView(View v) {
+        Bitmap bitmap = Bitmap.createBitmap(v.getWidth(), v.getHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        v.draw(canvas);
+        return bitmap;
+    }
+
+    public static String getFileNameFromPath(String url) {
+        int index = url.lastIndexOf('/');
+        return url.substring(index + 1);
+    }
+
+    public static final String filePath = Environment.getExternalStorageDirectory() + "/meetBus/";
+
+    // 将生成的图片保存到内存中
+    public static String saveBitmap(Bitmap bitmap, String name) {
+        if (Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED)) {
+            File dir = new File(filePath);
+            if (!dir.exists())
+                dir.mkdir();
+//            File file = new File(filePath + name + ".jpg");
+            File file = new File(filePath + name);
+            FileOutputStream out;
+
+            try {
+                out = new FileOutputStream(file);
+                if (bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)) {
+                    out.flush();
+                    out.close();
+                }
+                return file.getAbsolutePath();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
     private static final String SD_PATH = Environment.getExternalStorageDirectory().getPath();
