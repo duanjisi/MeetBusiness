@@ -1,9 +1,7 @@
 package com.boss66.meetbusiness.fragment;
 
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.boss66.meetbusiness.activity.vendingRack.LogisticsActivity;
 import com.boss66.meetbusiness.adapter.OrderAdapter;
 import com.boss66.meetbusiness.entity.OrderEntity;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
@@ -13,10 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by GMARUnity on 2017/6/28.
- * 待收货
+ * Created by GMARUnity on 2017/7/4.
+ * 待退款
  */
-public class OrderReceivingFragment extends BaseOrderFragment {
+public class OrderSellerRefundFragment extends BaseOrderFragment {
     @Override
     protected void setAdapterAndDecor(LRecyclerView list) {
         setHasOptionsMenu(true);
@@ -36,7 +34,7 @@ public class OrderReceivingFragment extends BaseOrderFragment {
             }
 
             @Override
-            public void onOrdBtn3(OrderEntity orderEntity,int pos) {
+            public void onOrdBtn3(OrderEntity orderEntity, int pos) {
                 btnToDo(orderEntity, 3);
             }
         });
@@ -61,7 +59,7 @@ public class OrderReceivingFragment extends BaseOrderFragment {
                 item.setAllPrice(String.valueOf(allprice));
                 item.setContentType(1);
             }
-            item.setOrderType(2);
+            item.setOrderType(1);
             item.setGoodsName("商品：" + i);
             item.setGoodsContent("商品介绍：" + i);
             dataList.add(item);
@@ -85,7 +83,6 @@ public class OrderReceivingFragment extends BaseOrderFragment {
                     Log.i("OrderEntity:", "确认收货");
                 } else if (type == 2) {
                     Log.i("OrderEntity:", "查看物流");
-                    openActivity(LogisticsActivity.class);
                 }
                 break;
             case 3:
@@ -93,7 +90,6 @@ public class OrderReceivingFragment extends BaseOrderFragment {
                     Log.i("OrderEntity:", "评价");
                 } else if (type == 2) {
                     Log.i("OrderEntity:", "查看物流");
-                    openActivity(LogisticsActivity.class);
                 } else {
                     Log.i("OrderEntity:", "删除订单");
                 }
