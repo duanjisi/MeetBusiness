@@ -1,8 +1,9 @@
 apply plugin: 'com.android.application'
 
 android {
+//    useLibrary 'org.apache.http.legacy'
     compileSdkVersion 24
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "25.0.0"
     defaultConfig {
         applicationId "com.boss66.meetbusiness"
         minSdkVersion 16

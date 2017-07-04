@@ -40,6 +40,7 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.boss66.meetbusiness.Constants;
 import com.boss66.meetbusiness.R;
 import com.boss66.meetbusiness.activity.base.BaseActivity;
 import com.boss66.meetbusiness.adapter.FilterAdapter;
@@ -105,6 +106,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     private ImageView iv_video_bg;
     private TextView tvContent, tv00, tv01, tv02;
     private PopupWindow popupWindow;
+    private String url;
     //    private OperateView operateView;
     //    private OperateUtils operateUtils;
 //    private Bitmap resizeBmp = null;
@@ -357,7 +359,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
 //        mEditKit.addTextStickerView(mTextView);
 
         Bundle bundle = getIntent().getExtras();
-        String url = bundle.getString(SRC_URL);
+        url = bundle.getString(SRC_URL);
         if (!TextUtils.isEmpty(url)) {
             mEditKit.setEditPreviewUrl(url);
         }
@@ -514,14 +516,22 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
+    private String img_path;
+    private String composeUrl;
+
     private void onNextClick() {
         if (stickerView != null) {
             stickerView.setShowDrawController(false);
         }
         Bitmap bmp = FileUtils.getBitmapByView(content_layout);
         if (bmp != null) {
-            String mPath = FileUtils.saveBitmap(bmp, "sdas.png");
+            String str = FileUtils.getFileNameFromPath(url);
+            String fileName = str.substring(0, str.indexOf("."));
+            img_path = FileUtils.saveBitmap(bmp, fileName + ".png");
+        } else {
+            img_path = Constants.CACHE_IMG_DIR + "temp.png";
         }
+        showComposingDialog();
         mEditKit.setTargetResolution(VIDEO_RESOLUTION);
         mEditKit.setVideoFps(FRAME_RATE);
         mEditKit.setVideoCodecId(ENCODE_TYPE);
@@ -534,7 +544,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         if (!file.exists()) {
             file.mkdir();
         }
-        String composeUrl = fileFolder + "/" + System.currentTimeMillis() + ".mp4";
+        composeUrl = fileFolder + "/" + System.currentTimeMillis() + ".mp4";
         //开始合成
         mEditKit.startCompose(composeUrl);
     }
@@ -552,7 +562,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     }
 
     private class SeekBarChangedObserver implements SeekBar.OnSeekBarChangeListener {
-
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             if (!fromUser) {
@@ -903,7 +912,13 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
 //                    KS3ClientWrap.KS3UploadInfo bucketInfo = new KS3ClientWrap.KS3UploadInfo
 //                            ("ksvsdemo", mCurObjectKey, mPutObjectResponseHandler);
 //                    return bucketInfo;
+                    cancelLoadingDialog();
                     showToast("合成视频完成!", true);
+
+                    Intent intent = new Intent(context, ShareVideoActivity.class);
+                    intent.putExtra("BgPath", img_path);
+                    intent.putExtra("videoPath", composeUrl);
+                    startActivity(intent);
                 }
                 case ShortVideoConstants.SHORTVIDEO_COMPOSE_ABORTED:
                     break;
@@ -993,11 +1008,14 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
 
 
     private void initDatas(VideoThumbnailInfo[] listData) {
+        int width = UIUtils.getScreenWidth(context) / 10 - UIUtils.dip2px(context, 100);
         for (int i = 0; i < listData.length; i++) {
             VideoThumbnailInfo info = listData[i];
             ImageView imageView = new ImageView(this);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(info.mWidth, LinearLayout.LayoutParams.MATCH_PARENT);
+//            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(info.mWidth, LinearLayout.LayoutParams.MATCH_PARENT);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(UIUtils.px2dip(context, width),
+                    LinearLayout.LayoutParams.MATCH_PARENT);
             params.leftMargin = 5;
             imageView.setLayoutParams(params);
             Bitmap bitmap = info.mBitmap;
