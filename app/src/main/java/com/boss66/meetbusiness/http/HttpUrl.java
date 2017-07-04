@@ -17,6 +17,7 @@ public class HttpUrl {
     /**
      * 发布feed相关接口
      */
+    public static final String BASE_FEED = BASE_URL + "feed/";
     public static final String PRAISE = BASE_URL + "feed/approval/";
 
     /**
@@ -24,4 +25,5 @@ public class HttpUrl {
      */
     public static final String USER = BASE_URL + "user/";
     public static final String MODIFY_NICK_URL = BASE_URL + "user/name";
+
 }

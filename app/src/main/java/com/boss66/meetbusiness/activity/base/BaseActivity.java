@@ -136,9 +136,30 @@ public class BaseActivity extends FragmentActivity {
         }
     }
 
+    protected void showComposingDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = createComposeDialog();
+            mProgressDialog.setCanceledOnTouchOutside(false);
+            mProgressDialog.show();
+        } else {
+            if (!mProgressDialog.isShowing()) {
+                mProgressDialog.show();
+            }
+        }
+    }
+
     private ProgressDialog createProgressDialog() {
         ProgressDialog dialog = DialogFactory.createProgressDialog(this);
         dialog.setMessage(getString(R.string.loading));
+        dialog.setIndeterminate(true);
+        // dialog.setCanceledOnTouchOutside(false);
+        // dialog.setCancelable(false);
+        return dialog;
+    }
+
+    private ProgressDialog createComposeDialog() {
+        ProgressDialog dialog = DialogFactory.createProgressDialog(this);
+        dialog.setMessage(getString(R.string.compose));
         dialog.setIndeterminate(true);
         // dialog.setCanceledOnTouchOutside(false);
         // dialog.setCancelable(false);
