@@ -284,9 +284,6 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
             ImageView iv_close = (ImageView) v_add_img.findViewById(R.id.iv_close);
             ImageView iv_icon = (ImageView) v_add_img.findViewById(R.id.iv_icon);
 
-//            Picasso.with(VendUploadGoodsActivity.this).load(path).
-//                    error(R.drawable.zf_default_message_image).transform(new PicassoRoundTransform()).into(iv_icon);
-
             Glide.with(VendUploadGoodsActivity.this).load(path).
                     error(R.drawable.zf_default_message_image).transform(new GlideRoundTransform(this, 10)).into(iv_icon);
 

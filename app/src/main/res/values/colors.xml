@@ -74,6 +74,7 @@
 
     <color name="btn_white_normal">#f7f8f8</color>
     <color name="btn_white_pressed">#b5b5b6</color>
+    <color name="golden_stars">#FFC619</color>
     <color name="bg_color00">#91b7fe</color>
     <color name="bg_color01">#fd9191</color>
     <color name="bg_color02">#b3bdc7</color>
