@@ -4,7 +4,7 @@ package com.boss66.meetbusiness.http;
  * Created by Johnny on 2017/5/16.
  */
 public class HttpUrl {
-    public static final String BASE_URL = "http://api.hmg66.com/v1/";
+    public static final String BASE_URL = "https://api.hmg66.com/v1/";
 
     public static final String AUTH_URL = "https://api.66boss.com/ksauth/index.php";
 

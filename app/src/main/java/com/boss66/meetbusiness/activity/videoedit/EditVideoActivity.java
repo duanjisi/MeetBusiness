@@ -1,7 +1,9 @@
 package com.boss66.meetbusiness.activity.videoedit;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -23,11 +25,14 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -67,6 +72,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Johnny on 2017/6/26.
@@ -518,6 +525,8 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
 
     private String img_path;
     private String composeUrl;
+    private boolean mComposeFinished = false;
+    private ComposeAlertDialog mComposeAlertDialog;
 
     private void onNextClick() {
         if (stickerView != null) {
@@ -531,13 +540,19 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         } else {
             img_path = Constants.CACHE_IMG_DIR + "temp.png";
         }
-        showComposingDialog();
+//        showComposingDialog();
         mEditKit.setTargetResolution(VIDEO_RESOLUTION);
         mEditKit.setVideoFps(FRAME_RATE);
         mEditKit.setVideoCodecId(ENCODE_TYPE);
         mEditKit.setVideoEncodeProfile(ENCODE_PROFILE);
         mEditKit.setAudioKBitrate(AUDIO_BITRATE);
         mEditKit.setVideoKBitrate(VIDEO_BITRATE);
+        //关闭上一次合成窗口
+        if (mComposeAlertDialog != null) {
+            mComposeAlertDialog.closeDialog();
+        }
+
+        mComposeAlertDialog = new ComposeAlertDialog(context, R.style.dialog);
         //设置合成路径
         String fileFolder = "/sdcard/MeetBus";
         File file = new File(fileFolder);
@@ -547,6 +562,141 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         composeUrl = fileFolder + "/" + System.currentTimeMillis() + ".mp4";
         //开始合成
         mEditKit.startCompose(composeUrl);
+    }
+
+
+    private class ComposeAlertDialog extends AlertDialog {
+        private RelativeLayout mProgressLayout;
+        private ProgressBar mComposeProgess;
+        private TextView mStateTextView;
+        private TextView mProgressText;
+
+        private int mScreenWidth;
+        private int mScreenHeight;
+        private String mFilePath = null;
+        public boolean mNeedResumePlay = false;
+        private AlertDialog mConfimDialog;
+
+        private Timer mTimer;
+
+        protected ComposeAlertDialog(Context context, int themeResId) {
+            super(context, themeResId);
+        }
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            Display display = getWindowManager().getDefaultDisplay();
+            mScreenWidth = display.getWidth();
+            mScreenHeight = display.getHeight();
+            ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(mScreenWidth, mScreenHeight);
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View viewDialog = inflater.inflate(R.layout.compose_layout, null);
+            setContentView(viewDialog, layoutParams);
+
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            mProgressLayout = (RelativeLayout) findViewById(R.id.compose_root);
+            mComposeProgess = (ProgressBar) findViewById(R.id.state_progress);
+            mProgressText = (TextView) findViewById(R.id.progress_text);
+            mStateTextView = (TextView) findViewById(R.id.state_text);
+        }
+
+        @Override
+        public boolean onKeyDown(int keyCode, KeyEvent event) {
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_BACK:
+                    if (!mComposeFinished) {
+                        mConfimDialog = new AlertDialog.Builder(context).setCancelable
+                                (true)
+                                .setTitle("中止合成?")
+                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface arg0, int arg1) {
+                                        mConfimDialog = null;
+                                    }
+                                })
+                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface arg0, int arg1) {
+                                        if (!mComposeFinished) {
+                                            mEditKit.stopCompose();
+                                            mComposeFinished = false;
+                                            closeDialog();
+                                            resumeEditPreview();
+                                        }
+                                        mConfimDialog = null;
+                                    }
+                                }).show();
+                    } else {
+                        closeDialog();
+                        resumeEditPreview();
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return false;
+        }
+
+        public void uploadProgress(double progress) {
+            updateProgress((int) progress);
+        }
+
+        private void updateProgress(final int progress) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (mProgressText.getVisibility() == View.VISIBLE) {
+                        mProgressText.setText(String.valueOf(progress) + "%");
+                    }
+                }
+            });
+
+        }
+
+        public void closeDialog() {
+            if (mTimer != null) {
+                mTimer.cancel();
+                mTimer = null;
+            }
+            ComposeAlertDialog.this.dismiss();
+        }
+
+        public void composeStarted() {
+            mStateTextView.setVisibility(View.VISIBLE);
+            mStateTextView.setText(R.string.compose_file);
+            mTimer = new Timer();
+            mTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    final int progress = mEditKit.getProgress();
+                    updateProgress(progress);
+                }
+            }, 500, 500);
+        }
+
+        public void composeFinished(String path) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (mConfimDialog != null) {
+                        mConfimDialog.dismiss();
+                        mConfimDialog = null;
+                    }
+//                    mStateTextView.setText("上传鉴权中");
+                }
+            });
+            mFilePath = path;
+//            startPreview();
+            if (mTimer != null) {
+                mTimer.cancel();
+                mTimer = null;
+            }
+        }
+    }
+
+    private void resumeEditPreview() {
+        mEditKit.resumeEditPreview();
     }
 
     private void showBgFram() {
@@ -637,6 +787,10 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (mComposeAlertDialog != null) {
+            mComposeAlertDialog.closeDialog();
+            mComposeAlertDialog = null;
+        }
         mEditKit.stopEditPreview();
         mEditKit.release();
     }
@@ -893,32 +1047,28 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                 case ShortVideoConstants.SHORTVIDEO_COMPOSE_START: {
                     mEditKit.pauseEditPreview();
 //                    mBeautySpinner.setSelection(0);
-//                    if (mComposeAlertDialog != null) {
-//                        mComposeAlertDialog.setCancelable(false);
-//                        mComposeAlertDialog.show();
-//                        mComposeAlertDialog.composeStarted();
-//                    }
+                    if (mComposeAlertDialog != null) {
+                        mComposeAlertDialog.setCancelable(false);
+                        mComposeAlertDialog.show();
+                        mComposeAlertDialog.composeStarted();
+                    }
                     return null;
                 }
                 case ShortVideoConstants.SHORTVIDEO_COMPOSE_FINISHED: {
 //                    mAudioReverbSpinner.setSelection(0);
 //                    mAudioEffectSpinner.setSelection(0);
-//                    if (mComposeAlertDialog != null) {
-//                        mComposeAlertDialog.composeFinished(msgs[0]);
-//                        mComposeFinished = true;
-//                    }
-//                    //上传必要信息：bucket,objectkey，及PutObjectResponseHandler上传过程回调
-//                    mCurObjectKey = getPackageName() + "/" + System.currentTimeMillis() + ".mp4";
-//                    KS3ClientWrap.KS3UploadInfo bucketInfo = new KS3ClientWrap.KS3UploadInfo
-//                            ("ksvsdemo", mCurObjectKey, mPutObjectResponseHandler);
-//                    return bucketInfo;
-                    cancelLoadingDialog();
-                    showToast("合成视频完成!", true);
-
-                    Intent intent = new Intent(context, ShareVideoActivity.class);
-                    intent.putExtra("BgPath", img_path);
-                    intent.putExtra("videoPath", composeUrl);
-                    startActivity(intent);
+                    if (mComposeAlertDialog != null) {
+                        Log.i("info", "===================msgs[0]:" + msgs[0]);
+                        Log.i("info", "===================imPath:" + img_path);
+                        mComposeAlertDialog.composeFinished(msgs[0]);
+                        mComposeFinished = true;
+                        mComposeAlertDialog.closeDialog();
+                        showToast("合成视频完成!", true);
+                        Intent intent = new Intent(context, ShareVideoActivity.class);
+                        intent.putExtra("BgPath", img_path);
+                        intent.putExtra("videoPath", msgs[0]);
+                        startActivity(intent);
+                    }
                 }
                 case ShortVideoConstants.SHORTVIDEO_COMPOSE_ABORTED:
                     break;
@@ -1008,16 +1158,17 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
 
 
     private void initDatas(VideoThumbnailInfo[] listData) {
-        int width = UIUtils.getScreenWidth(context) / 10 - UIUtils.dip2px(context, 100);
+        int width = (UIUtils.getScreenWidth(context) - UIUtils.dip2px(context, 80)) / 8;
         for (int i = 0; i < listData.length; i++) {
             VideoThumbnailInfo info = listData[i];
             ImageView imageView = new ImageView(this);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 //            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(info.mWidth, LinearLayout.LayoutParams.MATCH_PARENT);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(UIUtils.px2dip(context, width),
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.MATCH_PARENT);
             params.leftMargin = 5;
             imageView.setLayoutParams(params);
+            imageView.getLayoutParams().width = (int) width;
             Bitmap bitmap = info.mBitmap;
             if (bitmap != null) {
                 imageView.setImageBitmap(bitmap);
@@ -1034,25 +1185,25 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         VideoThumbnailInfo info = listData[0];
         if (info != null) {
             Log.i("info", "================0000000000000000");
-//            VideoThumbnailTask.loadBitmap(this, iv_video_bg,
-//                    null, (long) (info.mCurrentTime * 1000), info,
-//                    mEditKit, null);
             VideoThumbnailTask.loadBitmap(this, iv_video_bg,
                     null, (long) (info.mCurrentTime * 1000), info,
-                    mEditKit, null, new VideoThumbnailTask.callback() {
-                        @Override
-                        public void size(final int width, final int height) {
-                            Log.i("info", "=============width:" + width + "\n" + "height:" + height);
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, RelativeLayout.LayoutParams.WRAP_CONTENT);
-//                                    content_layout.setLayoutParams(params);
-                                    tvContent.setLayoutParams(params);
-                                }
-                            });
-                        }
-                    });
+                    mEditKit, null);
+//            VideoThumbnailTask.loadBitmap(this, iv_video_bg,
+//                    null, (long) (info.mCurrentTime * 1000), info,
+//                    mEditKit, null, new VideoThumbnailTask.callback() {
+//                        @Override
+//                        public void size(final int width, final int height) {
+//                            Log.i("info", "=============width:" + width + "\n" + "height:" + height);
+//                            handler.post(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, RelativeLayout.LayoutParams.WRAP_CONTENT);
+////                                    content_layout.setLayoutParams(params);
+//                                    tvContent.setLayoutParams(params);
+//                                }
+//                            });
+//                        }
+//                    });
         }
     }
 

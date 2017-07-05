@@ -67,4 +67,9 @@
     <string name="mis_permission_rationale_write_storage">存储写入权限需要保存图像.</string>
     <string name="giving_camera_permissions">没有相机权限！</string>
     <string name="giving_record_permissions">没有录音权限！</string>
+
+    <string name="upload_file_success">上传成功</string>
+    <string name="upload_file_fail">上传失败</string>
+    <string name="upload_file">文件上传中...</string>
+    <string name="compose_file">文件合成中...</string>
 </resources>
