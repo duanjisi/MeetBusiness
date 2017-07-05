@@ -81,6 +81,7 @@ public abstract class BaseDataRequest<T> {
             @Override
             public void onFailure(Request request, IOException e) {
                 final App app = App.getInstance();
+                Log.i("info", "===================Exception:" + e.getMessage());
                 if (NetworkUtil.networkAvailable(app)) {
                     mHandler.post(new Runnable() {
                         @Override
