@@ -65,7 +65,7 @@ public class LogisticsView extends LinearLayout {
                     icon.setLayoutParams(params);
                     //结尾图标隐藏竖线
 //                    iv_line.setVisibility(GONE);
-                    v_end.setVisibility(GONE);
+                    //v_end.setVisibility(GONE);
                     tv_time.setTextColor(getResources().getColor(R.color.actionsheet_red));
                     description.setTextColor(getResources().getColor(R.color.actionsheet_red));
                     icon.setImageResource(R.drawable.shot_next_step);

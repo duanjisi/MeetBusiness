@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  * Created by GMARUnity on 2017/6/28.
+ * 待付款
  */
 public class OrderObligationFragment extends BaseOrderFragment {
     private OrderAdapter orderAdapter;

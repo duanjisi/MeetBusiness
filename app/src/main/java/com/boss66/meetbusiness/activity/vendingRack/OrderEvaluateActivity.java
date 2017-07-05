@@ -76,6 +76,8 @@ public class OrderEvaluateActivity extends BaseActivity implements View.OnClickL
     }
 
     private void initView() {
+        imgMap = new HashMap<>();
+        imgStrMap = new HashMap<>();
         sceenW = UIUtils.getScreenWidth(this);
         ll_img = (LinearLayout) findViewById(R.id.ll_img);
         et_content = (EditText) findViewById(R.id.et_content);
@@ -87,6 +89,7 @@ public class OrderEvaluateActivity extends BaseActivity implements View.OnClickL
         bt_upload.setOnClickListener(this);
         v_add_img = View.inflate(this, R.layout.item_vend_add_img, null);
         TextView tv_add_img = (TextView) v_add_img.findViewById(R.id.tv_add_img);
+        et_content.getLayoutParams().height = (int) (sceenW / 2 * 0.9);
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tv_add_img.getLayoutParams();
         params.width = sceenW / 5;
         params.height = sceenW / 5;
