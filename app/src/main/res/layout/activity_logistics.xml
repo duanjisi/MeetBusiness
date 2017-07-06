@@ -90,10 +90,10 @@
 
             </RelativeLayout>
 
-            <com.boss66.meetbusiness.widget.LogisticsView
+            <com.atgc.cotton.widget.LogisticsView
                 android:id="@+id/logisticsView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></com.boss66.meetbusiness.widget.LogisticsView>
+                android:layout_height="wrap_content"></com.atgc.cotton.widget.LogisticsView>
         </LinearLayout>
 
     </ScrollView>

@@ -7,7 +7,7 @@
     android:paddingBottom="16dp"
     android:paddingTop="32dp">
 
-    <com.boss66.meetbusiness.widget.CircleImageView
+    <com.atgc.cotton.widget.CircleImageView
         android:id="@+id/iv_avatar"
         android:layout_width="83dp"
         android:layout_height="83dp"
