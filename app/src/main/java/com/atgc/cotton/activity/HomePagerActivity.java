@@ -238,7 +238,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
                     rb_shopping.setChecked(false);
 
 
-                    Intent intent = new Intent(HomePagerActivity.this, ShoppingCarActivity.class);
+                    Intent intent = new Intent(HomePagerActivity.this, GoodsDetailActivity.class);
                     startActivity(intent);
 //                    overridePendingTransition(R.anim.activity_in, R.anim.activity_no);
 //
