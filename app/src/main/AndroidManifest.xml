@@ -95,5 +95,8 @@
         <activity
             android:name="com.atgc.cotton.activity.videoedit.ShareVideoActivity"
             android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.GoodsDetailActivity"
+            android:screenOrientation="portrait"/>
+
     </application>
 </manifest>
