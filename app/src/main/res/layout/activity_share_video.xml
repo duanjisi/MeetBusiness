@@ -140,7 +140,7 @@
                 android:layout_centerVertical="true"
                 android:src="@drawable/selected" />
 
-            <com.boss66.meetbusiness.widget.RoundImageView
+            <com.atgc.cotton.widget.RoundImageView
                 android:id="@+id/iv_good_bg"
                 android:layout_width="120dp"
                 android:layout_height="120dp"

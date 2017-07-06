@@ -78,7 +78,7 @@
                     android:textColor="@color/text_color_black"
                     android:textSize="18sp" />
 
-                <com.boss66.meetbusiness.widget.MyRatingBar
+                <com.atgc.cotton.widget.MyRatingBar
                     android:id="@+id/ratingBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

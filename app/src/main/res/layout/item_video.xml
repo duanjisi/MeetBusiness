@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <com.boss66.meetbusiness.widget.RoundImageView
+    <com.atgc.cotton.widget.RoundImageView
         android:id="@+id/iv_bg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
         android:layout_below="@+id/iv_bg"
         android:layout_marginTop="10dp">
 
-        <com.boss66.meetbusiness.widget.CircleImageView
+        <com.atgc.cotton.widget.CircleImageView
             android:id="@+id/iv_author"
             android:layout_width="26dp"
             android:layout_height="26dp"

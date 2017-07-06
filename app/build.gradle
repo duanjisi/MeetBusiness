@@ -5,7 +5,7 @@ android {
     compileSdkVersion 24
     buildToolsVersion "25.0.0"
     defaultConfig {
-        applicationId "com.boss66.meetbusiness"
+        applicationId "com.atgc.cotton"
         minSdkVersion 16
         targetSdkVersion 24
         versionCode 1
