@@ -2,6 +2,7 @@ package com.boss66.meetbusiness.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.TextView;
 
 import com.boss66.meetbusiness.R;
@@ -10,6 +11,7 @@ import com.boss66.meetbusiness.presenter.GoodsDetailPresenter;
 import com.boss66.meetbusiness.presenter.view.IGoodsDetailView;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
 /**
  * 商品详情页
@@ -52,4 +54,14 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
         //请求网络失败的处理
     }
 
+    @OnClick({R.id.tv_name, R.id.tv_name2})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.tv_name:
+
+                break;
+            case R.id.tv_name2:
+                break;
+        }
+    }
 }

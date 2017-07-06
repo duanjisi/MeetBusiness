@@ -49,4 +49,6 @@ public abstract class MvpActivity<P extends BasePresenter> extends BaseActivity 
     public void hideLoading() {
         cancelLoadingDialog();
     }
+
+
 }
