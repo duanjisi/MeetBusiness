@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.boss66.meetbusiness.Constants;
+import com.boss66.meetbusiness.util.FileUtils;
 import com.ksyun.media.shortvideo.kit.KSYEditKit;
 
 import java.lang.ref.WeakReference;
@@ -105,6 +107,10 @@ public class VideoThumbnailTask extends AsyncTask<Long, Void, Bitmap> {
             return null;
         }
         mVideoThumbnailData.mBitmap = bitmap;
+        if (bitmap != null) {
+            FileUtils.deleteTempFile(Constants.CACHE_IMG_DIR + "temp.png");
+            String mPath = FileUtils.saveBitmap(bitmap, "temp.png");
+        }
         if (callback != null) {
             callback.size(bitmap.getWidth(), bitmap.getHeight());
         }

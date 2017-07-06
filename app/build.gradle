@@ -1,8 +1,9 @@
 apply plugin: 'com.android.application'
 
 android {
+    useLibrary 'org.apache.http.legacy'
     compileSdkVersion 24
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "25.0.0"
     defaultConfig {
         applicationId "com.boss66.meetbusiness"
         minSdkVersion 16
@@ -54,4 +55,5 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'de.greenrobot:eventbus:3.0.0-beta1'
 
+    compile files('libs/xUtils-2.6.14.jar')
 }

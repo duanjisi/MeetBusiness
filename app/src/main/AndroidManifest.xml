@@ -92,6 +92,9 @@
         <activity
             android:name=".activity.videoedit.LocalMusicActivity"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.videoedit.ShareVideoActivity"
+            android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.GoodsDetailActivity"
             android:screenOrientation="portrait"/>
 

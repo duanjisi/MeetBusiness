@@ -1,6 +1,5 @@
 package com.boss66.meetbusiness.fragment;
 
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.boss66.meetbusiness.activity.vendingRack.LogisticsActivity;
@@ -13,14 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by GMARUnity on 2017/6/28.
- * 待收货
+ * Created by GMARUnity on 2017/7/4.
+ * 待买家付款
  */
-public class OrderReceivingFragment extends BaseOrderFragment {
+public class OrderSellerObligationFragment extends BaseOrderFragment {
+    private OrderAdapter orderAdapter;
+    private int postion;
+
     @Override
     protected void setAdapterAndDecor(LRecyclerView list) {
         setHasOptionsMenu(true);
-        OrderAdapter orderAdapter = new OrderAdapter(getActivity());
+        orderAdapter = new OrderAdapter(getActivity());
         List<OrderEntity> dataList = new ArrayList<>();
         setData(dataList);
         orderAdapter.setDatas(dataList);
@@ -36,8 +38,9 @@ public class OrderReceivingFragment extends BaseOrderFragment {
             }
 
             @Override
-            public void onOrdBtn3(OrderEntity orderEntity,int pos) {
+            public void onOrdBtn3(OrderEntity orderEntity, int pos) {
                 btnToDo(orderEntity, 3);
+                postion = pos;
             }
         });
         mLRecyclerViewAdapter = new LRecyclerViewAdapter(orderAdapter);
@@ -50,9 +53,11 @@ public class OrderReceivingFragment extends BaseOrderFragment {
             if (i % 4 == 0) {
                 item.setContentType(0);
                 item.setShopName("店铺：" + i);
+                item.setHeadTag(i);
             } else if (i % 4 == 3) {
                 item.setContentType(2);
                 item.setAllNum(2);
+                item.setFootTag(i);
             } else {
                 item.setGoodsNum("" + (i + 1));
                 int price = 5 + i % 2;
@@ -61,9 +66,9 @@ public class OrderReceivingFragment extends BaseOrderFragment {
                 item.setAllPrice(String.valueOf(allprice));
                 item.setContentType(1);
             }
-            item.setOrderType(2);
+            item.setOrderType(0);
             item.setGoodsName("商品：" + i);
-            item.setGoodsContent("商品介绍：" + i);
+            item.setGoodsContent("商品介绍：的顶顶顶顶多多多多多多多多多过过过过个二二二啊啊啊啊啊啊啊啊啊" + i);
             dataList.add(item);
         }
     }
@@ -84,7 +89,7 @@ public class OrderReceivingFragment extends BaseOrderFragment {
                 if (type == 1) {
                     Log.i("OrderEntity:", "确认收货");
                 } else if (type == 2) {
-                    Log.i("OrderEntity:", "查看物流");
+                    Log.i("OrderEntity:", "查看物流LogisticsActivity");
                     openActivity(LogisticsActivity.class);
                 }
                 break;

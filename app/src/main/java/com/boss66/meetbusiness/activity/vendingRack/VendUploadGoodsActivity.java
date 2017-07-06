@@ -41,11 +41,9 @@ import com.boss66.meetbusiness.util.ToastUtil;
 import com.boss66.meetbusiness.util.UIUtils;
 import com.boss66.meetbusiness.widget.ActionSheet;
 import com.boss66.meetbusiness.widget.GlideRoundTransform;
-import com.boss66.meetbusiness.widget.PicassoRoundTransform;
 import com.bumptech.glide.Glide;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -76,7 +74,6 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
     private View v_add_img;
     private EditText et_repertory;
     private int sceenW, sceenH, repertoryNum = 0;
-    private List<View> viewList;
     private int addSize = 0, addTag;
     private HashMap<Integer, View> imgMap;
     private HashMap<Integer, String> imgStrMap;
@@ -97,7 +94,6 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
     }
 
     private void initView() {
-        viewList = new ArrayList<>();
         imgMap = new HashMap<>();
         imgStrMap = new HashMap<>();
         sceenW = UIUtils.getScreenWidth(this);

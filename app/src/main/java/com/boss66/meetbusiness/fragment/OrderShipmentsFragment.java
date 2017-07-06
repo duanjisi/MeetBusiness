@@ -13,6 +13,7 @@ import java.util.List;
 
 /**
  * Created by GMARUnity on 2017/6/28.
+ * 待发货
  */
 public class OrderShipmentsFragment extends BaseOrderFragment {
     @Override
