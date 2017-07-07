@@ -2,8 +2,8 @@ package com.atgc.cotton.activity;
 
 import android.os.Bundle;
 
-import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.R;
+import com.atgc.cotton.activity.base.BaseActivity;
 
 /**
  * Created by liw on 2017/6/28.

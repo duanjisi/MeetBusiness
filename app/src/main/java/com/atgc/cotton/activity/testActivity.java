@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.atgc.cotton.http.request.UnPraiseRequest;
 import com.atgc.cotton.App;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
@@ -13,6 +12,7 @@ import com.atgc.cotton.http.BaseDataRequest;
 import com.atgc.cotton.http.request.LoginRequest;
 import com.atgc.cotton.http.request.ModifyNickRequest;
 import com.atgc.cotton.http.request.PraiseRequest;
+import com.atgc.cotton.http.request.UnPraiseRequest;
 import com.atgc.cotton.http.request.UserInfosRequest;
 
 /**

@@ -11,9 +11,9 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.atgc.cotton.widget.DialogFactory;
 import com.atgc.cotton.App;
 import com.atgc.cotton.R;
+import com.atgc.cotton.widget.DialogFactory;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;

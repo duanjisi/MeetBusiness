@@ -11,6 +11,7 @@ public class HttpUrl {
     /**
      * public公共接口
      */
+    public static final String HOME_PAGER_URL = BASE_URL + "public/feed";//获取首页发现数据列表
     public static final String LOGIN_URL = BASE_URL + "public/login";
     public static final String REGISTER_URL = BASE_URL + "public/register";
 

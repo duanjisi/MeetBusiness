@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.atgc.cotton.entity.LocalVoiceEntity;
 import com.atgc.cotton.R;
+import com.atgc.cotton.entity.LocalVoiceEntity;
 
 /**
  * Created by GMARUnity on 2017/6/30.

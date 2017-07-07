@@ -24,14 +24,14 @@ import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.atgc.cotton.activity.base.BaseActivity;
-import com.atgc.cotton.util.UIUtils;
-import com.atgc.cotton.videorange.VideoThumbnailInfo;
 import com.atgc.cotton.R;
+import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.adapter.VideoThumbAdapter;
 import com.atgc.cotton.photoedit.OperateUtils;
 import com.atgc.cotton.photoedit.OperateView;
 import com.atgc.cotton.photoedit.TextObject;
+import com.atgc.cotton.util.UIUtils;
+import com.atgc.cotton.videorange.VideoThumbnailInfo;
 import com.atgc.cotton.videorange.VideoThumbnailTask;
 import com.ksyun.media.shortvideo.kit.KSYEditKit;
 import com.ksyun.media.shortvideo.utils.ShortVideoConstants;
@@ -40,7 +40,6 @@ import com.ksyun.media.shortvideo.utils.ShortVideoConstants;
  * Created by Johnny on 2017/6/26.
  */
 public class EditVideoActivity2 extends BaseActivity implements View.OnClickListener {
-
     private GLSurfaceView mEditPreviewView;
     private KSYEditKit mEditKit;
     private AppCompatSeekBar mOriginAudioVolumeSeekBar;

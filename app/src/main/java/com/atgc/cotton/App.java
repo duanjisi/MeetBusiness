@@ -3,11 +3,11 @@ package com.atgc.cotton;
 import android.app.Activity;
 import android.app.Application;
 
-import com.atgc.cotton.config.LoginStatus;
-import com.atgc.cotton.entity.AccountEntity;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.atgc.cotton.config.LoginStatus;
+import com.atgc.cotton.entity.AccountEntity;
 
 /**
  * Created by Johnny on 2017/5/16.
@@ -57,8 +57,7 @@ public class App extends Application {
     }
 
     public boolean isLogin() {
-        //return LoginStatus.getInstance().hadLogged();
-        return true;
+        return LoginStatus.getInstance().hadLogged();
     }
 
     public void initUser(AccountEntity account) {

@@ -3,8 +3,8 @@ package com.atgc.cotton.widget.recordclip;
 import android.os.Handler;
 import android.view.View;
 
-import com.atgc.cotton.activity.videoedit.RecordVideoActivity;
 import com.atgc.cotton.R;
+import com.atgc.cotton.activity.videoedit.RecordVideoActivity;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

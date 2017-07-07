@@ -1,7 +1,7 @@
 package com.atgc.cotton.http.request;
 
-import com.atgc.cotton.http.BaseDataRequest;
 import com.atgc.cotton.entity.AccountEntity;
+import com.atgc.cotton.http.BaseDataRequest;
 import com.atgc.cotton.http.HttpUrl;
 
 import java.util.HashMap;
