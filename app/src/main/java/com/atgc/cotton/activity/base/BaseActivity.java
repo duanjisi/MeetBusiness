@@ -207,4 +207,16 @@ public class BaseActivity extends FragmentActivity {
         super.onDestroy();
 //        AppManager.getInstance().remove(this);
     }
+
+    /**
+     * @param msg    内容
+     * @param length
+     * @return: void
+     */
+    protected void showToast(String msg) {
+        if (TextUtils.isEmpty(msg)) {
+            return;
+        }
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
 }

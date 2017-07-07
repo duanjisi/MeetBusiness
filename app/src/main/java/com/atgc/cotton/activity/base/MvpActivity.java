@@ -27,6 +27,16 @@ public abstract class MvpActivity<P extends BasePresenter> extends BaseActivity 
         setContentView(getLayoutId());
         ButterKnife.bind(this);
 
+        initUI();
+        initData();
+    }
+
+    protected void initData() {
+
+    }
+
+    protected void initUI() {
+
     }
 
     protected abstract int getLayoutId();

@@ -19,9 +19,18 @@ import java.io.File;
 import java.io.IOException;
 import java.net.FileNameMap;
 import java.net.URLConnection;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Map;
 
-/**
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+/** okhttp 2.x的网络请求框架
  * Created by liw on 2017/6/26.
  */
 
@@ -34,6 +43,34 @@ public class OkManager {
 
     private OkManager() {
         client = new OkHttpClient();
+        try {
+            SSLContext sc = SSLContext.getInstance("SSL");
+            sc.init(null, new TrustManager[]{new X509TrustManager() {
+                @Override
+                public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+
+                }
+
+                @Override
+                public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+
+                }
+
+                @Override
+                public X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+            }}, new SecureRandom());
+            client.setSslSocketFactory(sc.getSocketFactory());
+            client.setHostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         handler = new Handler(Looper.getMainLooper());
     }
 
@@ -101,7 +138,7 @@ public class OkManager {
             formEncodingBuilder.add(entry.getKey(), entry.getValue());
         }
         RequestBody requestBody = formEncodingBuilder.build();
-        final Request request = new Request.Builder().url(url).post(requestBody).build();
+        final Request request = new Request.Builder().url(url).post(requestBody).tag("aaaa").build();
         client.newCall(request).enqueue(new Callback() {
 
             @Override
@@ -231,7 +268,7 @@ public class OkManager {
 
     }
 
-    interface Funcl {
+    public interface Funcl {
         void onResponse(String result);
 
         void onFailure();

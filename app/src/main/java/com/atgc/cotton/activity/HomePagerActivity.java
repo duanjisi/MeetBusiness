@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -20,7 +21,6 @@ import android.widget.TextView;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.activity.vendingRack.MyOrderActivity;
-import com.atgc.cotton.activity.vendingRack.VendingRackHomeActivity;
 import com.atgc.cotton.activity.shoppingCar.ShoppingCarActivity;
 import com.atgc.cotton.activity.videoedit.RecordVideoActivity;
 import com.atgc.cotton.fragment.MainDiscoverFragment;
@@ -61,6 +61,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
 
     private RadioButton rb_shopping;
     private Handler handler;
+    private Button btn_login;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -123,6 +124,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
         mViewPager.setCurrentItem(VIEW_PAGER_PAGE_1);
 
         rb_shopping = (RadioButton) findViewById(R.id.rb_shopping);
+
     }
 
     @Override
@@ -139,7 +141,8 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
 
                 break;
             case R.id.iv_avatar:
-                openActivity(testActivity.class);
+//                openActivity(testActivity.class);
+                openActivity(LoginActivity.class);
                 break;
         }
     }
@@ -230,7 +233,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
                     openActivity(RecordVideoActivity.class);
                     break;
                 case R.id.rb_price:
-                    openActivity(VendingRackHomeActivity.class);
+//                    openActivity(VendingRackHomeActivity.class);
                     break;
                 case R.id.rb_shopping:
 //                    showToast("购物车", true);
