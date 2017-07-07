@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.boss66.meetbusiness">
+    package="com.atgc.cotton">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -65,7 +65,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.boss66.meetbusiness.fileProvider"
+            android:authorities="com.atgc.cotton.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -96,6 +96,8 @@
             android:name=".activity.videoedit.ShareVideoActivity"
             android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.GoodsDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.LoginActivity"
             android:screenOrientation="portrait"/>
 
     </application>

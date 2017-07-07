@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.boss66.meetbusiness.widget.SwipeMenuView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.atgc.cotton.widget.SwipeMenuView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
@@ -67,4 +67,4 @@
         android:paddingRight="@dimen/dp_18"
         android:src="@drawable/delete_goods" />
 
-</com.boss66.meetbusiness.widget.SwipeMenuView>
+</com.atgc.cotton.widget.SwipeMenuView>
