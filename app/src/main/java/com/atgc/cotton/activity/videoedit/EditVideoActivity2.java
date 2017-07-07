@@ -40,7 +40,6 @@ import com.ksyun.media.shortvideo.utils.ShortVideoConstants;
  * Created by Johnny on 2017/6/26.
  */
 public class EditVideoActivity2 extends BaseActivity implements View.OnClickListener {
-
     private GLSurfaceView mEditPreviewView;
     private KSYEditKit mEditKit;
     private AppCompatSeekBar mOriginAudioVolumeSeekBar;

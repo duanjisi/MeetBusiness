@@ -1304,7 +1304,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     public void onDoubleClick(StickerView sticker) {
 //        PrintUtils.println("双击调用");
 //        editLayout.setVisibility(View.VISIBLE);
-//        CommonUtils.showInputMethod(MainActivity.this, editText);
         if (popupWindow != null && popupWindow.isShowing()) {
             popupWindow.dismiss();
         } else {

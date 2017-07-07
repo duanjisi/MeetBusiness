@@ -239,8 +239,12 @@ public abstract class BaseDataRequest<T> {
     }
 
     private String getEnd(Map<String, String> params) {
-        Map<String, String> encryptionParams = HttpUtil.getEncryptionParams(getParams());
-        return OkHttpUtil.formatParams(encryptionParams);
+        if (params != null) {
+            Map<String, String> encryptionParams = HttpUtil.getEncryptionParams(params);
+            return "?" + OkHttpUtil.formatParams(encryptionParams);
+        } else {
+            return "";
+        }
     }
 
     protected abstract String getApiPath();
@@ -248,7 +252,11 @@ public abstract class BaseDataRequest<T> {
     protected abstract int getRequestMethod();
 
     public String getApiUrl() {
-        return getApiPath();
+        if (getRequestMethod() == REQUEST_METHOD_GET) {
+            return getApiPath() + getEnd(getParams());
+        } else {
+            return getApiPath();
+        }
     }
 
     public interface RequestCallback<T> {

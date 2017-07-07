@@ -1,16 +1,19 @@
 <resources>
-    <string name="app_name">约淘</string>
-
+    <string name="app_name">老板六六</string>
     <string name="loading">数据加载中， 请稍候&#8230;</string>
     <string name="compose">正在合成</string>
     <!--QQ,微信开放平台-->
-    <string name="weixin_app_id2">wxac34006c18243289</string>
-    <string name="weixin_app_id">wxcd7d86f3f2c04077</string>
-    <string name="weixin_app_secret">dd51e4ff815cfe313551a86a6402e886</string>
+    <!--<string name="weixin_app_id2">wxac34006c18243289</string>-->
+    <!--<string name="weixin_app_id">wxcd7d86f3f2c04077</string>-->
+    <!--<string name="weixin_app_secret">dd51e4ff815cfe313551a86a6402e886</string>-->
+    <!--<string name="qq_app_id">1106188643</string>-->
+    <!--<string name="qq_app_key">dlAfz2grvlmECfgT</string>-->
+    <!--<string name="alipay_app_id">2016092201948966</string>-->
+    <string name="weixin_app_id">wxac34006c18243289</string>
+    <string name="weixin_app_secret">d75af34b167ca5b4debb88009aa9d12c</string>
+    <string name="qq_app_id">1105592272</string>
+    <string name="qq_app_key">oZVFYZysIJFJhXx4</string>
 
-    <string name="qq_app_id">1106188643</string>
-    <string name="qq_app_key">dlAfz2grvlmECfgT</string>
-    <string name="alipay_app_id">2016092201948966</string>
     <string name="umeng_key">595af6c307fe652140000242</string>
 
     <!-- 错误提示 start -->

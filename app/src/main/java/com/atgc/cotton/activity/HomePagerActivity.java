@@ -1,6 +1,5 @@
 package com.atgc.cotton.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -20,7 +19,6 @@ import android.widget.TextView;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.activity.production.mine.MyProductionActivity;
-import com.atgc.cotton.activity.shoppingCar.ShoppingCarActivity;
 import com.atgc.cotton.activity.vendingRack.MyOrderActivity;
 import com.atgc.cotton.activity.vendingRack.VendingRackHomeActivity;
 import com.atgc.cotton.activity.videoedit.RecordVideoActivity;
@@ -238,8 +236,9 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
                     rb_shopping.setChecked(false);
 
 
-                    Intent intent = new Intent(HomePagerActivity.this, GoodsDetailActivity.class);
-                    startActivity(intent);
+//                    Intent intent = new Intent(HomePagerActivity.this, GoodsDetailActivity.class);
+//                    startActivity(intent);
+
 //                    overridePendingTransition(R.anim.activity_in, R.anim.activity_no);
 //
 //                    handler.postDelayed(new Runnable() {
@@ -248,7 +247,6 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
 //                            drawerLayout.closeDrawer(rl_left);
 //                        }
 //                    },500);
-
                     break;
                 case R.id.rb_order:
                     openActivity(MyOrderActivity.class, null);

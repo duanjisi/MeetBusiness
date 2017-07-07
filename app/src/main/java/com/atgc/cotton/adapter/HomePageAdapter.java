@@ -73,19 +73,38 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.VideoV
                     }
                 });
             }
-//            Log.i("info", "=============width:" + entity.getWidth() + "\n" + "height:" + entity.getHeight());
-            holder.tvAuthor.setText(entity.getAuthor());
-            holder.tvPraiseNum.setText(entity.getPraiseNum());
-            scaleSize(holder.ivBg, entity.getWidth(), entity.getHeight());
-            imageLoader.displayImage(entity.getUrl(), holder.ivBg, ImageLoaderUtils.getDisplayImageOptions());
-            imageLoader.displayImage(entity.getAuthorIcon(), holder.ivAvatar, ImageLoaderUtils.getDisplayImageOptions());
+            holder.tvAuthor.setText(entity.getUserName());
+            holder.tvPraiseNum.setText(entity.getLikeCount());
+//            scaleSize(holder.ivBg, entity.getWidth(), entity.getHeight());
+//            imageLoader.displayImage(entity.getUrl(), holder.ivBg, ImageLoaderUtils.getDisplayImageOptions());
+            imageLoader.displayImage(entity.getAvatar(), holder.ivAvatar, ImageLoaderUtils.getDisplayImageOptions());
+            scalLoadImageVideo(holder, entity.getMediaPath());
         }
     }
 
+    private String[] getSize(String url) {
+        Log.i("liwya", url);
+        String str = url.substring(url.indexOf("-"), url.length());
+        String size = str.substring(str.indexOf("-") + 1, str.indexOf("."));
+        return size.split("x");
+    }
+
+    private void scalLoadImageVideo(VideoView holder, String videoPath) {
+        String imageUrl = "";
+        if (videoPath.contains(".mp4")) {
+            imageUrl = videoPath.replace(".mp4", ".jpg");
+        } else if (videoPath.contains(".mov")) {
+            imageUrl = videoPath.replace(".mov", ".jpg");
+        }
+        String[] size = getSize(imageUrl);
+        int width = Integer.parseInt(size[0]);
+        int height = Integer.parseInt(size[1]);
+        scaleSize(holder.ivBg, width, height);
+        imageLoader.displayImage(imageUrl, holder.ivBg, ImageLoaderUtils.getDisplayImageOptions());
+    }
 
     private void scaleSize(RoundImageView iv, int w, int h) {
-//        int width =( w/widthScreen)*;
-        int height = (widthScreen / w) * h;
+        int height = (widthScreen * h) / w;
         Log.i("info", "=============width:" + widthScreen + "\n" + "height:" + height);
         iv.getLayoutParams().width = widthScreen;
         iv.getLayoutParams().height = height;
