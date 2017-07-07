@@ -20,7 +20,7 @@ public class HttpUrl {
      */
     public static final String BASE_FEED = BASE_URL + "feed/";
     public static final String PRAISE = BASE_URL + "feed/approval/";
-
+    public static final String NEAR = BASE_URL + "feed/vicinity/";
     /**
      * user公共接口
      */
