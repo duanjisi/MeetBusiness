@@ -7,6 +7,6 @@ public class MainNearFragment extends MainFragment {
 
     @Override
     protected int getType() {
-        return 0;
+        return TYPE_NEAR;
     }
 }
