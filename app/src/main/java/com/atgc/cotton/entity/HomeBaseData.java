@@ -1,5 +1,6 @@
 package com.atgc.cotton.entity;
 
+
 import java.util.ArrayList;
 
 /**

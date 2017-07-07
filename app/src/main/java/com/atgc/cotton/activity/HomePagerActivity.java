@@ -44,7 +44,6 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
     private ImageLoader imageLoader;
     private CircleImageView ivAvatar;
     private TextView tvActive, tvMsg, tvInfo;
-
     private static final int VIEW_PAGER_PAGE_1 = 0;
     private static final int VIEW_PAGER_PAGE_2 = 1;
     private static final int VIEW_PAGER_PAGE_3 = 2;
@@ -57,7 +56,6 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
     private ArrayList<Fragment> mFragments = new ArrayList<Fragment>();
     private MainFragment mainFocusFragment, mainDiscoverFragment, mainNearFragment;
     private RadioButton mFocus, mDiscover, mNear;
-
     private RadioButton rb_shopping;
     private Handler handler;
 

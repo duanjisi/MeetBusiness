@@ -117,5 +117,10 @@
         <!--android:name=".activity.GoodsDetailActivity"-->
         <!--android:screenOrientation="portrait" />-->
 
+        <!-- 定位需要的服务 -->
+        <service android:name="com.amap.api.location.APSService" />
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="39c0f3c63d4616b894ba0a679dbeb9a2"></meta-data>
     </application>
 </manifest>

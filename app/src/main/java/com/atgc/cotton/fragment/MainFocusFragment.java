@@ -7,6 +7,6 @@ public class MainFocusFragment extends MainFragment {
 
     @Override
     protected int getType() {
-        return 0;
+        return TYPE_FOCUS;
     }
 }
