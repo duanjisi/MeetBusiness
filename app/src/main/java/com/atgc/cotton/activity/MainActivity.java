@@ -55,7 +55,8 @@ public class MainActivity extends BaseActivity {
         iv_lock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openActivity(HomePagerActivity.class);
+//                openActivity(HomePagerActivity.class);
+                openActivity(LoginActivity.class);
                 finish();
             }
         });

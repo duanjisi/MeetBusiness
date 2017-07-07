@@ -64,14 +64,18 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
         return new LoginPresenter(this);
     }
 
+
+    //登录成功
     @Override
     public void getDataSuccess(String s) {
-
+        showToast(s);
+        finish();
+        openActivity(HomePagerActivity.class);
     }
 
     @Override
     public void getDataFail() {
-
+        showToast("登录失败,请重试");
     }
 
 
@@ -92,7 +96,6 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
             case R.id.btn_login:
                 showToast("登录");
                 login();
-
 
                 break;
             case R.id.tv_register:

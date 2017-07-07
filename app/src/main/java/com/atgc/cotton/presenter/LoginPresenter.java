@@ -1,7 +1,11 @@
 package com.atgc.cotton.presenter;
 
+import com.alibaba.fastjson.JSON;
+import com.atgc.cotton.App;
+import com.atgc.cotton.entity.UserEntity;
 import com.atgc.cotton.presenter.view.INormalView;
 import com.atgc.cotton.util.L;
+import com.atgc.cotton.util.PreferenceUtils;
 
 import java.util.Map;
 
@@ -27,9 +31,23 @@ public class LoginPresenter extends BasePresenter<INormalView> {
                 .subscribe(new MyObserver<String>() {
                     @Override
                     public void onNext_(String s) {
-                        L.i(s);
+                        UserEntity entity = JSON.parseObject(s, UserEntity.class);
+
+                        if(entity.getCode()==0){  //登录成功,
+                            //TODO    把个人信息存在本地
+                            UserEntity.DataBean data = entity.getData();
+                            PreferenceUtils.putBoolean(App.getInstance().getApplicationContext(), "isThirdLogin", true);
+                            //存本地，写个类.
+
+                            mvpView.getDataSuccess(entity.getMessage());
+                        }else{
+                            //登录失败
+                            mvpView.getDataFail();
+                        }
+
+
                         mvpView.hideLoading();
-                        mvpView.getDataSuccess(s);
+
                     }
 
                     @Override

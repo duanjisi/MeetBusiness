@@ -131,9 +131,6 @@ public class RegisterActivity extends MvpActivity<RegisterPresenter> implements 
         map = new HashMap<>();
         map.put("mobilephone",phone);
         map.put("password",psw);
-        Log.i("okh",phone);
-        Log.i("okh",psw);
-//       mvp 的网络请求框架
         mPresenter.register(map);
         //我的ok请求框架
 //        OkManager.getInstance().doPost(ApiStores.API_SERVER_URL+"public/register", map, new OkManager.Funcl() {
