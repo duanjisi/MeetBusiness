@@ -28,6 +28,11 @@ public interface ApiStores {
     //手机号注册
     @FormUrlEncoded
     @POST("public/register")
+    Observable<String> phoneRegister(@FieldMap Map<String,String> params);
+
+    //手机号登录
+    @FormUrlEncoded
+    @POST("public/login")
     Observable<String> phoneLogin(@FieldMap Map<String,String> params);
 
 }

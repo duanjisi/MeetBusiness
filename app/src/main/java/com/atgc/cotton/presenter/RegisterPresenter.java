@@ -17,9 +17,9 @@ public class RegisterPresenter extends BasePresenter<IRegisterView> {
     }
 
 
-    public void login(Map<String,String> map) {
+    public void register(Map<String,String> map) {
         mvpView.showLoading();
-        addSubscription(api.phoneLogin(map)
+        addSubscription(api.phoneRegister(map)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MyObserver<String>() {
@@ -27,7 +27,7 @@ public class RegisterPresenter extends BasePresenter<IRegisterView> {
                     public void onNext_(String model) {
                         L.i(model);
                         mvpView.hideLoading();
-                        mvpView.getCodeSucceed();
+                        mvpView.getCodeSucceed(model);
                     }
 
                     @Override

@@ -1,6 +1,8 @@
 package com.atgc.cotton.activity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +14,10 @@ import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.MvpActivity;
 import com.atgc.cotton.presenter.LoginPresenter;
 import com.atgc.cotton.presenter.view.INormalView;
+import com.atgc.cotton.util.UIUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -85,6 +91,9 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
                 break;
             case R.id.btn_login:
                 showToast("登录");
+                login();
+
+
                 break;
             case R.id.tv_register:
                 showToast("注册");
@@ -97,5 +106,34 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
                 showToast("wx");
                 break;
         }
+    }
+
+    private void login() {
+        String phone = et_account.getText().toString();
+        String psw = et_pw.getText().toString();
+
+        if (TextUtils.isEmpty(phone)) {
+            showToast("手机号不能为空!");
+            return;
+        }
+        if (!UIUtils.isMobile(phone)) {
+            showToast("手机号格式不正确!");
+            return;
+
+        }
+        if (TextUtils.isEmpty(psw)) {
+            showToast("请输入密码!");
+            return;
+        }
+        if (psw.length() < 6 || psw.length() > 16) {
+            showToast("密码长度不符合要求");
+            return;
+        }
+        Map<String, String> map = new HashMap<>();
+        map.put("mobilephone", phone);
+        map.put("password", psw);
+
+        mPresenter.login(map);
+
     }
 }

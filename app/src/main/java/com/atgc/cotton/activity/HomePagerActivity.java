@@ -21,8 +21,6 @@ import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.activity.production.mine.MyProductionActivity;
 import com.atgc.cotton.activity.vendingRack.MyOrderActivity;
-import com.atgc.cotton.activity.shoppingCar.ShoppingCarActivity;
-import com.atgc.cotton.activity.vendingRack.VendingRackHomeActivity;
 import com.atgc.cotton.activity.videoedit.RecordVideoActivity;
 import com.atgc.cotton.fragment.MainDiscoverFragment;
 import com.atgc.cotton.fragment.MainFocusFragment;

@@ -6,7 +6,7 @@ package com.atgc.cotton.presenter.view;
 
 public interface IRegisterView extends IBaseView {
 
-    void  getCodeSucceed();
+    void  getCodeSucceed(String s);
 
     void  loginSucceed();
 
