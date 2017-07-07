@@ -31,7 +31,7 @@ public class HttpUrl {
      * 售货架相关接口
      */
     public static final String VEND_UPLOAD_GOODS = BASE_URL + "goods/";//上架商品
-    public static final String VEND_GET_MY_GOODS = BASE_URL + "goods/mine";//获取我的售货架列表
+    public static final String VEND_GET_MY_GOODS = BASE_URL + "goods/mine?";//获取我的售货架列表
     public static final String VEND_CHANGE_GOODS = BASE_URL + "goods/";//修改商品 or 删除商品
 
 }

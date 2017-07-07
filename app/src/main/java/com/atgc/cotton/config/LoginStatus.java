@@ -71,7 +71,9 @@ public class LoginStatus {
     }
 
     public String getToken() {
-        return mPreferences.getString(TOKEN, "");
+        //return mPreferences.getString(TOKEN, "");
+        String token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjEwMDAwMDA5NiwiZXhwIjoxNTE0ODYzMTI1LCJpc3MiOiJ6aGVuZ2NvZ0BnbWFpbC5jb20iLCJuYmYiOjE0OTkzMTExMjV9.hNJqz-W3o_M_tiDiqiugjTWj1EOxZYigV-Nercf18VU";
+        return token;
     }
 
     public String getUserid() {

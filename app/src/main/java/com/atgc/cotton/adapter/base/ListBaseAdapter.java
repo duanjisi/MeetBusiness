@@ -50,7 +50,7 @@ public abstract class ListBaseAdapter<T> extends RecyclerView.Adapter<SuperViewH
 
     public abstract void onBindItemHolder(SuperViewHolder holder, int position);
 
-    public void onBindItemHolder(SuperViewHolder holder, int position, List<Object> payloads){
+    public void onBindItemHolder(SuperViewHolder holder, int position, List<Object> payloads) {
 
     }
 
@@ -80,8 +80,8 @@ public abstract class ListBaseAdapter<T> extends RecyclerView.Adapter<SuperViewH
         this.mDataList.remove(position);
         notifyItemRemoved(position);
 
-        if(position != (getDataList().size())){ // 如果移除的是最后一个，忽略
-            notifyItemRangeChanged(position,this.mDataList.size()-position);
+        if (position != (getDataList().size())) { // 如果移除的是最后一个，忽略
+            notifyItemRangeChanged(position, this.mDataList.size() - position);
         }
     }
 
@@ -89,5 +89,10 @@ public abstract class ListBaseAdapter<T> extends RecyclerView.Adapter<SuperViewH
         mDataList.clear();
         notifyDataSetChanged();
     }
+
+    public Object getItem(int pos) {
+        return mDataList.get(pos);
+    }
+
 }
 
