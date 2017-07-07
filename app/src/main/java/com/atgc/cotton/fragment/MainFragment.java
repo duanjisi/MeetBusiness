@@ -10,11 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.atgc.cotton.R;
 import com.atgc.cotton.adapter.HomePageAdapter;
+import com.atgc.cotton.listener.ItemClickListener;
+import com.atgc.cotton.R;
 import com.atgc.cotton.entity.Product;
 import com.atgc.cotton.entity.VideoEntity;
-import com.atgc.cotton.listener.ItemClickListener;
 import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
 import com.github.jdsjlzx.interfaces.OnRefreshListener;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;

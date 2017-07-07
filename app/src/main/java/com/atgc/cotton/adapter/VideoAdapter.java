@@ -8,11 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.atgc.cotton.R;
-import com.atgc.cotton.entity.VideoEntity;
 import com.atgc.cotton.util.ImageLoaderUtils;
 import com.atgc.cotton.util.UIUtils;
 import com.atgc.cotton.widget.CircleImageView;
+import com.atgc.cotton.R;
+import com.atgc.cotton.entity.VideoEntity;
 import com.atgc.cotton.widget.RoundImage;
 import com.nostra13.universalimageloader.core.ImageLoader;
 

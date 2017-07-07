@@ -29,9 +29,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.atgc.cotton.R;
 import com.atgc.cotton.util.UIUtils;
 import com.atgc.cotton.util.Utils;
+import com.atgc.cotton.R;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;

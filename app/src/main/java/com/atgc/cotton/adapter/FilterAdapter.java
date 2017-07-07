@@ -6,8 +6,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.atgc.cotton.R;
 import com.atgc.cotton.adapter.base.ListBaseAdapter;
+import com.atgc.cotton.R;
 import com.atgc.cotton.adapter.base.SuperViewHolder;
 import com.atgc.cotton.entity.FilterEntity;
 import com.bumptech.glide.Glide;

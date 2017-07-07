@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/dp_14"
-    android:padding="@dimen/dp_10">
+    android:padding="@dimen/dp_10"
+    android:paddingBottom="@dimen/dp_14">
 
     <TextView
         android:id="@+id/tv_add_attr"
@@ -97,13 +97,14 @@
             android:textColor="@color/text_color_gray_9" />
 
         <EditText
-            android:id="@+id/et_title"
+            android:id="@+id/et_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
             android:background="@null"
             android:hint="@string/input_goods_price"
             android:imeOptions="actionDone"
+            android:inputType="numberDecimal"
             android:paddingBottom="@dimen/dp_18"
             android:paddingRight="@dimen/dp_6"
             android:paddingTop="@dimen/dp_18"
@@ -119,4 +120,9 @@
         android:layout_height="1px"
         android:background="@color/line_color_gray_d2" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="提交"
+        android:visibility="invisible" />
 </LinearLayout>

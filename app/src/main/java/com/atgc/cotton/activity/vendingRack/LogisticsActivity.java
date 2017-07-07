@@ -9,10 +9,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.atgc.cotton.widget.LogisticsView;
 import com.atgc.cotton.R;
 import com.atgc.cotton.entity.LogisticsModel;
 import com.atgc.cotton.util.UIUtils;
-import com.atgc.cotton.widget.LogisticsView;
 
 import java.util.ArrayList;
 import java.util.List;

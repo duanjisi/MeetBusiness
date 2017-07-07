@@ -21,14 +21,14 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:name=".App"
+        android:name="com.atgc.cotton.App"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.HomePagerActivity"
+            android:name="com.atgc.cotton.activity.HomePagerActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
@@ -38,28 +38,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.vendingRack.VendingRackHomeActivity"
+            android:name="com.atgc.cotton.activity.vendingRack.VendingRackHomeActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".activity.vendingRack.VendUploadGoodsActivity"
+            android:name="com.atgc.cotton.activity.vendingRack.VendUploadGoodsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"></activity>
         <activity
-            android:name=".activity.vendingRack.MyOrderActivity"
+            android:name="com.atgc.cotton.activity.vendingRack.MyOrderActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"></activity>
         <activity
-            android:name=".activity.vendingRack.LogisticsActivity"
+            android:name="com.atgc.cotton.activity.vendingRack.LogisticsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"></activity>
         <activity
-            android:name=".activity.vendingRack.OrderEvaluateActivity"
+            android:name="com.atgc.cotton.activity.vendingRack.OrderEvaluateActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"></activity>
 
         <!--相册Activity-->
         <activity
-            android:name=".util.PhotoAlbumUtil.MultiImageSelectorActivity"
+            android:name="com.atgc.cotton.util.PhotoAlbumUtil.MultiImageSelectorActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"></activity>
 
@@ -73,27 +73,27 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".activity.testActivity"></activity>
+        <activity android:name="com.atgc.cotton.activity.testActivity"></activity>
         <activity
-            android:name=".activity.shoppingCar.ShoppingCarActivity"
+            android:name="com.atgc.cotton.activity.shoppingCar.ShoppingCarActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".activity.videoedit.RecordVideoActivity"
+            android:name="com.atgc.cotton.activity.videoedit.RecordVideoActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".activity.videoedit.EditVideoActivity"
+            android:name="com.atgc.cotton.activity.videoedit.EditVideoActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".activity.videoedit.LocalVideoFilesActivity"
+            android:name="com.atgc.cotton.activity.videoedit.LocalVideoFilesActivity"
             android:screenOrientation="portrait"></activity>
         <!--<activity-->
         <!--android:name=".activity.shoppingCar.ShoppingCarActivity"-->
         <!--android:screenOrientation="portrait"></activity>-->
         <activity
-            android:name=".activity.videoedit.LocalMusicActivity"
+            android:name="com.atgc.cotton.activity.videoedit.LocalMusicActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".activity.videoedit.ShareVideoActivity"
+            android:name="com.atgc.cotton.activity.videoedit.ShareVideoActivity"
             android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.GoodsDetailActivity"
             android:screenOrientation="portrait"/>

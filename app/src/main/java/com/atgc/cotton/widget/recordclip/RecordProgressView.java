@@ -11,8 +11,8 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.atgc.cotton.R;
 import com.atgc.cotton.activity.videoedit.RecordVideoActivity;
+import com.atgc.cotton.R;
 
 import java.util.LinkedList;
 

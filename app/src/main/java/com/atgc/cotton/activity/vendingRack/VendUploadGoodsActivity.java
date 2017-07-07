@@ -1,6 +1,7 @@
 package com.atgc.cotton.activity.vendingRack;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +16,9 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -28,19 +32,25 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
+import com.atgc.cotton.http.BaseDataRequest;
+import com.atgc.cotton.util.KeyboardUtils;
+import com.atgc.cotton.util.UIUtils;
+import com.atgc.cotton.widget.GlideRoundTransform;
 import com.atgc.cotton.R;
 import com.atgc.cotton.adapter.VendUploadGoodsAdapter;
+import com.atgc.cotton.entity.BaseResult;
 import com.atgc.cotton.entity.VendUploadEntity;
+import com.atgc.cotton.http.request.VendUploadGoodsRequest;
 import com.atgc.cotton.listener.PermissionListener;
 import com.atgc.cotton.util.FileUtils;
-import com.atgc.cotton.util.KeyboardUtils;
 import com.atgc.cotton.util.PermissonUtil.PermissionUtil;
 import com.atgc.cotton.util.PhotoAlbumUtil.MultiImageSelector;
 import com.atgc.cotton.util.PhotoAlbumUtil.MultiImageSelectorActivity;
 import com.atgc.cotton.util.ToastUtil;
-import com.atgc.cotton.util.UIUtils;
 import com.atgc.cotton.widget.ActionSheet;
-import com.atgc.cotton.widget.GlideRoundTransform;
 import com.bumptech.glide.Glide;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
@@ -53,6 +63,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -61,6 +72,9 @@ import java.util.concurrent.TimeUnit;
  * Created by GMARUnity on 2017/6/19.
  */
 public class VendUploadGoodsActivity extends AppCompatActivity implements View.OnClickListener, ActionSheet.OnSheetItemClickListener {
+
+    private static final String TAG = VendUploadGoodsActivity.class.getSimpleName();
+
     private LRecyclerView rv_content;
     private TextView tv_back;
     private Toolbar toolbar;
@@ -86,6 +100,9 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
     private Uri imageUri;
     private String photoPath;
 
+    private EditText et_title, et_price;
+    private String savePath;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +111,7 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
     }
 
     private void initView() {
+        savePath = Environment.getExternalStorageDirectory() + "/IMProject/";
         imgMap = new HashMap<>();
         imgStrMap = new HashMap<>();
         sceenW = UIUtils.getScreenWidth(this);
@@ -136,7 +154,6 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
             @Override
             public void onScrollUp() {
                 int state = mBottomSheetBehavior.getState();
-                Log.i("num:", "onScrollUp    " + state);
                 if (state == BottomSheetBehavior.STATE_EXPANDED) {
                     mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 }
@@ -145,7 +162,6 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
             @Override
             public void onScrollDown() {
                 int state = mBottomSheetBehavior.getState();
-                Log.i("num:", "onScrollDown    " + state);
                 if (state == BottomSheetBehavior.STATE_HIDDEN) {
                     mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 }
@@ -153,29 +169,33 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
 
             @Override
             public void onScrolled(int distanceX, int distanceY) {
+                boolean isBootm = rv_content.canScrollVertically(1);
+                if (!isBootm) {
+                    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                }
             }
 
             @Override
             public void onScrollStateChanged(int state) {
 
             }
-
         });
 
         mLRecyclerViewAdapter = new LRecyclerViewAdapter(adapter);
         rv_content.setAdapter(mLRecyclerViewAdapter);
         View headview = View.inflate(this, R.layout.head_view_vend_upload_goods, null);
+        et_title = (EditText) headview.findViewById(R.id.et_title);
         mLRecyclerViewAdapter.addHeaderView(headview);
         View footdview = LayoutInflater.from(this).inflate(R.layout.foot_view_vend_upload_goods, (ViewGroup) findViewById(android.R.id.content), false);
         initFootView(footdview);
         mLRecyclerViewAdapter.addFooterView(footdview);
 
         rv_content.setPullRefreshEnabled(false);
-        //rv_content.setLoadMoreEnabled(false);
         rv_content.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private void initFootView(View view) {
+        et_price = (EditText) view.findViewById(R.id.et_price);
         et_repertory = (EditText) view.findViewById(R.id.et_repertory);
         ImageView iv_minus = (ImageView) view.findViewById(R.id.iv_minus);
         ImageView iv_add = (ImageView) view.findViewById(R.id.iv_add);
@@ -204,6 +224,33 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
                     stopAddOrSubtract();    //手指抬起时停止发送
                 }
                 return true;
+            }
+        });
+        et_repertory.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable != null) {
+                    String s = editable.toString().trim();
+                    if (!TextUtils.isEmpty(s)) {
+                        if (s.length() > 9) {
+                            ToastUtil.showShort(VendUploadGoodsActivity.this, "已超过最大可输入值");
+                            et_repertory.setText("999999999");
+                            repertoryNum = 999999999;
+                        } else {
+                            repertoryNum = Integer.parseInt(s);
+                        }
+                    }
+                }
             }
         });
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tv_add_img.getLayoutParams();
@@ -242,6 +289,9 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
                 int addTag = (int) v.getTag();
                 addViewToContainer(false, addTag, null);
                 break;
+            case R.id.bt_upload:
+                upLoadGoods();
+                break;
         }
     }
 
@@ -274,6 +324,7 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
     };
 
     private void addViewToContainer(boolean isAdd, int tag, String path) {
+        Log.i("savePath：", "" + path);
         if (isAdd) {
             View v_add_img = View.inflate(this, R.layout.item_vend_add_img_content, null);
             RelativeLayout rl_item = (RelativeLayout) v_add_img.findViewById(R.id.rl_item);
@@ -381,9 +432,8 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
                     } else {
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         String imageName = System.currentTimeMillis() + ".jpg";
-                        String savePath = Environment.getExternalStorageDirectory() + "/IMProject/";
                         File file = new File(savePath, imageName);
-                        imageUri = FileProvider.getUriForFile(VendUploadGoodsActivity.this, "com.boss66.meetbusiness.fileProvider", file);//这里进行替换uri的获得方式
+                        imageUri = FileProvider.getUriForFile(VendUploadGoodsActivity.this, "com.atgc.cotton.fileProvider", file);//这里进行替换uri的获得方式
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);//这里加入flag
                         startActivityForResult(intent, OPEN_CAMERA);
@@ -437,6 +487,7 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
                     String path = selectPicList.get(i);
                     imgStrMap.put(addTag, path);
                     addViewToContainer(true, 0, path);
+
                 }
             }
         }
@@ -462,5 +513,92 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
             scheduledExecutor.shutdownNow();
             scheduledExecutor = null;
         }
+    }
+
+    private void upLoadGoods() {
+        String token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjEwMDAwMDA5NiwiZXhwIjoxNTE0Nzk1MDIxLCJpc3MiOiJ6aGVuZ2NvZ0BnbWFpbC5jb20iLCJuYmYiOjE0OTkyNDMwMjF9.vLKKbhLF6X-fC-zhpoFoL06JZ2iBaKuDvd_xHuDMSAo";
+        Map<String, Object> map = new HashMap<>();
+        String title = et_title.getText().toString().trim();
+        if (TextUtils.isEmpty(title)) {
+            ToastUtil.show(this, "标题不能为空", Toast.LENGTH_SHORT);
+            return;
+        }
+        String repertory = et_repertory.getText().toString().trim();
+        if (TextUtils.isEmpty(repertory) || repertoryNum <= 0) {
+            ToastUtil.show(this, "库存不能为空", Toast.LENGTH_SHORT);
+            return;
+        }
+        String price = et_price.getText().toString().trim();
+        if (TextUtils.isEmpty(price)) {
+            ToastUtil.show(this, "价格不能为空", Toast.LENGTH_SHORT);
+            return;
+        }
+        if (imgStrMap.size() < 1) {
+            ToastUtil.show(this, "请至少上传一张图片", Toast.LENGTH_SHORT);
+            return;
+        }
+        map.put("name", title);
+        map.put("number", repertory);
+        map.put("price", price);
+        List<VendUploadEntity> list = adapter.getDataList();
+        int listSize = list.size();
+        JSONArray jsonarray = new JSONArray();
+        for (int i = 0; i < listSize; i++) {
+            VendUploadEntity entity = list.get(i);
+            if (entity != null) {
+                JSONObject object = new JSONObject();
+                try {
+                    object.put("attr_name", entity.getTitle());
+                    object.put("attr_value", entity.getContent());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                jsonarray.add(object);
+            }
+        }
+        map.put("attrs", jsonarray);
+        int i = 0;
+        for (int key : imgStrMap.keySet()) {
+            String path = imgStrMap.get(key);
+            if (Build.VERSION.SDK_INT >= 24 && path.contains("com.atgc.cotton.fileProvider") &&
+                    path.contains("/IMProject/")) {
+                String[] arr = path.split("/IMProject/");
+                if (arr != null && arr.length > 1) {
+                    path = savePath + arr[1];
+                }
+            }
+
+            Bitmap bitmap = FileUtils.compressImageFromFile(path, sceenW);
+            if (bitmap != null) {
+                File file = FileUtils.compressImage(bitmap, savePath);
+                if (file != null) {
+                    map.put("pic" + i, file);
+                    i++;
+                }
+            }
+        }
+        VendUploadGoodsRequest request = new VendUploadGoodsRequest(TAG, 0);
+        request.sendFile(new BaseDataRequest.RequestCallback<String>() {
+
+            @Override
+            public void onSuccess(String pojo) {
+                Log.i("savePath:", "onSuccess:" + pojo);
+                if (!TextUtils.isEmpty(pojo)) {
+                    BaseResult dta = BaseResult.parse(pojo);
+                    if (dta != null) {
+                        if (dta.getCode() == 0 && dta.getStatus() == 200) {
+                            ToastUtil.showShort(VendUploadGoodsActivity.this, dta.getMessage());
+                            setResult(RESULT_OK);
+                            finish();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                ToastUtil.showShort(VendUploadGoodsActivity.this, msg);
+            }
+        }, map, token);
     }
 }

@@ -10,13 +10,13 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
-import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.fragment.MainDiscoverFragment;
 import com.atgc.cotton.fragment.MainFocusFragment;
 import com.atgc.cotton.fragment.MainFragment;
 import com.atgc.cotton.fragment.MainNearFragment;
 import com.atgc.cotton.util.UIUtils;
+import com.atgc.cotton.R;
 
 import java.util.ArrayList;
 

@@ -1,23 +1,21 @@
 package com.atgc.cotton.http.request;
 
 import com.atgc.cotton.http.BaseDataRequest;
-import com.atgc.cotton.entity.AccountEntity;
 import com.atgc.cotton.http.HttpUrl;
 
 import java.util.Map;
 
 /**
- * Created by Johnny on 2017/6/23.
+ * Created by GMARUnity on 2017/7/5.
  */
-public class UserInfosRequest extends BaseDataRequest<AccountEntity> {
-
-    public UserInfosRequest(String tag, Object... params) {
+public class VendUploadGoodsRequest extends BaseDataRequest<String> {
+    public VendUploadGoodsRequest(String tag, Object... params) {
         super(tag, params);
     }
 
     @Override
     protected boolean isParse() {
-        return true;
+        return false;
     }
 
     @Override
@@ -27,11 +25,11 @@ public class UserInfosRequest extends BaseDataRequest<AccountEntity> {
 
     @Override
     protected String getApiPath() {
-        return HttpUrl.USER + mParams[0];
+        return HttpUrl.VEND_UPLOAD_GOODS;
     }
 
     @Override
     protected int getRequestMethod() {
-        return REQUEST_METHOD_GET;
+        return REQUEST_METHOD_POST;
     }
 }

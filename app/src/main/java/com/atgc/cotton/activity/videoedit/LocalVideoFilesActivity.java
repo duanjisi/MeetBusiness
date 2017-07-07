@@ -24,13 +24,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
-import com.atgc.cotton.adapter.BaseRecycleViewAdapter;
-import com.atgc.cotton.domain.VideoEntity;
 import com.atgc.cotton.util.ImageResizer;
 import com.atgc.cotton.util.UIUtils;
 import com.atgc.cotton.widget.RecyclingImageView;
+import com.atgc.cotton.R;
+import com.atgc.cotton.adapter.BaseRecycleViewAdapter;
+import com.atgc.cotton.domain.VideoEntity;
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 

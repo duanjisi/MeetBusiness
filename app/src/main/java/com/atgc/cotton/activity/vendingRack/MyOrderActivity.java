@@ -11,16 +11,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
-import com.atgc.cotton.R;
 import com.atgc.cotton.fragment.BaseOrderFragment;
+import com.atgc.cotton.fragment.OrderSellerAllFragment;
+import com.atgc.cotton.fragment.OrderSellerShipmentsFragment;
+import com.atgc.cotton.R;
 import com.atgc.cotton.fragment.OrderAllFragment;
 import com.atgc.cotton.fragment.OrderEvaluateFragment;
 import com.atgc.cotton.fragment.OrderObligationFragment;
 import com.atgc.cotton.fragment.OrderReceivingFragment;
-import com.atgc.cotton.fragment.OrderSellerAllFragment;
 import com.atgc.cotton.fragment.OrderSellerObligationFragment;
 import com.atgc.cotton.fragment.OrderSellerRefundFragment;
-import com.atgc.cotton.fragment.OrderSellerShipmentsFragment;
 import com.atgc.cotton.fragment.OrderShipmentsFragment;
 
 import java.util.ArrayList;

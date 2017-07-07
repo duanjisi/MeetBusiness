@@ -9,8 +9,8 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
-import com.atgc.cotton.App;
 import com.atgc.cotton.Constants;
+import com.atgc.cotton.App;
 import com.atgc.cotton.R;
 import com.atgc.cotton.db.dao.JsonDao;
 import com.atgc.cotton.util.MycsLog;
@@ -18,12 +18,15 @@ import com.atgc.cotton.util.NetworkUtil;
 import com.atgc.cotton.util.ToastUtil;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.MultipartBuilder;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import net.jodah.typetools.TypeResolver;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
@@ -257,4 +260,23 @@ public abstract class BaseDataRequest<T> {
         void onFailure(String msg);
     }
 
+    public void sendFile(final RequestCallback callback, Map<String, Object> paramsMap, String token) {
+        String url = getApiUrl();
+        MultipartBuilder builder = new MultipartBuilder();
+        builder.type(MultipartBuilder.FORM);
+        for (String key : paramsMap.keySet()) {
+            Object object = paramsMap.get(key);
+            if (object instanceof String) {
+                builder.addFormDataPart(key, object.toString());
+            } else if (!(object instanceof File)) {
+                builder.addFormDataPart(key, object.toString());
+            } else {
+                File file = (File) object;
+                builder.addFormDataPart(key, file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
+            }
+        }
+        RequestBody body = builder.build();
+        final Request request = new Request.Builder().addHeader("Authorization", token).url(url).post(body).build();
+        netRequest(request, callback);
+    }
 }

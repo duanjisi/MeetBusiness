@@ -11,23 +11,23 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.activity.vendingRack.MyOrderActivity;
 import com.atgc.cotton.activity.vendingRack.VendingRackHomeActivity;
+import com.atgc.cotton.activity.shoppingCar.ShoppingCarActivity;
 import com.atgc.cotton.activity.videoedit.RecordVideoActivity;
 import com.atgc.cotton.fragment.MainDiscoverFragment;
 import com.atgc.cotton.fragment.MainFocusFragment;
 import com.atgc.cotton.fragment.MainFragment;
 import com.atgc.cotton.fragment.MainNearFragment;
 import com.atgc.cotton.util.ImageLoaderUtils;
-import com.atgc.cotton.util.OnMultiClickListener;
 import com.atgc.cotton.util.UIUtils;
 import com.atgc.cotton.widget.CircleImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -61,8 +61,6 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
 
     private RadioButton rb_shopping;
     private Handler handler;
-
-    private Button btn_login;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -125,18 +123,6 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
         mViewPager.setCurrentItem(VIEW_PAGER_PAGE_1);
 
         rb_shopping = (RadioButton) findViewById(R.id.rb_shopping);
-
-        btn_login = (Button) findViewById(R.id.btn_login);
-        btn_login.setOnClickListener(new OnMultiClickListener() {
-            @Override
-            public void onMultiClick(View v) {
-                //登录页面
-                openActivity(LoginActivity.class);
-
-
-
-            }
-        });
     }
 
     @Override
@@ -251,7 +237,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
                     rb_shopping.setChecked(false);
 
 
-                    Intent intent = new Intent(HomePagerActivity.this, GoodsDetailActivity.class);
+                    Intent intent = new Intent(HomePagerActivity.this, ShoppingCarActivity.class);
                     startActivity(intent);
 //                    overridePendingTransition(R.anim.activity_in, R.anim.activity_no);
 //

@@ -9,10 +9,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.atgc.cotton.R;
 import com.atgc.cotton.adapter.base.ListBaseAdapter;
-import com.atgc.cotton.adapter.base.SuperViewHolder;
 import com.atgc.cotton.entity.VendUploadEntity;
+import com.atgc.cotton.R;
+import com.atgc.cotton.adapter.base.SuperViewHolder;
 import com.atgc.cotton.widget.SwipeMenuView;
 
 /**

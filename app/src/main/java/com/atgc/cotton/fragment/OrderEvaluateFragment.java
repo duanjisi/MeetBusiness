@@ -3,9 +3,9 @@ package com.atgc.cotton.fragment;
 import android.util.Log;
 
 import com.atgc.cotton.activity.vendingRack.LogisticsActivity;
+import com.atgc.cotton.entity.OrderEntity;
 import com.atgc.cotton.activity.vendingRack.OrderEvaluateActivity;
 import com.atgc.cotton.adapter.OrderAdapter;
-import com.atgc.cotton.entity.OrderEntity;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 

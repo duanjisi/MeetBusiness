@@ -4,8 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.atgc.cotton.App;
 import com.atgc.cotton.db.DBHelper;
+import com.atgc.cotton.App;
 import com.atgc.cotton.db.JsonEntityColumn;
 import com.atgc.cotton.db.helper.ColumnHelper;
 import com.atgc.cotton.entity.JsonEntity;

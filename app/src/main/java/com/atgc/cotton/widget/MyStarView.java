@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 
-import com.atgc.cotton.R;
 import com.atgc.cotton.util.UIUtils;
+import com.atgc.cotton.R;
 
 /**
  * Created by GMARUnity on 2017/7/3.

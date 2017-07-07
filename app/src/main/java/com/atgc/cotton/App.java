@@ -57,7 +57,8 @@ public class App extends Application {
     }
 
     public boolean isLogin() {
-        return LoginStatus.getInstance().hadLogged();
+        //return LoginStatus.getInstance().hadLogged();
+        return true;
     }
 
     public void initUser(AccountEntity account) {
