@@ -46,7 +46,7 @@ public class LoginPresenter extends BasePresenter<INormalView> {
                         if(entity.getCode()==0){  //登录成功,
                             //TODO    把个人信息存在本地
                             UserEntity.DataBean data = entity.getData();
-                            PreferenceUtils.putBoolean(context, "isThirdLogin", true);
+                            PreferenceUtils.putBoolean(context, "isThirdLogin", false);
 
                             AccountEntity accountEntity = new AccountEntity();
                             accountEntity.setAvatar(data.getAvatar());

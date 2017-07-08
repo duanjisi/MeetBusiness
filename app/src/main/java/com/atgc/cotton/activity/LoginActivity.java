@@ -34,14 +34,10 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
     ImageView im_logo;
     @Bind(R.id.et_acconut)
     EditText et_account;
-    @Bind(R.id.ll_count)
-    View ll_count;
     @Bind(R.id.et_pw)
     EditText et_pw;
     @Bind(R.id.tv_Reset)
     TextView tv_reset;
-    @Bind(R.id.view_pw)
-    View view_pw;
     @Bind(R.id.btn_login)
     Button btn_login;
     @Bind(R.id.tv_register)
@@ -79,6 +75,12 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
         showToast("登录失败,请重试");
     }
 
+    @Override
+    protected void initData() {
+        super.initData();
+        addQQQZonePlatform();
+        addWXPlatform();
+    }
 
     @OnClick({R.id.img_back, R.id.et_acconut, R.id.et_pw, R.id.tv_Reset, R.id.btn_login, R.id.tv_register, R.id.img_qq, R.id.img_wx})
     public void onViewClicked(View view) {
@@ -89,7 +91,6 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
             case R.id.et_acconut:
                 break;
             case R.id.et_pw:
-
                 break;
             case R.id.tv_Reset:
                 showToast("重置密码");
