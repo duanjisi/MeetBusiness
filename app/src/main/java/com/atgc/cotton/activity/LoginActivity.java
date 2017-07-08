@@ -66,7 +66,10 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
     }
 
 
-    //登录成功
+    /**
+     * 登录成功回调
+     * @param s
+     */
     @Override
     public void getDataSuccess(String s) {
         showToast(s);
@@ -74,6 +77,9 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
         openActivity(HomePagerActivity.class);
     }
 
+    /**
+     * 登录失败
+     */
     @Override
     public void getDataFail() {
         showToast("登录失败,请重试");
@@ -110,11 +116,9 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
                 openActivity(RegisterActivity.class);
                 break;
             case R.id.img_qq:
-                showToast("qq");
                 ThirdLogin(SHARE_MEDIA.QQ, "qq");
                 break;
             case R.id.img_wx:
-                showToast("wx");
                 ThirdLogin(SHARE_MEDIA.WEIXIN, "wx");
                 break;
         }
@@ -248,9 +252,20 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
 //                                ThirdLoginPathform(type, access_token, avatar, openid, unionid, thusername);
                                 //调用自己的接口登录
                                 if(type.equals("wx")){
-                                    showToast("微信111");
+                                    Map<String,String> map = new HashMap<>();
+                                    map.put("wxunionid",unionid);
+                                    map.put("wxnickname",thusername);
+                                    map.put("wxavatar",avatar);
+
+                                    mPresenter.wxLogin(map);
+
                                 }else{
-                                    showToast("qq111");
+                                    Map<String,String> map = new HashMap<>();
+                                    map.put("accesstoken",access_token);
+                                    map.put("qqnickname",thusername);
+                                    map.put("qqavatar",avatar);
+
+                                    mPresenter.qqLogin(map);
                                 }
                             }
                         }

@@ -34,4 +34,6 @@ public class HttpUrl {
     public static final String VEND_GET_MY_GOODS = BASE_URL + "goods/mine?";//获取我的售货架列表
     public static final String VEND_CHANGE_GOODS = BASE_URL + "goods/";//修改商品 or 删除商品
 
+    //退出登录
+    public static final String LOGOUT  = BASE_URL+"public/logout";
 }
