@@ -30,7 +30,6 @@ public class BaseActivity extends FragmentActivity {
     // 首先在您的Activity中添加如下成员变量
     final public UMSocialService mController = UMServiceFactory
             .getUMSocialService("com.umeng.share");
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +37,6 @@ public class BaseActivity extends FragmentActivity {
         App.getInstance().addTempActivity(this);
         context = this;
     }
-
     protected void addQQQZonePlatform() {
         String appId = getString(R.string.qq_app_id);
         String appKey = getString(R.string.qq_app_key);
@@ -210,7 +208,6 @@ public class BaseActivity extends FragmentActivity {
 
     /**
      * @param msg    内容
-     * @param length
      * @return: void
      */
     protected void showToast(String msg) {

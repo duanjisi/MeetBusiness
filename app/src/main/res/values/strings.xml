@@ -11,11 +11,10 @@
     <!--<string name="alipay_app_id">2016092201948966</string>-->
     <string name="weixin_app_id">wxac34006c18243289</string>
     <string name="weixin_app_secret">d75af34b167ca5b4debb88009aa9d12c</string>
+
     <string name="qq_app_id">1105592272</string>
     <string name="qq_app_key">oZVFYZysIJFJhXx4</string>
-
     <string name="umeng_key">595af6c307fe652140000242</string>
-
     <!-- 错误提示 start -->
     <string name="error_generic_error">网络连接出现错误！</string>
     <string name="error_generic_server_down">连接不上服务器，请重试！</string>
