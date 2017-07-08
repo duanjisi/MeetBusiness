@@ -9,12 +9,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.MvpActivity;
 import com.atgc.cotton.presenter.LoginPresenter;
 import com.atgc.cotton.presenter.view.INormalView;
 import com.atgc.cotton.util.UIUtils;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.controller.listener.SocializeListeners;
+import com.umeng.socialize.exception.SocializeException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -78,6 +82,7 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
     @Override
     protected void initData() {
         super.initData();
+
         addQQQZonePlatform();
         addWXPlatform();
     }
@@ -106,13 +111,18 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
                 break;
             case R.id.img_qq:
                 showToast("qq");
+                ThirdLogin(SHARE_MEDIA.QQ, "qq");
                 break;
             case R.id.img_wx:
                 showToast("wx");
+                ThirdLogin(SHARE_MEDIA.WEIXIN, "wx");
                 break;
         }
     }
 
+    /**
+     * 手机号登录
+     */
     private void login() {
         String phone = et_account.getText().toString();
         String psw = et_pw.getText().toString();
@@ -140,5 +150,111 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
 
         mPresenter.login(map);
 
+    }
+
+
+    /**
+     * 第三方登录
+     * @param platform
+     * @param type
+     */
+    private void ThirdLogin(SHARE_MEDIA platform, final String type) {
+        mController.doOauthVerify(LoginActivity.this, platform,
+                new SocializeListeners.UMAuthListener() {
+
+                    @Override
+                    public void onStart(SHARE_MEDIA platform) {
+                        Toast.makeText(LoginActivity.this, "授权开始",
+                                Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(SocializeException e,
+                                        SHARE_MEDIA platform) {
+                        showToast(e.getMessage(), true);
+                        Toast.makeText(LoginActivity.this, "授权失败",
+                                Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onComplete(Bundle value, SHARE_MEDIA platform) {
+                        // 获取uid
+//                        Log.i("info", "Bundle:" + printBundle(value));
+                        String uid = value.getString("uid");
+                        String openid = value.getString("openid");
+                        String access_token = value.getString("access_token");
+//                        String unionid = value.getString("unionid");
+                        if (!TextUtils.isEmpty(uid)
+                                && !TextUtils.isEmpty(openid)
+                                && !TextUtils.isEmpty(access_token)) {
+                            // uid不为空，获取用户信息
+                            getUserInfo(platform, openid, access_token, type);
+                        } else {
+                            Toast.makeText(LoginActivity.this, "授权失败...",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancel(SHARE_MEDIA platform) {
+                        Toast.makeText(LoginActivity.this, "授权取消",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+
+    /**
+     * 获取用户信息
+     * @param platform
+     * @param openid
+     * @param access_token
+     * @param type
+     */
+    private void getUserInfo(SHARE_MEDIA platform
+            , final String openid
+            , final String access_token
+            , final String type) {
+        mController.getPlatformInfo(LoginActivity.this, platform,
+                new SocializeListeners.UMDataListener() {
+
+                    @Override
+                    public void onStart() {
+
+                    }
+
+                    @Override
+                    public void onComplete(int status, Map<String, Object> info) {
+                        if (info != null) {
+                            String thusername = "";
+                            String avatar = "";
+                            String unionid = "";
+                            if (info.containsKey("nickname")) {
+                                thusername = (String) info.get("nickname");
+                            } else if (info.containsKey("screen_name")) {
+                                thusername = (String) info.get("screen_name");
+                            }
+                            if (info.containsKey("profile_image_url")) {
+                                avatar = (String) info.get("profile_image_url");
+                            } else if (info.containsKey("headimgurl")) {
+                                avatar = (String) info.get("headimgurl");
+                            }
+                            if (info.containsKey("unionid")) {
+                                unionid = (String) info.get("unionid");
+                            }
+                            Log.i("info", "===info:" + info.toString());
+                            Log.i("info", "===thusername:" + thusername + "\n" + "avatar:" + avatar);
+                            if (thusername != null && !thusername.equals("") && !avatar.equals("")) {
+//                                ThirdLoginPathform(type, access_token, avatar, openid, unionid, thusername);
+                                //调用自己的接口登录
+                                if(type.equals("wx")){
+                                    showToast("微信111");
+                                }else{
+                                    showToast("qq111");
+                                }
+                            }
+                        }
+                    }
+                });
     }
 }

@@ -19,6 +19,8 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- QQ、QQ空间所需权限 -->
+    <uses-permission android:name="android.permission.GET_TASKS"/>
 
     <application
         android:name=".App"
@@ -131,4 +133,38 @@
             android:name="com.amap.api.v2.apikey"
             android:value="39c0f3c63d4616b894ba0a679dbeb9a2"></meta-data>
     </application>
+
+    <!-- QQ第三方登录 start -->
+    <activity
+        android:name="com.tencent.tauth.AuthActivity"
+        android:noHistory="true"
+        android:launchMode="singleTask">
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="tencent1105592272" />
+        </intent-filter>
+    </activity>
+    <activity
+        android:name="com.tencent.connect.common.AssistActivity"
+        android:screenOrientation="portrait"
+        android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+    <!--微信 必须在wxapi下，记得加上项目的包名-->
+    <activity
+        android:name=".wxapi.WXEntryActivity"
+        android:configChanges="keyboardHidden|orientation|screenSize"
+        android:exported="true"
+        android:screenOrientation="portrait"
+        android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+
+    <!--友盟appkey-->
+    <meta-data
+        android:name="UMENG_APPKEY"
+        android:value="57a30b2ce0f55a041f00241d" />
+
+
+
+
 </manifest>

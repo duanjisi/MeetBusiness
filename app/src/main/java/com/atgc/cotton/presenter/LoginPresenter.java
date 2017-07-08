@@ -33,6 +33,10 @@ public class LoginPresenter extends BasePresenter<INormalView> {
     }
 
 
+    /**
+     * 手机登录
+     * @param map
+     */
     public void login(Map<String,String> map) {
         mvpView.showLoading();
         addSubscription(api.phoneLogin(map)
@@ -82,6 +86,8 @@ public class LoginPresenter extends BasePresenter<INormalView> {
                     }
                 }));
     }
+
+
 
 
 }
