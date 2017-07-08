@@ -56,7 +56,7 @@ public class LoginPresenter extends BasePresenter<INormalView> {
                             accountEntity.setUserId(data.getUserId());
                             accountEntity.setUserName(data.getUserName());
                             //存本地
-                            LoginStatus.getInstance().login(accountEntity,true);
+                            LoginStatus.getInstance().login(accountEntity,false);
 
 
                             mvpView.getDataSuccess(entity.getMessage());
