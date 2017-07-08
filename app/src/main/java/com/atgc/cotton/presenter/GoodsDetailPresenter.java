@@ -1,5 +1,7 @@
 package com.atgc.cotton.presenter;
 
+import android.content.Context;
+
 import com.atgc.cotton.presenter.view.INormalView;
 import com.atgc.cotton.util.L;
 
@@ -13,7 +15,7 @@ import rx.schedulers.Schedulers;
 public class GoodsDetailPresenter extends BasePresenter<INormalView>{
 
 
-    public GoodsDetailPresenter(INormalView mvpView) {
+    public GoodsDetailPresenter(INormalView mvpView ) {
         super(mvpView);
     }
 

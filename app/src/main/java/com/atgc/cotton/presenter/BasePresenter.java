@@ -1,6 +1,8 @@
 package com.atgc.cotton.presenter;
 
 
+import android.content.Context;
+
 import com.atgc.cotton.retrofit.ApiClient;
 import com.atgc.cotton.retrofit.ApiStores;
 
@@ -22,6 +24,7 @@ public class BasePresenter<V> implements IBasePresenter {
         this.mvpView = mvpView;
         attachView(mvpView);
     }
+
 
     public void attachView(V mvpView) {
         this.mvpView = mvpView;

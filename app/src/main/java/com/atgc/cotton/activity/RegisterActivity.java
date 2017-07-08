@@ -37,6 +37,7 @@ import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 
 /**
+ * 注册
  * Created by liw on 2017/7/7.
  */
 public class RegisterActivity extends MvpActivity<RegisterPresenter> implements IRegisterView {

@@ -23,6 +23,7 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 /**
+ * 登录
  * Created by liw on 2017/7/6.
  */
 
@@ -61,7 +62,7 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
 
     @Override
     protected LoginPresenter createPresenter() {
-        return new LoginPresenter(this);
+        return new LoginPresenter(this,context);
     }
 
 

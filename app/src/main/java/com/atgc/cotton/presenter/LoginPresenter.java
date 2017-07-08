@@ -1,7 +1,11 @@
 package com.atgc.cotton.presenter;
 
+import android.content.Context;
+
 import com.alibaba.fastjson.JSON;
 import com.atgc.cotton.App;
+import com.atgc.cotton.config.LoginStatus;
+import com.atgc.cotton.entity.AccountEntity;
 import com.atgc.cotton.entity.UserEntity;
 import com.atgc.cotton.presenter.view.INormalView;
 import com.atgc.cotton.util.L;
@@ -18,8 +22,14 @@ import rx.schedulers.Schedulers;
 public class LoginPresenter extends BasePresenter<INormalView> {
 
 
+    private Context context;
     public LoginPresenter(INormalView mvpView) {
         super(mvpView);
+    }
+
+    public LoginPresenter(INormalView mvpView,Context context) {
+        super(mvpView);
+        this.context = context;
     }
 
 
@@ -36,8 +46,18 @@ public class LoginPresenter extends BasePresenter<INormalView> {
                         if(entity.getCode()==0){  //登录成功,
                             //TODO    把个人信息存在本地
                             UserEntity.DataBean data = entity.getData();
-                            PreferenceUtils.putBoolean(App.getInstance().getApplicationContext(), "isThirdLogin", true);
-                            //存本地，写个类.
+                            PreferenceUtils.putBoolean(context, "isThirdLogin", true);
+
+                            AccountEntity accountEntity = new AccountEntity();
+                            accountEntity.setAvatar(data.getAvatar());
+                            accountEntity.setMobilePhone(data.getMobilePhone());
+                            accountEntity.setSex(data.getSex());
+                            accountEntity.setToken(data.getToken());
+                            accountEntity.setUserId(data.getUserId());
+                            accountEntity.setUserName(data.getUserName());
+                            //存本地
+                            LoginStatus.getInstance().login(accountEntity,true);
+
 
                             mvpView.getDataSuccess(entity.getMessage());
                         }else{

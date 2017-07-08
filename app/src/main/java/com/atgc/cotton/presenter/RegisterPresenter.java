@@ -1,5 +1,7 @@
 package com.atgc.cotton.presenter;
 
+import android.content.Context;
+
 import com.atgc.cotton.presenter.view.IRegisterView;
 import com.atgc.cotton.util.L;
 
@@ -12,10 +14,11 @@ import rx.schedulers.Schedulers;
  * Created by liw on 2017/7/7.
  */
 public class RegisterPresenter extends BasePresenter<IRegisterView> {
-    public RegisterPresenter(IRegisterView mvpView) {
+
+
+    public RegisterPresenter(IRegisterView mvpView ) {
         super(mvpView);
     }
-
 
     public void register(Map<String,String> map) {
         mvpView.showLoading();
