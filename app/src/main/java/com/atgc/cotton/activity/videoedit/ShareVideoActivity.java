@@ -11,11 +11,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.atgc.cotton.App;
+import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
+import com.atgc.cotton.http.HttpUrl;
 import com.atgc.cotton.util.FileUtils;
 import com.atgc.cotton.util.ImageLoaderUtils;
-import com.atgc.cotton.R;
-import com.atgc.cotton.http.HttpUrl;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;

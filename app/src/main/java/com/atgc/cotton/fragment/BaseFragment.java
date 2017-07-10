@@ -11,9 +11,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.widget.Toast;
-
-import com.atgc.cotton.widget.DialogFactory;
 import com.atgc.cotton.R;
+import com.atgc.cotton.widget.DialogFactory;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
 

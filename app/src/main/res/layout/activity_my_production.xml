@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.atgc.cotton.widget.StickyNavLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/id_stickynavlayout_topview"
+        layout="@layout/item_pro_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></include>
+
+    <com.atgc.cotton.widget.SimpleViewPagerIndicator
+        android:id="@id/id_stickynavlayout_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#e5e9ed">
+
+    </com.atgc.cotton.widget.SimpleViewPagerIndicator>
+
+    <android.support.v4.view.ViewPager
+        android:id="@id/id_stickynavlayout_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v4.view.ViewPager>
+</com.atgc.cotton.widget.StickyNavLayout>

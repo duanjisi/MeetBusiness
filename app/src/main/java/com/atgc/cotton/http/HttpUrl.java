@@ -11,6 +11,7 @@ public class HttpUrl {
     /**
      * public公共接口
      */
+    public static final String HOME_PAGER_URL = BASE_URL + "public/feed";//获取首页发现数据列表
     public static final String LOGIN_URL = BASE_URL + "public/login";
     public static final String REGISTER_URL = BASE_URL + "public/register";
 
@@ -19,7 +20,7 @@ public class HttpUrl {
      */
     public static final String BASE_FEED = BASE_URL + "feed/";
     public static final String PRAISE = BASE_URL + "feed/approval/";
-
+    public static final String NEAR = BASE_URL + "feed/vicinity/";
     /**
      * user公共接口
      */
@@ -33,4 +34,6 @@ public class HttpUrl {
     public static final String VEND_GET_MY_GOODS = BASE_URL + "goods/mine?";//获取我的售货架列表
     public static final String VEND_CHANGE_GOODS = BASE_URL + "goods/";//修改商品 or 删除商品
 
+    //退出登录
+    public static final String LOGOUT  = BASE_URL+"public/logout";
 }

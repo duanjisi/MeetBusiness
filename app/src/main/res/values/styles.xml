@@ -12,8 +12,8 @@
     </declare-styleable>
 
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/material</item>
-        <item name="colorPrimaryDark">@color/material</item>
+        <item name="colorPrimary">@color/black_</item>
+        <item name="colorPrimaryDark">@color/black_</item>
         <item name="colorAccent">@color/white</item>
         <item name="drawerArrowStyle">@style/AppTheme.Base.DrawerArrowToggele</item>
     </style>

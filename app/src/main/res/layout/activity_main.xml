@@ -1,25 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.atgc.cotton.widget.SlidingMenu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:zhy="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/id_menu"
-    android:layout_width="wrap_content"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbars="none">
-    <!--zhy:rightPadding="100dp"-->
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+    android:orientation="vertical">
 
-        <include layout="@layout/layout_menu" />
-        <!--<FrameLayout-->
-        <!--android:id="@+id/replaced_layout"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
-        <!--</FrameLayout>-->
-        <include
-            layout="@layout/view_home_pager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"></include>
-    </LinearLayout>
-</com.atgc.cotton.widget.SlidingMenu>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/top_navigation_bar_height">
+
+        <ImageView
+            android:id="@+id/iv_lock"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/dp_11"
+            android:paddingRight="@dimen/dp_11"
+            android:src="@drawable/home_page_lock" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="老板六六"
+            android:textColor="@color/main_default_color"
+            android:textSize="22sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_color_gray_d1"></LinearLayout>
+
+    <com.github.jdsjlzx.recyclerview.LRecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false" />
+</LinearLayout>

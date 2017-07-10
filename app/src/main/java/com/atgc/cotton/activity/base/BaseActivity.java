@@ -11,9 +11,9 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.atgc.cotton.widget.DialogFactory;
 import com.atgc.cotton.App;
 import com.atgc.cotton.R;
+import com.atgc.cotton.widget.DialogFactory;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
@@ -30,7 +30,6 @@ public class BaseActivity extends FragmentActivity {
     // 首先在您的Activity中添加如下成员变量
     final public UMSocialService mController = UMServiceFactory
             .getUMSocialService("com.umeng.share");
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +37,6 @@ public class BaseActivity extends FragmentActivity {
         App.getInstance().addTempActivity(this);
         context = this;
     }
-
     protected void addQQQZonePlatform() {
         String appId = getString(R.string.qq_app_id);
         String appKey = getString(R.string.qq_app_key);
@@ -206,5 +204,16 @@ public class BaseActivity extends FragmentActivity {
     protected void onDestroy() {
         super.onDestroy();
 //        AppManager.getInstance().remove(this);
+    }
+
+    /**
+     * @param msg    内容
+     * @return: void
+     */
+    protected void showToast(String msg) {
+        if (TextUtils.isEmpty(msg)) {
+            return;
+        }
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }

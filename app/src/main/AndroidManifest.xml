@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -19,16 +18,18 @@
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- QQ、QQ空间所需权限 -->
+    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <application
-        android:name="com.atgc.cotton.App"
+        android:name=".App"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/ic_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.atgc.cotton.activity.HomePagerActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
@@ -38,28 +39,31 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.atgc.cotton.activity.vendingRack.VendingRackHomeActivity"
+            android:name=".activity.HomePagerActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.atgc.cotton.activity.vendingRack.VendUploadGoodsActivity"
+            android:name=".activity.vendingRack.VendingRackHomeActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.vendingRack.VendUploadGoodsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"></activity>
         <activity
-            android:name="com.atgc.cotton.activity.vendingRack.MyOrderActivity"
+            android:name=".activity.vendingRack.MyOrderActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"></activity>
         <activity
-            android:name="com.atgc.cotton.activity.vendingRack.LogisticsActivity"
+            android:name=".activity.vendingRack.LogisticsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"></activity>
         <activity
-            android:name="com.atgc.cotton.activity.vendingRack.OrderEvaluateActivity"
+            android:name=".activity.vendingRack.OrderEvaluateActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"></activity>
 
         <!--相册Activity-->
         <activity
-            android:name="com.atgc.cotton.util.PhotoAlbumUtil.MultiImageSelectorActivity"
+            android:name=".util.PhotoAlbumUtil.MultiImageSelectorActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"></activity>
 
@@ -73,30 +77,100 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name="com.atgc.cotton.activity.testActivity"></activity>
+        <activity android:name=".activity.testActivity"></activity>
         <activity
-            android:name="com.atgc.cotton.activity.shoppingCar.ShoppingCarActivity"
+            android:name=".activity.shoppingCar.ShoppingCarActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.atgc.cotton.activity.videoedit.RecordVideoActivity"
+            android:name=".activity.videoedit.RecordVideoActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.atgc.cotton.activity.videoedit.EditVideoActivity"
+            android:name=".activity.videoedit.EditVideoActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.atgc.cotton.activity.videoedit.LocalVideoFilesActivity"
+            android:name=".activity.videoedit.LocalVideoFilesActivity"
             android:screenOrientation="portrait"></activity>
         <!--<activity-->
         <!--android:name=".activity.shoppingCar.ShoppingCarActivity"-->
         <!--android:screenOrientation="portrait"></activity>-->
         <activity
-            android:name="com.atgc.cotton.activity.videoedit.LocalMusicActivity"
+            android:name=".activity.videoedit.LocalMusicActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.atgc.cotton.activity.videoedit.ShareVideoActivity"
+            android:name=".activity.videoedit.ShareVideoActivity"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".activity.GoodsDetailActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.production.mine.EditDataActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.production.mine.QrCodeActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.production.mine.EditIntroActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.production.mine.EditNickActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.production.mine.MyProductionActivity"
+            android:screenOrientation="portrait"></activity>
+        <!--<activity-->
+        <!--android:name=".activity.GoodsDetailActivity"-->
+        <!--android:screenOrientation="portrait" />-->
+        <activity
+            android:name=".activity.GoodsDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:screenOrientation="portrait">
 
+        </activity>
+
+        <!-- 定位需要的服务 -->
+        <service android:name="com.amap.api.location.APSService" />
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="39c0f3c63d4616b894ba0a679dbeb9a2"></meta-data>
+
+        <!-- QQ第三方登录 start -->
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tencent1105592272" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!--微信 必须在wxapi下，记得加上项目的包名-->
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name=".activity.PersonalSetActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+
+        <!--友盟appkey-->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="57a30b2ce0f55a041f00241d" />
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="Umeng" />
     </application>
 </manifest>

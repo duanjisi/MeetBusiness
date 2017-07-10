@@ -1,38 +1,39 @@
 package com.atgc.cotton.activity;
 
+import android.graphics.Rect;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.os.Handler;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.View;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 
-import com.atgc.cotton.activity.base.BaseActivity;
-import com.atgc.cotton.fragment.MainDiscoverFragment;
-import com.atgc.cotton.fragment.MainFocusFragment;
-import com.atgc.cotton.fragment.MainFragment;
-import com.atgc.cotton.fragment.MainNearFragment;
-import com.atgc.cotton.util.UIUtils;
 import com.atgc.cotton.R;
+import com.atgc.cotton.activity.base.BaseActivity;
+import com.atgc.cotton.adapter.HomePageAdapter;
+import com.atgc.cotton.entity.HomeBaseData;
+import com.atgc.cotton.entity.VideoEntity;
+import com.atgc.cotton.http.BaseDataRequest;
+import com.atgc.cotton.http.request.HomePagerRequest;
+import com.atgc.cotton.listener.ItemClickListener;
+import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
+import com.github.jdsjlzx.interfaces.OnRefreshListener;
+import com.github.jdsjlzx.recyclerview.LRecyclerView;
+import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 
 import java.util.ArrayList;
 
+/**
+ * Created by Johnny on 2017/7/7.
+ */
 public class MainActivity extends BaseActivity {
-    private static final int VIEW_PAGER_PAGE_1 = 0;
-    private static final int VIEW_PAGER_PAGE_2 = 1;
-    private static final int VIEW_PAGER_PAGE_3 = 2;
-    private static final int PAGE_COUNT = 3;
-
-    private RadioGroup mRadioGroup;
-    private ImageView mCursorIm;
-    private int mCursorImWidth;
-    private ViewPager mViewPager;
-    private ArrayList<Fragment> mFragments = new ArrayList<Fragment>();
-    private MainFragment mainFocusFragment, mainDiscoverFragment, mainNearFragment;
-    private RadioButton mFocus, mDiscover, mNear;
+    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final int PAGER_NUM = 8;
+    private int pager = 1;
+    private ImageView iv_lock;
+    private LRecyclerView lRecyclerView;
+    private HomePageAdapter adapter;
+    private LRecyclerViewAdapter lRecyclerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,117 +42,153 @@ public class MainActivity extends BaseActivity {
         initViews();
     }
 
-
     private void initViews() {
-        mCursorIm = (ImageView) findViewById(R.id.im_cursor);
-        mCursorImWidth = UIUtils.setCursorIm(context, mCursorIm, PAGE_COUNT);
-
-        mRadioGroup = (RadioGroup) findViewById(R.id.radio_group);
-
-        mFocus = (RadioButton) findViewById(R.id.rb_focus);
-        mDiscover = (RadioButton) findViewById(R.id.rb_discover);
-        mNear = (RadioButton) findViewById(R.id.rb_near);
-
-        mRadioGroup.setOnCheckedChangeListener(new CheckListener());
-
-        addData();
-        mViewPager = (ViewPager) findViewById(R.id.view_pager);
-        PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(),
-                mFragments);
-        mViewPager.setOffscreenPageLimit(PAGE_COUNT - 1);
-        mViewPager.setAdapter(adapter);
-        mViewPager.addOnPageChangeListener(new MyPageChangeListener());
-        mViewPager.setCurrentItem(VIEW_PAGER_PAGE_1);
+        iv_lock = (ImageView) findViewById(R.id.iv_lock);
+        lRecyclerView = (LRecyclerView) findViewById(R.id.recyclerview);
+        lRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        adapter = new HomePageAdapter(context, new clickListener());
+        lRecyclerViewAdapter = new LRecyclerViewAdapter(adapter);
+        lRecyclerView.setFooterViewHint("加载中", "已经没数据", "网络不给力啊，点击再试一次吧");
+        lRecyclerView.setAdapter(lRecyclerViewAdapter);
+        lRecyclerView.setLoadMoreEnabled(true);
+        lRecyclerView.refreshComplete(8);
+        iv_lock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                openActivity(HomePagerActivity.class);
+                openActivity(LoginActivity.class);
+                finish();
+            }
+        });
+        lRecyclerView.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        showToast("刷新完成", false);
+                        lRecyclerView.refreshComplete(PAGER_NUM);
+                        requestDatas();
+                    }
+                }, 1000);
+            }
+        });
+        lRecyclerView.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        showToast("加载更多~", false);
+                        requestMoreDatas();
+                    }
+                }, 1000);
+            }
+        });
+        SpacesItemDecoration decoration = new SpacesItemDecoration(16);
+        lRecyclerView.addItemDecoration(decoration);
+        requestDatas();
     }
 
-    private void addData() {
-        mainFocusFragment = new MainFocusFragment();
-        mainDiscoverFragment = new MainDiscoverFragment();
-        mainNearFragment = new MainNearFragment();
-
-        mFragments.add(mainFocusFragment);
-        mFragments.add(mainDiscoverFragment);
-        mFragments.add(mainNearFragment);
-    }
-
-    private class PagerAdapter extends FragmentPagerAdapter {
-        private ArrayList<Fragment> fragmentsList;
-
-        public PagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        public PagerAdapter(FragmentManager fm, ArrayList<Fragment> fragments) {
-            super(fm);
-            this.fragmentsList = fragments;
-        }
-
+    private class clickListener implements ItemClickListener {
         @Override
-        public Fragment getItem(int arg0) {
-            return fragmentsList.get(arg0);
-        }
+        public void onItemClick(View view, int position, VideoEntity video) {
+            if (video != null) {
 
-        @Override
-        public int getCount() {
-            return fragmentsList.size();
-        }
-
-        @Override
-        public int getItemPosition(Object object) {
-            return super.getItemPosition(object);
-        }
-    }
-
-    private class MyPageChangeListener implements ViewPager.OnPageChangeListener {
-
-        @Override
-        public void onPageScrollStateChanged(int arg0) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mCursorIm.getLayoutParams();
-            params.leftMargin = (int) (position * mCursorImWidth + mCursorImWidth * positionOffset);
-            mCursorIm.setLayoutParams(params);
-        }
-
-        @Override
-        public void onPageSelected(int arg0) {
-            switch (arg0) {
-                case VIEW_PAGER_PAGE_1:
-                    mFocus.setChecked(true);
-                    break;
-                case VIEW_PAGER_PAGE_2:
-                    mDiscover.setChecked(true);
-                    break;
-                case VIEW_PAGER_PAGE_3:
-                    mNear.setChecked(true);
-                    break;
-                default:
-                    break;
             }
         }
     }
 
-    private class CheckListener implements RadioGroup.OnCheckedChangeListener {
+    private class SpacesItemDecoration extends RecyclerView.ItemDecoration {
+        private int space;
+
+        public SpacesItemDecoration(int space) {
+            this.space = space;
+        }
 
         @Override
-        public void onCheckedChanged(RadioGroup arg0, int arg1) {
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            outRect.left = space;
+            outRect.right = space;
+            outRect.bottom = space;
+            if (parent.getChildAdapterPosition(view) == 0) {
+                outRect.top = space;
+            }
+        }
+    }
 
-            switch (arg1) {
-                case R.id.rb_focus:
-                    mViewPager.setCurrentItem(VIEW_PAGER_PAGE_1);
-                    break;
-                case R.id.rb_discover:
-                    mViewPager.setCurrentItem(VIEW_PAGER_PAGE_2);
-                    break;
-                case R.id.rb_near:
-                    mViewPager.setCurrentItem(VIEW_PAGER_PAGE_3);
-                    break;
-                default:
-                    break;
+    private void requestDatas() {
+        showLoadingDialog();
+        pager = 1;
+        HomePagerRequest request = new HomePagerRequest(TAG, "" + pager, "" + PAGER_NUM);
+        request.send(new BaseDataRequest.RequestCallback<HomeBaseData>() {
+            @Override
+            public void onSuccess(HomeBaseData pojo) {
+                cancelLoadingDialog();
+                initData(pojo);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                cancelLoadingDialog();
+                showToast(msg, true);
+            }
+        });
+    }
+
+    private void initData(HomeBaseData homeBaseData) {
+        if (homeBaseData != null) {
+            ArrayList<VideoEntity> videos = homeBaseData.getData();
+            int size = videos.size();
+            if (videos != null && size != 0) {
+                if (size == PAGER_NUM) {
+                    lRecyclerView.setNoMore(false);
+                } else {
+                    lRecyclerView.setNoMore(true);
+//                    showToast("加载完成!", true);
+                }
+                adapter.initDatas(videos);
+            } else {
+                lRecyclerView.setNoMore(true);
+//                showToast("加载完成!", true);
+            }
+        }
+    }
+
+    private void requestMoreDatas() {
+        pager++;
+        showLoadingDialog();
+        HomePagerRequest request = new HomePagerRequest(TAG, "" + pager, "" + PAGER_NUM);
+        request.send(new BaseDataRequest.RequestCallback<HomeBaseData>() {
+            @Override
+            public void onSuccess(HomeBaseData pojo) {
+                cancelLoadingDialog();
+                bindData(pojo);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                cancelLoadingDialog();
+                showToast(msg, true);
+            }
+        });
+    }
+
+    private void bindData(HomeBaseData homeBaseData) {
+        if (homeBaseData != null) {
+            ArrayList<VideoEntity> videos = homeBaseData.getData();
+            int size = videos.size();
+            if (videos != null && size != 0) {
+                if (size == PAGER_NUM) {
+                    lRecyclerView.setNoMore(false);
+                } else {
+                    lRecyclerView.setNoMore(true);
+                    showToast("加载完成!", true);
+                }
+                adapter.addDatas(videos);
+            } else {
+                lRecyclerView.setNoMore(true);
+                showToast("加载完成!", true);
             }
         }
     }

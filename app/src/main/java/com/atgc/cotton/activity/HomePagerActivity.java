@@ -1,6 +1,5 @@
 package com.atgc.cotton.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -9,20 +8,21 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
+import com.atgc.cotton.activity.production.mine.MyProductionActivity;
 import com.atgc.cotton.activity.vendingRack.MyOrderActivity;
-import com.atgc.cotton.activity.vendingRack.VendingRackHomeActivity;
-import com.atgc.cotton.activity.shoppingCar.ShoppingCarActivity;
 import com.atgc.cotton.activity.videoedit.RecordVideoActivity;
+import com.atgc.cotton.config.LoginStatus;
 import com.atgc.cotton.fragment.MainDiscoverFragment;
 import com.atgc.cotton.fragment.MainFocusFragment;
 import com.atgc.cotton.fragment.MainFragment;
@@ -30,6 +30,7 @@ import com.atgc.cotton.fragment.MainNearFragment;
 import com.atgc.cotton.util.ImageLoaderUtils;
 import com.atgc.cotton.util.UIUtils;
 import com.atgc.cotton.widget.CircleImageView;
+import com.bumptech.glide.Glide;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -45,7 +46,6 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
     private ImageLoader imageLoader;
     private CircleImageView ivAvatar;
     private TextView tvActive, tvMsg, tvInfo;
-
     private static final int VIEW_PAGER_PAGE_1 = 0;
     private static final int VIEW_PAGER_PAGE_2 = 1;
     private static final int VIEW_PAGER_PAGE_3 = 2;
@@ -58,9 +58,10 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
     private ArrayList<Fragment> mFragments = new ArrayList<Fragment>();
     private MainFragment mainFocusFragment, mainDiscoverFragment, mainNearFragment;
     private RadioButton mFocus, mDiscover, mNear;
-
     private RadioButton rb_shopping;
     private Handler handler;
+    private Button btn_login;
+    private TextView tv_name;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -123,6 +124,18 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
         mViewPager.setCurrentItem(VIEW_PAGER_PAGE_1);
 
         rb_shopping = (RadioButton) findViewById(R.id.rb_shopping);
+
+        tv_name = (TextView) findViewById(R.id.tv_name);
+        String avatar = LoginStatus.getInstance().getAvatar();
+        String username = LoginStatus.getInstance().getUsername();
+        if(!TextUtils.isEmpty(avatar)){
+            Glide.with(context).load(avatar).into(ivAvatar);
+        }
+        if(!TextUtils.isEmpty(username)){
+            tv_name.setText(username);
+        }
+
+
     }
 
     @Override
@@ -139,7 +152,8 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
 
                 break;
             case R.id.iv_avatar:
-                openActivity(testActivity.class);
+//                openActivity(testActivity.class);
+                openActivity(LoginActivity.class);
                 break;
         }
     }
@@ -222,23 +236,25 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
             switch (arg1) {
                 case R.id.rb_setting:
                     showToast("个人设置", true);
+                    openActivity(PersonalSetActivity.class);
                     break;
                 case R.id.rb_production:
-                    showToast("我的作品", true);
+                    openActivity(MyProductionActivity.class);
                     break;
                 case R.id.rb_video:
                     openActivity(RecordVideoActivity.class);
                     break;
                 case R.id.rb_price:
-                    openActivity(VendingRackHomeActivity.class);
+//                    openActivity(VendingRackHomeActivity.class);
                     break;
                 case R.id.rb_shopping:
 //                    showToast("购物车", true);
                     rb_shopping.setChecked(false);
 
 
-                    Intent intent = new Intent(HomePagerActivity.this, ShoppingCarActivity.class);
-                    startActivity(intent);
+//                    Intent intent = new Intent(HomePagerActivity.this, GoodsDetailActivity.class);
+//                    startActivity(intent);
+
 //                    overridePendingTransition(R.anim.activity_in, R.anim.activity_no);
 //
 //                    handler.postDelayed(new Runnable() {
@@ -247,7 +263,6 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
 //                            drawerLayout.closeDrawer(rl_left);
 //                        }
 //                    },500);
-
                     break;
                 case R.id.rb_order:
                     openActivity(MyOrderActivity.class, null);

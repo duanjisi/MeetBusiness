@@ -7,9 +7,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.atgc.cotton.R;
 import com.atgc.cotton.videorange.VideoThumbnailInfo;
 import com.atgc.cotton.videorange.VideoThumbnailTask;
-import com.atgc.cotton.R;
 import com.ksyun.media.shortvideo.kit.KSYEditKit;
 
 /**

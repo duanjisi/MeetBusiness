@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.listener.PermissionListener;
 import com.atgc.cotton.util.FileUtils;
@@ -28,7 +29,6 @@ import com.atgc.cotton.util.UIUtils;
 import com.atgc.cotton.widget.ActionSheet;
 import com.atgc.cotton.widget.GlideRoundTransform;
 import com.atgc.cotton.widget.MyRatingBar;
-import com.atgc.cotton.R;
 
 import com.bumptech.glide.Glide;
 
@@ -152,7 +152,7 @@ public class OrderEvaluateActivity extends BaseActivity implements View.OnClickL
                         String imageName = System.currentTimeMillis() + ".jpg";
                         String savePath = Environment.getExternalStorageDirectory() + "/IMProject/";
                         File file = new File(savePath, imageName);
-                        imageUri = FileProvider.getUriForFile(OrderEvaluateActivity.this, "com.atgc.cotton.fileProvider", file);//这里进行替换uri的获得方式
+                        imageUri = FileProvider.getUriForFile(OrderEvaluateActivity.this, "com.boss66.meetbusiness.fileProvider", file);//这里进行替换uri的获得方式
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);//这里加入flag
                         startActivityForResult(intent, OPEN_CAMERA);

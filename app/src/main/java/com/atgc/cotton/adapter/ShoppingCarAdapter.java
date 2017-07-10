@@ -7,10 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.atgc.cotton.entity.ShoopingEntity;
 import com.atgc.cotton.R;
 import com.atgc.cotton.adapter.base.ListBaseAdapter;
 import com.atgc.cotton.adapter.base.SuperViewHolder;
+import com.atgc.cotton.entity.ShoopingEntity;
 import com.atgc.cotton.widget.SwipeMenuView;
 
 /**

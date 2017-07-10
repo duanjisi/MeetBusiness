@@ -46,8 +46,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.atgc.cotton.Constants;
+import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.adapter.FilterAdapter;
+import com.atgc.cotton.adapter.VideoThumbAdapter;
 import com.atgc.cotton.entity.FilterEntity;
 import com.atgc.cotton.listener.PermissionListener;
 import com.atgc.cotton.photoedit.TextObject;
@@ -58,8 +60,6 @@ import com.atgc.cotton.util.UIUtils;
 import com.atgc.cotton.videorange.VideoThumbnailInfo;
 import com.atgc.cotton.videorange.VideoThumbnailTask;
 import com.atgc.cotton.widget.Sticker.StickerView;
-import com.atgc.cotton.R;
-import com.atgc.cotton.adapter.VideoThumbAdapter;
 import com.czt.mp3recorder.MP3Recorder;
 import com.ksyun.media.shortvideo.kit.KSYEditKit;
 import com.ksyun.media.shortvideo.utils.ShortVideoConstants;
@@ -1304,7 +1304,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     public void onDoubleClick(StickerView sticker) {
 //        PrintUtils.println("双击调用");
 //        editLayout.setVisibility(View.VISIBLE);
-//        CommonUtils.showInputMethod(MainActivity.this, editText);
         if (popupWindow != null && popupWindow.isShowing()) {
             popupWindow.dismiss();
         } else {

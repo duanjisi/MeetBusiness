@@ -13,25 +13,29 @@
         android:layout_marginTop="40dp"
         android:orientation="vertical">
 
-        <com.atgc.cotton.widget.CircleImageView
-            android:id="@+id/iv_avatar"
-            android:layout_width="83dp"
-            android:layout_height="83dp"
-            android:layout_centerHorizontal="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/person" />
+            <com.atgc.cotton.widget.CircleImageView
+                android:id="@+id/iv_avatar"
+                android:layout_width="83dp"
+                android:layout_height="83dp"
+                android:layout_centerHorizontal="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/person" />
 
-        <TextView
-            android:id="@+id/tv_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/iv_avatar"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="12dp"
-            android:text="时代发生地方"
-            android:textColor="@color/text_color_black"
-            android:textSize="16.5sp" />
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv_avatar"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="12dp"
+                android:text="时代发生地方"
+                android:textColor="@color/text_color_black"
+                android:textSize="16.5sp" />
+        </RelativeLayout>
+
+
+
+
 
     <LinearLayout
         android:id="@+id/ll"

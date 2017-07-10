@@ -10,8 +10,8 @@ import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import com.atgc.cotton.util.PhotoAlbumUtil.MultiImageSelectorFragment;
 import com.atgc.cotton.entity.Image;
+import com.atgc.cotton.util.PhotoAlbumUtil.MultiImageSelectorFragment;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;

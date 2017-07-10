@@ -11,9 +11,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.atgc.cotton.R;
 import com.atgc.cotton.entity.OrderEntity;
 import com.atgc.cotton.util.UIUtils;
-import com.atgc.cotton.R;
 
 /**
  * Created by GMARUnity on 2017/6/28.
