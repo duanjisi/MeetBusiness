@@ -19,16 +19,6 @@
         android:layout_width="75dp"
         android:layout_height="75dp" />
 
-    <TextView
-        android:textSize="14sp"
-        android:textColor="#8e97a5"
-        android:layout_marginTop="5dp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/img_head"
-        android:text="设置头像"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
 
     <EditText
         android:inputType="textPhonetic"
@@ -122,72 +112,14 @@
         android:background="@color/line_color_gray_d2"></View>
 
 
-
-    <EditText
-        android:id="@+id/et_name"
-        android:textCursorDrawable="@null"
-        android:layout_marginLeft="20dp"
-        android:hint="昵称"
-        android:background="@null"
-        android:textSize="17.5sp"
-        android:textColorHint="@color/hint_text_color"
-        android:layout_below="@id/view_code"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
-
-    <View
-        android:id="@+id/view_name"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_below="@id/et_name"
-        android:layout_width="match_parent"
-        android:layout_height="1.6px"
-        android:background="@color/line_color_gray_d2"></View>
-
-
-    <RelativeLayout
-        android:id="@+id/rl_sex"
-        android:layout_below="@id/view_name"
-        android:layout_width="match_parent"
-        android:layout_height="50dp">
-        <TextView
-            android:layout_centerVertical="true"
-            android:id="@+id/et_sex"
-            android:layout_marginLeft="20dp"
-            android:text="性别"
-            android:textSize="17.5sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <ImageView
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="20dp"
-            android:src="@drawable/data_enter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </RelativeLayout>
-
-
-
-    <View
-        android:id="@+id/view_sex"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_below="@id/rl_sex"
-        android:layout_width="match_parent"
-        android:layout_height="1.6px"
-        android:background="@color/line_color_gray_d2"></View>
-
-
     <Button
+        android:layout_marginTop="30dp"
+        android:layout_below="@id/view_code"
         android:id="@+id/btn_register"
         android:layout_width="match_parent"
         android:layout_height="51.7dp"
-        android:layout_below="@+id/view_sex"
         android:layout_marginLeft="22dp"
         android:layout_marginRight="22dp"
-        android:layout_marginTop="33dp"
         android:background="@drawable/edit_shape"
         android:gravity="center"
         android:text="注册"
@@ -195,9 +127,10 @@
         android:textSize="17.5sp" />
 
     <TextView
+        android:layout_below="@id/btn_register"
+        android:id="@+id/tv_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btn_register"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25.3dp"
         android:text="接受短信大约需要45秒"
