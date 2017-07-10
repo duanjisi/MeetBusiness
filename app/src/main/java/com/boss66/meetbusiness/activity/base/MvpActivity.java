@@ -3,6 +3,7 @@ package com.boss66.meetbusiness.activity.base;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import com.atgc.cotton.activity.base.BaseActivity;
 import com.boss66.meetbusiness.presenter.BasePresenter;
 import com.boss66.meetbusiness.presenter.view.IBaseView;
 

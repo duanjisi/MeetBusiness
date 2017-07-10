@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.atgc.cotton.fragment.BaseFragment;
 import com.boss66.meetbusiness.presenter.BasePresenter;
 import com.boss66.meetbusiness.presenter.view.IBaseView;
 

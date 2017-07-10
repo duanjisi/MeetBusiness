@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 
-import com.boss66.meetbusiness.R;
+import com.atgc.cotton.R;
 import com.boss66.meetbusiness.activity.base.MvpActivity;
 import com.boss66.meetbusiness.presenter.GoodsDetailPresenter;
 import com.boss66.meetbusiness.presenter.view.IGoodsDetailView;
