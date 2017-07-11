@@ -1,6 +1,7 @@
 package com.atgc.cotton.activity.vendingRack;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,9 +13,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -26,12 +27,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.atgc.cotton.R;
+import com.atgc.cotton.activity.base.BaseCompatActivity;
 import com.atgc.cotton.adapter.VendUploadGoodsAdapter;
-import com.atgc.cotton.entity.VendUploadEntity;
+import com.atgc.cotton.entity.GoodsDetailEntity;
+import com.atgc.cotton.entity.VendGoodsAttrEntity;
 import com.atgc.cotton.listener.PermissionListener;
+import com.atgc.cotton.presenter.VendUploadPresenter;
+import com.atgc.cotton.presenter.view.IVendUploadView;
 import com.atgc.cotton.util.FileUtils;
 import com.atgc.cotton.util.KeyboardUtils;
 import com.atgc.cotton.util.PermissonUtil.PermissionUtil;
@@ -53,6 +59,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -60,19 +67,20 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by GMARUnity on 2017/6/19.
  */
-public class VendUploadGoodsActivity extends AppCompatActivity implements View.OnClickListener, ActionSheet.OnSheetItemClickListener {
+public class VendUploadGoodsActivity extends BaseCompatActivity<VendUploadPresenter> implements
+        View.OnClickListener, ActionSheet.OnSheetItemClickListener, IVendUploadView {
     private LRecyclerView rv_content;
-    private TextView tv_back;
+    private TextView tv_back, tv_title;
     private Toolbar toolbar;
     private Button bt_upload;
     private LRecyclerViewAdapter mLRecyclerViewAdapter = null;
     private VendUploadGoodsAdapter adapter;
-    private List<VendUploadEntity> list;
+    private List<VendGoodsAttrEntity> list;
     private int attrSize = 1;
 
     private LinearLayout ll_img;
     private View v_add_img;
-    private EditText et_repertory;
+    private EditText et_repertory, et_price;
     private int sceenW, sceenH, repertoryNum = 0;
     private int addSize = 0, addTag;
     private HashMap<Integer, View> imgMap;
@@ -84,7 +92,15 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
     private final int OPEN_ALBUM = 2;//相册
     private int cameraType;//1:相机 2：相册 3：视频
     private Uri imageUri;
-    private String photoPath;
+
+    private TextView et_title;
+    private Map<String, Object> parmMap;
+    private List<GoodsDetailEntity.DataBean.GoodsGalleryBean> GoodsGalleryList;
+    private StringBuilder stringBuilder;
+    private List<String> newUploadList;
+    private boolean isChange = false;
+    private int upLoadimgTag = 0;
+    private String goodsid;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -93,11 +109,17 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
         initView();
     }
 
+    @Override
+    protected VendUploadPresenter createPresenter() {
+        return new VendUploadPresenter(this);
+    }
+
     private void initView() {
         imgMap = new HashMap<>();
         imgStrMap = new HashMap<>();
         sceenW = UIUtils.getScreenWidth(this);
         sceenH = UIUtils.getScreenHeight(this);
+        tv_title = (TextView) findViewById(R.id.tv_title);
         bt_upload = (Button) findViewById(R.id.bt_upload);
         tv_back = (TextView) findViewById(R.id.tv_back);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -110,14 +132,13 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
         adapter = new VendUploadGoodsAdapter(this);
         list = new LinkedList<>();
         for (int i = 0; i < attrSize; i++) {
-            VendUploadEntity entity = new VendUploadEntity();
+            VendGoodsAttrEntity entity = new VendGoodsAttrEntity();
             list.add(entity);
         }
         adapter.setDataList(list);
         adapter.setOnDelListener(new VendUploadGoodsAdapter.onSwipeListener() {
             @Override
             public void onDel(int pos) {
-                Toast.makeText(VendUploadGoodsActivity.this, "删除:" + pos, Toast.LENGTH_SHORT).show();
                 attrSize--;
                 adapter.remove(pos);
                 if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
@@ -153,6 +174,10 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
 
             @Override
             public void onScrolled(int distanceX, int distanceY) {
+                boolean isBottom = rv_content.canScrollVertically(1);
+                if (!isBottom) {
+                    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                }
             }
 
             @Override
@@ -165,17 +190,28 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
         mLRecyclerViewAdapter = new LRecyclerViewAdapter(adapter);
         rv_content.setAdapter(mLRecyclerViewAdapter);
         View headview = View.inflate(this, R.layout.head_view_vend_upload_goods, null);
+        et_title = (TextView) headview.findViewById(R.id.et_title);
         mLRecyclerViewAdapter.addHeaderView(headview);
         View footdview = LayoutInflater.from(this).inflate(R.layout.foot_view_vend_upload_goods, (ViewGroup) findViewById(android.R.id.content), false);
         initFootView(footdview);
         mLRecyclerViewAdapter.addFooterView(footdview);
 
         rv_content.setPullRefreshEnabled(false);
-        //rv_content.setLoadMoreEnabled(false);
         rv_content.setLayoutManager(new LinearLayoutManager(this));
+        Intent intent = getIntent();
+        if (intent != null) {
+            goodsid = intent.getStringExtra("goodsId");
+            if (!TextUtils.isEmpty(goodsid)) {
+                tv_title.setText("修改商品");
+                isChange = true;
+                stringBuilder = new StringBuilder();
+                mPresenter.getGoodsDetail(goodsid);
+            }
+        }
     }
 
     private void initFootView(View view) {
+        et_price = (EditText) view.findViewById(R.id.et_price);
         et_repertory = (EditText) view.findViewById(R.id.et_repertory);
         ImageView iv_minus = (ImageView) view.findViewById(R.id.iv_minus);
         ImageView iv_add = (ImageView) view.findViewById(R.id.iv_add);
@@ -231,7 +267,7 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
             case R.id.tv_add_attr:
                 KeyboardUtils.hideSoftInput(VendUploadGoodsActivity.this);
                 attrSize++;
-                VendUploadEntity entity = new VendUploadEntity();
+                VendGoodsAttrEntity entity = new VendGoodsAttrEntity();
                 list.add(entity);
                 int size = attrSize + 1;
                 if (size >= 0)
@@ -241,6 +277,74 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
             case R.id.iv_close:
                 int addTag = (int) v.getTag();
                 addViewToContainer(false, addTag, null);
+                break;
+            case R.id.bt_upload:
+                if (parmMap == null) {
+                    parmMap = new HashMap<>();
+                } else {
+                    parmMap.clear();
+                }
+                String name = et_title.getText().toString().trim();
+                if (TextUtils.isEmpty(name)) {
+                    showToast("标题不能为空", false);
+                    return;
+                }
+                parmMap.put("name", name);
+                parmMap.put("number", String.valueOf(repertoryNum));
+                String price = et_price.getText().toString().trim();
+                if (TextUtils.isEmpty(price)) {
+                    showToast("价格不能为空", false);
+                    return;
+                }
+                parmMap.put("price", price);
+                List<VendGoodsAttrEntity> attrList = adapter.getDataList();
+                int attrSize = attrList.size();
+                if (attrSize > 0) {
+                    JSONArray jsonArray = new JSONArray();
+                    for (int i = 0; i < attrSize; i++) {
+                        VendGoodsAttrEntity entity1 = attrList.get(i);
+                        JSONObject object = new JSONObject();
+                        object.put("attr_name", entity1.getAttrName());
+                        object.put("attr_value", entity1.getAttrValue());
+                        jsonArray.add(object);
+                    }
+                    parmMap.put("attrs", jsonArray.toJSONString());
+                }
+                upLoadimgTag = 0;
+                if (isChange) {
+                    if (imgStrMap.size() == 0) {
+                        showToast("至少需要一张图片", false);
+                        return;
+                    }
+                    parmMap.put("goodsid", goodsid);
+                    if (stringBuilder != null && stringBuilder.length() > 0) {
+                        parmMap.put("imgids", stringBuilder.toString());
+                    }
+                    if (newUploadList != null && newUploadList.size() > 0) {
+                        String savePath = Environment.getExternalStorageDirectory() + "/IMProject/";
+                        for (int i = 0; i < newUploadList.size(); i++) {
+                            String path = newUploadList.get(i);
+                            addImgToParms(path, savePath);
+                        }
+                    }
+                } else {
+                    int imgSize = imgStrMap.size();
+                    if (imgSize > 0) {
+                        String savePath = Environment.getExternalStorageDirectory() + "/IMProject/";
+                        for (Map.Entry<Integer, String> entry : imgStrMap.entrySet()) {
+                            String path = entry.getValue();
+                            addImgToParms(path, savePath);
+                        }
+                    } else {
+                        showToast("至少需要一张图片", false);
+                        return;
+                    }
+                }
+                if (isChange) {
+                    mPresenter.changeMyGoods(parmMap, Integer.parseInt(goodsid));
+                } else {
+                    mPresenter.uploadGoods(parmMap);
+                }
                 break;
         }
     }
@@ -258,14 +362,16 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
                     }
                     break;
                 case 124:
-                    Log.i("num:", "" + repertoryNum);
+                    String num = et_repertory.getText().toString().trim();
+                    repertoryNum = Integer.parseInt(num);
                     if (repertoryNum > 0) {
                         repertoryNum--;
                         et_repertory.setText("" + repertoryNum);
                     }
                     break;
                 case 125:
-                    Log.i("num:", "" + repertoryNum);
+                    String num1 = et_repertory.getText().toString().trim();
+                    repertoryNum = Integer.parseInt(num1);
                     repertoryNum++;
                     et_repertory.setText("" + repertoryNum);
                     break;
@@ -296,6 +402,12 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
             addTag++;
             addSize++;
         } else {
+            if (GoodsGalleryList != null && GoodsGalleryList.size() > tag) {
+                GoodsDetailEntity.DataBean.GoodsGalleryBean item = GoodsGalleryList.get(tag);
+                if (item != null) {
+                    stringBuilder.append(item.getImgId() + "|");
+                }
+            }
             ll_img.removeView(imgMap.get(tag));
             imgMap.remove(tag);
             imgStrMap.remove(tag);
@@ -355,8 +467,6 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //获取文件路径
-        photoPath = tempFile.getAbsolutePath();
         return tempFile;
     }
 
@@ -383,7 +493,7 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
                         String imageName = System.currentTimeMillis() + ".jpg";
                         String savePath = Environment.getExternalStorageDirectory() + "/IMProject/";
                         File file = new File(savePath, imageName);
-                        imageUri = FileProvider.getUriForFile(VendUploadGoodsActivity.this, "com.boss66.meetbusiness.fileProvider", file);//这里进行替换uri的获得方式
+                        imageUri = FileProvider.getUriForFile(VendUploadGoodsActivity.this, "com.atgc.cotton.fileProvider", file);//这里进行替换uri的获得方式
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);//这里加入flag
                         startActivityForResult(intent, OPEN_CAMERA);
@@ -418,6 +528,9 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (isChange && newUploadList == null) {
+            newUploadList = new ArrayList<>();
+        }
         if (requestCode == OPEN_CAMERA && resultCode == RESULT_OK) {//打开相机
             if (imageUri != null) {
                 String path = null;
@@ -425,6 +538,9 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
                     path = FileUtils.getPath(this, imageUri);
                 } else {
                     path = imageUri.toString();
+                }
+                if (isChange){
+                    newUploadList.add(path);
                 }
                 imgStrMap.put(addTag, path);
                 addViewToContainer(true, 0, path);
@@ -435,6 +551,9 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
                 int size = selectPicList.size();
                 for (int i = 0; i < size; i++) {
                     String path = selectPicList.get(i);
+                    if (isChange){
+                        newUploadList.add(path);
+                    }
                     imgStrMap.put(addTag, path);
                     addViewToContainer(true, 0, path);
                 }
@@ -454,7 +573,7 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
                 msg.what = vid;
                 handler.sendMessage(msg);
             }
-        }, 0, 300, TimeUnit.MILLISECONDS);    //每间隔100ms发送Message
+        }, 0, 150, TimeUnit.MILLISECONDS);    //每间隔100ms发送Message
     }
 
     private void stopAddOrSubtract() {
@@ -462,5 +581,64 @@ public class VendUploadGoodsActivity extends AppCompatActivity implements View.O
             scheduledExecutor.shutdownNow();
             scheduledExecutor = null;
         }
+    }
+
+    private void addImgToParms(String path, String savePath) {
+        if (Build.VERSION.SDK_INT >= 24 && path.contains("com.atgc.cotton.fileProvider") &&
+                path.contains("/IMProject/")) {
+            String[] arr = path.split("/IMProject/");
+            if (arr != null && arr.length > 1) {
+                path = savePath + arr[1];
+            }
+        }
+        Bitmap bitmap = FileUtils.compressImageFromFile(path, sceenW);
+        if (bitmap != null) {
+            File file = FileUtils.compressImage(bitmap, savePath);
+            if (file != null) {
+                parmMap.put("pic" + upLoadimgTag, file);
+                upLoadimgTag++;
+            }
+        }
+    }
+
+    @Override
+    public void upLoadSccess() {
+        showToast("上传成功", false);
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    @Override
+    public void getGoodsDetail(GoodsDetailEntity.DataBean dataBean) {
+        et_title.setText(dataBean.getGoodsName());
+        et_price.setText("" + dataBean.getGoodsPrice());
+        repertoryNum = dataBean.getGoodsNumber();
+        et_repertory.setText("" + dataBean.getGoodsNumber());
+        List<VendGoodsAttrEntity> GoodsAttr = dataBean.getGoodsAttr();
+        attrSize = GoodsAttr.size();
+        adapter.setDataList(GoodsAttr);
+        GoodsGalleryList = dataBean.getGoodsGallery();
+        if (GoodsGalleryList != null && GoodsGalleryList.size() > 0) {
+            for (int i = 0; i < GoodsGalleryList.size(); i++) {
+                GoodsDetailEntity.DataBean.GoodsGalleryBean item = GoodsGalleryList.get(i);
+                String url = item.getImgUrl();
+                addTag = i;
+                imgStrMap.put(addTag, url);
+                addViewToContainer(true, 0, url);
+            }
+        }
+
+    }
+
+    @Override
+    public void changeGoodsSuccess() {
+        showToast("修改成功", false);
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    @Override
+    public void onError(String msg) {
+        showToast(msg, false);
     }
 }
