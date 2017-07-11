@@ -1,25 +1,38 @@
 package com.atgc.cotton.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.atgc.cotton.R;
+import com.atgc.cotton.activity.vendingRack.VendUploadGoodsActivity;
+import com.atgc.cotton.activity.vendingRack.VendingRackHomeActivity;
 import com.atgc.cotton.adapter.base.ListBaseAdapter;
 import com.atgc.cotton.adapter.base.SuperViewHolder;
+import com.atgc.cotton.entity.VendGoodsEntity;
+import com.atgc.cotton.util.UIUtils;
+import com.atgc.cotton.widget.GlideRoundTransform;
 import com.atgc.cotton.widget.SwipeMenuView;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
 /**
  * Created by GMARUnity on 2017/6/19.
  */
-public class VendingRackHomeAdapter extends ListBaseAdapter<String> {
+public class VendingRackHomeAdapter extends ListBaseAdapter<VendGoodsEntity.Goods> {
+
+    private Context context;
+    private int sceenW;
 
     public VendingRackHomeAdapter(Context context) {
         super(context);
+        this.context = context;
+        sceenW = UIUtils.getScreenWidth(context) / 4;
     }
 
     @Override
@@ -31,16 +44,25 @@ public class VendingRackHomeAdapter extends ListBaseAdapter<String> {
     public void onBindItemHolder(SuperViewHolder holder, final int position) {
         View contentView = holder.getView(R.id.rl_content);
         ImageView iv_delete = holder.getView(R.id.iv_delete);
+        ImageView iv_icon = holder.getView(R.id.iv_icon);
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) iv_icon.getLayoutParams();
+        params.width = sceenW;
+        params.height = sceenW;
+        iv_icon.setLayoutParams(params);
         TextView tv_num = holder.getView(R.id.tv_num);
-        List<String> list = getDataList();
-        if (list != null && list.size() > 0) {
-            tv_num.setText(list.get(position));
+        TextView tv_title = holder.getView(R.id.tv_title);
+        TextView tv_content = holder.getView(R.id.tv_content);
+        TextView tv_price = holder.getView(R.id.tv_price);
+
+        VendGoodsEntity.Goods item = (VendGoodsEntity.Goods) getItem(position);
+        if (item != null) {
+            Glide.with(context).load(item.getGoodsImg()).error(R.drawable.zf_default_message_image).
+                    transform(new GlideRoundTransform(context, 10)).into(iv_icon);
+            tv_num.setText("库存：" + item.getGoodsNumber());
+            tv_title.setText("" + item.getGoodsName());
+            tv_content.setText("" + item.getGoodsAttr());
+            tv_price.setText("￥" + item.getShopPrice());
         }
-//        TextView title = holder.getView(R.id.title);
-//        Button btnDelete = holder.getView(R.id.btnDelete);
-//        Button btnUnRead = holder.getView(R.id.btnUnRead);
-//        Button btnTop = holder.getView(R.id.btnTop);
-//
         //这句话关掉IOS阻塞式交互效果 并依次打开左滑右滑
         ((SwipeMenuView) holder.itemView).setIos(false).setLeftSwipe(true);
 //
@@ -59,7 +81,10 @@ public class VendingRackHomeAdapter extends ListBaseAdapter<String> {
         contentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("TAG", "onClick() called with: v = [" + v + "]");
+                VendGoodsEntity.Goods item = (VendGoodsEntity.Goods) getItem(position);
+                Intent intent = new Intent(context, VendUploadGoodsActivity.class);
+                intent.putExtra("goodsId", item.getGoodsId());
+                ((VendingRackHomeActivity) context).startActivityForResult(intent, 101);
             }
         });
     }

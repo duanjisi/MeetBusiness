@@ -12,13 +12,13 @@ import android.widget.ImageView;
 import com.atgc.cotton.R;
 import com.atgc.cotton.adapter.base.ListBaseAdapter;
 import com.atgc.cotton.adapter.base.SuperViewHolder;
-import com.atgc.cotton.entity.VendUploadEntity;
+import com.atgc.cotton.entity.VendGoodsAttrEntity;
 import com.atgc.cotton.widget.SwipeMenuView;
 
 /**
  * Created by GMARUnity on 2017/6/19.
  */
-public class VendUploadGoodsAdapter extends ListBaseAdapter<VendUploadEntity> {
+public class VendUploadGoodsAdapter extends ListBaseAdapter<VendGoodsAttrEntity> {
 
 
     public VendUploadGoodsAdapter(Context context) {
@@ -35,9 +35,9 @@ public class VendUploadGoodsAdapter extends ListBaseAdapter<VendUploadEntity> {
         ImageView iv_delete = holder.getView(R.id.iv_delete);
         final EditText et_title = holder.getView(R.id.et_title);
         final EditText et_content = holder.getView(R.id.et_content);
-        final String title = et_title.getText().toString();
-        String content = et_content.getText().toString();
-        final VendUploadEntity entity = mDataList.get(position);
+        final VendGoodsAttrEntity entity = mDataList.get(position);
+        String title = entity.getAttrName();
+        String content = entity.getAttrValue();
         if (et_title.getTag() instanceof TextWatcher) {
             et_title.removeTextChangedListener((TextWatcher) et_title.getTag());
         }
@@ -59,12 +59,9 @@ public class VendUploadGoodsAdapter extends ListBaseAdapter<VendUploadEntity> {
                 if (editable != null) {
                     String s = editable.toString().trim();
                     if (!TextUtils.isEmpty(s)) {
-                        entity.setTitle("" + s);
+                        entity.setAttrName("" + s);
                     }
-                    Log.i("title:", "et_title + afterTextChanged:" + s);
                 }
-
-                //confirmlist.get(position).setMessage(editable.toString());
             }
         };
         TextWatcher contentwatcher = new TextWatcher() {
@@ -82,19 +79,17 @@ public class VendUploadGoodsAdapter extends ListBaseAdapter<VendUploadEntity> {
                 if (editable != null) {
                     String s = editable.toString().trim();
                     if (!TextUtils.isEmpty(s)) {
-                        entity.setContent("" + s);
+                        entity.setAttrValue("" + s);
                     }
-                    Log.i("title:", "et_content + afterTextChanged:" + s);
                 }
-                //confirmlist.get(position).setMessage(editable.toString());
             }
         };
         et_title.addTextChangedListener(titlewatcher);
         et_title.setTag(titlewatcher);
         et_content.addTextChangedListener(contentwatcher);
         et_content.setTag(contentwatcher);
-        et_title.setText(entity.getTitle());
-        et_content.setText(entity.getContent());
+        et_title.setText(title);
+        et_content.setText(content);
         Log.i("title:", "" + title + "  position:" + position + "  size:" + getItemCount()
                 + "  list:" + mDataList.size());
 //
@@ -116,7 +111,7 @@ public class VendUploadGoodsAdapter extends ListBaseAdapter<VendUploadEntity> {
 
     public void add(String text, int position) {
         int oldsize = getItemCount();
-        VendUploadEntity entity = new VendUploadEntity();
+        VendGoodsAttrEntity entity = new VendGoodsAttrEntity();
         mDataList.add(entity);
         int size = getItemCount();
         notifyItemInserted(size);
