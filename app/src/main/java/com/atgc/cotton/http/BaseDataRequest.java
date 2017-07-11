@@ -53,7 +53,9 @@ public abstract class BaseDataRequest<T> {
         final Request.Builder builder = new Request.Builder()
                 .url(url);
         if (!url.contains("public")) {
+            Log.i("info", "===================Token:" + App.getInstance().getToken());
             if (App.getInstance().isLogin()) {
+                Log.i("info", "===================000000000000000");
                 builder.addHeader("Authorization", App.getInstance().getToken());
             }
         }

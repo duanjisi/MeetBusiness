@@ -71,9 +71,7 @@ public class LoginStatus {
     }
 
     public String getToken() {
-        //return mPreferences.getString(TOKEN, "");
-        String token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjEwMDAwMDA5NiwiZXhwIjoxNTE0ODYzMTI1LCJpc3MiOiJ6aGVuZ2NvZ0BnbWFpbC5jb20iLCJuYmYiOjE0OTkzMTExMjV9.hNJqz-W3o_M_tiDiqiugjTWj1EOxZYigV-Nercf18VU";
-        return token;
+        return mPreferences.getString(TOKEN, "");
     }
 
     public String getUserid() {
@@ -82,5 +80,24 @@ public class LoginStatus {
 
     public String getUsername() {
         return mPreferences.getString(USERNAME, "");
+    }
+
+    public void setUser_name(String name) {
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putString(USERNAME, name);
+        editor.apply();
+    }
+
+
+    public void setAvatar(String avatar) {
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putString(AVATAR, avatar);
+        editor.apply();
+    }
+
+    public void setSex(String sex) {
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putString(SEX, sex);
+        editor.apply();
     }
 }

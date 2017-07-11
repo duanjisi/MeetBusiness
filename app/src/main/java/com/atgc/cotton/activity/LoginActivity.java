@@ -82,7 +82,6 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
     @Override
     protected void initData() {
         super.initData();
-
         addQQQZonePlatform();
         addWXPlatform();
     }
@@ -147,9 +146,7 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
         Map<String, String> map = new HashMap<>();
         map.put("mobilephone", phone);
         map.put("password", psw);
-
         mPresenter.login(map);
-
     }
 
 
