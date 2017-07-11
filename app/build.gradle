@@ -21,6 +21,10 @@ android {
         }
     }
 
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -66,15 +70,16 @@ dependencies {
     compile 'io.reactivex:rxjava:1.1.5'
     compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
-    //返回gson
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
-    compile 'com.squareup.retrofit2:converter-scalars:2.0.0'
+    //返回gson
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     //返回String
-    compile 'com.squareup.okhttp3:logging-interceptor:3.1.2'
+    compile 'com.squareup.retrofit2:converter-scalars:2.0.0'
     //logo生成器
+    compile 'com.squareup.okhttp3:logging-interceptor:3.1.2'
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'me.dm7.barcodescanner:zxing:1.7.2'
     compile 'de.greenrobot:eventbus:3.0.0-beta1'
     compile files('libs/xUtils-2.6.14.jar')
     compile files('libs/AMap_Location_V3.3.0_20170118.jar')

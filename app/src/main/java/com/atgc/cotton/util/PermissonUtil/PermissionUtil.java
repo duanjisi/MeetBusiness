@@ -21,7 +21,7 @@ import java.util.List;
 public class PermissionUtil {
     private static final String TAG = "PermissionUtil";
 
-    public static final int PERMISSIONS_REQUEST_CODE = 65530;//1314520;
+    public static final int PERMISSIONS_REQUEST_CODE = 65530;
 
     // 定位需要权限
     public static final String[] PERMISSIONS_GROUP_LOACATION = {

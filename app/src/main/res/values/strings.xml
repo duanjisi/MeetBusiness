@@ -76,4 +76,22 @@
     <string name="compose_file">文件合成中...</string>
     <string name="richscan_add_my_to_friend">扫一扫二维码，关注我吧~</string>
     <string name="no_datas">暂未获取到任何数据</string>
+
+    <string name="share_weixin">微信</string>
+    <string name="share_weixin_circle">朋友圈</string>
+    <string name="share_weibo">微博</string>
+    <string name="share_qq">QQ</string>
+    <string name="share_qzone">QQ空间</string>
+
+
+    <string name="notice_weixin_not_install">你未安装微信！</string>
+    <string name="notice_qq_not_install">你未安装QQ！</string>
+    <string name="msg_clipping_image">正在裁剪图片</string>
+    <string name="action_clip">裁剪</string>
+    <string name="msg_camera_invalid_permission_denied">无法打开相机，可能是权限被拒绝</string>
+    <string name="msg_camera_invalid_initial_failed">相机初始化失败，无法打开相机</string>
+    <string name="msg_camera_invalid_unknown_error">无法打开相机，未知错误</string>
+    <string name="msg_could_not_save_photo">无法保存图片</string>
+    <string name="success_save">已成功保存到本地</string>
+    <string name="no_name_tip">名字不能为空，请填写</string>
 </resources>

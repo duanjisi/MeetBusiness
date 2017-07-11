@@ -4,9 +4,15 @@ package com.atgc.cotton.http;
  * Created by Johnny on 2017/5/16.
  */
 public class HttpUrl {
+    //    public static final String BASE_URL = "https://api.hmg66.com/v1/";
     public static final String BASE_URL = "https://yuetao.66boss.com/v1/";
-
     public static final String AUTH_URL = "https://api.66boss.com/ksauth/index.php";
+
+
+    /**
+     * attention 关注相关接口
+     */
+    public static final String NUM_URL = BASE_URL + "attention/statistics";//获取我的粉丝总数，关注总数
 
     /**
      * public公共接口
@@ -21,12 +27,14 @@ public class HttpUrl {
     public static final String BASE_FEED = BASE_URL + "feed/";
     public static final String PRAISE = BASE_URL + "feed/approval/";
     public static final String NEAR = BASE_URL + "feed/vicinity/";
+    public static final String MY_PRODUCTION = BASE_URL + "feed/mine";
+
     /**
      * user公共接口
      */
     public static final String USER = BASE_URL + "user/";
     public static final String MODIFY_NICK_URL = BASE_URL + "user/name";
-
+    public static final String USER_AVATAR_URL = USER + "avatar";
     /**
      * 售货架相关接口
      */

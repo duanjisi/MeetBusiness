@@ -28,7 +28,7 @@ public class NearRequest extends BaseDataRequest<HomeBaseData> {
         String lat = (String) mParams[1];
         Map<String, String> map = new HashMap<String, String>();
         map.put("lgt", lgt);
-        map.put("lat ", lat);
+        map.put("lat", lat);
         return map;
     }
 

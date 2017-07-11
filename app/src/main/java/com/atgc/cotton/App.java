@@ -2,12 +2,14 @@ package com.atgc.cotton;
 
 import android.app.Activity;
 import android.app.Application;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import com.atgc.cotton.config.LoginStatus;
 import com.atgc.cotton.entity.AccountEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Johnny on 2017/5/16.
@@ -20,7 +22,14 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        MultiDex.install(this);
         mApplication = this;
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     public synchronized static App getInstance() {

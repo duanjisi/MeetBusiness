@@ -4,8 +4,9 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
-
+    <color name="text_gray_darker">#666666</color>
     <color name="menu_text_color_default">#f69600</color>
     <color name="main_checked_color">#8e97a5</color>
     <color name="main_default_color">#293d55</color>
@@ -16,7 +17,7 @@
     <color name="ios7_white">#ffa8a8a8</color>
     <color name="line_school">#d9d9d9</color>
     <!-- 线条颜色 end -->
-
+    <color name="viewfinder_mask">#B2000000</color>
     <!-- 字体颜色 start -->
     <color name="text_color_black">#333333</color>
     <color name="text_color_gray_6">#666666</color>
@@ -80,6 +81,7 @@
     <color name="bg_color02">#b3bdc7</color>
     <color name="bg_edit">#f2f6f9</color>
 
+    <color name="text_light_blue_font">#46B6EF</color>
     <color name="bg_gray">#e9e9e9</color>
     <color name="background_color">#f4f8fb</color>
     <color name="text_light_gray">#717171</color>
