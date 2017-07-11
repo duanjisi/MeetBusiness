@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl_top_bar"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/top_navigation_bar_height"
-    android:background="@color/edit_red">
+    android:layout_height="@dimen/top_navigation_bar_height">
 
     <TextView
         android:id="@+id/tv_back"
@@ -36,18 +35,18 @@
     <!--android:src="@drawable/hp_setup"-->
     <!--android:visibility="gone" />-->
 
-    <!--<TextView-->
-    <!--android:id="@+id/tv_right"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_alignParentRight="true"-->
-    <!--android:layout_centerVertical="true"-->
-    <!--android:gravity="center"-->
-    <!--android:paddingLeft="@dimen/dp_6"-->
-    <!--android:paddingRight="11dp"-->
-    <!--android:text="保存"-->
-    <!--android:textColor="@color/white"-->
-    <!--android:textSize="16.5sp"-->
-    <!--android:visibility="gone" />-->
+    <TextView
+        android:id="@+id/tv_right"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:paddingLeft="@dimen/dp_6"
+        android:paddingRight="11dp"
+        android:text="保存"
+        android:textColor="@color/white"
+        android:textSize="16.5sp"
+        android:visibility="gone" />
 
 </RelativeLayout>

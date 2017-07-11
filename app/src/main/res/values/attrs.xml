@@ -16,7 +16,17 @@
         <attr name="ios" format="boolean" />
         <attr name="leftSwipe" format="boolean" />
     </declare-styleable>
-
+    <!--图片截取取景框-->
+    <declare-styleable name="ClipImageView">
+        <attr name="civHeight" format="integer" />
+        <attr name="civWidth" format="integer" />
+        <attr name="civTipText" format="string" />
+        <attr name="civTipTextSize" format="dimension" />
+        <attr name="civMaskColor" format="color" />
+        <attr name="civClipPadding" format="dimension" />
+        <attr name="civClipRoundCorner" format="dimension|reference" />
+        <attr name="civClipCircle" format="boolean" />
+    </declare-styleable>
     <declare-styleable name="XlHRatingBar">
         <attr name="starCount" format="integer" /><!--总的星星数-->
         <attr name="canEdit" format="boolean" /><!--是否可以点击选择，有时候纯展示用不需要选择-->

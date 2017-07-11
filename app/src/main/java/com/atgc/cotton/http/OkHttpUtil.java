@@ -8,54 +8,43 @@ import com.squareup.okhttp.Response;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.security.SecureRandom;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
 public class OkHttpUtil {
     private static final OkHttpClient mOkHttpClient = new OkHttpClient();
-
     private static final String DEFAULT_PARAMS_ENCODING = "UTF-8";
 
     static {
         mOkHttpClient.setConnectTimeout(30, TimeUnit.SECONDS);
-//        mOkHttpClient.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-        try {
-            SSLContext sc = SSLContext.getInstance("SSL");
-            sc.init(null, new TrustManager[]{new X509TrustManager() {
-                @Override
-                public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-
-                }
-
-                @Override
-                public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-
-                }
-
-                @Override
-                public X509Certificate[] getAcceptedIssuers() {
-                    return null;
-                }
-            }}, new SecureRandom());
-            mOkHttpClient.setSslSocketFactory(sc.getSocketFactory());
-            mOkHttpClient.setHostnameVerifier(new HostnameVerifier() {
-                @Override
-                public boolean verify(String hostname, SSLSession session) {
-                    return true;
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            SSLContext sc = SSLContext.getInstance("SSL");
+//            sc.init(null, new TrustManager[]{new X509TrustManager() {
+//                @Override
+//                public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+//
+//                }
+//
+//                @Override
+//                public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+//
+//                }
+//
+//                @Override
+//                public X509Certificate[] getAcceptedIssuers() {
+//                    return null;
+//                }
+//            }}, new SecureRandom());
+//            mOkHttpClient.setSslSocketFactory(sc.getSocketFactory());
+//            mOkHttpClient.setHostnameVerifier(new HostnameVerifier() {
+//                @Override
+//                public boolean verify(String hostname, SSLSession session) {
+//                    return true;
+//                }
+//            });
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
 
