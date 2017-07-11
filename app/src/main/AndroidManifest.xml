@@ -29,7 +29,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.HomePagerActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
@@ -39,7 +39,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.HomePagerActivity"
+            android:name=".activity.MainActivity"
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activity.vendingRack.VendingRackHomeActivity"
@@ -126,8 +126,10 @@
         <activity
             android:name=".activity.RegisterActivity"
             android:screenOrientation="portrait">
-
         </activity>
+
+        <activity android:name=".activity.WriteOrderActivity"
+            android:screenOrientation="portrait"/>
 
         <!-- 定位需要的服务 -->
         <service android:name="com.amap.api.location.APSService" />

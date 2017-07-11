@@ -1,8 +1,7 @@
 package com.atgc.cotton.presenter;
 
-import android.content.Context;
-
 import com.atgc.cotton.presenter.view.IRegisterView;
+import com.atgc.cotton.retrofit.MyObserver;
 import com.atgc.cotton.util.L;
 
 import java.util.Map;

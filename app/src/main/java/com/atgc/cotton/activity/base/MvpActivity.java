@@ -15,7 +15,6 @@ import butterknife.ButterKnife;
 
 public abstract class MvpActivity<P extends BasePresenter> extends BaseActivity implements IBaseView {
 
-
      protected P mPresenter;
 
     @Override
@@ -32,11 +31,9 @@ public abstract class MvpActivity<P extends BasePresenter> extends BaseActivity 
     }
 
     protected void initData() {
-
     }
 
     protected void initUI() {
-
     }
 
     protected abstract int getLayoutId();

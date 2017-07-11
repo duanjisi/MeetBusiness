@@ -17,7 +17,7 @@ import rx.Observer;
  */
 public interface ApiStores {
     //baseUrl
-    String API_SERVER_URL = "https://api.hmg66.com/v1/";
+    String API_SERVER_URL = "https://yuetao.66boss.com/v1/";
 
 
 

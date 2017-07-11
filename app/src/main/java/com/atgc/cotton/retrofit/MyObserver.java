@@ -1,4 +1,4 @@
-package com.atgc.cotton.presenter;
+package com.atgc.cotton.retrofit;
 
 import retrofit2.adapter.rxjava.HttpException;
 import rx.Observer;

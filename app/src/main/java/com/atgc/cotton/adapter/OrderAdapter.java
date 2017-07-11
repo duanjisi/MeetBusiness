@@ -1,6 +1,7 @@
 package com.atgc.cotton.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.atgc.cotton.R;
+import com.atgc.cotton.activity.GoodsDetailActivity;
 import com.atgc.cotton.entity.OrderEntity;
 import com.atgc.cotton.util.UIUtils;
 
@@ -81,6 +83,15 @@ public class OrderAdapter extends BaseRecycleViewAdapter {
             if (!TextUtils.isEmpty(goodsPrice)) {
                 ((MyViewHolderContent) holder).tv_goods_price.setText("￥" + goodsPrice);
             }
+
+            //跳转商品页
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, GoodsDetailActivity.class);
+                    mContext.startActivity(intent);
+                }
+            });
         } else if (holder instanceof MyViewHolderFooter) {
             int allNum = orderEntity.getAllNum();
             String allPrice = orderEntity.getAllPrice();
@@ -134,6 +145,7 @@ public class OrderAdapter extends BaseRecycleViewAdapter {
                     ((MyViewHolderFooter) holder).bt_3.setText("删除订单");
                     break;
             }
+
         }
     }
 
