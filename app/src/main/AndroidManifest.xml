@@ -145,6 +145,11 @@
 
         <activity android:name=".activity.WriteOrderActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.ChooseAddressActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".activity.EditAddressActivity"
+            android:screenOrientation="portrait"/>
 
         <!-- 定位需要的服务 -->
         <service android:name="com.amap.api.location.APSService" />

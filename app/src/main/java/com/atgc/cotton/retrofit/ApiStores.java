@@ -2,6 +2,8 @@ package com.atgc.cotton.retrofit;
 
 
 
+import com.atgc.cotton.http.HttpUrl;
+
 import java.util.Map;
 
 import retrofit2.http.FieldMap;
@@ -17,7 +19,7 @@ import rx.Observer;
  */
 public interface ApiStores {
     //baseUrl
-    String API_SERVER_URL = "https://yuetao.66boss.com/v1/";
+    String API_SERVER_URL = HttpUrl.BASE_URL;
 
 
 

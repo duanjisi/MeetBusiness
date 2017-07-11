@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     useLibrary 'org.apache.http.legacy'
     compileSdkVersion 24
-    buildToolsVersion "25.0.0"
+    buildToolsVersion '25.0.3'
     defaultConfig {
         applicationId "com.atgc.cotton"
         minSdkVersion 16
