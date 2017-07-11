@@ -35,4 +35,13 @@ public interface ApiStores {
     @POST("public/login")
     Observable<String> phoneLogin(@FieldMap Map<String,String> params);
 
+    //qq登录
+    @FormUrlEncoded
+    @POST("public/qqlogin")
+    Observable<String> qqLogin(@FieldMap Map<String,String> params);
+
+    //wx登录
+    @FormUrlEncoded
+    @POST("public/wxlogin")
+    Observable<String> wxLogin(@FieldMap Map<String,String> params);
 }

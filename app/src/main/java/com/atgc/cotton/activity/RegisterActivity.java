@@ -55,12 +55,7 @@ public class RegisterActivity extends MvpActivity<RegisterPresenter> implements 
     Button btnCode;
     @Bind(R.id.rl_code)
     RelativeLayout rlCode;
-    @Bind(R.id.et_name)
-    EditText etName;
-    @Bind(R.id.et_sex)
-    TextView etSex;
-    @Bind(R.id.rl_sex)
-    RelativeLayout rlSex;
+
     @Bind(R.id.btn_register)
     Button btnRegister;
     private HashMap<String, String> map;
@@ -82,26 +77,20 @@ public class RegisterActivity extends MvpActivity<RegisterPresenter> implements 
 
     }
 
-    @OnClick({R.id.img_back, R.id.img_head, R.id.btn_code, R.id.rl_sex, R.id.btn_register})
+    @OnClick({R.id.img_back, R.id.img_head, R.id.btn_code,  R.id.btn_register})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.img_back:
                 finish();
                 break;
             case R.id.img_head:    //头像
-                showToast("头像");
                 break;
             case R.id.btn_code:     //验证码
                 showToast("验证码");
                 break;
-            case R.id.rl_sex:     //性别
-                showToast("性别");
-                break;
+
             case R.id.btn_register:  //注册            验证码还没加上，还有性别，昵称，接口也没
-//                showToast("注册");
                 register();
-
-
                 break;
         }
     }

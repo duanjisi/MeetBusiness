@@ -1,5 +1,6 @@
 package com.atgc.cotton.activity;
 
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -62,21 +63,36 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
 
     @Override
     protected LoginPresenter createPresenter() {
-        return new LoginPresenter(this,context);
+        return new LoginPresenter(this, context);
     }
 
 
-    //登录成功
+    /**
+     * 登录成功回调
+     *
+     * @param s
+     */
     @Override
     public void getDataSuccess(String s) {
-        showToast(s);
+//        showToast(s);
         finish();
         openActivity(HomePagerActivity.class);
     }
 
+    /**
+     * 登录失败
+     */
     @Override
     public void getDataFail() {
         showToast("登录失败,请重试");
+    }
+
+    @Override
+    protected void initUI() {
+        super.initUI();
+
+        tv_register.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
+        tv_register.getPaint().setAntiAlias(true);//抗锯齿
     }
 
     @Override
@@ -97,23 +113,19 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
             case R.id.et_pw:
                 break;
             case R.id.tv_Reset:
-                showToast("重置密码");
+                showToast("忘记密码");
                 break;
             case R.id.btn_login:
-                showToast("登录");
                 login();
 
                 break;
             case R.id.tv_register:
-                showToast("注册");
                 openActivity(RegisterActivity.class);
                 break;
             case R.id.img_qq:
-                showToast("qq");
                 ThirdLogin(SHARE_MEDIA.QQ, "qq");
                 break;
             case R.id.img_wx:
-                showToast("wx");
                 ThirdLogin(SHARE_MEDIA.WEIXIN, "wx");
                 break;
         }
@@ -127,7 +139,7 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
         String psw = et_pw.getText().toString();
 
         if (TextUtils.isEmpty(phone)) {
-            showToast("手机号不能为空!");
+            showToast("登录帐号不能为空!");
             return;
         }
         if (!UIUtils.isMobile(phone)) {
@@ -136,13 +148,10 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
 
         }
         if (TextUtils.isEmpty(psw)) {
-            showToast("请输入密码!");
+            showToast("登录密码不能为空!");
             return;
         }
-        if (psw.length() < 6 || psw.length() > 16) {
-            showToast("密码长度不符合要求");
-            return;
-        }
+
         Map<String, String> map = new HashMap<>();
         map.put("mobilephone", phone);
         map.put("password", psw);
@@ -152,6 +161,7 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
 
     /**
      * 第三方登录
+     *
      * @param platform
      * @param type
      */
@@ -203,6 +213,7 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
 
     /**
      * 获取用户信息
+     *
      * @param platform
      * @param openid
      * @param access_token
@@ -244,10 +255,21 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
                             if (thusername != null && !thusername.equals("") && !avatar.equals("")) {
 //                                ThirdLoginPathform(type, access_token, avatar, openid, unionid, thusername);
                                 //调用自己的接口登录
-                                if(type.equals("wx")){
-                                    showToast("微信111");
-                                }else{
-                                    showToast("qq111");
+                                if (type.equals("wx")) {
+                                    Map<String, String> map = new HashMap<>();
+                                    map.put("wxunionid", unionid);
+                                    map.put("wxnickname", thusername);
+                                    map.put("wxavatar", avatar);
+
+                                    mPresenter.wxLogin(map);
+
+                                } else {
+                                    Map<String, String> map = new HashMap<>();
+                                    map.put("accesstoken", access_token);
+                                    map.put("qqnickname", thusername);
+                                    map.put("qqavatar", avatar);
+
+                                    mPresenter.qqLogin(map);
                                 }
                             }
                         }

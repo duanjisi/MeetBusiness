@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
@@ -21,6 +22,7 @@ import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.activity.production.mine.MyProductionActivity;
 import com.atgc.cotton.activity.vendingRack.MyOrderActivity;
 import com.atgc.cotton.activity.videoedit.RecordVideoActivity;
+import com.atgc.cotton.config.LoginStatus;
 import com.atgc.cotton.fragment.MainDiscoverFragment;
 import com.atgc.cotton.fragment.MainFocusFragment;
 import com.atgc.cotton.fragment.MainFragment;
@@ -28,6 +30,7 @@ import com.atgc.cotton.fragment.MainNearFragment;
 import com.atgc.cotton.util.ImageLoaderUtils;
 import com.atgc.cotton.util.UIUtils;
 import com.atgc.cotton.widget.CircleImageView;
+import com.bumptech.glide.Glide;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -58,6 +61,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
     private RadioButton rb_shopping;
     private Handler handler;
     private Button btn_login;
+    private TextView tv_name;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -120,6 +124,17 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
         mViewPager.setCurrentItem(VIEW_PAGER_PAGE_1);
 
         rb_shopping = (RadioButton) findViewById(R.id.rb_shopping);
+
+        tv_name = (TextView) findViewById(R.id.tv_name);
+        String avatar = LoginStatus.getInstance().getAvatar();
+        String username = LoginStatus.getInstance().getUsername();
+        if(!TextUtils.isEmpty(avatar)){
+            Glide.with(context).load(avatar).into(ivAvatar);
+        }
+        if(!TextUtils.isEmpty(username)){
+            tv_name.setText(username);
+        }
+
 
     }
 
@@ -221,6 +236,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
             switch (arg1) {
                 case R.id.rb_setting:
                     showToast("个人设置", true);
+                    openActivity(PersonalSetActivity.class);
                     break;
                 case R.id.rb_production:
                     openActivity(MyProductionActivity.class);

@@ -175,6 +175,10 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name=".activity.PersonalSetActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
 
         <!--友盟appkey-->
         <meta-data

@@ -23,9 +23,7 @@ public class LoginPresenter extends BasePresenter<INormalView> {
 
 
     private Context context;
-    public LoginPresenter(INormalView mvpView) {
-        super(mvpView);
-    }
+
 
     public LoginPresenter(INormalView mvpView,Context context) {
         super(mvpView);
@@ -48,30 +46,110 @@ public class LoginPresenter extends BasePresenter<INormalView> {
                         UserEntity entity = JSON.parseObject(s, UserEntity.class);
 
                         if(entity.getCode()==0){  //登录成功,
-                            //TODO    把个人信息存在本地
-                            UserEntity.DataBean data = entity.getData();
-                            PreferenceUtils.putBoolean(context, "isThirdLogin", false);
-
-                            AccountEntity accountEntity = new AccountEntity();
-                            accountEntity.setAvatar(data.getAvatar());
-                            accountEntity.setMobilePhone(data.getMobilePhone());
-                            accountEntity.setSex(data.getSex());
-                            accountEntity.setToken(data.getToken());
-                            accountEntity.setUserId(data.getUserId());
-                            accountEntity.setUserName(data.getUserName());
-                            //存本地
-                            LoginStatus.getInstance().login(accountEntity,false);
-
+                            initUser(entity);
 
                             mvpView.getDataSuccess(entity.getMessage());
                         }else{
                             //登录失败
                             mvpView.getDataFail();
                         }
-
-
                         mvpView.hideLoading();
+                    }
 
+                    @Override
+                    public void onError_(String msg) {
+                        mvpView.hideLoading();
+                        mvpView.getDataFail();
+                    }
+
+                    @Override
+                    public void onCompleted_() {
+
+                    }
+                }));
+    }
+
+    /**
+     * 用户数据存手机本地
+     * @param entity
+     */
+    private void initUser(UserEntity entity) {
+        UserEntity.DataBean data = entity.getData();
+        PreferenceUtils.putBoolean(context, "isThirdLogin", false);
+
+        AccountEntity accountEntity = new AccountEntity();
+        accountEntity.setAvatar(data.getAvatar());
+        accountEntity.setMobilePhone(data.getMobilePhone());
+        accountEntity.setSex(data.getSex());
+        accountEntity.setToken(data.getToken());
+        accountEntity.setUserId(data.getUserId());
+        accountEntity.setUserName(data.getUserName());
+        //存本地
+        LoginStatus.getInstance().login(accountEntity,false);
+
+
+    }
+
+    /**
+     * qq登录
+     * @param map
+     */
+    public void qqLogin(Map<String,String> map) {
+        mvpView.showLoading();
+        addSubscription(api.qqLogin(map)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MyObserver<String>() {
+                    @Override
+                    public void onNext_(String s) {
+                        UserEntity entity = JSON.parseObject(s, UserEntity.class);
+
+                        if(entity.getCode()==0){  //登录成功,
+                            initUser(entity);
+
+                            mvpView.getDataSuccess(entity.getMessage());
+                        }else{
+                            //登录失败
+                            mvpView.getDataFail();
+                        }
+                        mvpView.hideLoading();
+                    }
+
+                    @Override
+                    public void onError_(String msg) {
+                        mvpView.hideLoading();
+                        mvpView.getDataFail();
+                    }
+
+                    @Override
+                    public void onCompleted_() {
+
+                    }
+                }));
+    }
+
+    /**
+     * wx登录
+     * @param map
+     */
+    public void wxLogin(Map<String,String> map) {
+        mvpView.showLoading();
+        addSubscription(api.wxLogin(map)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MyObserver<String>() {
+                    @Override
+                    public void onNext_(String s) {
+                        UserEntity entity = JSON.parseObject(s, UserEntity.class);
+
+                        if(entity.getCode()==0){  //登录成功,
+                            initUser(entity);
+                            mvpView.getDataSuccess(entity.getMessage());
+                        }else{
+                            //登录失败
+                            mvpView.getDataFail();
+                        }
+                        mvpView.hideLoading();
                     }
 
                     @Override
