@@ -44,4 +44,7 @@ public class HttpUrl {
 
     //退出登录
     public static final String LOGOUT  = BASE_URL+"public/logout";
+
+    //添加收货地址
+    public static final String ADD_ADDRESS  =BASE_URL+"user/address";
 }

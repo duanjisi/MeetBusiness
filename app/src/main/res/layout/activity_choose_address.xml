@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
 
     <RelativeLayout
@@ -25,18 +26,27 @@
             android:textSize="18sp" />
 
         <View
-            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
+            android:layout_alignParentBottom="true"
             android:background="@color/line_school" />
     </RelativeLayout>
 
     <Button
         android:id="@+id/btn_add"
-        android:textColor="@color/white"
-        android:text="新增地址"
-        android:background="@color/edit_red"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/edit_red"
+        android:text="新增地址"
+        android:textColor="@color/white" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_address"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/btn_add"
+        android:layout_below="@id/rl_top"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"></android.support.v7.widget.RecyclerView>
 </RelativeLayout>

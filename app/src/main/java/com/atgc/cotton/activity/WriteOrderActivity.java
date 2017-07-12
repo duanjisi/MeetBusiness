@@ -7,6 +7,7 @@ import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 
 /**
+ * 填写订单
  * Created by liw on 2017/7/11.
  */
 public class WriteOrderActivity extends BaseActivity implements View.OnClickListener {

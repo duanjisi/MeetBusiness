@@ -76,4 +76,23 @@ public interface ApiStores {
     @Multipart
     @PUT("goods/{goodsid}")
     Observable<String> changeMyGoods(@Header("Authorization") String token, @Path("goodsid") int goodsid, @PartMap Map<String, RequestBody> params);
+
+    //添加收货地址
+    @Multipart
+    @POST("user/address")
+    Observable<String> addAddress(@Header("Authorization") String token, @PartMap Map<String, String> params);
+
+    //查找地址列表
+    @GET("user/address")
+    Observable<String> searchAddress(@Header("Authorization") String token, @Query("page") int page, @Query("size") int size);
+
+    //删除地址
+    @DELETE("user/address/{id}")
+    Observable<String> deleteAddress(@Header("Authorization") String token, @Path("id") int id);
+
+    //编辑地址
+    @Multipart
+    @PUT("user/address/{id}")
+    Observable<String> editAddress(@Header("Authorization") String token, @Path("id") int id, @PartMap Map<String, String> params);
+
 }
