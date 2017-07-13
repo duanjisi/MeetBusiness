@@ -33,7 +33,8 @@
                 android:paddingRight="@dimen/dp_6"
                 android:paddingTop="@dimen/dp_18"
                 android:textColor="@color/text_color_black"
-                android:textCursorDrawable="@drawable/shape_edittext_cursor" />
+                android:textCursorDrawable="@drawable/shape_edittext_cursor"
+                android:textSize="14sp" />
 
         </LinearLayout>
 
@@ -60,7 +61,8 @@
                 android:paddingRight="@dimen/dp_6"
                 android:paddingTop="@dimen/dp_18"
                 android:textColor="@color/text_color_black"
-                android:textCursorDrawable="@drawable/shape_edittext_cursor" />
+                android:textCursorDrawable="@drawable/shape_edittext_cursor"
+                android:textSize="14sp" />
 
         </LinearLayout>
 

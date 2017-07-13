@@ -6,6 +6,7 @@ import com.atgc.cotton.entity.BaseResult;
 import com.atgc.cotton.entity.GoodsDetailEntity;
 import com.atgc.cotton.entity.VendGoodsEntity;
 import com.atgc.cotton.presenter.view.IVendUploadView;
+import com.atgc.cotton.retrofit.MyObserver;
 
 import java.io.File;
 import java.util.HashMap;

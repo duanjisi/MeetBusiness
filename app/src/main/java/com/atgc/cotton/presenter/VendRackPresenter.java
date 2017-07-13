@@ -3,12 +3,9 @@ package com.atgc.cotton.presenter;
 import com.alibaba.fastjson.JSON;
 import com.atgc.cotton.App;
 import com.atgc.cotton.entity.BaseResult;
-import com.atgc.cotton.entity.UserEntity;
 import com.atgc.cotton.entity.VendGoodsEntity;
-import com.atgc.cotton.presenter.view.INormalView;
 import com.atgc.cotton.presenter.view.IVendRackView;
-
-import java.util.Map;
+import com.atgc.cotton.retrofit.MyObserver;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -34,11 +31,14 @@ public class VendRackPresenter extends BasePresenter<IVendRackView> {
                 .subscribe(new MyObserver<String>() {
                     @Override
                     public void onNext_(String s) {
-                        VendGoodsEntity entity = JSON.parseObject(s, VendGoodsEntity.class);
-                        if (entity.getCode() == 0 && entity != null && entity.getData() != null) {
-                            mvpView.getMyVendGoods(entity.getData());
-                        } else {
-                            mvpView.onError(entity.getMessage());
+                        BaseResult result = BaseResult.parse(s);
+                        if (result.getCode() == 0) {
+                            VendGoodsEntity entity = JSON.parseObject(s, VendGoodsEntity.class);
+                            if (entity.getCode() == 0 && entity != null && entity.getData() != null) {
+                                mvpView.getMyVendGoods(entity.getData());
+                            } else {
+                                mvpView.onError(entity.getMessage());
+                            }
                         }
                         mvpView.hideLoading();
                     }

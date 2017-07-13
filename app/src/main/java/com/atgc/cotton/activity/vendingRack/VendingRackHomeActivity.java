@@ -67,7 +67,7 @@ public class VendingRackHomeActivity extends BaseCompatActivity<VendRackPresente
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         int sceenW = UIUtils.getScreenWidth(this);
-        bt_upload.getLayoutParams().height = sceenW / 8;
+        //bt_upload.getLayoutParams().height = sceenW / 8;
         adapter = new VendingRackHomeAdapter(this);
         List<VendGoodsEntity.Goods> list = new ArrayList<>();
         adapter.setDataList(list);
