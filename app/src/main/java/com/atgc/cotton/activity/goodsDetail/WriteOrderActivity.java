@@ -1,4 +1,4 @@
-package com.atgc.cotton.activity;
+package com.atgc.cotton.activity.goodsDetail;
 
 import android.os.Bundle;
 import android.view.View;

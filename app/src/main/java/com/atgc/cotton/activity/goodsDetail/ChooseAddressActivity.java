@@ -1,15 +1,17 @@
-package com.atgc.cotton.activity;
+package com.atgc.cotton.activity.goodsDetail;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.Button;
 
 import com.alibaba.fastjson.JSON;
 import com.atgc.cotton.App;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.MvpActivity;
+import com.atgc.cotton.activity.goodsDetail.EditAddressActivity;
 import com.atgc.cotton.adapter.ChooseAddressAdapter;
 import com.atgc.cotton.entity.AddressListEntity;
 import com.atgc.cotton.event.RefreshAddress;
@@ -19,8 +21,6 @@ import com.atgc.cotton.presenter.view.IChooseAddressView;
 
 import java.util.List;
 
-import butterknife.Bind;
-import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 
@@ -28,11 +28,9 @@ import de.greenrobot.event.Subscribe;
  * 选择地址
  * Created by liw on 2017/7/11.
  */
-public class ChooseAddressActivity extends MvpActivity<ChooseAddressPresenter> implements IChooseAddressView {
-    @Bind(R.id.btn_add)
-    Button btnAdd;
-    @Bind(R.id.rv_address)
-    RecyclerView rvAddress;
+public class ChooseAddressActivity extends MvpActivity<ChooseAddressPresenter> implements IChooseAddressView, View.OnClickListener {
+    private Button btnAdd;
+    private RecyclerView rvAddress;
     private ChooseAddressAdapter adapter;
     private String token;
     private List<AddressListEntity.DataBean> datas;
@@ -54,6 +52,9 @@ public class ChooseAddressActivity extends MvpActivity<ChooseAddressPresenter> i
     @Override
     protected void initUI() {
         super.initUI();
+        btnAdd = (Button) findViewById(R.id.btn_add);
+        btnAdd.setOnClickListener(this);
+        rvAddress = (RecyclerView) findViewById(R.id.rv_address);
         adapter = new ChooseAddressAdapter(this);
         rvAddress.setLayoutManager(new LinearLayoutManager(this));
         rvAddress.setAdapter(adapter);
@@ -62,9 +63,9 @@ public class ChooseAddressActivity extends MvpActivity<ChooseAddressPresenter> i
         adapter.setDeleteListener(new ChooseAddressAdapter.onDeleteListener() {
             @Override
             public void onDel(int position) {
-                deletePos= position;
+                deletePos = position;
                 int addressId = datas.get(position).getAddressId();
-                mPresenter.deleteAddress(token,addressId);
+                mPresenter.deleteAddress(token, addressId);
 
             }
         });
@@ -72,6 +73,7 @@ public class ChooseAddressActivity extends MvpActivity<ChooseAddressPresenter> i
 
     /**
      * 添加地址后通知刷新
+     *
      * @param event
      */
     @Subscribe
@@ -97,11 +99,6 @@ public class ChooseAddressActivity extends MvpActivity<ChooseAddressPresenter> i
         return new ChooseAddressPresenter(this);
     }
 
-
-    @OnClick(R.id.btn_add)
-    public void onViewClicked() {
-        openActivity(EditAddressActivity.class);
-    }
 
     /**
      * 查询地址列表成功
@@ -136,5 +133,10 @@ public class ChooseAddressActivity extends MvpActivity<ChooseAddressPresenter> i
     @Override
     public void deleteFailue() {
         showToast("删除失败");
+    }
+
+    @Override
+    public void onClick(View v) {
+        openActivity(EditAddressActivity.class);
     }
 }

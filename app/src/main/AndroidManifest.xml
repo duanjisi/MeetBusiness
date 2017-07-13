@@ -143,12 +143,12 @@
             android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".activity.WriteOrderActivity"
+        <activity android:name=".activity.goodsDetail.WriteOrderActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.ChooseAddressActivity"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".activity.EditAddressActivity"
+        <activity android:name=".activity.goodsDetail.EditAddressActivity"
             android:screenOrientation="portrait"/>
 
         <!-- 定位需要的服务 -->

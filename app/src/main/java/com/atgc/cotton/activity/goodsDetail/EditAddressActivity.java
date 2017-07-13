@@ -1,4 +1,4 @@
-package com.atgc.cotton.activity;
+package com.atgc.cotton.activity.goodsDetail;
 
 import android.app.Dialog;
 import android.content.Intent;

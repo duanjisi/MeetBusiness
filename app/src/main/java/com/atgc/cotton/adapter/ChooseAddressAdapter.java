@@ -11,10 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.atgc.cotton.R;
-import com.atgc.cotton.activity.EditAddressActivity;
+import com.atgc.cotton.activity.goodsDetail.EditAddressActivity;
 import com.atgc.cotton.entity.AddressListEntity;
-
-import org.w3c.dom.Text;
 
 /**
  * Created by liw on 2017/7/12.

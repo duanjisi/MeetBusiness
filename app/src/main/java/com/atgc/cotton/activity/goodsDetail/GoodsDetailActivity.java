@@ -1,4 +1,4 @@
-package com.atgc.cotton.activity;
+package com.atgc.cotton.activity.goodsDetail;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -13,9 +13,9 @@ import android.widget.TextView;
 
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.MvpActivity;
+import com.atgc.cotton.activity.goodsDetail.WriteOrderActivity;
 import com.atgc.cotton.presenter.GoodsDetailPresenter;
 import com.atgc.cotton.presenter.view.IGoodsDetailView;
-import com.atgc.cotton.presenter.view.INormalView;
 
 import butterknife.Bind;
 import butterknife.OnClick;
