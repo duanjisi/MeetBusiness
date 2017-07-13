@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+   <RelativeLayout
+       android:id="@+id/rl_top"
+       android:layout_width="match_parent"
+       android:layout_height="50dp">
+
+      <ImageView
+          android:id="@+id/img_back"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerVertical="true"
+          android:layout_marginLeft="10dp"
+          android:src="@drawable/nav_return" />
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerInParent="true"
+          android:text="编辑地址"
+          android:textColor="@color/main_default_color"
+          android:textSize="18sp" />
+      <Button
+          android:id="@+id/btn_save"
+          android:layout_marginRight="10dp"
+          android:layout_alignParentRight="true"
+          android:layout_centerVertical="true"
+          android:text="保存"
+          android:textColor="@color/white"
+          android:background="@drawable/edit_shape"
+          android:layout_width="50dp"
+          android:layout_height="40dp" />
+
+      <View
+          android:layout_alignParentBottom="true"
+          android:layout_width="match_parent"
+          android:layout_height="0.5dp"
+          android:background="@color/line_school" />
+   </RelativeLayout>
+
+   <!--<Button-->
+   <!--android:id="@+id/btn_delete"-->
+   <!--android:layout_alignParentBottom="true"-->
+   <!--android:text="删除地址"-->
+   <!--android:textColor="@color/edit_red"-->
+   <!--android:background="@color/white"-->
+   <!--android:layout_width="match_parent"-->
+   <!--android:layout_height="50dp" />-->
+   <!--<View-->
+   <!--android:layout_above="@id/btn_delete"-->
+   <!--android:layout_width="match_parent"-->
+   <!--android:layout_height="0.5dp"-->
+   <!--android:background="@color/line_school" />-->
+
+   <RelativeLayout
+       android:id="@+id/rl_receiver"
+       android:layout_below="@id/rl_top"
+       android:layout_width="match_parent"
+       android:layout_height="60dp">
+      <TextView
+          android:id="@+id/tv_receiver"
+          android:layout_centerVertical="true"
+          android:layout_marginLeft="10dp"
+          android:textSize="14sp"
+          android:textColor="#8e97a5"
+          android:text="收货人"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+
+      <EditText
+          android:id="@+id/et_people"
+          android:maxLines="1"
+          android:textSize="14sp"
+          android:layout_centerVertical="true"
+          android:layout_marginLeft="15dp"
+          android:hint="请输入"
+          android:textColorHint="#d8dfe6"
+          android:background="@null"
+          android:layout_toRightOf="@id/tv_receiver"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
+
+      <View
+          android:layout_alignParentBottom="true"
+          android:layout_width="match_parent"
+          android:layout_height="0.5dp"
+          android:background="@color/line_school" />
+
+   </RelativeLayout>
+
+
+   <RelativeLayout
+       android:id="@+id/rl_phone"
+       android:layout_below="@id/rl_receiver"
+       android:layout_width="match_parent"
+       android:layout_height="60dp">
+      <TextView
+          android:id="@+id/tv_phone"
+          android:layout_centerVertical="true"
+          android:layout_marginLeft="10dp"
+          android:textSize="14sp"
+          android:textColor="#8e97a5"
+          android:text="联系电话"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+
+      <EditText
+          android:id="@+id/et_phone"
+          android:maxLength="13"
+          android:inputType="phone"
+          android:textSize="14sp"
+          android:layout_centerVertical="true"
+          android:layout_marginLeft="15dp"
+          android:hint="请输入"
+          android:textColorHint="#d8dfe6"
+          android:background="@null"
+          android:layout_toRightOf="@id/tv_phone"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" />
+
+      <View
+          android:layout_alignParentBottom="true"
+          android:layout_width="match_parent"
+          android:layout_height="0.5dp"
+          android:background="@color/line_school" />
+   </RelativeLayout>
+
+
+
+   <RelativeLayout
+       android:id="@+id/rl_address"
+       android:layout_below="@id/rl_phone"
+       android:layout_width="match_parent"
+       android:layout_height="60dp">
+      <TextView
+          android:id="@+id/tv_area"
+          android:layout_centerVertical="true"
+          android:layout_marginLeft="10dp"
+          android:textSize="14sp"
+          android:textColor="#8e97a5"
+          android:text="所在地区"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+
+      <TextView
+          android:id="@+id/tv_content"
+          android:layout_toRightOf="@id/tv_area"
+          android:layout_centerVertical="true"
+          android:layout_marginLeft="15dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+
+      <ImageView
+          android:id="@+id/img_enter"
+          android:layout_alignParentRight="true"
+          android:layout_centerVertical="true"
+          android:layout_marginRight="10dp"
+          android:src="@drawable/data_enter"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+
+      <TextView
+          android:id="@+id/tv_choose"
+          android:layout_marginRight="15dp"
+          android:layout_centerVertical="true"
+          android:layout_toLeftOf="@id/img_enter"
+          android:text="请选择"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+
+      <View
+          android:layout_alignParentBottom="true"
+          android:layout_width="match_parent"
+          android:layout_height="0.5dp"
+          android:background="@color/line_school" />
+   </RelativeLayout>
+
+   <RelativeLayout
+       android:id="@+id/rl_where"
+       android:layout_below="@id/rl_address"
+       android:layout_width="match_parent"
+       android:layout_height="100dp">
+      <TextView
+          android:layout_marginTop="15dp"
+          android:id="@+id/tv_address"
+          android:layout_marginLeft="10dp"
+          android:textSize="14sp"
+          android:textColor="#8e97a5"
+          android:text="详细地址"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+
+      <EditText
+          android:id="@+id/et_address"
+          android:textSize="14sp"
+
+          android:textColorHint="#d8dfe6"
+          android:hint="请输入详细地址"
+          android:gravity="left|top"
+          android:background="@null"
+          android:maxLines="4"
+          android:layout_marginLeft="15dp"
+          android:layout_marginTop="15dp"
+          android:layout_toRightOf="@id/tv_address"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent" />
+
+      <View
+          android:layout_alignParentBottom="true"
+          android:layout_width="match_parent"
+          android:layout_height="0.5dp"
+          android:background="@color/line_school" />
+   </RelativeLayout>
+
+   <TextView
+       android:textSize="14sp"
+       android:textColor="#8e97a5"
+       android:layout_marginLeft="10dp"
+       android:text="设为默认"
+       android:layout_marginTop="15dp"
+       android:layout_below="@id/rl_where"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content" />
+
+   <ToggleButton
+       android:id="@+id/tb_default"
+       android:background="@android:color/transparent"
+       android:button="@drawable/selector_switch_bt"
+       android:checked="true"
+       android:text=""
+       android:textOff=""
+       android:textOn=""
+       android:layout_alignParentRight="true"
+       android:layout_below="@id/rl_where"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content" />
+
+
+</RelativeLayout>

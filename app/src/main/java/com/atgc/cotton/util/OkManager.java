@@ -2,6 +2,7 @@ package com.atgc.cotton.util;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.atgc.cotton.App;
@@ -138,7 +139,14 @@ public class OkManager {
             formEncodingBuilder.add(entry.getKey(), entry.getValue());
         }
         RequestBody requestBody = formEncodingBuilder.build();
-        final Request request = new Request.Builder().url(url).post(requestBody).tag("aaaa").build();
+        final Request.Builder builder = new Request.Builder().url(url);
+        //加上header
+        if (!url.contains("public")) {
+            if (App.getInstance().isLogin()) {
+                builder.addHeader("Authorization", App.getInstance().getToken());
+            }
+        }
+        final Request request = builder.post(requestBody).build();
         client.newCall(request).enqueue(new Callback() {
 
             @Override

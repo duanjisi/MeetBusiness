@@ -7,6 +7,8 @@ import com.atgc.cotton.entity.VendGoodsEntity;
 import com.atgc.cotton.presenter.view.IVendRackView;
 import com.atgc.cotton.retrofit.MyObserver;
 
+import java.util.Map;
+
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
