@@ -83,7 +83,6 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.VideoV
     }
 
     private String[] getSize(String url) {
-        Log.i("liwya", url);
         String str = url.substring(url.indexOf("-"), url.length());
         String size = str.substring(str.indexOf("-") + 1, str.indexOf("."));
         return size.split("x");

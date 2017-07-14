@@ -43,7 +43,7 @@
 
         <include
             layout="@layout/has_address"
-            android:visibility="gone" />
+            android:visibility="invisible" />
 
     </LinearLayout>
 

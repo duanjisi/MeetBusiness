@@ -23,20 +23,10 @@ public abstract class MvpActivity<P extends BasePresenter> extends BaseActivity 
         super.onCreate(savedInstanceState);
 
         mPresenter = createPresenter();
-        setContentView(getLayoutId());
-        ButterKnife.bind(this);
 
-        initUI();
-        initData();
     }
 
-    protected void initData() {
-    }
 
-    protected void initUI() {
-    }
-
-    protected abstract int getLayoutId();
 
     @Override
     protected void onDestroy() {

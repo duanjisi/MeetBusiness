@@ -1,6 +1,7 @@
 package com.atgc.cotton.activity.goodsDetail;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -50,8 +51,14 @@ public class ChooseAddressActivity extends MvpActivity<ChooseAddressPresenter> i
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+
+        setContentView(R.layout.activity_choose_address);
+        initUI();
+        initData();
+    }
+
     protected void initUI() {
-        super.initUI();
         btnAdd = (Button) findViewById(R.id.btn_add);
         btnAdd.setOnClickListener(this);
         rvAddress = (RecyclerView) findViewById(R.id.rv_address);
@@ -73,7 +80,6 @@ public class ChooseAddressActivity extends MvpActivity<ChooseAddressPresenter> i
 
     /**
      * 添加地址后通知刷新
-     *
      * @param event
      */
     @Subscribe
@@ -82,17 +88,11 @@ public class ChooseAddressActivity extends MvpActivity<ChooseAddressPresenter> i
     }
 
 
-    @Override
     protected void initData() {
-        super.initData();
         token = App.getInstance().getToken();
         mPresenter.searchAddress(token, 1, 50);
     }
 
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_choose_address;
-    }
 
     @Override
     protected ChooseAddressPresenter createPresenter() {

@@ -133,7 +133,7 @@
         <!--android:name=".activity.GoodsDetailActivity"-->
         <!--android:screenOrientation="portrait" />-->
         <activity
-            android:name=".activity.GoodsDetailActivity"
+            android:name=".activity.goodsDetail.GoodsDetailActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.LoginActivity"
@@ -145,7 +145,7 @@
 
         <activity android:name=".activity.goodsDetail.WriteOrderActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".activity.ChooseAddressActivity"
+        <activity android:name=".activity.goodsDetail.ChooseAddressActivity"
             android:screenOrientation="portrait"/>
 
         <activity android:name=".activity.goodsDetail.EditAddressActivity"
