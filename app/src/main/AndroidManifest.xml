@@ -129,6 +129,10 @@
         <activity
             android:name=".activity.production.mine.MyProductionActivity"
             android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".activity.production.other.OtherProActivity"
+            android:screenOrientation="portrait"></activity>
         <!--<activity-->
         <!--android:name=".activity.GoodsDetailActivity"-->
         <!--android:screenOrientation="portrait" />-->
@@ -139,9 +143,11 @@
             android:name=".activity.LoginActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.production.other.OtherPlayerActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.RegisterActivity"
             android:screenOrientation="portrait">
-
         </activity>
 
         <!-- 定位需要的服务 -->
@@ -175,7 +181,8 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".activity.PersonalSetActivity"
+        <activity
+            android:name=".activity.PersonalSetActivity"
             android:screenOrientation="portrait">
 
         </activity>

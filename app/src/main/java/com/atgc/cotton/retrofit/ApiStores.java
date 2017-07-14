@@ -10,16 +10,13 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import rx.Observable;
-import rx.Observer;
 
 /**
  *  Created by liw on 2017/7/5.
  */
 public interface ApiStores {
     //baseUrl
-    String API_SERVER_URL = "https://api.hmg66.com/v1/";
-
-
+    String API_SERVER_URL = "https://yuetao.66boss.com/v1/";
 
     //加载天气
     @GET("adat/sk/{cityId}.html")

@@ -31,8 +31,8 @@ public class SharePopup extends BasePopup implements View.OnClickListener {
         this.context = context;
         setAnimationStyle(R.style.popwin_anim_style);
         setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-//        setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        setHeight(UIUtils.dip2px(context, 121));
+        setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+//        setHeight(UIUtils.dip2px(context, 170));
         View popView = LayoutInflater.from(context).inflate(R.layout.popup_share, null);
         initViews(popView);
         setContentView(popView);

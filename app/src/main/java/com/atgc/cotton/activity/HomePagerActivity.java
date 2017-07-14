@@ -17,6 +17,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.activity.production.mine.MyProductionActivity;
@@ -128,14 +129,12 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
         tv_name = (TextView) findViewById(R.id.tv_name);
         String avatar = LoginStatus.getInstance().getAvatar();
         String username = LoginStatus.getInstance().getUsername();
-        if(!TextUtils.isEmpty(avatar)){
+        if (!TextUtils.isEmpty(avatar)) {
             Glide.with(context).load(avatar).into(ivAvatar);
         }
-        if(!TextUtils.isEmpty(username)){
+        if (!TextUtils.isEmpty(username)) {
             tv_name.setText(username);
         }
-
-
     }
 
     @Override
@@ -240,6 +239,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
                     break;
                 case R.id.rb_production:
                     openActivity(MyProductionActivity.class);
+//                    openActivity(OtherPlayerActivity.class);
                     break;
                 case R.id.rb_video:
                     openActivity(RecordVideoActivity.class);

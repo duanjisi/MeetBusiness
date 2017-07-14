@@ -94,4 +94,5 @@
     <string name="msg_could_not_save_photo">无法保存图片</string>
     <string name="success_save">已成功保存到本地</string>
     <string name="no_name_tip">名字不能为空，请填写</string>
+    <string name="not_filled">未填写</string>
 </resources>

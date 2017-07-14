@@ -13,6 +13,7 @@ public class HttpUrl {
      * attention 关注相关接口
      */
     public static final String NUM_URL = BASE_URL + "attention/statistics";//获取我的粉丝总数，关注总数
+    public static final String BASE_FOCUS = BASE_URL + "attention/";//获取我的粉丝总数，关注总数
 
     /**
      * public公共接口
@@ -28,7 +29,7 @@ public class HttpUrl {
     public static final String PRAISE = BASE_URL + "feed/approval/";
     public static final String NEAR = BASE_URL + "feed/vicinity/";
     public static final String MY_PRODUCTION = BASE_URL + "feed/mine";
-
+    public static final String MY_LIKE = BASE_URL + "feed/like";
     /**
      * user公共接口
      */
@@ -43,5 +44,5 @@ public class HttpUrl {
     public static final String VEND_CHANGE_GOODS = BASE_URL + "goods/";//修改商品 or 删除商品
 
     //退出登录
-    public static final String LOGOUT  = BASE_URL+"public/logout";
+    public static final String LOGOUT = BASE_URL + "public/logout";
 }

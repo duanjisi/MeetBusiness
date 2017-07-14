@@ -14,14 +14,18 @@ import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.entity.AccountEntity;
 import com.atgc.cotton.entity.MyNumEntity;
+import com.atgc.cotton.fragment.MyLikeFragment;
+import com.atgc.cotton.fragment.MyProFragment;
 import com.atgc.cotton.fragment.ProductFragment;
 import com.atgc.cotton.http.BaseDataRequest;
 import com.atgc.cotton.http.request.MyNumRequest;
 import com.atgc.cotton.listenter.ListenerConstans;
 import com.atgc.cotton.listenter.ViewPagerListener;
+import com.atgc.cotton.util.ImageLoaderUtils;
 import com.atgc.cotton.util.MycsLog;
 import com.atgc.cotton.widget.SharePopup;
 import com.atgc.cotton.widget.SimpleViewPagerIndicator;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.umeng.socialize.bean.HandlerRequestCode;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.bean.SocializeEntity;
@@ -46,7 +50,8 @@ public class MyProductionActivity extends BaseActivity implements
         SharePopup.OnItemSelectedListener {
     private static final String TAG = MyProductionActivity.class.getSimpleName();
     private AccountEntity account;
-    private ImageView iv_back, iv_share;
+    private ImageLoader imageLoader;
+    private ImageView iv_back, iv_share, iv_bg;
     private TextView tv_title, tv_focus, tv_fans, tv_edit, tv_intro;
     private SharePopup sharePopup;
     private String[] mTitles = new String[]{"作品", "喜欢"};
@@ -54,6 +59,7 @@ public class MyProductionActivity extends BaseActivity implements
     private FragmentPagerAdapter mAdapter;
     private ViewPager mViewPager;
     private ArrayList<Fragment> mFragments = new ArrayList<>();
+    private ProductFragment myProFragment, likeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +73,12 @@ public class MyProductionActivity extends BaseActivity implements
 
     private void initViews() {
         account = App.getInstance().getAccountEntity();
+        imageLoader = ImageLoaderUtils.createImageLoader(context);
         mIndicator = (SimpleViewPagerIndicator) findViewById(R.id.id_stickynavlayout_indicator);
         mViewPager = (ViewPager) findViewById(R.id.id_stickynavlayout_viewpager);
         iv_back = (ImageView) findViewById(R.id.iv_back);
         iv_share = (ImageView) findViewById(R.id.iv_share);
+        iv_bg = (ImageView) findViewById(R.id.iv_bg);
         tv_title = (TextView) findViewById(R.id.tv_name);
         tv_focus = (TextView) findViewById(R.id.tv_focus);
         tv_fans = (TextView) findViewById(R.id.tv_fans);
@@ -82,6 +90,7 @@ public class MyProductionActivity extends BaseActivity implements
 
         iv_back.setOnClickListener(this);
         iv_share.setOnClickListener(this);
+        iv_bg.setOnClickListener(this);
         tv_focus.setOnClickListener(this);
         tv_fans.setOnClickListener(this);
         tv_edit.setOnClickListener(this);
@@ -91,8 +100,10 @@ public class MyProductionActivity extends BaseActivity implements
 
     private void initDatas() {
         mIndicator.setTitles(mTitles);
-        mFragments.add(new ProductFragment());
-        mFragments.add(new ProductFragment());
+        myProFragment=new MyProFragment();
+        likeFragment=new MyLikeFragment();
+        mFragments.add(myProFragment);
+        mFragments.add(likeFragment);
         mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public int getCount() {
@@ -140,7 +151,13 @@ public class MyProductionActivity extends BaseActivity implements
                 finish();
                 break;
             case R.id.iv_share:
-
+                if (!isFinishing()) {
+                    if (sharePopup.isShowing()) {
+                        sharePopup.dismiss();
+                    } else {
+                        sharePopup.show(getWindow().getDecorView());
+                    }
+                }
                 break;
             case R.id.tv_focus:
 
@@ -296,8 +313,9 @@ public class MyProductionActivity extends BaseActivity implements
                 nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
             }
             tv_title.setCompoundDrawables(null, null, nav_up, null);
-            tv_focus.setText(entity.getFollowCount());
-            tv_fans.setText(entity.getFansCount());
+            tv_focus.setText("关注：" + entity.getFollowCount());
+            tv_fans.setText("粉丝：" + entity.getFansCount());
+            imageLoader.displayImage(account.getAvatar(), iv_bg, ImageLoaderUtils.getDisplayImageOptions());
         }
     }
 }

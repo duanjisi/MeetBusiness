@@ -34,11 +34,11 @@ public class PersonalInfoChangeActivity extends BaseActivity implements View.OnC
 
     private final static String TAG = PersonalInfoChangeActivity.class.getSimpleName();
 
-    private TextView tv_title, tv_back, tv_right;
+    private TextView tv_title, tv_right;
     private ClearEditText et_name;
     private RelativeLayout rl_sex_man, rl_sex_woman;
     private View v_sex;
-    private ImageView iv_man_gou, iv_woman_gou;
+    private ImageView iv_man_gou, iv_woman_gou, iv_back;
     private RelativeLayout rl_signature;
     private EditText et_signature;
     private TextView tv_signature_num;
@@ -56,9 +56,9 @@ public class PersonalInfoChangeActivity extends BaseActivity implements View.OnC
     private void initView() {
         access_token = App.getInstance().getAccountEntity().getToken();
         tv_title = (TextView) findViewById(R.id.tv_title);
-        tv_back = (TextView) findViewById(R.id.tv_back);
+        iv_back = (ImageView) findViewById(R.id.iv_back);
         tv_right = (TextView) findViewById(R.id.tv_right);
-        tv_back.setOnClickListener(this);
+        iv_back.setOnClickListener(this);
         tv_right.setOnClickListener(this);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -113,7 +113,7 @@ public class PersonalInfoChangeActivity extends BaseActivity implements View.OnC
                 et_signature.setFilters(filters);
                 rl_signature.setVisibility(View.VISIBLE);
                 tv_right.setVisibility(View.VISIBLE);
-                tv_title.setText("个性签名");
+                tv_title.setText("个人介绍");
                 if (!isNull && !TextUtils.isEmpty(changeValue)) {
                     et_signature.setText(changeValue);
                 }
@@ -142,7 +142,7 @@ public class PersonalInfoChangeActivity extends BaseActivity implements View.OnC
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.tv_back:
+            case R.id.iv_back:
                 finish();
                 break;
             case R.id.tv_right://保存

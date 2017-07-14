@@ -14,14 +14,18 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.atgc.cotton.App;
 import com.atgc.cotton.Constants;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
+import com.atgc.cotton.config.LoginStatus;
+import com.atgc.cotton.entity.ChangeAvatarEntity;
 import com.atgc.cotton.http.HttpUrl;
 import com.atgc.cotton.listener.PermissionListener;
 import com.atgc.cotton.util.FileUtils;
@@ -52,7 +56,8 @@ import java.util.Date;
  */
 public class PersonalIconActivity extends BaseActivity implements View.OnClickListener, ActionSheet.OnSheetItemClickListener {
 
-    private TextView tv_back, tv_right;
+    private TextView tv_right;
+    private ImageView iv_back;
     private PhotoView iv_icon;
     private ActionSheet actionSheet;
     private final int OPEN_CAMERA = 1;//相机
@@ -87,13 +92,13 @@ public class PersonalIconActivity extends BaseActivity implements View.OnClickLi
         access_token = App.getInstance().getAccountEntity().getToken();
         mOutputPath = new File(getExternalCacheDir(), "chosen.jpg").getPath();
         int screenW = UIUtils.getScreenWidth(this);
-        tv_back = (TextView) findViewById(R.id.tv_back);
+        iv_back = (ImageView) findViewById(R.id.iv_back);
         tv_right = (TextView) findViewById(R.id.tv_right);
         iv_icon = (PhotoView) findViewById(R.id.iv_icon);
         RelativeLayout.LayoutParams linearParams = (RelativeLayout.LayoutParams) iv_icon.getLayoutParams();
         linearParams.height = screenW;
         iv_icon.setLayoutParams(linearParams);
-        tv_back.setOnClickListener(this);
+        iv_back.setOnClickListener(this);
         tv_right.setOnClickListener(this);
         iv_icon.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -119,7 +124,7 @@ public class PersonalIconActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.tv_back:
+            case R.id.iv_back:
                 goBack();
                 break;
             case R.id.tv_right:
@@ -259,36 +264,37 @@ public class PersonalIconActivity extends BaseActivity implements View.OnClickLi
         HttpUtils httpUtils = new HttpUtils(60 * 1000);//实例化RequestParams对象
         com.lidroid.xutils.http.RequestParams params = new com.lidroid.xutils.http.RequestParams();
         File file = new File(path);
-        params.addBodyParameter("access_token", access_token);
+        Log.i("info", "==============file.exists():" + file.exists());
+        params.addHeader("Authorization", access_token);
         params.addBodyParameter("avatar", file);
-        httpUtils.send(HttpRequest.HttpMethod.POST, main, params, new RequestCallBack<String>() {
+        httpUtils.send(HttpRequest.HttpMethod.PUT, main, params, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 try {
                     cancelLoadingDialog();
-                    Log.i("info", "==============responseInfo:" + responseInfo.toString());
-//                    ChangeAvatarEntity entity = JSON.parseObject(responseInfo.result, ChangeAvatarEntity.class);
-//                    if (entity != null) {
-//                        if (entity.status == 401) {
-//                            Intent intent = new Intent();
-//                            intent.setAction(Constants.ACTION_LOGOUT_RESETING);
-//                            App.getInstance().sendBroadcast(intent);
-//                        } else {
-//                            ChangeAvatarEntity.Result result = entity.getResult();
-//                            if (result != null) {
-//                                isHeadChange = true;
-//                                ToastUtil.showShort(context, "更改成功");
-//                                headurl = result.getAvatar();
-//                                imageLoader.displayImage(headurl, iv_icon,
-//                                        ImageLoaderUtils.getDisplayImageOptions());
-//                                LoginStatus loginStatus = LoginStatus.getInstance();
-//                                String avatar = result.getAvatar();
-//                                if (!TextUtils.isEmpty(avatar)) {
-//                                    loginStatus.setAvatar(avatar);
-//                                }
-//                            }
-//                        }
-//                    }
+                    Log.i("info", "==============responseInfo:" + responseInfo.result);
+                    ChangeAvatarEntity entity = JSON.parseObject(responseInfo.result, ChangeAvatarEntity.class);
+                    if (entity != null) {
+                        if (entity.Status == 401) {
+                            Intent intent = new Intent();
+                            intent.setAction(Constants.ACTION_LOGOUT_RESETING);
+                            App.getInstance().sendBroadcast(intent);
+                        } else {
+                            ChangeAvatarEntity.Data result = entity.getData();
+                            if (result != null) {
+                                isHeadChange = true;
+                                ToastUtil.showShort(context, "更改成功");
+                                headurl = result.getAvatar();
+                                imageLoader.displayImage(headurl, iv_icon,
+                                        ImageLoaderUtils.getDisplayImageOptions());
+                                LoginStatus loginStatus = LoginStatus.getInstance();
+                                String avatar = result.getAvatar();
+                                if (!TextUtils.isEmpty(avatar)) {
+                                    loginStatus.setAvatar(avatar);
+                                }
+                            }
+                        }
+                    }
                 } catch (JSONException e) {
                     ToastUtil.showShort(context, "上传失败");
                 }
@@ -296,6 +302,7 @@ public class PersonalIconActivity extends BaseActivity implements View.OnClickLi
 
             @Override
             public void onFailure(HttpException e, String s) {
+                Log.i("info", "==============HttpException:" + e.getMessage());
                 int code = e.getExceptionCode();
                 if (code == 401) {
                     goLogin();
