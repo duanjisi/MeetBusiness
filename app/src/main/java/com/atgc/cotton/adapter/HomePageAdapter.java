@@ -1,6 +1,8 @@
 package com.atgc.cotton.adapter;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,11 +30,13 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.VideoV
     private ImageLoader imageLoader;
     private List<VideoEntity> videos;
     private ItemClickListener clickListener;
+    private Resources resources;
 
     public HomePageAdapter(Context context, List<VideoEntity> videos) {
         this.videos = videos;
         widthScreen = UIUtils.getScreenWidth(context) / 2;
         this.imageLoader = ImageLoaderUtils.createImageLoader(context);
+        resources = context.getResources();
     }
 
     public HomePageAdapter(Context context, ItemClickListener listener) {
@@ -42,6 +46,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.VideoV
         this.clickListener = listener;
         widthScreen = UIUtils.getScreenWidth(context) / 2;
         this.imageLoader = ImageLoaderUtils.createImageLoader(context);
+        resources = context.getResources();
     }
 
     public void initDatas(List<VideoEntity> list) {
@@ -65,20 +70,48 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.VideoV
     public void onBindViewHolder(final VideoView holder, final int position) {
         final VideoEntity entity = (VideoEntity) videos.get(position);
         if (entity != null) {
-            if (clickListener != null) {
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        clickListener.onItemClick(holder.itemView, position, entity);
-                    }
-                });
-            }
+//            if (clickListener != null) {
+//                holder.itemView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        clickListener.onItemClick(holder.itemView, position, entity);
+//                    }
+//                });
+//            }
+
             holder.tvAuthor.setText(entity.getUserName());
+            String sex = entity.getSex();
+            Drawable nav_up = null;
+            if (sex.equals("1")) {
+                nav_up = resources.getDrawable(R.drawable.man);
+                nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+            } else if (sex.equals("2")) {
+                nav_up = resources.getDrawable(R.drawable.lady);
+                nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+            } else {
+                nav_up = resources.getDrawable(R.drawable.lady);
+                nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+            }
+            holder.tvAuthor.setCompoundDrawables(null, null, nav_up, null);
             holder.tvPraiseNum.setText(entity.getLikeCount());
-//            scaleSize(holder.ivBg, entity.getWidth(), entity.getHeight());
-//            imageLoader.displayImage(entity.getUrl(), holder.ivBg, ImageLoaderUtils.getDisplayImageOptions());
             imageLoader.displayImage(entity.getAvatar(), holder.ivAvatar, ImageLoaderUtils.getDisplayImageOptions());
             scalLoadImageVideo(holder, entity.getMediaPath());
+            holder.ivAvatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (clickListener != null) {
+                        clickListener.onAvatarClick(entity);
+                    }
+                }
+            });
+            holder.ivBg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (clickListener != null) {
+                        clickListener.onItemClick(holder.itemView, position, entity);
+                    }
+                }
+            });
         }
     }
 

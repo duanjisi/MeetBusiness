@@ -37,6 +37,7 @@ public class EditDataActivity extends BaseActivity implements View.OnClickListen
     private AccountEntity account;
     private ImageLoader imageLoader;
     private boolean isChange = false;
+    private boolean isSignatureNull = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class EditDataActivity extends BaseActivity implements View.OnClickListen
         tv_copy = (TextView) findViewById(R.id.tv_tag);
         iv_avatar = (CircleImageView) findViewById(R.id.iv_avatar);
 
-        rl_avatar = (RelativeLayout) findViewById(R.id.rl_nick);
+        rl_avatar = (RelativeLayout) findViewById(R.id.rl_avatar);
         rl_nick = (RelativeLayout) findViewById(R.id.rl_nick);
         rl_sex = (RelativeLayout) findViewById(R.id.rl_sex);
         rl_id = (RelativeLayout) findViewById(R.id.rl_id);
@@ -128,7 +129,12 @@ public class EditDataActivity extends BaseActivity implements View.OnClickListen
                 openActivity(QrCodeActivity.class);
                 break;
             case R.id.rl_intro:
-
+                Bundle bundle2 = new Bundle();
+                bundle2.putString("changeType", "signature");
+                String signature = tv_intro.getText().toString();
+                bundle2.putString("changeValue", signature);
+                bundle2.putBoolean("isNull", isSignatureNull);
+                openActvityForResult(PersonalInfoChangeActivity.class, NAME_SEX_SIGNATURE_REQUEST, bundle2);
                 break;
         }
     }
@@ -158,6 +164,17 @@ public class EditDataActivity extends BaseActivity implements View.OnClickListen
                     case "sex":
                         tv_sex.setText("" + value);
                         sLoginStatus.setSex(value);
+                        break;
+                    case "signature":
+                        if (!TextUtils.isEmpty(value)) {
+                            tv_intro.setText("" + value);
+                            isSignatureNull = false;
+                            sLoginStatus.setIntro(value);
+                        } else {
+                            isSignatureNull = true;
+                            tv_intro.setText(getString(R.string.not_filled));
+                            sLoginStatus.setIntro(getString(R.string.not_filled));
+                        }
                         break;
                 }
                 EventBus.getDefault().post(new ActionEntity(Constants.Action.UPDATE_ACCOUNT_INFORM));

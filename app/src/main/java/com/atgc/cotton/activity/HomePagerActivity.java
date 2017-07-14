@@ -138,8 +138,6 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
         if (!TextUtils.isEmpty(username)) {
             tv_name.setText(username);
         }
-
-
     }
 
     @Override
@@ -244,6 +242,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
                     break;
                 case R.id.rb_production:
                     openActivity(MyProductionActivity.class);
+//                    openActivity(OtherPlayerActivity.class);
                     break;
                 case R.id.rb_video:
                     openActivity(RecordVideoActivity.class);

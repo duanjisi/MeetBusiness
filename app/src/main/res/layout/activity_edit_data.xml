@@ -87,6 +87,7 @@
                     android:src="@drawable/data_enter" />
 
                 <com.atgc.cotton.widget.CircleImageView
+                    android:id="@+id/iv_avatar"
                     android:layout_width="33dp"
                     android:layout_height="33dp"
                     android:layout_centerVertical="true"
@@ -266,6 +267,7 @@
                 android:layout_height="55dp">
 
                 <TextView
+                    android:id="@+id/tv_tag6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -295,8 +297,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_11"
                     android:layout_marginRight="17.5dp"
                     android:layout_toLeftOf="@+id/iv_tag4"
+                    android:layout_toRightOf="@+id/tv_tag6"
+                    android:ellipsize="end"
+                    android:gravity="end"
+                    android:lines="1"
                     android:text="介绍下自己吧，很开心!~" />
             </RelativeLayout>
         </LinearLayout>

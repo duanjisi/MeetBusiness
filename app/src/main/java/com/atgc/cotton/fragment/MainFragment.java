@@ -1,5 +1,6 @@
 package com.atgc.cotton.fragment;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +18,8 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.atgc.cotton.R;
+import com.atgc.cotton.activity.production.other.OtherPlayerActivity;
+import com.atgc.cotton.activity.production.other.OtherProActivity;
 import com.atgc.cotton.adapter.HomePageAdapter;
 import com.atgc.cotton.entity.HomeBaseData;
 import com.atgc.cotton.entity.VideoEntity;
@@ -67,7 +70,7 @@ public abstract class MainFragment extends BaseFragment implements AMapLocationL
         initViews(view);
         if (getType() == TYPE_NEAR) {
             getPermission();
-        }else {
+        } else {
             requestDatas();
         }
     }
@@ -121,7 +124,18 @@ public abstract class MainFragment extends BaseFragment implements AMapLocationL
         @Override
         public void onItemClick(View view, int position, VideoEntity video) {
             if (video != null) {
+                Intent intent = new Intent(getContext(), OtherPlayerActivity.class);
+                intent.putExtra("obj", video);
+                startActivity(intent);
+            }
+        }
 
+        @Override
+        public void onAvatarClick(VideoEntity video) {
+            if (video != null) {
+                Intent intent = new Intent(getContext(), OtherProActivity.class);
+                intent.putExtra("obj", video);
+                startActivity(intent);
             }
         }
     }
@@ -169,7 +183,12 @@ public abstract class MainFragment extends BaseFragment implements AMapLocationL
             @Override
             public void onFailure(String msg) {
                 cancelLoadingDialog();
-                showToast(msg, true);
+                if (msg.equals("no record")) {
+                    showToast("数据加载完成!", true);
+                    lRecyclerView.setNoMore(false);
+                } else {
+                    showToast(msg, true);
+                }
             }
         });
     }
@@ -204,18 +223,23 @@ public abstract class MainFragment extends BaseFragment implements AMapLocationL
                 break;
         }
         pager++;
-        showLoadingDialog();
+//        showLoadingDialog();
         request.send(new BaseDataRequest.RequestCallback<HomeBaseData>() {
             @Override
             public void onSuccess(HomeBaseData pojo) {
-                cancelLoadingDialog();
+//                cancelLoadingDialog();
                 bindData(pojo);
             }
 
             @Override
             public void onFailure(String msg) {
-                cancelLoadingDialog();
-                showToast(msg, true);
+//                cancelLoadingDialog();
+                if (msg.equals("no record")) {
+                    showToast("数据加载完成!", true);
+                    lRecyclerView.setNoMore(false);
+                } else {
+                    showToast(msg, true);
+                }
             }
         });
     }

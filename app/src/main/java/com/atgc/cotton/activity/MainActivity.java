@@ -1,5 +1,6 @@
 package com.atgc.cotton.activity;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
+import com.atgc.cotton.activity.production.other.OtherProActivity;
 import com.atgc.cotton.adapter.HomePageAdapter;
 import com.atgc.cotton.entity.HomeBaseData;
 import com.atgc.cotton.entity.VideoEntity;
@@ -95,6 +97,15 @@ public class MainActivity extends BaseActivity {
         public void onItemClick(View view, int position, VideoEntity video) {
             if (video != null) {
 
+            }
+        }
+
+        @Override
+        public void onAvatarClick(VideoEntity video) {
+            if (video != null) {
+                Intent intent = new Intent(context, OtherProActivity.class);
+                intent.putExtra("obj", video);
+                startActivity(intent);
             }
         }
     }

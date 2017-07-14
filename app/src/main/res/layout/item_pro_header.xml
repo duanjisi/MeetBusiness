@@ -6,14 +6,22 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="413dp"
-        android:background="@drawable/person">
+        android:layout_height="413dp">
 
-        <FrameLayout
+        <ImageView
+            android:id="@+id/iv_bg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:visibility="visible"></ImageView>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
             android:background="@drawable/works_bg_translucent"
-            android:visibility="visible"></FrameLayout>
+            android:visibility="visible"></ImageView>
+
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -33,8 +41,6 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:drawablePadding="6dp"
-                android:drawableRight="@drawable/works_man"
-                android:text="是的开发"
                 android:textColor="@color/white"
                 android:textSize="19.5sp" />
 
