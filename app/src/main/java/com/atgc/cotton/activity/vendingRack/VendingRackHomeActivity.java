@@ -2,18 +2,28 @@ package com.atgc.cotton.activity.vendingRack;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.atgc.cotton.R;
+import com.atgc.cotton.activity.base.BaseCompatActivity;
 import com.atgc.cotton.adapter.VendingRackHomeAdapter;
+import com.atgc.cotton.entity.VendGoodsEntity;
+import com.atgc.cotton.presenter.BasePresenter;
+import com.atgc.cotton.presenter.VendRackPresenter;
+import com.atgc.cotton.presenter.view.IVendRackView;
+import com.atgc.cotton.util.UIUtils;
 import com.github.jdsjlzx.ItemDecoration.DividerDecoration;
+import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
+import com.github.jdsjlzx.interfaces.OnRefreshListener;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 import com.github.jdsjlzx.recyclerview.ProgressStyle;
@@ -24,7 +34,7 @@ import java.util.List;
 /**
  * Created by GMARUnity on 2017/6/19.
  */
-public class VendingRackHomeActivity extends AppCompatActivity implements View.OnClickListener {
+public class VendingRackHomeActivity extends BaseCompatActivity<VendRackPresenter> implements View.OnClickListener, IVendRackView {
 
     private Toolbar toolbar;
     private TextView tv_back;
@@ -32,12 +42,19 @@ public class VendingRackHomeActivity extends AppCompatActivity implements View.O
     private LRecyclerView rv_content;
     private VendingRackHomeAdapter adapter;
     private LRecyclerViewAdapter mLRecyclerViewAdapter = null;
+    private int page = 0, curPos = 0;
+    private boolean isAddNew, isOnRefresh;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vending_rack_home);
         initView();
+    }
+
+    @Override
+    protected VendRackPresenter createPresenter() {
+        return new VendRackPresenter(this);
     }
 
     private void initView() {
@@ -49,24 +66,19 @@ public class VendingRackHomeActivity extends AppCompatActivity implements View.O
         bt_upload.setOnClickListener(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
+        int sceenW = UIUtils.getScreenWidth(this);
+        //bt_upload.getLayoutParams().height = sceenW / 8;
         adapter = new VendingRackHomeAdapter(this);
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < 2; i++) {
-            list.add("库存：" + i);
-        }
+        List<VendGoodsEntity.Goods> list = new ArrayList<>();
         adapter.setDataList(list);
         adapter.setOnDelListener(new VendingRackHomeAdapter.onSwipeListener() {
             @Override
             public void onDel(int pos) {
-                Toast.makeText(VendingRackHomeActivity.this, "删除:" + pos, Toast.LENGTH_SHORT).show();
-                adapter.getDataList().remove(pos);
-                adapter.notifyItemRemoved(pos);
-
-                if (pos != (adapter.getDataList().size())) { // 如果移除的是最后一个，忽略
-                    adapter.notifyItemRangeChanged(pos, adapter.getDataList().size() - pos);
+                curPos = pos;
+                VendGoodsEntity.Goods item = (VendGoodsEntity.Goods) adapter.getItem(pos);
+                if (item != null) {
+                    mPresenter.deleteMyVendGoods(item.getGoodsId());
                 }
-                //且如果想让侧滑菜单同时关闭，需要同时调用 ((CstSwipeDelMenu) holder.itemView).quickClose();
             }
         });
         mLRecyclerViewAdapter = new LRecyclerViewAdapter(adapter);
@@ -83,15 +95,43 @@ public class VendingRackHomeActivity extends AppCompatActivity implements View.O
                 .setColorResource(R.color.text_color_gray_c)
                 .build();
         rv_content.addItemDecoration(divider);
-//        rv_content.setArrowImageView(R.drawable.ic_pulltorefresh_arrow);
+        rv_content.setLoadMoreEnabled(true);
+        rv_content.refreshComplete(20);
+        rv_content.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        isOnRefresh = true;
+                        isAddNew = false;
+                        rv_content.refreshComplete(20);
+                        mPresenter.getMyVendGoods(page, 20);
+                    }
+                }, 1000);
+            }
+        });
+        rv_content.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        isOnRefresh = false;
+                        isAddNew = false;
+                        mPresenter.getMyVendGoods(page, 20);
+                    }
+                }, 1000);
+            }
+        });
+        mPresenter.getMyVendGoods(page, 20);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_upload:
-//                openActivity(MyOrderActivity.class, null);
-                openActivity(VendUploadGoodsActivity.class, null);
+                openActvityForResult(VendUploadGoodsActivity.class, 101);
                 break;
             case R.id.tv_back:
                 finish();
@@ -99,11 +139,47 @@ public class VendingRackHomeActivity extends AppCompatActivity implements View.O
         }
     }
 
-    public void openActivity(Class<?> clazz, Bundle bundle) {
-        Intent intent = new Intent(this, clazz);
-        if (bundle != null) {
-            intent.putExtras(bundle);
+    @Override
+    public void getMyVendGoods(List<VendGoodsEntity.Goods> entity) {
+        int size = entity.size();
+        if (size == 20) {
+            rv_content.setNoMore(false);
+            page++;
+        } else {
+            rv_content.setNoMore(true);
         }
-        startActivity(intent);
+        if (!isOnRefresh) {
+            adapter.addAll(entity);
+            adapter.notifyDataSetChanged();
+        } else {
+            adapter.setDataList(entity);
+        }
+    }
+
+    @Override
+    public void deleMyGoodsSuccess() {
+        showToast("删除成功", false);
+        adapter.getDataList().remove(curPos);
+        adapter.notifyItemRemoved(curPos);
+
+        if (curPos != (adapter.getDataList().size())) { // 如果移除的是最后一个，忽略
+            adapter.notifyItemRangeChanged(curPos, adapter.getDataList().size() - curPos);
+        }
+        //且如果想让侧滑菜单同时关闭，需要同时调用 ((CstSwipeDelMenu) holder.itemView).quickClose();
+    }
+
+    @Override
+    public void onError(String msg) {
+        showToast(msg, false);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 101 && resultCode == RESULT_OK) {
+            isOnRefresh = true;
+            page = 0;
+            mPresenter.getMyVendGoods(page, 20);
+        }
     }
 }

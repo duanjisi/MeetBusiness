@@ -38,7 +38,7 @@
     <string name="goods_attr_name">属性名称</string>
     <string name="goods_attr_name_example">例如：颜色</string>
     <string name="goods_attr_class">属性分类</string>
-    <string name="goods_attr_class_example">例如：红色、橙色、绿色</string>
+    <string name="goods_attr_class_example">多个请用、隔开。例如：红色、橙色</string>
     <string name="add_goods_attr">添加属性</string>
     <string name="add_goods_pic">添加图片</string>
     <string name="goods_repertory">库存</string>

@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     useLibrary 'org.apache.http.legacy'
     compileSdkVersion 24
-    buildToolsVersion "25.0.0"
+    buildToolsVersion '25.0.3'
     defaultConfig {
         applicationId "com.atgc.cotton"
         minSdkVersion 16
@@ -40,6 +40,7 @@ android {
         main {
             //jni库的调用会到资源文件夹下libs里面找so文件
             jniLibs.srcDirs = ['libs']
+            assets.srcDirs = ['src/main/assets', 'src/main/assets/']
         }
     }
     buildTypes {
@@ -71,13 +72,13 @@ dependencies {
     compile 'io.reactivex:rxjava:1.1.5'
     compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
-    //返回gson
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
-    compile 'com.squareup.retrofit2:converter-scalars:2.0.0'
+    //返回gson
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     //返回String
-    compile 'com.squareup.okhttp3:logging-interceptor:3.1.2'
+    compile 'com.squareup.retrofit2:converter-scalars:2.0.0'
     //logo生成器
+    compile 'com.squareup.okhttp3:logging-interceptor:3.1.2'
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'me.dm7.barcodescanner:zxing:1.7.2'

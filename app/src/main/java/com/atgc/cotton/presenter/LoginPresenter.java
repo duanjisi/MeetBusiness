@@ -3,12 +3,11 @@ package com.atgc.cotton.presenter;
 import android.content.Context;
 
 import com.alibaba.fastjson.JSON;
-import com.atgc.cotton.App;
 import com.atgc.cotton.config.LoginStatus;
 import com.atgc.cotton.entity.AccountEntity;
 import com.atgc.cotton.entity.UserEntity;
 import com.atgc.cotton.presenter.view.INormalView;
-import com.atgc.cotton.util.L;
+import com.atgc.cotton.retrofit.MyObserver;
 import com.atgc.cotton.util.PreferenceUtils;
 
 import java.util.Map;

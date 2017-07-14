@@ -22,6 +22,7 @@ import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.activity.production.mine.MyProductionActivity;
 import com.atgc.cotton.activity.vendingRack.MyOrderActivity;
+import com.atgc.cotton.activity.vendingRack.VendingRackHomeActivity;
 import com.atgc.cotton.activity.videoedit.RecordVideoActivity;
 import com.atgc.cotton.config.LoginStatus;
 import com.atgc.cotton.fragment.MainDiscoverFragment;
@@ -59,7 +60,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
     private ArrayList<Fragment> mFragments = new ArrayList<Fragment>();
     private MainFragment mainFocusFragment, mainDiscoverFragment, mainNearFragment;
     private RadioButton mFocus, mDiscover, mNear;
-    private RadioButton rb_shopping;
+    private RadioButton rb_shopping, rb_price, rb_order;
     private Handler handler;
     private Button btn_login;
     private TextView tv_name;
@@ -125,6 +126,8 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
         mViewPager.setCurrentItem(VIEW_PAGER_PAGE_1);
 
         rb_shopping = (RadioButton) findViewById(R.id.rb_shopping);
+        rb_price = (RadioButton) findViewById(R.id.rb_price);
+        rb_order = (RadioButton) findViewById(R.id.rb_order);
 
         tv_name = (TextView) findViewById(R.id.tv_name);
         String avatar = LoginStatus.getInstance().getAvatar();
@@ -245,7 +248,8 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
                     openActivity(RecordVideoActivity.class);
                     break;
                 case R.id.rb_price:
-//                    openActivity(VendingRackHomeActivity.class);
+                    openActivity(VendingRackHomeActivity.class);
+                    rb_price.setChecked(false);
                     break;
                 case R.id.rb_shopping:
 //                    showToast("购物车", true);
@@ -265,7 +269,8 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
 //                    },500);
                     break;
                 case R.id.rb_order:
-                    openActivity(MyOrderActivity.class, null);
+                    openActivity(MyOrderActivity.class);
+                    rb_order.setChecked(false);
                     break;
                 default:
                     break;

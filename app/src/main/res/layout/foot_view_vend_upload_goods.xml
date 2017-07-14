@@ -69,6 +69,7 @@
             android:paddingRight="@dimen/dp_22"
             android:paddingTop="@dimen/dp_14"
             android:singleLine="true"
+            android:maxLength="9"
             android:text="0"
             android:textColor="@color/text_color_black"
             android:textCursorDrawable="@drawable/shape_edittext_cursor" />
@@ -105,6 +106,7 @@
             android:hint="@string/input_goods_price"
             android:imeOptions="actionDone"
             android:inputType="numberDecimal"
+            android:maxLength="8"
             android:paddingBottom="@dimen/dp_18"
             android:paddingRight="@dimen/dp_6"
             android:paddingTop="@dimen/dp_18"
