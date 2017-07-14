@@ -18,6 +18,7 @@ public class LoginStatus {
     private static final String TOKEN = "Token";
     private static final String USERID = "UserId";
     private static final String USERNAME = "UserName";
+    private static final String INTRO = "Introduction";
     private static LoginStatus sLoginStatus;
     private SharedPreferences mPreferences;
 
@@ -82,6 +83,10 @@ public class LoginStatus {
         return mPreferences.getString(USERNAME, "");
     }
 
+    public String getIntro() {
+        return mPreferences.getString(INTRO, "");
+    }
+
     public void setUser_name(String name) {
         SharedPreferences.Editor editor = mPreferences.edit();
         editor.putString(USERNAME, name);
@@ -100,4 +105,11 @@ public class LoginStatus {
         editor.putString(SEX, sex);
         editor.apply();
     }
+
+    public void setIntro(String intro) {
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putString(INTRO, intro);
+        editor.apply();
+    }
+
 }

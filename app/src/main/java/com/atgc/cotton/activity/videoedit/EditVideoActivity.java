@@ -95,7 +95,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     public final static int ENCODE_PROFILE = VideoEncodeFormat.ENCODE_PROFILE_BALANCE;
 
     private HashMap<Integer, int[]> maps = new HashMap<>();
-
     private GLSurfaceView mEditPreviewView;
     private KSYEditKit mEditKit;
     private StickerView stickerView;

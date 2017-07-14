@@ -44,7 +44,8 @@ import java.util.List;
  */
 public class LocalVideoFilesActivity extends BaseActivity {
 
-    private TextView tv_back, tv_title;
+    private TextView tv_title;
+    private ImageView iv_back;
     //private GridView gv_video;
     private ImageAdapter mAdapter;
     private List<VideoEntity> mList;
@@ -63,8 +64,8 @@ public class LocalVideoFilesActivity extends BaseActivity {
 
     private void initView() {
         rv_video = (RecyclerView) findViewById(R.id.rv_video);
-        tv_back = (TextView) findViewById(R.id.tv_back);
-        tv_back.setOnClickListener(new View.OnClickListener() {
+        iv_back = (ImageView) findViewById(R.id.iv_back);
+        iv_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
@@ -105,22 +106,18 @@ public class LocalVideoFilesActivity extends BaseActivity {
         }));
         rv_video.setAdapter(rImageAdapter);
 //        getVideoFile();
-
 //        ImageCache.ImageCacheParams cacheParams = new ImageCache.ImageCacheParams();
 //
 //        cacheParams.setMemCacheSizePercent(0.25f); // Set memory cache to 25% of
         // app memory
-
         // The ImageFetcher takes care of loading images into our ImageView
         // children asynchronously
 //        mImageResizer = new ImageResizer(this, mImageThumbSize);
 //        mImageResizer.setLoadingImage(R.drawable.em_empty_photo);
 //        mImageResizer.addImageCache(this.getSupportFragmentManager(),
 //                cacheParams);
-
         new SearchThead().start();
         //getVideoFile();
-
 //        gv_video.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {

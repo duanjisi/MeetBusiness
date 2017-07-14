@@ -1,6 +1,8 @@
 package com.atgc.cotton.entity;
 
-public class VideoEntity {
+import java.io.Serializable;
+
+public class VideoEntity implements Serializable {
     private String AddTime = "";
     private String Avatar = "";
     private String BrowseCount = "";
