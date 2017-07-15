@@ -22,10 +22,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.MvpActivity;
 import com.atgc.cotton.adapter.GoodsClassifyAdapter;
 import com.atgc.cotton.entity.GoodsDetailEntity;
+import com.atgc.cotton.entity.OrderGoodsEntity;
+import com.atgc.cotton.entity.OrderGoodsListEntity;
 import com.atgc.cotton.entity.VendGoodsAttrEntity;
 import com.atgc.cotton.presenter.GoodsDetailPresenter;
 import com.atgc.cotton.presenter.view.IGoodsDetailView;
@@ -76,11 +79,13 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
     private ArrayList<String> imgList;
     private ArrayList<ImageView> views;
     private List<ImageView> point_views;
-    private List<VendGoodsAttrEntity> goodsAttr;
-    private int goodsPrice;
+    private Double goodsPrice;
     private int goodsNumber;
     private GoodsClassifyAdapter adapter;
     private String goodsName;
+    private String userName;
+    private List<VendGoodsAttrEntity> goodsAttr;
+    private int goodsId;
 
     protected void initUI() {
 //        int screenWidth = UIUtils.getScreenWidth(this);
@@ -118,7 +123,6 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
 
             case R.id.rl_classify:   //选择分类
                 if (dialog == null) {
-
                     showGoodsDialog();
                 } else {
                     dialog.show();
@@ -171,9 +175,9 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
             @Override
             public void onClick(View v) {
                 String num = et_repertory.getText().toString();
-                if (!TextUtils.isEmpty(num)){
-                    if(Integer.parseInt(num)>0){
-                        num = Integer.parseInt(num)-1+"";
+                if (!TextUtils.isEmpty(num)) {
+                    if (Integer.parseInt(num) > 0) {
+                        num = Integer.parseInt(num) - 1 + "";
                         et_repertory.setText(num);
                     }
 
@@ -186,8 +190,8 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
             @Override
             public void onClick(View v) {
                 String num = et_repertory.getText().toString();
-                if (!TextUtils.isEmpty(num)){
-                    num = Integer.parseInt(num)+1+"";
+                if (!TextUtils.isEmpty(num)) {
+                    num = Integer.parseInt(num) + 1 + "";
                     et_repertory.setText(num);
 
                 }
@@ -201,26 +205,45 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
             public void onClick(View v) {
 
                 showToast("加入购物车");
+
+
                 Map<String, Set<Integer>> map2 = adapter.getMap2();   //是否选中
                 Map<String, String> map = adapter.getMap();     //选中的分类类别 和，分类名
                 for (Map.Entry<String, Set<Integer>> entry : map2.entrySet()) {
                     String key = entry.getKey();
                     Set<Integer> value = entry.getValue();
 
-                    if(value.isEmpty()){ //选中状态为空
-                        showToast("请选择: "+key);
+                    if (value.isEmpty()) { //选中状态为空
+                        showToast("请选择: " + key);
                         return;
                     }
                 }
-
+                String type = "";      //选择的类别
                 for (Map.Entry<String, String> entry : map.entrySet()) {
                     String key = entry.getKey();    // 分类类别
                     String value = entry.getValue(); //分类名
-                    L.i(key+value);
-
+                    L.i(key + value);
+                    type = type + key + ": " + value + "  ";
                 }
                 //购买数量
                 String buyNum = et_repertory.getText().toString();
+                String imgUrl = imgList.get(0);
+
+
+
+
+                OrderGoodsEntity entity = new OrderGoodsEntity();
+                entity.setBuyNum(Integer.parseInt(buyNum));
+                entity.setGoodsName(goodsName);
+                entity.setGoodsPrice(goodsPrice);
+                entity.setImgUrl(imgUrl);
+                entity.setTitle(userName);
+                entity.setType(type);
+                entity.setGoodsId(goodsId);
+                //加入购物车，即存入数据库
+
+
+
 
 
             }
@@ -231,35 +254,55 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
             public void onClick(View v) {
                 //购买
                 dialog.dismiss();
-                String type="";      //选择的类别
+
+
+
                 Map<String, Set<Integer>> map2 = adapter.getMap2();   //是否选中
                 Map<String, String> map = adapter.getMap();     //选中的分类类别 和，分类名
                 for (Map.Entry<String, Set<Integer>> entry : map2.entrySet()) {
                     String key = entry.getKey();
                     Set<Integer> value = entry.getValue();
 
-                    if(value.isEmpty()){ //选中状态为空
-                        showToast("请选择: "+key);
+                    if (value.isEmpty()) { //选中状态为空
+                        showToast("请选择: " + key);
                         return;
                     }
                 }
-
+                String type = "";      //选择的类别
                 for (Map.Entry<String, String> entry : map.entrySet()) {
                     String key = entry.getKey();    // 分类类别
                     String value = entry.getValue(); //分类名
-                    L.i(key+value);
-                    type = type+ key+": "+value+"  ";
+                    L.i(key + value);
+                    type = type + key + ": " + value + "  ";
                 }
                 //购买数量
                 String buyNum = et_repertory.getText().toString();
+                String imgUrl = imgList.get(0);
+
+
+
+
+                OrderGoodsEntity entity = new OrderGoodsEntity();
+                entity.setBuyNum(Integer.parseInt(buyNum));
+                entity.setGoodsName(goodsName);
+                entity.setGoodsPrice(goodsPrice);
+                entity.setImgUrl(imgUrl);
+                entity.setTitle(userName);
+                entity.setType(type);
+                entity.setGoodsId(goodsId);
+
+                List<OrderGoodsEntity> datas = new ArrayList<>();
+                datas.add(entity);
+
+                OrderGoodsListEntity data = new OrderGoodsListEntity();
+                data.setData(datas);
+
+                String goodsJson = JSON.toJSONString(data);
+                L.i(goodsJson);
+                //订单页
                 Intent intent = new Intent(context, WriteOrderActivity.class);
 
-                intent.putExtra("buyNum",buyNum);
-                intent.putExtra("type",type);
-                intent.putExtra("goodsPrice",goodsPrice);
-                String imgUrl = imgList.get(0);
-                intent.putExtra("imgUrl",imgUrl);
-                intent.putExtra("goodsName",goodsName);
+                intent.putExtra("goodsJson", goodsJson);
 
 
                 startActivity(intent);
@@ -329,6 +372,10 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
         goodsPrice = bean.getGoodsPrice();
         goodsAttr = bean.getGoodsAttr();
         goodsNumber = bean.getGoodsNumber();
+        goodsId = bean.getGoodsId();
+
+        //用户名--即店铺名
+        userName = bean.getUserName();
 
 
         tvPrice.setText("¥ " + goodsPrice);

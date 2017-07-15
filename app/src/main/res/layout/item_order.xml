@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/ll_goods"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_address"
+        android:paddingBottom="@dimen/dp_10"
+        >
+
+        <TextView
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/text_color_black"
+            android:layout_marginLeft="10dp"
+            android:textSize="14sp"
+            android:id="@+id/tv_title"
+            android:text="iphone官方店"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <com.atgc.cotton.widget.RoundImageView
+            android:layout_below="@id/tv_title"
+            android:layout_marginLeft="5dp"
+            android:id="@+id/iv_icon"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/person"
+            app:round_borderRadius="8dp"
+            app:round_type="1" />
+
+        <TextView
+            android:layout_below="@id/tv_title"
+            android:id="@+id/tv_goods_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_toRightOf="@+id/iv_icon"
+            android:text="ssssss"
+            android:textColor="@color/text_color_black" />
+
+        <TextView
+            android:id="@+id/tv_goods_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_goods_name"
+            android:layout_below="@+id/tv_goods_name"
+            android:layout_marginTop="@dimen/dp_10"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:text="少时诵诗书所所所所所所少时诵诗书所所所所所所少时诵诗书所所所所所所少时诵诗书所所所所所所少时诵诗书所所所所所所"
+            android:textColor="@color/ios7_white" />
+
+        <TextView
+            android:id="@+id/tv_goods_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_goods_name"
+            android:layout_below="@+id/tv_goods_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="￥20"
+            android:textColor="@color/actionsheet_red" />
+
+        <TextView
+            android:layout_marginRight="10dp"
+            android:id="@+id/tv_goods_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/tv_goods_price"
+            android:text="x1"
+            android:textColor="@color/text_color_black" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_count"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/ll_goods"
+        android:background="#F2F6F9">
+
+        <TextView
+            android:layout_marginRight="15dp"
+            android:id="@+id/tv_all_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="￥11"
+            android:textColor="@color/actionsheet_red" />
+
+        <TextView
+            android:layout_marginRight="3dp"
+            android:id="@+id/tv_all_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/tv_all_price"
+            android:text="共1件：合计"
+            android:textColor="@color/ios7_white" />
+
+
+    </RelativeLayout>
+
+    <View
+        android:layout_below="@id/rl_count"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/dp_18"
+        android:background="@color/line_color_gray_d2" />
+</RelativeLayout>

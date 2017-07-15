@@ -21,9 +21,7 @@ public abstract class MvpActivity<P extends BasePresenter> extends BaseActivity 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
         mPresenter = createPresenter();
-
     }
 
 
