@@ -37,6 +37,11 @@ import com.atgc.cotton.util.UIUtils;
 import com.bumptech.glide.Glide;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
+import com.lidroid.xutils.DbUtils;
+import com.lidroid.xutils.db.sqlite.Selector;
+import com.lidroid.xutils.db.sqlite.SqlInfo;
+import com.lidroid.xutils.db.sqlite.WhereBuilder;
+import com.lidroid.xutils.exception.DbException;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -87,6 +92,8 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
     private List<VendGoodsAttrEntity> goodsAttr;
     private int goodsId;
 
+    private DbUtils mDbUtils;
+
     protected void initUI() {
 //        int screenWidth = UIUtils.getScreenWidth(this);
 //        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) vpImg.getLayoutParams();
@@ -99,6 +106,7 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
     protected void initData() {
         //TODO 先用测试数据
         mPresenter.getGoodsDetail(56);
+        mDbUtils = DbUtils.create(this);
     }
 
     @Override
@@ -223,15 +231,14 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
                     String key = entry.getKey();    // 分类类别
                     String value = entry.getValue(); //分类名
                     L.i(key + value);
-                    type = type + key + ": " + value + "  ";
+                    type = type + key + ": " + value + "  "; //暂时用空格分开
                 }
                 //购买数量
                 String buyNum = et_repertory.getText().toString();
                 String imgUrl = imgList.get(0);
 
 
-
-
+                //加入购物车的商品
                 OrderGoodsEntity entity = new OrderGoodsEntity();
                 entity.setBuyNum(Integer.parseInt(buyNum));
                 entity.setGoodsName(goodsName);
@@ -242,8 +249,61 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
                 entity.setGoodsId(goodsId);
                 //加入购物车，即存入数据库
 
+                try {
+                    //查询数据库，如果看是插入还是更新.  通过商品id和商品分类
+//
+                    List<OrderGoodsEntity> list = mDbUtils.findAll(OrderGoodsEntity.class);
 
 
+                    List<OrderGoodsEntity> entityList = new ArrayList<OrderGoodsEntity>();
+
+                    if (list == null) {
+
+                        //数据库没商品
+                        entityList.add(entity);
+
+//                        mDbUtils.saveAll(entityList);
+                        saveAll(entityList);
+
+                    } else {
+                        //数据库有商品
+                        if (list.size() > 0) {
+                            //先清空数据库
+                            mDbUtils.deleteAll(list);
+                            boolean isUpdata = false;
+                            int updataNum = 0;
+                            int updataPos = 0;
+
+                            for (int i = 0; i < list.size(); i++) {
+
+                                int id = list.get(i).getGoodsId();
+                                String type1 = list.get(i).getType();
+                                int num = list.get(i).getBuyNum();
+                                //id相同，type相同就更新，否则插入
+                                if (id == goodsId && type1.equals(type)) {
+
+                                    isUpdata = true;
+                                    updataNum = num;
+                                    updataPos = i;
+                                }
+                            }
+                            if (isUpdata) {
+                                list.get(updataPos).setBuyNum(updataNum + Integer.parseInt(buyNum));
+                                saveAll(list);
+                            } else {
+                                list.add(entity);
+                                saveAll(list);
+                            }
+
+
+                        }
+
+                    }
+
+
+                } catch (DbException e) {
+                    e.printStackTrace();
+                }
 
 
             }
@@ -254,7 +314,6 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
             public void onClick(View v) {
                 //购买
                 dialog.dismiss();
-
 
 
                 Map<String, Set<Integer>> map2 = adapter.getMap2();   //是否选中
@@ -278,8 +337,6 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
                 //购买数量
                 String buyNum = et_repertory.getText().toString();
                 String imgUrl = imgList.get(0);
-
-
 
 
                 OrderGoodsEntity entity = new OrderGoodsEntity();
@@ -328,6 +385,16 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
 
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
+    }
+
+    private void saveAll(List<OrderGoodsEntity> list) {
+        try {
+            L.i(list.toString());
+            mDbUtils.saveAll(list);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
