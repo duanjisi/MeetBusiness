@@ -3,6 +3,7 @@ package com.atgc.cotton.activity.goodsDetail;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -104,10 +105,17 @@ public class EditAddressActivity extends MvpActivity<AddAddressPresenter> implem
     private String consignee; //收件人
     private String address; //详细地址
     private int addressId;
+    private String location;
 
     @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_edit_address);
+        initUI();
+        initData();
+    }
+
     protected void initUI() {
-        super.initUI();
         Intent intent = getIntent();
         if (intent != null) {
             contact = intent.getStringExtra("contact");
@@ -115,6 +123,7 @@ public class EditAddressActivity extends MvpActivity<AddAddressPresenter> implem
             address = intent.getStringExtra("address");
             isDefault = intent.getIntExtra("isDefault", -1);
             addressId = intent.getIntExtra("id", -1);
+            location = intent.getStringExtra("location");
         }
         findViewById(R.id.img_back).setOnClickListener(this);
         findViewById(R.id.btn_save).setOnClickListener(this);
@@ -141,6 +150,7 @@ public class EditAddressActivity extends MvpActivity<AddAddressPresenter> implem
         et_people.setText(consignee);
         et_phone.setText(contact);
         et_address.setText(address);
+        tv_content.setText(location);
         if (isDefault == 1) {
             tb_default.setChecked(true);
         } else {
@@ -149,16 +159,10 @@ public class EditAddressActivity extends MvpActivity<AddAddressPresenter> implem
 
     }
 
-    @Override
     protected void initData() {
-        super.initData();
         initCityData();
     }
 
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_edit_address;
-    }
 
     @Override
     protected AddAddressPresenter createPresenter() {

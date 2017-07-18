@@ -2,6 +2,7 @@ package com.atgc.cotton.activity;
 
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -56,16 +58,21 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
     @Bind(R.id.tv_bottom)
     TextView tvBottom;
 
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_login;
-    }
 
     @Override
     protected LoginPresenter createPresenter() {
         return new LoginPresenter(this, context);
     }
 
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
+        initUI();
+        initData();
+    }
 
     /**
      * 登录成功回调
@@ -87,17 +94,13 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
         showToast("登录失败,请重试");
     }
 
-    @Override
     protected void initUI() {
-        super.initUI();
 
         tv_register.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
         tv_register.getPaint().setAntiAlias(true);//抗锯齿
     }
 
-    @Override
     protected void initData() {
-        super.initData();
         addQQQZonePlatform();
         addWXPlatform();
     }

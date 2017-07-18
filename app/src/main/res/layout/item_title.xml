@@ -5,13 +5,15 @@
     android:layout_marginTop="9dp"
     android:layout_height="wrap_content">
     <ImageView
+        android:id="@+id/img_shop"
         android:layout_marginLeft="5dp"
-        android:src="@drawable/selected"
-        android:layout_width="25dp"
-        android:layout_height="25dp" />
+        android:src="@drawable/unchecked"
+        android:layout_width="30dp"
+        android:layout_height="30dp" />
     <TextView
+        android:id="@+id/tv_shop_name"
         android:textSize="15sp"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="10dp"
         android:text="啦啦啦啦"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

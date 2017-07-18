@@ -90,8 +90,6 @@ public class VendUploadGoodsAdapter extends ListBaseAdapter<VendGoodsAttrEntity>
         et_content.setTag(contentwatcher);
         et_title.setText(title);
         et_content.setText(content);
-        Log.i("title:", "" + title + "  position:" + position + "  size:" + getItemCount()
-                + "  list:" + mDataList.size());
 //
         //这句话关掉IOS阻塞式交互效果 并依次打开左滑右滑
         ((SwipeMenuView) holder.itemView).setIos(false).setLeftSwipe(true);
@@ -109,15 +107,13 @@ public class VendUploadGoodsAdapter extends ListBaseAdapter<VendGoodsAttrEntity>
         });
     }
 
-    public void add(String text, int position) {
-        int oldsize = getItemCount();
+    public void add() {
         VendGoodsAttrEntity entity = new VendGoodsAttrEntity();
         mDataList.add(entity);
         int size = getItemCount();
         notifyItemInserted(size);
         if (size >= 0)
             notifyItemRangeChanged(size, 1);
-        //notifyItemInserted(getItemCount());
     }
 
     /**

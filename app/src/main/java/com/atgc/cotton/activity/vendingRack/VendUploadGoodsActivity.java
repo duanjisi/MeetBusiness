@@ -271,7 +271,7 @@ public class VendUploadGoodsActivity extends BaseCompatActivity<VendUploadPresen
                 list.add(entity);
                 int size = attrSize + 1;
                 if (size >= 0)
-                    adapter.add("cesss", 0);
+                    adapter.add();
                 handler.sendEmptyMessageDelayed(123, 500);
                 break;
             case R.id.iv_close:

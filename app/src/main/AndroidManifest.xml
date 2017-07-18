@@ -96,9 +96,7 @@
         <activity
             android:name=".activity.videoedit.LocalVideoFilesActivity"
             android:screenOrientation="portrait"></activity>
-        <!--<activity-->
-        <!--android:name=".activity.shoppingCar.ShoppingCarActivity"-->
-        <!--android:screenOrientation="portrait"></activity>-->
+
         <activity
             android:name=".activity.videoedit.LocalMusicActivity"
             android:screenOrientation="portrait"></activity>
@@ -140,7 +138,7 @@
         <!--android:name=".activity.GoodsDetailActivity"-->
         <!--android:screenOrientation="portrait" />-->
         <activity
-            android:name=".activity.GoodsDetailActivity"
+            android:name=".activity.goodsDetail.GoodsDetailActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.LoginActivity"
@@ -158,6 +156,10 @@
         <activity
             android:name=".activity.ChooseAddressActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".activity.goodsDetail.WriteOrderActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.goodsDetail.ChooseAddressActivity"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".activity.goodsDetail.EditAddressActivity"

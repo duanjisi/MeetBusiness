@@ -95,4 +95,6 @@ public interface ApiStores {
     @PUT("user/address/{id}")
     Observable<String> editAddress(@Header("Authorization") String token, @Path("id") int id, @PartMap Map<String, String> params);
 
+
+
 }
