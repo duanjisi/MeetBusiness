@@ -17,6 +17,7 @@ public class MorePopup extends BasePopup implements View.OnClickListener {
 
     private OnItemdListener mOnItemSelectedListener;
     private Context context;
+    private boolean isTopShow = true;
 
     public MorePopup(Context context) {
         super(context);
@@ -29,9 +30,24 @@ public class MorePopup extends BasePopup implements View.OnClickListener {
         setContentView(popView);
     }
 
+    public MorePopup(Context context, boolean show) {
+        super(context);
+        this.context = context;
+        this.isTopShow = show;
+        setAnimationStyle(R.style.popwin_anim_style);
+        setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+        setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        View popView = LayoutInflater.from(context).inflate(R.layout.popup_more, null);
+        initViews(popView);
+        setContentView(popView);
+    }
 
     private void initViews(View view) {
-        view.findViewById(R.id.rl_id).setOnClickListener(this);
+        if (!isTopShow) {
+            view.findViewById(R.id.rl_id).setVisibility(View.GONE);
+        } else {
+            view.findViewById(R.id.rl_id).setOnClickListener(this);
+        }
         view.findViewById(R.id.tv_inform).setOnClickListener(this);
         view.findViewById(R.id.tv_add_black_name).setOnClickListener(this);
         view.findViewById(R.id.tv_cancle).setOnClickListener(this);

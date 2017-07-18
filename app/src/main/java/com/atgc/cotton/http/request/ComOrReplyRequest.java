@@ -1,6 +1,5 @@
 package com.atgc.cotton.http.request;
 
-import com.atgc.cotton.entity.FocusEntity;
 import com.atgc.cotton.http.BaseDataRequest;
 import com.atgc.cotton.http.HttpUrl;
 
@@ -8,12 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Johnny on 2017/7/7.
- * 关注某人
+ * Created by Johnny on 2017/7/14.
  */
-public class FocusSomeOneRequest extends BaseDataRequest<FocusEntity> {
+public class ComOrReplyRequest extends BaseDataRequest<String> {
 
-    public FocusSomeOneRequest(String tag, Object... params) {
+    public ComOrReplyRequest(String tag, Object... params) {
         super(tag, params);
     }
 
@@ -24,15 +22,19 @@ public class FocusSomeOneRequest extends BaseDataRequest<FocusEntity> {
 
     @Override
     protected Map<String, String> getParams() {
-        String sourcefrom  = (String) mParams[1];
+        String pid = (String) mParams[1];
+        String content = (String) mParams[2];
+        String uidto = (String) mParams[3];
         Map<String, String> map = new HashMap<String, String>();
-        map.put("sourcefrom", sourcefrom );
+        map.put("pid", pid);
+        map.put("content", content);
+        map.put("uidto", uidto);
         return map;
     }
 
     @Override
     protected String getApiPath() {
-        return HttpUrl.BASE_FOCUS + mParams[0];
+        return HttpUrl.COM_REPLY + mParams[0];
     }
 
     @Override

@@ -10,10 +10,12 @@ import android.widget.TextView;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.adapter.ProductAdapter;
+import com.atgc.cotton.entity.FansEntity;
 import com.atgc.cotton.entity.FocusEntity;
 import com.atgc.cotton.entity.HomeBaseData;
 import com.atgc.cotton.entity.VideoEntity;
 import com.atgc.cotton.http.BaseDataRequest;
+import com.atgc.cotton.http.request.FansRequest;
 import com.atgc.cotton.http.request.FocusCancelRequest;
 import com.atgc.cotton.http.request.FocusJudgeRequest;
 import com.atgc.cotton.http.request.FocusSomeOneRequest;
@@ -105,6 +107,7 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
             }
         });
         requestDatas();
+        requestFans();
         isFocusRequest();
     }
 
@@ -189,6 +192,7 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
             }
 
             if (videoEntity != null) {
+                tv_intro.setText(videoEntity.getSignature());
                 String sex = videoEntity.getSex();
                 tv_name.setText(videoEntity.getUserName());
                 Drawable nav_up = null;
@@ -200,8 +204,8 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
                     nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
                 }
                 tv_name.setCompoundDrawables(null, null, nav_up, null);
-//                tv_focus.setText("关注：" + entity.getFollowCount());
-//                tv_fans.setText("粉丝：" + entity.getFansCount());
+//                tv_focus.setText("关注：" + videoEntity.getFollowCount());
+//                tv_fans.setText("粉丝：" + videoEntity.getFansCount());
                 String videoPath = videoEntity.getMediaPath();
                 String imageUrl = "";
                 if (videoPath.contains(".mp4")) {
@@ -251,6 +255,25 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
                 loadMore = false;
             }
         }
+    }
+
+    private void requestFans() {
+        if (videoEntity == null) {
+            return;
+        }
+        FansRequest request = new FansRequest(TAG, videoEntity.getUserId());
+        request.send(new BaseDataRequest.RequestCallback<FansEntity>() {
+            @Override
+            public void onSuccess(FansEntity pojo) {
+                tv_focus.setText("关注：" + pojo.getFollowCount());
+                tv_fans.setText("粉丝：" + pojo.getFansCount());
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                showToast(msg, true);
+            }
+        });
     }
 
     private String shareContent;
@@ -410,7 +433,7 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
         if (videoEntity == null) {
             return;
         }
-        FocusSomeOneRequest request = new FocusSomeOneRequest(TAG, videoEntity.getUserId(), "");
+        FocusSomeOneRequest request = new FocusSomeOneRequest(TAG, videoEntity.getUserId(), "他人作品");
         request.send(new BaseDataRequest.RequestCallback<FocusEntity>() {
             @Override
             public void onSuccess(FocusEntity pojo) {

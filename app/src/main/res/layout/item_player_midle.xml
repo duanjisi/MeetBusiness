@@ -75,7 +75,7 @@
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/tv_desc"
+            android:id="@+id/tv_intro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="17.5dp"
@@ -91,7 +91,8 @@
         <HorizontalScrollView
             android:id="@+id/gallery"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="@dimen/dp_11"
             android:layout_marginLeft="@dimen/dp_11"
             android:layout_marginRight="@dimen/dp_11"
             android:layout_marginTop="9dp"
