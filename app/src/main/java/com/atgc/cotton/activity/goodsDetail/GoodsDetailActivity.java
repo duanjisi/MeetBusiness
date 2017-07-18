@@ -7,9 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,8 +26,6 @@ import com.atgc.cotton.activity.base.MvpActivity;
 import com.atgc.cotton.adapter.GoodsClassifyAdapter;
 import com.atgc.cotton.entity.GoodsDetailEntity;
 import com.atgc.cotton.entity.OrderGoods;
-import com.atgc.cotton.entity.OrderGoodsEntity;
-import com.atgc.cotton.entity.OrderGoodsEntity2;
 import com.atgc.cotton.entity.OrderGoodsListEntity;
 import com.atgc.cotton.entity.VendGoodsAttrEntity;
 import com.atgc.cotton.presenter.GoodsDetailPresenter;
@@ -40,13 +36,9 @@ import com.bumptech.glide.Glide;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 import com.lidroid.xutils.DbUtils;
-import com.lidroid.xutils.db.sqlite.Selector;
-import com.lidroid.xutils.db.sqlite.SqlInfo;
-import com.lidroid.xutils.db.sqlite.WhereBuilder;
 import com.lidroid.xutils.exception.DbException;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -108,8 +100,14 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
 
     protected void initData() {
         //TODO 先用测试数据
-        mPresenter.getGoodsDetail(57);
-        mDbUtils = DbUtils.create(this);
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            String goodId = bundle.getString("goodId", "");
+            if (!TextUtils.isEmpty(goodId)) {
+                mPresenter.getGoodsDetail(Integer.parseInt(goodId));
+                mDbUtils = DbUtils.create(this);
+            }
+        }
     }
 
     @Override
@@ -262,7 +260,7 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
 
                     List<OrderGoods> entityList = new ArrayList<OrderGoods>();
 
-                    if (list == null||list.size()==0) {
+                    if (list == null || list.size() == 0) {
 
                         //数据库没商品
                         entityList.add(entity);

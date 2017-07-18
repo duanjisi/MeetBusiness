@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
+import com.atgc.cotton.activity.goodsDetail.GoodsDetailActivity;
 import com.atgc.cotton.adapter.CommentAdapter;
 import com.atgc.cotton.entity.BaseComment;
 import com.atgc.cotton.entity.BaseGood;
@@ -588,7 +589,9 @@ public class OtherPlayerActivity extends BaseActivity implements
         public void onClick(View view) {
             GoodBean good = (GoodBean) view.getTag();
             if (good != null) {
-                showToast(good.getGoodsName() + "被点击!", true);
+                Intent intent = new Intent(context, GoodsDetailActivity.class);
+                intent.putExtra("goodId", good.getGoodsId());
+                startActivity(intent);
             }
         }
     }
