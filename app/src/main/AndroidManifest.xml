@@ -133,6 +133,9 @@
         <activity
             android:name=".activity.production.other.OtherProActivity"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.production.other.CommentDetailsActivity"
+            android:screenOrientation="portrait"></activity>
         <!--<activity-->
         <!--android:name=".activity.GoodsDetailActivity"-->
         <!--android:screenOrientation="portrait" />-->
@@ -147,16 +150,18 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.RegisterActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
 
-        <activity android:name=".activity.goodsDetail.WriteOrderActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.ChooseAddressActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.goodsDetail.WriteOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ChooseAddressActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".activity.goodsDetail.EditAddressActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.goodsDetail.EditAddressActivity"
+            android:screenOrientation="portrait" />
 
         <!-- 定位需要的服务 -->
         <service android:name="com.amap.api.location.APSService" />

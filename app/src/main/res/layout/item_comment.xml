@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.atgc.cotton.widget.CircleImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="33dp"
+        android:layout_height="33dp"
+        android:layout_marginLeft="@dimen/dp_11"
+        android:layout_marginTop="@dimen/dp_11"
+        android:src="@drawable/person" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/iv_avatar"
+        android:layout_marginLeft="@dimen/dp_11"
+        android:layout_toRightOf="@+id/iv_avatar"
+        android:text="时代发"
+        android:textColor="@color/text_color_black"
+        android:textSize="15.5sp" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_name"
+        android:layout_below="@+id/tv_name"
+        android:text="27分钟前"
+        android:textSize="13.5sp" />
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_name"
+        android:layout_below="@+id/tv_time"
+        android:layout_marginRight="@dimen/dp_11"
+        android:layout_marginTop="@dimen/dp_11"
+        android:text="士大夫当时发生的发生地方第三方時代發生的發生的"
+        android:textSize="15.5sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/tv_content"
+        android:layout_marginTop="@dimen/dp_11"
+        android:background="@color/line_color_gray_d1"
+        android:orientation="horizontal"></LinearLayout>
+</RelativeLayout>
