@@ -14,6 +14,7 @@ import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.MvpActivity;
 import com.atgc.cotton.adapter.GoodsOrderAdapter;
 import com.atgc.cotton.entity.GoodsDetailEntity;
+import com.atgc.cotton.entity.OrderGoods;
 import com.atgc.cotton.entity.OrderGoodsEntity;
 import com.atgc.cotton.entity.OrderGoodsListEntity;
 import com.atgc.cotton.presenter.PutOrderPresenter;
@@ -73,7 +74,7 @@ public class WriteOrderActivity extends MvpActivity<PutOrderPresenter> implement
         rvContent.setAdapter(adapter);
 
         entity = JSON.parseObject(goodsJson, OrderGoodsListEntity.class);
-        List<OrderGoodsEntity> datas = entity.getData();
+        List<OrderGoods> datas = entity.getData();
 
         adapter.setDatas(datas);
         adapter.notifyDataSetChanged();

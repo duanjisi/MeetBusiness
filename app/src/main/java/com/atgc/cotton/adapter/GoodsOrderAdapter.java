@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.atgc.cotton.R;
+import com.atgc.cotton.entity.OrderGoods;
 import com.atgc.cotton.entity.OrderGoodsEntity;
 import com.bumptech.glide.Glide;
 
@@ -26,7 +27,7 @@ public class GoodsOrderAdapter extends BaseRecycleViewAdapter {
     @Override
     public void onBindItemHolder(RecyclerView.ViewHolder holder, int position) {
         GoodsOrderHolder holder1 = (GoodsOrderHolder) holder;
-        OrderGoodsEntity item = (OrderGoodsEntity) datas.get(position);
+        OrderGoods item = (OrderGoods) datas.get(position);
 
         holder1.tv_title.setText(item.getTitle());
 

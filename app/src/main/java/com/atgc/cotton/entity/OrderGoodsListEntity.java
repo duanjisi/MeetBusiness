@@ -7,13 +7,13 @@ import java.util.List;
  */
 
 public class OrderGoodsListEntity {
-    private List<OrderGoodsEntity> data;
+    private List<OrderGoods> data;
 
-    public List<OrderGoodsEntity> getData() {
+    public List<OrderGoods> getData() {
         return data;
     }
 
-    public void setData(List<OrderGoodsEntity> data) {
+    public void setData(List<OrderGoods> data) {
         this.data = data;
     }
 }

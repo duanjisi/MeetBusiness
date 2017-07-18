@@ -27,7 +27,9 @@ import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.MvpActivity;
 import com.atgc.cotton.adapter.GoodsClassifyAdapter;
 import com.atgc.cotton.entity.GoodsDetailEntity;
+import com.atgc.cotton.entity.OrderGoods;
 import com.atgc.cotton.entity.OrderGoodsEntity;
+import com.atgc.cotton.entity.OrderGoodsEntity2;
 import com.atgc.cotton.entity.OrderGoodsListEntity;
 import com.atgc.cotton.entity.VendGoodsAttrEntity;
 import com.atgc.cotton.presenter.GoodsDetailPresenter;
@@ -93,6 +95,7 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
     private int goodsId;
 
     private DbUtils mDbUtils;
+    private String userId;
 
     protected void initUI() {
 //        int screenWidth = UIUtils.getScreenWidth(this);
@@ -105,7 +108,7 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
 
     protected void initData() {
         //TODO 先用测试数据
-        mPresenter.getGoodsDetail(56);
+        mPresenter.getGoodsDetail(57);
         mDbUtils = DbUtils.create(this);
     }
 
@@ -239,7 +242,7 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
 
 
                 //加入购物车的商品
-                OrderGoodsEntity entity = new OrderGoodsEntity();
+                OrderGoods entity = new OrderGoods();
                 entity.setBuyNum(Integer.parseInt(buyNum));
                 entity.setGoodsName(goodsName);
                 entity.setGoodsPrice(goodsPrice);
@@ -247,22 +250,23 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
                 entity.setTitle(userName);
                 entity.setType(type);
                 entity.setGoodsId(goodsId);
+                entity.setUserId(userId);
+
                 //加入购物车，即存入数据库
 
                 try {
                     //查询数据库，如果看是插入还是更新.  通过商品id和商品分类
 //
-                    List<OrderGoodsEntity> list = mDbUtils.findAll(OrderGoodsEntity.class);
+                    List<OrderGoods> list = mDbUtils.findAll(OrderGoods.class);
 
 
-                    List<OrderGoodsEntity> entityList = new ArrayList<OrderGoodsEntity>();
+                    List<OrderGoods> entityList = new ArrayList<OrderGoods>();
 
-                    if (list == null) {
+                    if (list == null||list.size()==0) {
 
                         //数据库没商品
                         entityList.add(entity);
 
-//                        mDbUtils.saveAll(entityList);
                         saveAll(entityList);
 
                     } else {
@@ -339,7 +343,7 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
                 String imgUrl = imgList.get(0);
 
 
-                OrderGoodsEntity entity = new OrderGoodsEntity();
+                OrderGoods entity = new OrderGoods();
                 entity.setBuyNum(Integer.parseInt(buyNum));
                 entity.setGoodsName(goodsName);
                 entity.setGoodsPrice(goodsPrice);
@@ -347,8 +351,9 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
                 entity.setTitle(userName);
                 entity.setType(type);
                 entity.setGoodsId(goodsId);
+                entity.setUserId(userId);
 
-                List<OrderGoodsEntity> datas = new ArrayList<>();
+                List<OrderGoods> datas = new ArrayList<>();
                 datas.add(entity);
 
                 OrderGoodsListEntity data = new OrderGoodsListEntity();
@@ -387,10 +392,11 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
         dialog.show();
     }
 
-    private void saveAll(List<OrderGoodsEntity> list) {
+    private void saveAll(List<OrderGoods> list) {
         try {
             L.i(list.toString());
             mDbUtils.saveAll(list);
+//            mDbUtils.deleteAll(OrderGoods.class);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -440,6 +446,7 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
         goodsAttr = bean.getGoodsAttr();
         goodsNumber = bean.getGoodsNumber();
         goodsId = bean.getGoodsId();
+        userId = bean.getUserId();
 
         //用户名--即店铺名
         userName = bean.getUserName();

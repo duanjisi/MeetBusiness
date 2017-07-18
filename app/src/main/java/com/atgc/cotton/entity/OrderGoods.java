@@ -4,13 +4,11 @@ import com.lidroid.xutils.db.annotation.Column;
 import com.lidroid.xutils.db.annotation.Id;
 import com.lidroid.xutils.db.annotation.Table;
 
-import java.util.List;
-
 /**
- * Created by liw on 2017/7/15.
+ * Created by liw on 2017/7/18.
  */
-@Table(name="OrderGoods")
-public class OrderGoodsEntity {
+@Table(name="OrderGoodDetial")
+public class OrderGoods {
     @Column(column = "_id")
     @Id(column = "_id")
     private int _id;
@@ -30,8 +28,8 @@ public class OrderGoodsEntity {
     public Integer goodsId;  //商品id
     @Column(column = "head")
     public int head=0;  //是否显示标题    0是普通布局 1是店铺布局
-    @Column(column = "check1")
-    public boolean check1=false;//是否选中
+    @Column(column = "checksss")
+    public boolean checksss;//是否选中
     @Column(column = "userId")
     public String userId; //店铺id
 
@@ -43,12 +41,12 @@ public class OrderGoodsEntity {
         this.userId = userId;
     }
 
-    public boolean isCheck1() {
-        return check1;
+    public boolean isChecksss() {
+        return checksss;
     }
 
-    public void setCheck1(boolean check1) {
-        this.check1 = check1;
+    public void setChecksss(boolean checksss) {
+        this.checksss = checksss;
     }
 
     public int getHead() {

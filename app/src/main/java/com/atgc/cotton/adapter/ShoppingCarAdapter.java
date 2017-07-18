@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.atgc.cotton.R;
 import com.atgc.cotton.adapter.base.ListBaseAdapter;
 import com.atgc.cotton.adapter.base.SuperViewHolder;
+import com.atgc.cotton.entity.OrderGoods;
 import com.atgc.cotton.entity.OrderGoodsEntity;
 import com.atgc.cotton.entity.ShoopingEntity;
 import com.atgc.cotton.widget.SwipeMenuView;
@@ -23,7 +24,7 @@ import java.util.List;
  * Created by liw on 2017/6/27.
  */
 
-public class ShoppingCarAdapter extends ListBaseAdapter<OrderGoodsEntity> {
+public class ShoppingCarAdapter extends ListBaseAdapter<OrderGoods> {
 
     public ShoppingCarAdapter(Context context) {
         super(context);
@@ -59,8 +60,7 @@ public class ShoppingCarAdapter extends ListBaseAdapter<OrderGoodsEntity> {
                     }
                 });
 
-                //TODO     ui展示
-                OrderGoodsEntity entity = mDataList.get(position);
+                OrderGoods entity = mDataList.get(position);
                 ImageView iv_icon = holder.getView(R.id.iv_icon);
                 ImageView img_choose = holder.getView(R.id.img_choose);
                 Glide.with(mContext).load(entity.getImgUrl()).into(iv_icon);
@@ -73,7 +73,7 @@ public class ShoppingCarAdapter extends ListBaseAdapter<OrderGoodsEntity> {
                 TextView tv_num = holder.getView(R.id.tv_num);
                 tv_num.setText("x" + entity.getBuyNum());
 
-                final boolean check1 = mDataList.get(position).isCheck();
+                final boolean check1 = mDataList.get(position).isChecksss();
                 if (check1) {
                     img_choose.setImageResource(R.drawable.selected);
                 } else {
@@ -84,41 +84,58 @@ public class ShoppingCarAdapter extends ListBaseAdapter<OrderGoodsEntity> {
                 img_choose.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        List<Boolean> checks = new ArrayList<Boolean>();   //当前商品id的选中状态
-                        List<Boolean> allChecks = new ArrayList<Boolean>(); //所有id的选中状态
-                        mDataList.get(position).setCheck(!check1); //改变当前的选中状态
-                        Integer goodsId = mDataList.get(position).getGoodsId();
+                        List<Boolean> checks = new ArrayList<>();   //当前商店的商品id的选中状态
+                        List<Boolean> allChecks = new ArrayList<>(); //所有商店商品id的选中状态,用来刷新activity的全选图标
+                        mDataList.get(position).setChecksss(!check1); //改变当前的选中状态
+                        String userId = mDataList.get(position).getUserId();
                         //检查其他的统一id是否选中
+//
+//                        for (int i = 0; i < mDataList.size(); i++) {
+//                            String id = mDataList.get(i).getUserId();
+//                            if (id.equals(userId)) {         //拿到同一个店铺的数据
+//                                Integer head = mDataList.get(i).getHead();
+//                                if (head == 0) {     //拿到
+//                                    boolean check = mDataList.get(i).isChecksss();
+//                                    checks.add(check);     //包id相同商品的选中状态存list，然后看是否contains false或者true
+//                                } else {
+//                                    shopPos[0] = i;   //店铺名的位置存起来
+//                                }
+//
+//                            }
+//
+//                        }
+
+
                         for (int i = 0; i < mDataList.size(); i++) {
                             Integer head = mDataList.get(i).getHead();
-                            if (head == 0) {      //商品的data
-                                Integer id = mDataList.get(i).getGoodsId();
-
-                                if (id == goodsId) { //找到id相同的商品
-                                    boolean check = mDataList.get(i).isCheck();
-                                    checks.add(check);     //包id相同商品的选中状态存list，然后看是否contains false或者true
+                            if (head == 0) {
+                                String id = mDataList.get(i).getUserId();
+                                if (id.equals(userId)) {
+                                    boolean check = mDataList.get(i).isChecksss();
+                                    checks.add(check);     //id相同商品的选中状态存list，然后看是否contains false或者true
+                                }else {
+                                    shopPos[0] = i;   //店铺名的位置存起来
                                 }
-                            } else {
-                                shopPos[0] = i;
                             }
+
                         }
 
                         if (!checks.contains(false)) {   //全选中
-                            mDataList.get(shopPos[0]).setCheck(true);
+                            mDataList.get(shopPos[0]).setChecksss(true);
                         }
-                        if (checks.contains(false)) { //没有全选中,把activity全选状态移除，然后价格改变
-                            mDataList.get(shopPos[0]).setCheck(false);
+                        if (checks.contains(false)) { //没有全选中
+                            mDataList.get(shopPos[0]).setChecksss(false);
                         }
 
-                        for (int i = 0; i < mDataList.size(); i++) {
-                            boolean check = mDataList.get(i).isCheck();
+                        for (int i = 0; i < mDataList.size(); i++) {       //所有商店所有商品的check状态
+                            boolean check = mDataList.get(i).isChecksss();
                             allChecks.add(check);
                         }
                         if (!allChecks.contains(false)) {     //所有都是全选中，通知activity刷新ui
-                            mOnRefreshListener.onRfresh(mDataList,true);
+                            mOnRefreshListener.onRfresh(mDataList, true);
                         }
                         if (allChecks.contains(false)) {  //有一个没选中
-                            mOnRefreshListener.onRfresh(mDataList,false);
+                            mOnRefreshListener.onRfresh(mDataList, false);
                         }
                         notifyDataSetChanged();
                     }
@@ -128,7 +145,7 @@ public class ShoppingCarAdapter extends ListBaseAdapter<OrderGoodsEntity> {
                 TextView tv_shop_name = holder.getView(R.id.tv_shop_name);
                 tv_shop_name.setText(mDataList.get(position).getTitle());
                 final ImageView img_shop = holder.getView(R.id.img_shop);
-                final boolean check = mDataList.get(position).isCheck();
+                final boolean check = mDataList.get(position).isChecksss();
                 if (check) {
                     img_shop.setImageResource(R.drawable.selected);
                 } else {
@@ -137,31 +154,29 @@ public class ShoppingCarAdapter extends ListBaseAdapter<OrderGoodsEntity> {
                 img_shop.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mDataList.get(position).setCheck(!check);
-                        Integer goodsId = mDataList.get(position).getGoodsId();
+                        mDataList.get(position).setChecksss(!check);
+                        String userId = mDataList.get(position).getUserId();
                         for (int i = 0; i < mDataList.size(); i++) {
-                            if (mDataList.get(i).getGoodsId() == goodsId) {
-                                mDataList.get(i).setCheck(!check);
+                            if (userId.equals(mDataList.get(i).getUserId())) {
+                                mDataList.get(i).setChecksss(!check);      //改变所有item，包括商店名
                             }
                         }
 
                         List<Boolean> allChecks = new ArrayList<Boolean>(); //所有id的选中状态
                         for (int i = 0; i < mDataList.size(); i++) {
-                            boolean check2 = mDataList.get(i).isCheck();
+                            boolean check2 = mDataList.get(i).isChecksss();
                             allChecks.add(check2);
                         }
                         if (!allChecks.contains(false)) {     //所有都是全选中，通知activity刷新ui
-                            mOnRefreshListener.onRfresh(mDataList,true);
+                            mOnRefreshListener.onRfresh(mDataList, true);
                         }
                         if (allChecks.contains(false)) {  //有一个没选中
-                            mOnRefreshListener.onRfresh(mDataList,false);
+                            mOnRefreshListener.onRfresh(mDataList, false);
                         }
 
                         notifyDataSetChanged();
                     }
                 });
-                // 同样要通知activity
-
 
                 break;
         }
@@ -216,7 +231,7 @@ public class ShoppingCarAdapter extends ListBaseAdapter<OrderGoodsEntity> {
      * 刷新选中状态和金额
      */
     public interface onRefreshListener {
-        void onRfresh(List<OrderGoodsEntity> datas,boolean b);
+        void onRfresh(List<OrderGoods> datas, boolean b);
     }
 
     private onRefreshListener mOnRefreshListener;

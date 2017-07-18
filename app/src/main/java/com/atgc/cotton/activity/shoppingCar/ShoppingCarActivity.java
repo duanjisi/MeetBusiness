@@ -12,11 +12,13 @@ import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.activity.base.MvpActivity;
 import com.atgc.cotton.adapter.ShoppingCarAdapter;
+import com.atgc.cotton.entity.OrderGoods;
 import com.atgc.cotton.entity.OrderGoodsEntity;
 import com.atgc.cotton.entity.ShoopingEntity;
 import com.atgc.cotton.presenter.ShoppingCarPresenter;
 import com.atgc.cotton.presenter.view.INormalView;
 import com.atgc.cotton.util.L;
+import com.atgc.cotton.util.MoneyUtil;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 import com.github.jdsjlzx.recyclerview.ProgressStyle;
@@ -30,6 +32,7 @@ import java.util.List;
 
 
 /**
+ * 购物车
  * Created by liw on 2017/6/19.
  */
 
@@ -44,7 +47,7 @@ public class ShoppingCarActivity extends MvpActivity<ShoppingCarPresenter> imple
     private DbUtils mDbUtils;
     private ImageView img_choose; //全选与否
     private boolean check = false; //默认未选中
-    private List<OrderGoodsEntity> datas;
+    private List<OrderGoods> datas;
 
     private TextView tv_num;
 
@@ -62,7 +65,7 @@ public class ShoppingCarActivity extends MvpActivity<ShoppingCarPresenter> imple
         mDbUtils = DbUtils.create(this);
         try {
             //数据库里数据，要做处理，加上标题
-            List<OrderGoodsEntity> list = mDbUtils.findAll(OrderGoodsEntity.class);
+            List<OrderGoods> list = mDbUtils.findAll(OrderGoods.class);
 
 
             //编辑后的数据
@@ -70,28 +73,29 @@ public class ShoppingCarActivity extends MvpActivity<ShoppingCarPresenter> imple
 
             if (list != null && list.size() > 0) {
 
-                Collections.sort(list, new Comparator<OrderGoodsEntity>() {
+                Collections.sort(list, new Comparator<OrderGoods>() {
                     @Override
-                    public int compare(OrderGoodsEntity data1, OrderGoodsEntity data2) {
+                    public int compare(OrderGoods data1, OrderGoods data2) {
                         //按照商品id排序，id相同在排在一起
-                        return data1.getGoodsId().compareTo(data2.getGoodsId());
+                        return data1.getUserId().compareTo(data2.getUserId());
                     }
                 });
 
-                //存商品id的list
-                List<Integer> ids = new ArrayList<>();
+                //存id的list
+                List<String> ids = new ArrayList<>();
                 for (int i = 0; i < list.size(); i++) {
-                    Integer goodsId = list.get(i).getGoodsId();
+                    String goodsId = list.get(i).getUserId();
 
-                    //如果不包含goodsid，就add进去
+                    //如果不包含商品id，就add进去
                     if (!ids.contains(goodsId)) {
                         ids.add(goodsId);
                         String title = list.get(i).getTitle();
 
-                        OrderGoodsEntity orderGoodsEntity = new OrderGoodsEntity();
+                        OrderGoods orderGoodsEntity = new OrderGoods();
                         orderGoodsEntity.setHead(1);    //用head来做布局不同的显示
                         orderGoodsEntity.setTitle(title); //显示店铺名布局
                         orderGoodsEntity.setGoodsId(list.get(i).getGoodsId()); //用id来做选中状态
+                        orderGoodsEntity.setUserId(list.get(i).getUserId());
                         datas.add(orderGoodsEntity);
                     }
                     //再把商品data add进去
@@ -137,19 +141,22 @@ public class ShoppingCarActivity extends MvpActivity<ShoppingCarPresenter> imple
         });
         adapter.setOnRefreshListener(new ShoppingCarAdapter.onRefreshListener() {
             @Override
-            public void onRfresh(List<OrderGoodsEntity> datas,boolean b) {
+            public void onRfresh(List<OrderGoods> datas,boolean b) {
                 if(b){
                     img_choose.setImageResource(R.drawable.selected);
                 }else {
                     img_choose.setImageResource(R.drawable.unchecked);
                 }
-                Double allPrice = 0.0;
-                for(OrderGoodsEntity data:datas){
-                    if(data.isCheck()){
+                String allPrice ="0";
+                for(OrderGoods data:datas){
+                    if(data.isChecksss()){
                         if(data.getHead()==0){
                             int buyNum = data.getBuyNum();
                             Double goodsPrice = data.getGoodsPrice();
-                            allPrice = allPrice+(goodsPrice*buyNum);
+//                            allPrice = allPrice+(goodsPrice*buyNum);
+
+                            String moneyMul = MoneyUtil.moneyMul(goodsPrice + "", buyNum + "");
+                            allPrice = MoneyUtil.moneyAdd(allPrice,moneyMul);
                         }
 
                     }
@@ -192,8 +199,8 @@ public class ShoppingCarActivity extends MvpActivity<ShoppingCarPresenter> imple
                     img_choose.setImageResource(R.drawable.unchecked);
                     check = false;
                 }
-                for(OrderGoodsEntity data:datas){
-                    data.setCheck(check);
+                for(OrderGoods data:datas){
+                    data.setChecksss(check);
                 }
 
                 if(!check){
@@ -201,13 +208,15 @@ public class ShoppingCarActivity extends MvpActivity<ShoppingCarPresenter> imple
 
                 }else{
 
-                    Double allPrice = 0.0;
-                    for (OrderGoodsEntity data : datas) {
+                    String allPrice ="0";
+                    for (OrderGoods data : datas) {
                         if(data.getHead()==0){
-                            if (data.isCheck()) {
+                            if (data.isChecksss()) {
                                 int buyNum = data.getBuyNum();
                                 Double goodsPrice = data.getGoodsPrice();
-                                allPrice = allPrice + (goodsPrice * buyNum);
+//                                allPrice = allPrice + (goodsPrice * buyNum);
+                                String moneyMul = MoneyUtil.moneyMul(goodsPrice + "", buyNum + "");
+                                allPrice = MoneyUtil.moneyAdd(allPrice,moneyMul);
                             }
                         }
 
