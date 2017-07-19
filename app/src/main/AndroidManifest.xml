@@ -137,7 +137,7 @@
         <!--android:name=".activity.GoodsDetailActivity"-->
         <!--android:screenOrientation="portrait" />-->
         <activity
-            android:name=".activity.GoodsDetailActivity"
+            android:name=".activity.goodsDetail.GoodsDetailActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.LoginActivity"

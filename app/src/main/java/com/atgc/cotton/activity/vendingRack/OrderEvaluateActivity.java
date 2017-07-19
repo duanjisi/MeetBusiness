@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
+import com.atgc.cotton.entity.OrderGoodsEntity;
 import com.atgc.cotton.listener.PermissionListener;
 import com.atgc.cotton.util.FileUtils;
 import com.atgc.cotton.util.PermissonUtil.PermissionUtil;
@@ -30,6 +32,7 @@ import com.atgc.cotton.widget.ActionSheet;
 import com.atgc.cotton.widget.GlideRoundTransform;
 import com.atgc.cotton.widget.MyRatingBar;
 
+import com.atgc.cotton.widget.RoundImageView;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
@@ -45,8 +48,8 @@ import java.util.HashMap;
 public class OrderEvaluateActivity extends BaseActivity implements View.OnClickListener, ActionSheet.OnSheetItemClickListener {
 
     private TextView tv_back;
-    private TextView bt_upload;
-    private ImageView iv_icon;
+    private Button bt_upload;
+    private RoundImageView iv_icon;
     private MyRatingBar starBar;
     private EditText et_content;
     private LinearLayout ll_img;
@@ -78,8 +81,8 @@ public class OrderEvaluateActivity extends BaseActivity implements View.OnClickL
         ll_img = (LinearLayout) findViewById(R.id.ll_img);
         et_content = (EditText) findViewById(R.id.et_content);
         starBar = (MyRatingBar) findViewById(R.id.ratingBar);
-        iv_icon = (ImageView) findViewById(R.id.iv_icon);
-        bt_upload = (TextView) findViewById(R.id.bt_upload);
+        iv_icon = (RoundImageView) findViewById(R.id.iv_icon);
+        bt_upload = (Button) findViewById(R.id.bt_upload);
         tv_back = (TextView) findViewById(R.id.tv_back);
         tv_back.setOnClickListener(this);
         bt_upload.setOnClickListener(this);
@@ -89,6 +92,12 @@ public class OrderEvaluateActivity extends BaseActivity implements View.OnClickL
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tv_add_img.getLayoutParams();
         params.width = sceenW / 5;
         params.height = sceenW / 5;
+
+        LinearLayout.LayoutParams Headparams = (LinearLayout.LayoutParams) iv_icon.getLayoutParams();
+        Headparams.width = sceenW / 5;
+        Headparams.height = sceenW / 5;
+        iv_icon.setLayoutParams(Headparams);
+
         int pad = sceenW / 22;
         params.setMargins(0, pad, pad, pad);
         tv_add_img.setLayoutParams(params);
@@ -107,14 +116,10 @@ public class OrderEvaluateActivity extends BaseActivity implements View.OnClickL
                 Log.i("rating:", "" + rating);
             }
         });
-//        starBar.setCountNum(5);
-//        //starBar.setCountSelected(0);
-//        starBar.setOnRatingChangeListener(new MyStarView.OnRatingChangeListener() {
-//            @Override
-//            public void onChange(int countSelected) {
-//                Log.i("dividerWidth:", " " + countSelected);
-//            }
-//        });
+        Intent intent = getIntent();
+        if (intent != null) {
+            OrderGoodsEntity orderEntity = (OrderGoodsEntity) intent.getSerializableExtra("data");
+        }
     }
 
     @Override
@@ -125,6 +130,10 @@ public class OrderEvaluateActivity extends BaseActivity implements View.OnClickL
                 break;
             case R.id.tv_back:
                 finish();
+                break;
+            case R.id.iv_close:
+                int addTag = (int) v.getTag();
+                addViewToContainer(false, addTag, null);
                 break;
         }
     }
@@ -239,11 +248,11 @@ public class OrderEvaluateActivity extends BaseActivity implements View.OnClickL
             imgStrMap.remove(tag);
             addSize--;
         }
-        if (imgMap.size() > 0) {
-            View img = ll_img.getChildAt(0);
-            TextView tv_img = (TextView) img.findViewById(R.id.tv_img);
-            tv_img.setVisibility(View.VISIBLE);
-        }
+//        if (imgMap.size() > 0) {
+//            View img = ll_img.getChildAt(0);
+//            TextView tv_img = (TextView) img.findViewById(R.id.tv_img);
+//            tv_img.setVisibility(View.VISIBLE);
+//        }
     }
 
     private void showActionSheet() {
