@@ -51,7 +51,7 @@ public class MyProductionActivity extends BaseActivity implements
     private static final String TAG = MyProductionActivity.class.getSimpleName();
     private AccountEntity account;
     private ImageLoader imageLoader;
-    private ImageView iv_back, iv_share, iv_bg;
+    private ImageView iv_back, iv_bg;
     private TextView tv_title, tv_focus, tv_fans, tv_edit, tv_intro;
     private SharePopup sharePopup;
     private String[] mTitles = new String[]{"作品", "喜欢"};
@@ -77,7 +77,7 @@ public class MyProductionActivity extends BaseActivity implements
         mIndicator = (SimpleViewPagerIndicator) findViewById(R.id.id_stickynavlayout_indicator);
         mViewPager = (ViewPager) findViewById(R.id.id_stickynavlayout_viewpager);
         iv_back = (ImageView) findViewById(R.id.iv_back);
-        iv_share = (ImageView) findViewById(R.id.iv_share);
+//        iv_share = (ImageView) findViewById(R.id.iv_share);
         iv_bg = (ImageView) findViewById(R.id.iv_bg);
         tv_title = (TextView) findViewById(R.id.tv_name);
         tv_focus = (TextView) findViewById(R.id.tv_focus);
@@ -89,7 +89,7 @@ public class MyProductionActivity extends BaseActivity implements
         sharePopup.setOnItemSelectedListener(this);
 
         iv_back.setOnClickListener(this);
-        iv_share.setOnClickListener(this);
+//        iv_share.setOnClickListener(this);
         iv_bg.setOnClickListener(this);
         tv_focus.setOnClickListener(this);
         tv_fans.setOnClickListener(this);
@@ -150,15 +150,15 @@ public class MyProductionActivity extends BaseActivity implements
             case R.id.iv_back:
                 finish();
                 break;
-            case R.id.iv_share:
-                if (!isFinishing()) {
-                    if (sharePopup.isShowing()) {
-                        sharePopup.dismiss();
-                    } else {
-                        sharePopup.show(getWindow().getDecorView());
-                    }
-                }
-                break;
+//            case R.id.iv_share:
+//                if (!isFinishing()) {
+//                    if (sharePopup.isShowing()) {
+//                        sharePopup.dismiss();
+//                    } else {
+//                        sharePopup.show(getWindow().getDecorView());
+//                    }
+//                }
+//                break;
             case R.id.tv_focus:
 
                 break;

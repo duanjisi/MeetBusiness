@@ -79,7 +79,7 @@ public class GoodsDetailEntity {
         private int GoodsId;
         private String GoodsName;
         private int GoodsNumber;
-        private int GoodsPrice;
+        private Double GoodsPrice;
         private String UserId;
         private String UserName;
         private List<VendGoodsAttrEntity> GoodsAttr;
@@ -125,11 +125,11 @@ public class GoodsDetailEntity {
             this.GoodsNumber = GoodsNumber;
         }
 
-        public int getGoodsPrice() {
+        public Double getGoodsPrice() {
             return GoodsPrice;
         }
 
-        public void setGoodsPrice(int GoodsPrice) {
+        public void setGoodsPrice(Double GoodsPrice) {
             this.GoodsPrice = GoodsPrice;
         }
 

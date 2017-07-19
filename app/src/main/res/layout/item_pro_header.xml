@@ -44,14 +44,14 @@
                 android:textColor="@color/white"
                 android:textSize="19.5sp" />
 
-            <ImageView
-                android:id="@+id/iv_share"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:paddingLeft="@dimen/dp_11"
-                android:paddingRight="@dimen/dp_11"
-                android:src="@drawable/works_share" />
+            <!--<ImageView-->
+                <!--android:id="@+id/iv_share"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:paddingLeft="@dimen/dp_11"-->
+                <!--android:paddingRight="@dimen/dp_11"-->
+                <!--android:src="@drawable/works_share" />-->
         </RelativeLayout>
 
         <RelativeLayout

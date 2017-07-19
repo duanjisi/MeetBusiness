@@ -19,6 +19,15 @@ public class VideoEntity implements Serializable {
     private String Sex = "";
     private String UserId = "";
     private String UserName = "";
+    private String Signature = "";
+
+    public String getSignature() {
+        return Signature;
+    }
+
+    public void setSignature(String signature) {
+        Signature = signature;
+    }
 
     public String getAddTime() {
         return AddTime;

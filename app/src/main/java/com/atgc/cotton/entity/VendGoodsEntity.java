@@ -1,11 +1,12 @@
 package com.atgc.cotton.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by GMARUnity on 2017/7/5.
  */
-public class VendGoodsEntity {
+public class VendGoodsEntity implements Serializable {
 
     public String getStatus() {
         return Status;
@@ -53,7 +54,8 @@ public class VendGoodsEntity {
     private String Message = "";
     private List<Goods> Data;
 
-    public class Goods {
+    public class Goods implements Serializable {
+
         public String getGoodsAttr() {
             return GoodsAttr;
         }
@@ -102,11 +104,20 @@ public class VendGoodsEntity {
             GoodsId = goodsId;
         }
 
+        public boolean isSelected() {
+            return selected;
+        }
+
+        public void setSelected(boolean selected) {
+            this.selected = selected;
+        }
+
         private String GoodsAttr;
         private String GoodsId;
         private String GoodsImg;
         private String GoodsName;
         private String GoodsNumber;
         private String ShopPrice;
+        private boolean selected = false;
     }
 }

@@ -33,6 +33,7 @@ import com.atgc.cotton.util.UIUtils;
 import java.util.HashMap;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 
@@ -61,10 +62,6 @@ public class RegisterActivity extends MvpActivity<RegisterPresenter> implements 
     private HashMap<String, String> map;
 
 
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_register;
-    }
 
     @Override
     protected RegisterPresenter createPresenter() {
@@ -72,9 +69,10 @@ public class RegisterActivity extends MvpActivity<RegisterPresenter> implements 
     }
 
     @Override
-    protected void initData() {
-        super.initData();
-
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_register);
+        ButterKnife.bind(this);
     }
 
     @OnClick({R.id.img_back, R.id.img_head, R.id.btn_code,  R.id.btn_register})

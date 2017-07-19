@@ -18,9 +18,11 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.atgc.cotton.App;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.activity.production.mine.MyProductionActivity;
+import com.atgc.cotton.activity.shoppingCar.ShoppingCarActivity;
 import com.atgc.cotton.activity.vendingRack.MyOrderActivity;
 import com.atgc.cotton.activity.vendingRack.VendingRackHomeActivity;
 import com.atgc.cotton.activity.videoedit.RecordVideoActivity;
@@ -60,7 +62,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
     private ArrayList<Fragment> mFragments = new ArrayList<Fragment>();
     private MainFragment mainFocusFragment, mainDiscoverFragment, mainNearFragment;
     private RadioButton mFocus, mDiscover, mNear;
-    private RadioButton rb_shopping, rb_price, rb_order;
+    private RadioButton rb_setting, rb_production, rb_video, rb_shopping, rb_price, rb_order;
     private Handler handler;
     private Button btn_login;
     private TextView tv_name;
@@ -69,6 +71,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity);
+        App.getInstance().addTempActivity(this);
         rl_line = (RelativeLayout) findViewById(R.id.rl_line);
         ViewTreeObserver vto2 = rl_line.getViewTreeObserver();
         vto2.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -125,6 +128,9 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
         mViewPager.addOnPageChangeListener(new MyPageChangeListener());
         mViewPager.setCurrentItem(VIEW_PAGER_PAGE_1);
 
+        rb_setting = (RadioButton) findViewById(R.id.rb_setting);
+        rb_production = (RadioButton) findViewById(R.id.rb_production);
+        rb_video = (RadioButton) findViewById(R.id.rb_video);
         rb_shopping = (RadioButton) findViewById(R.id.rb_shopping);
         rb_price = (RadioButton) findViewById(R.id.rb_price);
         rb_order = (RadioButton) findViewById(R.id.rb_order);
@@ -239,26 +245,33 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
                 case R.id.rb_setting:
                     showToast("个人设置", true);
                     openActivity(PersonalSetActivity.class);
+                    rb_setting.setChecked(false);
+                    closeDrawer();
                     break;
                 case R.id.rb_production:
                     openActivity(MyProductionActivity.class);
+                    rb_production.setChecked(false);
+                    closeDrawer();
 //                    openActivity(OtherPlayerActivity.class);
                     break;
                 case R.id.rb_video:
                     openActivity(RecordVideoActivity.class);
+                    rb_video.setChecked(false);
+                    closeDrawer();
                     break;
                 case R.id.rb_price:
                     openActivity(VendingRackHomeActivity.class);
                     rb_price.setChecked(false);
+                    closeDrawer();
                     break;
                 case R.id.rb_shopping:
 //                    showToast("购物车", true);
-                    rb_shopping.setChecked(false);
+//                    rb_shopping.setChecked(false);
 
-
-//                    Intent intent = new Intent(HomePagerActivity.this, GoodsDetailActivity.class);
+//
+//                    Intent intent = new Intent(HomePagerActivity.this, ShoppingCarActivity.class);
 //                    startActivity(intent);
-
+//
 //                    overridePendingTransition(R.anim.activity_in, R.anim.activity_no);
 //
 //                    handler.postDelayed(new Runnable() {
@@ -267,15 +280,26 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
 //                            drawerLayout.closeDrawer(rl_left);
 //                        }
 //                    },500);
+                    openActivity(ShoppingCarActivity.class);
                     break;
                 case R.id.rb_order:
                     openActivity(MyOrderActivity.class);
                     rb_order.setChecked(false);
+                    closeDrawer();
                     break;
                 default:
                     break;
             }
         }
+    }
+
+    private void closeDrawer(){
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                drawerLayout.closeDrawer(rl_left);
+            }
+        }, 500);
     }
 
     private class CheckListener implements RadioGroup.OnCheckedChangeListener {

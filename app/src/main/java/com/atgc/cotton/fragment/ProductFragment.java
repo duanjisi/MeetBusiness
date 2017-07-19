@@ -1,5 +1,6 @@
 package com.atgc.cotton.fragment;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.atgc.cotton.R;
+import com.atgc.cotton.activity.production.other.OtherPlayerActivity;
 import com.atgc.cotton.adapter.ProductAdapter;
 import com.atgc.cotton.entity.HomeBaseData;
 import com.atgc.cotton.entity.VideoEntity;
@@ -91,7 +93,12 @@ public abstract class ProductFragment extends BaseFragment {
     private class itemClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+            VideoEntity videoEntity = (VideoEntity) adapterView.getItemAtPosition(i);
+            if (videoEntity != null) {
+                Intent intent = new Intent(getContext(), OtherPlayerActivity.class);
+                intent.putExtra("obj", videoEntity);
+                startActivity(intent);
+            }
         }
     }
 
@@ -130,7 +137,13 @@ public abstract class ProductFragment extends BaseFragment {
             @Override
             public void onFailure(String msg) {
                 cancelLoadingDialog();
-                showToast(msg, true);
+                if (msg.contains("no record")) {
+                    gridView.onFinishLoading(false, null);
+                    loadMore = false;
+                    showToast("没有数据", true);
+                } else {
+                    showToast(msg, true);
+                }
             }
         });
     }
@@ -177,7 +190,13 @@ public abstract class ProductFragment extends BaseFragment {
             @Override
             public void onFailure(String msg) {
                 cancelLoadingDialog();
-                showToast(msg, true);
+                if (msg.contains("no record")) {
+                    gridView.onFinishLoading(false, null);
+                    loadMore = false;
+                    showToast("没有数据", true);
+                } else {
+                    showToast(msg, true);
+                }
             }
         });
     }

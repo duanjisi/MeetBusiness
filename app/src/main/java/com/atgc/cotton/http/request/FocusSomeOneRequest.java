@@ -26,7 +26,7 @@ public class FocusSomeOneRequest extends BaseDataRequest<FocusEntity> {
     protected Map<String, String> getParams() {
         String sourcefrom  = (String) mParams[1];
         Map<String, String> map = new HashMap<String, String>();
-        map.put("sourcefrom ", sourcefrom );
+        map.put("sourcefrom", sourcefrom );
         return map;
     }
 

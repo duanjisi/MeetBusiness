@@ -21,6 +21,7 @@ public class ChangeAvatarEntity {
     }
 
     public class Data {
+
         public String getAvatar() {
             return Avatar;
         }
@@ -29,6 +30,24 @@ public class ChangeAvatarEntity {
             this.Avatar = avatar;
         }
 
+        public String getFeedId() {
+            return FeedId;
+        }
+
+        public void setFeedId(String feedId) {
+            FeedId = feedId;
+        }
+
+        public String getMediaPath() {
+            return MediaPath;
+        }
+
+        public void setMediaPath(String mediaPath) {
+            MediaPath = mediaPath;
+        }
+
         String Avatar;
+        String FeedId = "";
+        String MediaPath = "";
     }
 }

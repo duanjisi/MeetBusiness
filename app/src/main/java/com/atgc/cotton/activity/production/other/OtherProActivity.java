@@ -1,5 +1,6 @@
 package com.atgc.cotton.activity.production.other;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
@@ -10,10 +11,12 @@ import android.widget.TextView;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.adapter.ProductAdapter;
+import com.atgc.cotton.entity.FansEntity;
 import com.atgc.cotton.entity.FocusEntity;
 import com.atgc.cotton.entity.HomeBaseData;
 import com.atgc.cotton.entity.VideoEntity;
 import com.atgc.cotton.http.BaseDataRequest;
+import com.atgc.cotton.http.request.FansRequest;
 import com.atgc.cotton.http.request.FocusCancelRequest;
 import com.atgc.cotton.http.request.FocusJudgeRequest;
 import com.atgc.cotton.http.request.FocusSomeOneRequest;
@@ -45,7 +48,7 @@ import java.util.ArrayList;
  */
 public class OtherProActivity extends BaseActivity implements View.OnClickListener, SharePopup.OnItemSelectedListener, MorePopup.OnItemdListener {
     private static final String TAG = OtherProActivity.class.getSimpleName();
-    private ImageView iv_back, iv_share, iv_more, iv_bg;
+    private ImageView iv_back, iv_more, iv_bg;
     private TextView tv_name, tv_focus, tv_fans, tv_msg, tv_fos, tv_intro;
     private VideoEntity videoEntity;
     private ImageLoader imageLoader;
@@ -69,7 +72,7 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
         imageLoader = ImageLoaderUtils.createImageLoader(context);
         videoEntity = (VideoEntity) getIntent().getExtras().getSerializable("obj");
         iv_back = (ImageView) findViewById(R.id.iv_back);
-        iv_share = (ImageView) findViewById(R.id.iv_share);
+//        iv_share = (ImageView) findViewById(R.id.iv_share);
         iv_more = (ImageView) findViewById(R.id.iv_more);
         iv_bg = (ImageView) findViewById(R.id.iv_bg);
 
@@ -81,7 +84,7 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
         tv_intro = (TextView) findViewById(R.id.tv_intro);
 
         iv_back.setOnClickListener(this);
-        iv_share.setOnClickListener(this);
+//        iv_share.setOnClickListener(this);
         iv_more.setOnClickListener(this);
         tv_msg.setOnClickListener(this);
         tv_fos.setOnClickListener(this);
@@ -105,13 +108,19 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
             }
         });
         requestDatas();
+        requestFans();
         isFocusRequest();
     }
 
     private class itemClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+            VideoEntity videoEntity = (VideoEntity) adapterView.getItemAtPosition(i);
+            if (videoEntity != null) {
+                Intent intent = new Intent(context, OtherPlayerActivity.class);
+                intent.putExtra("obj", videoEntity);
+                startActivity(intent);
+            }
         }
     }
 
@@ -121,15 +130,15 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
             case R.id.iv_back:
                 finish();
                 break;
-            case R.id.iv_share:
-                if (!isFinishing()) {
-                    if (sharePopup.isShowing()) {
-                        sharePopup.dismiss();
-                    } else {
-                        sharePopup.show(getWindow().getDecorView());
-                    }
-                }
-                break;
+//            case R.id.iv_share:
+//                if (!isFinishing()) {
+//                    if (sharePopup.isShowing()) {
+//                        sharePopup.dismiss();
+//                    } else {
+//                        sharePopup.show(getWindow().getDecorView());
+//                    }
+//                }
+//                break;
             case R.id.iv_more:
                 if (!isFinishing()) {
                     if (morePopup.isShowing()) {
@@ -189,6 +198,7 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
             }
 
             if (videoEntity != null) {
+                tv_intro.setText(videoEntity.getSignature());
                 String sex = videoEntity.getSex();
                 tv_name.setText(videoEntity.getUserName());
                 Drawable nav_up = null;
@@ -200,8 +210,8 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
                     nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
                 }
                 tv_name.setCompoundDrawables(null, null, nav_up, null);
-//                tv_focus.setText("关注：" + entity.getFollowCount());
-//                tv_fans.setText("粉丝：" + entity.getFansCount());
+//                tv_focus.setText("关注：" + videoEntity.getFollowCount());
+//                tv_fans.setText("粉丝：" + videoEntity.getFansCount());
                 String videoPath = videoEntity.getMediaPath();
                 String imageUrl = "";
                 if (videoPath.contains(".mp4")) {
@@ -251,6 +261,25 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
                 loadMore = false;
             }
         }
+    }
+
+    private void requestFans() {
+        if (videoEntity == null) {
+            return;
+        }
+        FansRequest request = new FansRequest(TAG, videoEntity.getUserId());
+        request.send(new BaseDataRequest.RequestCallback<FansEntity>() {
+            @Override
+            public void onSuccess(FansEntity pojo) {
+                tv_focus.setText("关注：" + pojo.getFollowCount());
+                tv_fans.setText("粉丝：" + pojo.getFansCount());
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                showToast(msg, true);
+            }
+        });
     }
 
     private String shareContent;
@@ -410,7 +439,7 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
         if (videoEntity == null) {
             return;
         }
-        FocusSomeOneRequest request = new FocusSomeOneRequest(TAG, videoEntity.getUserId(), "");
+        FocusSomeOneRequest request = new FocusSomeOneRequest(TAG, videoEntity.getUserId(), "他人作品");
         request.send(new BaseDataRequest.RequestCallback<FocusEntity>() {
             @Override
             public void onSuccess(FocusEntity pojo) {

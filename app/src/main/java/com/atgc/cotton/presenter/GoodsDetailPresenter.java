@@ -1,5 +1,7 @@
 package com.atgc.cotton.presenter;
 
+import com.alibaba.fastjson.JSON;
+import com.atgc.cotton.entity.GoodsDetailEntity;
 import com.atgc.cotton.presenter.view.IBaseView;
 import com.atgc.cotton.presenter.view.IGoodsDetailView;
 import com.atgc.cotton.presenter.view.INormalView;
@@ -20,16 +22,20 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView>{
         super(mvpView);
     }
 
-    public void loadDataByRetrofitRxjava(String cityId) {
+    public void getGoodsDetail(int id) {
         mvpView.showLoading();
-        addSubscription(api.loadDataByRetrofitRxjava(cityId)
+        addSubscription(api.getGoodsDetail(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MyObserver<String>() {
                     @Override
                     public void onNext_(String model) {
-                        L.i(model);
                         mvpView.hideLoading();
+                        GoodsDetailEntity entity = JSON.parseObject(model, GoodsDetailEntity.class);
+                        if(entity!=null){
+                            GoodsDetailEntity.DataBean bean = entity.getData();
+                            mvpView.getGoodsSuccess(bean);
+                        }
                     }
 
                     @Override
