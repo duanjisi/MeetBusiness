@@ -97,6 +97,23 @@ public interface ApiStores {
     //获取我买到的订单
     @GET("order/")
     Observable<String> getMyBuyOrder(@Header("Authorization") String token, @Query("status") int status, @Query("page") int page, @Query("size") int size);
+    //发送短信验证码
+    @FormUrlEncoded
+    @POST("public/regsms")
+    Observable<String> sendCode(@FieldMap Map<String, String> params);
+
+    //重置密码
+    @FormUrlEncoded
+    @POST("public/resetpsw")
+    Observable<String> resetPsw(@FieldMap Map<String, String> params);
+
+    //找回密码发送手机短信
+    @FormUrlEncoded
+    @POST("public/resetsms")
+    Observable<String> sendRestCode(@FieldMap Map<String, String> params);
+
+
+
 
     //获取我买到的待评价订单
     @GET("order/goods/")

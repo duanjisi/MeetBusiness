@@ -163,6 +163,10 @@
             android:name=".activity.goodsDetail.ChooseAddressActivity"
             android:screenOrientation="portrait" />
 
+
+        <activity android:name=".activity.goodsDetail.ChooseAddressActivity"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".activity.goodsDetail.EditAddressActivity"
             android:screenOrientation="portrait" />
@@ -201,9 +205,10 @@
         <activity
             android:name=".activity.PersonalSetActivity"
             android:screenOrientation="portrait">
-
         </activity>
 
+        <activity android:name=".activity.ResetPswActivity"
+            android:screenOrientation="portrait"/>
         <!--友盟appkey-->
         <meta-data
             android:name="UMENG_APPKEY"

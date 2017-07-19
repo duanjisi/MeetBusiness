@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.atgc.cotton.R;
 import com.atgc.cotton.entity.OrderGoods;
-import com.atgc.cotton.entity.OrderGoodsEntity;
+import com.atgc.cotton.util.MoneyUtil;
 import com.bumptech.glide.Glide;
 
 /**
@@ -26,28 +26,54 @@ public class GoodsOrderAdapter extends BaseRecycleViewAdapter {
 
     @Override
     public void onBindItemHolder(RecyclerView.ViewHolder holder, int position) {
-        GoodsOrderHolder holder1 = (GoodsOrderHolder) holder;
-        OrderGoods item = (OrderGoods) datas.get(position);
+        switch (holder.getItemViewType()) {
 
-        holder1.tv_title.setText(item.getTitle());
+            case 0:
+                GoodsOrderHolder holder1 = (GoodsOrderHolder) holder;
 
-        holder1.tv_goods_name.setText(item.getGoodsName());
-        holder1.tv_goods_content.setText(item.getType());
-        holder1.tv_goods_num.setText("x"+item.getBuyNum());
-        holder1.tv_goods_price.setText("¥"+item.getGoodsPrice());
+                OrderGoods item = (OrderGoods) datas.get(position);
 
-        holder1.tv_all_price.setText("¥"+item.getGoodsPrice()+"");
-        holder1.tv_all_num.setText("共"+item.getBuyNum()+"件:  小计");
 
-        Glide.with(context).load(item.getImgUrl()).into(holder1.iv_icon);
+                Double goodsPrice = item.getGoodsPrice();
+                int buyNum = item.getBuyNum();
+
+                holder1.tv_goods_name.setText(item.getGoodsName());
+                holder1.tv_goods_content.setText(item.getType());
+                holder1.tv_goods_num.setText("x" + buyNum);
+                holder1.tv_goods_price.setText("¥" + goodsPrice);
+
+                String allPrice = MoneyUtil.moneyMul(goodsPrice + "", buyNum + "");
+
+                holder1.tv_all_price.setText("¥" + allPrice);
+                holder1.tv_all_num.setText("共" + item.getBuyNum() + "件:  小计");
+
+                Glide.with(context).load(item.getImgUrl()).into(holder1.iv_icon);
+                break;
+            case 1:
+                ShopNameHolder holder2 = (ShopNameHolder) holder;
+                OrderGoods item2 = (OrderGoods) datas.get(position);
+                holder2.tv_title.setText(item2.getTitle());
+
+                break;
+        }
+
 
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_order,parent,false);
+        View view = null;
+        switch (viewType) {
+            case 0:
+                view = LayoutInflater.from(context).inflate(R.layout.item_order, parent, false);
+                return new GoodsOrderHolder(view);
+            case 1:
+                view = LayoutInflater.from(context).inflate(R.layout.item_order_title, parent, false);
+                return new ShopNameHolder(view);
+        }
+        return null;
 
-        return new GoodsOrderHolder(view);
+
     }
 
     @Override
@@ -55,8 +81,7 @@ public class GoodsOrderAdapter extends BaseRecycleViewAdapter {
         return datas.size();
     }
 
-    public class GoodsOrderHolder extends RecyclerView.ViewHolder{
-        private TextView tv_title;
+    public class GoodsOrderHolder extends RecyclerView.ViewHolder {
         private TextView tv_goods_name;
         private TextView tv_goods_content;
         private TextView tv_goods_price;
@@ -69,7 +94,6 @@ public class GoodsOrderAdapter extends BaseRecycleViewAdapter {
 
         public GoodsOrderHolder(View itemView) {
             super(itemView);
-            tv_title = (TextView) itemView.findViewById(R.id.tv_title);
             tv_goods_name = (TextView) itemView.findViewById(R.id.tv_goods_name);
             tv_goods_content = (TextView) itemView.findViewById(R.id.tv_goods_content);
             tv_goods_price = (TextView) itemView.findViewById(R.id.tv_goods_price);
@@ -81,4 +105,26 @@ public class GoodsOrderAdapter extends BaseRecycleViewAdapter {
         }
 
     }
+
+    public class ShopNameHolder extends RecyclerView.ViewHolder {
+
+        private TextView tv_title;
+
+        public ShopNameHolder(View itemView) {
+            super(itemView);
+            tv_title = (TextView) itemView.findViewById(R.id.tv_title);
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+//        return super.getItemViewType(position);
+        OrderGoods data = (OrderGoods) datas.get(position);
+        if (data.getHead() == 0) {
+            return 0;  //商品
+        } else {
+            return 1; //标题布局
+        }
+    }
+
 }

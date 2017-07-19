@@ -2,8 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:paddingTop="9dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         android:id="@+id/ll_goods"
@@ -13,15 +14,7 @@
         android:paddingBottom="@dimen/dp_10"
         >
 
-        <TextView
-            android:layout_marginBottom="5dp"
-            android:textColor="@color/text_color_black"
-            android:layout_marginLeft="10dp"
-            android:textSize="14sp"
-            android:id="@+id/tv_title"
-            android:text="iphone官方店"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+
         <com.atgc.cotton.widget.RoundImageView
             android:layout_below="@id/tv_title"
             android:layout_marginLeft="5dp"

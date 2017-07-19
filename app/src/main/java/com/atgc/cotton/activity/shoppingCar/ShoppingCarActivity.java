@@ -1,5 +1,6 @@
 package com.atgc.cotton.activity.shoppingCar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
@@ -8,12 +9,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.activity.base.MvpActivity;
+import com.atgc.cotton.activity.goodsDetail.WriteOrderActivity;
 import com.atgc.cotton.adapter.ShoppingCarAdapter;
 import com.atgc.cotton.entity.OrderGoods;
-import com.atgc.cotton.entity.OrderGoodsEntity;
+import com.atgc.cotton.entity.OrderGoodsListEntity;
 import com.atgc.cotton.entity.ShoopingEntity;
 import com.atgc.cotton.presenter.ShoppingCarPresenter;
 import com.atgc.cotton.presenter.view.INormalView;
@@ -43,13 +46,13 @@ public class ShoppingCarActivity extends MvpActivity<ShoppingCarPresenter> imple
     private ShoppingCarAdapter adapter;
 
 
-
     private DbUtils mDbUtils;
     private ImageView img_choose; //全选与否
     private boolean check = false; //默认未选中
-    private List<OrderGoods> datas;
+    private List<OrderGoods> datas; //编辑后的数据
 
     private TextView tv_num;
+    private TextView tv_delete;
 
 
     @Override
@@ -62,13 +65,12 @@ public class ShoppingCarActivity extends MvpActivity<ShoppingCarPresenter> imple
     }
 
     private void initData() {
-        mDbUtils = DbUtils.create(this);
+
         try {
             //数据库里数据，要做处理，加上标题
             List<OrderGoods> list = mDbUtils.findAll(OrderGoods.class);
 
 
-            //编辑后的数据
             datas = new ArrayList<>();
 
             if (list != null && list.size() > 0) {
@@ -121,17 +123,18 @@ public class ShoppingCarActivity extends MvpActivity<ShoppingCarPresenter> imple
     }
 
     private void initUI() {
+        mDbUtils = DbUtils.create(this);
         rcv_content = (LRecyclerView) findViewById(R.id.rcv_content);
 
 
         adapter = new ShoppingCarAdapter(this);
-
+        adapter.setDb(mDbUtils);
         adapter.setOnDelListener(new ShoppingCarAdapter.onSwipeListener() {
             @Override
             public void onDel(int pos) {
-                Toast.makeText(ShoppingCarActivity.this, "删除:" + pos, Toast.LENGTH_SHORT).show();
-                adapter.getDataList().remove(pos);
-                adapter.notifyItemRemoved(pos);
+//                Toast.makeText(ShoppingCarActivity.this, "删除:" + pos, Toast.LENGTH_SHORT).show();
+//                adapter.getDataList().remove(pos);
+//                adapter.notifyItemRemoved(pos);
 
                 if (pos != (adapter.getDataList().size())) {
                     adapter.notifyItemRangeChanged(pos, adapter.getDataList().size() - pos);
@@ -141,22 +144,22 @@ public class ShoppingCarActivity extends MvpActivity<ShoppingCarPresenter> imple
         });
         adapter.setOnRefreshListener(new ShoppingCarAdapter.onRefreshListener() {
             @Override
-            public void onRfresh(List<OrderGoods> datas,boolean b) {
-                if(b){
+            public void onRfresh(List<OrderGoods> datas, boolean b) {
+                if (b) {
                     img_choose.setImageResource(R.drawable.selected);
-                }else {
+                } else {
                     img_choose.setImageResource(R.drawable.unchecked);
                 }
-                String allPrice ="0";
-                for(OrderGoods data:datas){
-                    if(data.isChecksss()){
-                        if(data.getHead()==0){
+                String allPrice = "0";
+                for (OrderGoods data : datas) {
+                    if (data.isChecksss()) {
+                        if (data.getHead() == 0) {
                             int buyNum = data.getBuyNum();
                             Double goodsPrice = data.getGoodsPrice();
 //                            allPrice = allPrice+(goodsPrice*buyNum);
 
                             String moneyMul = MoneyUtil.moneyMul(goodsPrice + "", buyNum + "");
-                            allPrice = MoneyUtil.moneyAdd(allPrice,moneyMul);
+                            allPrice = MoneyUtil.moneyAdd(allPrice, moneyMul);
                         }
 
                     }
@@ -179,6 +182,9 @@ public class ShoppingCarActivity extends MvpActivity<ShoppingCarPresenter> imple
         img_choose = (ImageView) findViewById(R.id.img_choose);
         img_choose.setOnClickListener(this);
         tv_num = (TextView) findViewById(R.id.tv_num);
+        tv_delete = (TextView) findViewById(R.id.tv_delete);
+
+        tv_delete.setOnClickListener(this);
     }
 
     @Override
@@ -199,24 +205,24 @@ public class ShoppingCarActivity extends MvpActivity<ShoppingCarPresenter> imple
                     img_choose.setImageResource(R.drawable.unchecked);
                     check = false;
                 }
-                for(OrderGoods data:datas){
+                for (OrderGoods data : datas) {
                     data.setChecksss(check);
                 }
 
-                if(!check){
+                if (!check) {
                     tv_num.setText(null);
 
-                }else{
+                } else {
 
-                    String allPrice ="0";
+                    String allPrice = "0";
                     for (OrderGoods data : datas) {
-                        if(data.getHead()==0){
+                        if (data.getHead() == 0) {
                             if (data.isChecksss()) {
                                 int buyNum = data.getBuyNum();
                                 Double goodsPrice = data.getGoodsPrice();
 //                                allPrice = allPrice + (goodsPrice * buyNum);
                                 String moneyMul = MoneyUtil.moneyMul(goodsPrice + "", buyNum + "");
-                                allPrice = MoneyUtil.moneyAdd(allPrice,moneyMul);
+                                allPrice = MoneyUtil.moneyAdd(allPrice, moneyMul);
                             }
                         }
 
@@ -227,6 +233,66 @@ public class ShoppingCarActivity extends MvpActivity<ShoppingCarPresenter> imple
 
                 adapter.setDataList(datas);
                 adapter.notifyDataSetChanged();
+
+                break;
+            case R.id.tv_delete:
+//                showToast("购买");
+                //TODO 去订单页面
+                OrderGoodsListEntity entity = new OrderGoodsListEntity();
+                List<OrderGoods> newDatas = new ArrayList<>();
+
+
+                //把选中的数据取出来，只要商品，店铺后面再加。
+                for (int i = 0; i < datas.size(); i++) {
+
+                    int head = datas.get(i).getHead();
+                    if (head == 0) {
+                        boolean checksss = datas.get(i).isChecksss();
+                        if (checksss) {
+                            newDatas.add(datas.get(i));
+                        }
+                    }
+
+                }
+
+                if (newDatas.size() == 0) {
+                    showToast("您还没有选择宝贝哦");
+                    return;
+                }
+                //加上店铺
+
+                //存id的list
+                List<String> ids = new ArrayList<>();
+                List<OrderGoods> addShopList = new ArrayList<>();
+                for (int i = 0; i < newDatas.size(); i++) {
+                    String goodsId = newDatas.get(i).getUserId();
+
+                    //如果不包含商品id，就add进去
+                    if (!ids.contains(goodsId)) {
+                        ids.add(goodsId);
+                        String title = newDatas.get(i).getTitle();
+
+                        OrderGoods orderGoodsEntity = new OrderGoods();
+                        orderGoodsEntity.setHead(1);    //用head来做布局不同的显示
+                        orderGoodsEntity.setTitle(title); //显示店铺名布局
+                        orderGoodsEntity.setGoodsId(newDatas.get(i).getGoodsId()); //用id来做选中状态
+                        orderGoodsEntity.setUserId(newDatas.get(i).getUserId());
+                        addShopList.add(orderGoodsEntity);
+                    }
+                    //再把商品data add进去
+                    addShopList.add(newDatas.get(i));
+                }
+
+
+                entity.setData(addShopList);
+
+                String goodsJson = JSON.toJSONString(entity);
+                L.i(goodsJson);
+                //订单页
+                Intent intent = new Intent(context, WriteOrderActivity.class);
+                intent.putExtra("goodsJson", goodsJson);
+                startActivity(intent);
+
 
                 break;
         }

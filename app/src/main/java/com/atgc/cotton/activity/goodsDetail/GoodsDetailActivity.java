@@ -96,18 +96,22 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
 //        vpImg.setLayoutParams(layoutParams);
 
 
+
     }
 
     protected void initData() {
         //TODO 先用测试数据
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            String goodId = bundle.getString("goodId", "");
-            if (!TextUtils.isEmpty(goodId)) {
-                mPresenter.getGoodsDetail(Integer.parseInt(goodId));
-                mDbUtils = DbUtils.create(this);
-            }
-        }
+//        Bundle bundle = getIntent().getExtras();
+//        if (bundle != null) {
+//            String goodId = bundle.getString("goodId", "");
+//            if (!TextUtils.isEmpty(goodId)) {
+//                mPresenter.getGoodsDetail(Integer.parseInt(goodId));
+//                mDbUtils = DbUtils.create(this);
+//            }
+//        }
+
+        mPresenter.getGoodsDetail(Integer.parseInt("58"));
+        mDbUtils = DbUtils.create(this);
     }
 
     @Override
@@ -213,7 +217,6 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
             @Override
             public void onClick(View v) {
 
-                showToast("加入购物车");
 
 
                 Map<String, Set<Integer>> map2 = adapter.getMap2();   //是否选中
@@ -394,7 +397,8 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
         try {
             L.i(list.toString());
             mDbUtils.saveAll(list);
-//            mDbUtils.deleteAll(OrderGoods.class);
+//            mDbUtils.deleteAll(OrderGoods.class);      //调试用
+            showToast("已加入购物车");
 
         } catch (Exception e) {
             e.printStackTrace();

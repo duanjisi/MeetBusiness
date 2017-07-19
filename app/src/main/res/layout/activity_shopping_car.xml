@@ -47,7 +47,7 @@
         android:textColor="@color/white"
         android:background="@color/edit_red"
         android:gravity="center"
-        android:text="删除"
+        android:text="购买"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="50dp" />
@@ -72,8 +72,8 @@
             android:src="@drawable/unchecked"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:layout_width="25dp"
-            android:layout_height="25dp" />
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
 
         <TextView
 

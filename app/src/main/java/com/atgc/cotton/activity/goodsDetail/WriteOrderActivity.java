@@ -8,17 +8,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.MvpActivity;
 import com.atgc.cotton.adapter.GoodsOrderAdapter;
-import com.atgc.cotton.entity.GoodsDetailEntity;
 import com.atgc.cotton.entity.OrderGoods;
-import com.atgc.cotton.entity.OrderGoodsEntity;
 import com.atgc.cotton.entity.OrderGoodsListEntity;
 import com.atgc.cotton.presenter.PutOrderPresenter;
 import com.atgc.cotton.presenter.view.IPutOrderView;
+import com.atgc.cotton.util.MoneyUtil;
 
 import java.util.List;
 
@@ -40,6 +40,8 @@ public class WriteOrderActivity extends MvpActivity<PutOrderPresenter> implement
     Button btnOrder;
     @Bind(R.id.rv_content)
     RecyclerView rvContent;
+    @Bind(R.id.tv_price)
+    TextView tvPrice;
 
     private String buyNum;
     private String type;
@@ -79,6 +81,19 @@ public class WriteOrderActivity extends MvpActivity<PutOrderPresenter> implement
         adapter.setDatas(datas);
         adapter.notifyDataSetChanged();
 
+        String allPrice = "0";
+
+        for (int i = 0; i < datas.size(); i++) {
+            int head = datas.get(i).getHead();
+            if(head==0){
+                int buyNum = datas.get(i).getBuyNum();
+                Double goodsPrice = datas.get(i).getGoodsPrice();
+                String singlePrice = MoneyUtil.moneyMul(buyNum + "", goodsPrice + "");
+                allPrice = MoneyUtil.moneyAdd(allPrice, singlePrice);
+            }
+
+        }
+        tvPrice.setText("¥ "+allPrice);
 
     }
 

@@ -61,6 +61,7 @@ public class PersonalSetActivity extends BaseActivity implements View.OnClickLis
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        App.getInstance().logout();
                         openActivity(MainActivity.class);
                         App.getInstance().exit();
                     }
