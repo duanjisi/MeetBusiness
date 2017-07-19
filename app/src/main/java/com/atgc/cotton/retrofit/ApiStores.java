@@ -95,6 +95,23 @@ public interface ApiStores {
     @PUT("user/address/{id}")
     Observable<String> editAddress(@Header("Authorization") String token, @Path("id") int id, @PartMap Map<String, String> params);
 
+    //发送短信验证码
+    @FormUrlEncoded
+    @POST("public/regsms")
+    Observable<String> sendCode(@FieldMap Map<String, String> params);
+
+    //重置密码
+    @FormUrlEncoded
+    @POST("public/resetpsw")
+    Observable<String> resetPsw(@FieldMap Map<String, String> params);
+
+    //找回密码发送手机短信
+    @FormUrlEncoded
+    @POST("public/resetsms")
+    Observable<String> sendRestCode(@FieldMap Map<String, String> params);
+
+
+
 
 
 }

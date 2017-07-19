@@ -51,7 +51,7 @@
         android:inputType="textPassword"
         android:textCursorDrawable="@null"
         android:layout_marginLeft="20dp"
-        android:hint="密码6~16个字符"
+        android:hint="新密码(6-16字符)"
         android:background="@null"
         android:textSize="17.5sp"
         android:textColorHint="@color/hint_text_color"
@@ -125,7 +125,7 @@
         android:layout_marginRight="22dp"
         android:background="@drawable/edit_shape"
         android:gravity="center"
-        android:text="注册"
+        android:text="确认重置密码"
         android:textColor="@color/white"
         android:textSize="17.5sp" />
 

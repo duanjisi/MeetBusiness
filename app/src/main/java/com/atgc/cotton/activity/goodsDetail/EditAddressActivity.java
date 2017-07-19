@@ -449,6 +449,5 @@ public class EditAddressActivity extends MvpActivity<AddAddressPresenter> implem
     @Override
     public void getDataFail() {
         showToast("保存失败");
-
     }
 }

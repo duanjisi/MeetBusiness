@@ -41,6 +41,10 @@ public class ChooseAddressActivity extends MvpActivity<ChooseAddressPresenter> i
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_choose_address);
+        initUI();
+        initData();
         EventBus.getDefault().register(this);
     }
 
@@ -50,13 +54,6 @@ public class ChooseAddressActivity extends MvpActivity<ChooseAddressPresenter> i
         EventBus.getDefault().unregister(this);
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-
-        setContentView(R.layout.activity_choose_address);
-        initUI();
-        initData();
-    }
 
     protected void initUI() {
         btnAdd = (Button) findViewById(R.id.btn_add);
