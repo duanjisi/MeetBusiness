@@ -11,5 +11,6 @@ public class Constants {
 
     public static final class Action {
         public static final String UPDATE_ACCOUNT_INFORM = "com.atgc.cotton.update.account.inform";
+        public static final String EXIT_CURRENT_ACTIVITY = "com.atgc.cotton.exit.current.activity";
     }
 }

@@ -213,7 +213,7 @@ public class OtherPlayerActivity extends BaseActivity implements
             tv_time.setText(TimeUtil.getDateTime(videoEntity.getAddTime()));
             tv_play_num.setText(videoEntity.getBrowseCount() + "播放");
             tv_like.setText(videoEntity.getLikeCount());
-            tv_com_num.setText(videoEntity.getContent() + "评论");
+            tv_com_num.setText(videoEntity.getCommentCount() + "评论");
             imageLoader.displayImage(videoEntity.getAvatar(), iv_header, ImageLoaderUtils.getDisplayImageOptions());
             initShareData();
         }

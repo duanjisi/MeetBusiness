@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_11"
+        android:layout_marginRight="@dimen/dp_11">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_11">
+
+            <ImageView
+                android:id="@+id/iv_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/selected" />
+
+            <com.atgc.cotton.widget.RoundImageView
+                android:id="@+id/iv_good_bg"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginLeft="@dimen/dp_11"
+                android:layout_toRightOf="@+id/iv_tag"
+                android:src="@drawable/person"
+                app:round_borderRadius="8dp"
+                app:round_type="1" />
+
+            <TextView
+                android:id="@+id/tv_good_describe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_11"
+                android:layout_toRightOf="@+id/iv_good_bg"
+                android:ellipsize="end"
+                android:lines="2"
+                android:text="适当放宽适当放宽四大皆空放假了的时间思考的方式房间"
+                android:textColor="@color/main_default_color"
+                android:textSize="13.5sp" />
+
+            <TextView
+                android:id="@+id/tv_good_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/tv_good_describe"
+                android:layout_below="@+id/tv_good_describe"
+                android:layout_marginTop="13dp"
+                android:text="化妆品净含量：100ml" />
+
+            <TextView
+                android:id="@+id/tv_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/tv_good_content"
+                android:layout_below="@+id/tv_good_content"
+                android:layout_marginTop="13dp"
+                android:text="113"
+                android:textColor="@color/edit_red" />
+
+            <TextView
+                android:id="@+id/tv_volum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/tv_good_content"
+                android:layout_marginTop="13dp"
+                android:text="库存：3000"
+                android:textColor="@color/text_color_gray_a" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="@dimen/dp_11"
+        android:background="@color/line_color_gray_d1"
+        android:orientation="horizontal"></LinearLayout>
+</LinearLayout>

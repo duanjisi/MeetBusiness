@@ -147,6 +147,9 @@
             android:name=".activity.production.other.OtherPlayerActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.videoedit.VendGoodsActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.RegisterActivity"
             android:screenOrientation="portrait"></activity>
 
@@ -154,12 +157,11 @@
             android:name=".activity.goodsDetail.WriteOrderActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.ChooseAddressActivity"
+            android:name=".activity.goodsDetail.WriteOrderActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.goodsDetail.WriteOrderActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.goodsDetail.ChooseAddressActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.goodsDetail.ChooseAddressActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activity.goodsDetail.EditAddressActivity"

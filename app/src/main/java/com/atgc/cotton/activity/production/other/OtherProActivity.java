@@ -1,5 +1,6 @@
 package com.atgc.cotton.activity.production.other;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
@@ -47,7 +48,7 @@ import java.util.ArrayList;
  */
 public class OtherProActivity extends BaseActivity implements View.OnClickListener, SharePopup.OnItemSelectedListener, MorePopup.OnItemdListener {
     private static final String TAG = OtherProActivity.class.getSimpleName();
-    private ImageView iv_back, iv_share, iv_more, iv_bg;
+    private ImageView iv_back, iv_more, iv_bg;
     private TextView tv_name, tv_focus, tv_fans, tv_msg, tv_fos, tv_intro;
     private VideoEntity videoEntity;
     private ImageLoader imageLoader;
@@ -71,7 +72,7 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
         imageLoader = ImageLoaderUtils.createImageLoader(context);
         videoEntity = (VideoEntity) getIntent().getExtras().getSerializable("obj");
         iv_back = (ImageView) findViewById(R.id.iv_back);
-        iv_share = (ImageView) findViewById(R.id.iv_share);
+//        iv_share = (ImageView) findViewById(R.id.iv_share);
         iv_more = (ImageView) findViewById(R.id.iv_more);
         iv_bg = (ImageView) findViewById(R.id.iv_bg);
 
@@ -83,7 +84,7 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
         tv_intro = (TextView) findViewById(R.id.tv_intro);
 
         iv_back.setOnClickListener(this);
-        iv_share.setOnClickListener(this);
+//        iv_share.setOnClickListener(this);
         iv_more.setOnClickListener(this);
         tv_msg.setOnClickListener(this);
         tv_fos.setOnClickListener(this);
@@ -114,7 +115,12 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
     private class itemClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+            VideoEntity videoEntity = (VideoEntity) adapterView.getItemAtPosition(i);
+            if (videoEntity != null) {
+                Intent intent = new Intent(context, OtherPlayerActivity.class);
+                intent.putExtra("obj", videoEntity);
+                startActivity(intent);
+            }
         }
     }
 
@@ -124,15 +130,15 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
             case R.id.iv_back:
                 finish();
                 break;
-            case R.id.iv_share:
-                if (!isFinishing()) {
-                    if (sharePopup.isShowing()) {
-                        sharePopup.dismiss();
-                    } else {
-                        sharePopup.show(getWindow().getDecorView());
-                    }
-                }
-                break;
+//            case R.id.iv_share:
+//                if (!isFinishing()) {
+//                    if (sharePopup.isShowing()) {
+//                        sharePopup.dismiss();
+//                    } else {
+//                        sharePopup.show(getWindow().getDecorView());
+//                    }
+//                }
+//                break;
             case R.id.iv_more:
                 if (!isFinishing()) {
                     if (morePopup.isShowing()) {

@@ -107,7 +107,7 @@ public abstract class MainFragment extends BaseFragment implements AMapLocationL
                     @Override
                     public void run() {
                         if (getType() != TYPE_NEAR) {
-                            showToast("加载更多~", false);
+//                            showToast("加载更多~", false);
                             requestMoreDatas();
                         }
                     }
