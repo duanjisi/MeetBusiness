@@ -26,8 +26,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.atgc.cotton.Constants;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
+import com.atgc.cotton.entity.ActionEntity;
 import com.atgc.cotton.entity.AuthEntity;
 import com.atgc.cotton.http.BaseDataRequest;
 import com.atgc.cotton.http.request.AuthRequest;
@@ -44,6 +46,9 @@ import com.ksyun.media.streamer.kit.StreamerConstants;
 import com.ksyun.media.streamer.logstats.StatsLogReport;
 
 import java.io.File;
+
+import de.greenrobot.event.EventBus;
+import de.greenrobot.event.Subscribe;
 
 /**
  * Created by Johnny on 2017/6/26.
@@ -88,6 +93,7 @@ public class RecordVideoActivity extends BaseActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_record_video);
+        EventBus.getDefault().register(this);
         //must set
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -189,6 +195,15 @@ public class RecordVideoActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
+    @Subscribe
+    public void onMessageEvent(ActionEntity event) {
+        if (event != null) {
+            String action = event.getAction();
+            if (action.equals(Constants.Action.EXIT_CURRENT_ACTIVITY)) {
+                finish();
+            }
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -684,6 +699,7 @@ public class RecordVideoActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         if (mMainHandler != null) {
             mMainHandler.removeCallbacksAndMessages(null);
             mMainHandler = null;

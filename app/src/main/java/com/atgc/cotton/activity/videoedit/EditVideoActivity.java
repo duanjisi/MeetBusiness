@@ -50,6 +50,7 @@ import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.adapter.FilterAdapter;
 import com.atgc.cotton.adapter.VideoThumbAdapter;
+import com.atgc.cotton.entity.ActionEntity;
 import com.atgc.cotton.entity.FilterEntity;
 import com.atgc.cotton.listener.PermissionListener;
 import com.atgc.cotton.photoedit.TextObject;
@@ -74,6 +75,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import de.greenrobot.event.EventBus;
+import de.greenrobot.event.Subscribe;
 
 /**
  * Created by Johnny on 2017/6/26.
@@ -201,7 +205,18 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_video);
+        EventBus.getDefault().register(this);
         initViews();
+    }
+
+    @Subscribe
+    public void onMessageEvent(ActionEntity event) {
+        if (event != null) {
+            String action = event.getAction();
+            if (action.equals(Constants.Action.EXIT_CURRENT_ACTIVITY)) {
+                finish();
+            }
+        }
     }
 
     private void initViews() {
@@ -786,6 +801,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         if (mComposeAlertDialog != null) {
             mComposeAlertDialog.closeDialog();
             mComposeAlertDialog = null;
