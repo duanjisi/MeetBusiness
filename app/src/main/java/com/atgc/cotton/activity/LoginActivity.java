@@ -59,6 +59,7 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
     TextView tvBottom;
 
 
+
     @Override
     protected LoginPresenter createPresenter() {
         return new LoginPresenter(this, context);

@@ -111,6 +111,12 @@ public interface ApiStores {
     Observable<String> sendRestCode(@FieldMap Map<String, String> params);
 
 
+    //下订单
+    @FormUrlEncoded
+    @POST("order/")
+    Observable<String> order(@Header("Authorization") String token,@FieldMap Map<String, String> params);
+
+
 
 
 

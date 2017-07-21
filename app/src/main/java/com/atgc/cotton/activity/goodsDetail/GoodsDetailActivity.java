@@ -110,7 +110,7 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
 //            }
 //        }
 
-        mPresenter.getGoodsDetail(Integer.parseInt("58"));
+        mPresenter.getGoodsDetail(Integer.parseInt("57"));
         mDbUtils = DbUtils.create(this);
     }
 
@@ -235,9 +235,11 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
                     String key = entry.getKey();    // 分类类别
                     String value = entry.getValue(); //分类名
                     L.i(key + value);
-                    type = type + key + ": " + value + "  "; //暂时用空格分开
+                    type = type + key + ":" + value + "|"; //暂时用空格分开
                 }
+                type = type.substring(0,type.length()-1);
                 //购买数量
+
                 String buyNum = et_repertory.getText().toString();
                 String imgUrl = imgList.get(0);
 
@@ -355,12 +357,25 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
                 entity.setUserId(userId);
 
                 List<OrderGoods> datas = new ArrayList<>();
+
+                //加上店铺名
+                OrderGoods orderGoodsEntity = new OrderGoods();
+                orderGoodsEntity.setHead(1);    //用head来做布局不同的显示
+                orderGoodsEntity.setTitle(userName); //显示店铺名布局
+                orderGoodsEntity.setGoodsId(goodsId); //用id来做选中状态
+                orderGoodsEntity.setUserId(userId);
+                datas.add(orderGoodsEntity);
+
+
+                //加上商品
                 datas.add(entity);
 
-                OrderGoodsListEntity data = new OrderGoodsListEntity();
-                data.setData(datas);
 
-                String goodsJson = JSON.toJSONString(data);
+
+                OrderGoodsListEntity entity1 = new OrderGoodsListEntity();
+                entity1.setData(datas);
+
+                String goodsJson = JSON.toJSONString(entity1);
                 L.i(goodsJson);
                 //订单页
                 Intent intent = new Intent(context, WriteOrderActivity.class);

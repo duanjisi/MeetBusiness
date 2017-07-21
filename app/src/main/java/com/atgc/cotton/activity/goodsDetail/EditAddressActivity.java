@@ -134,28 +134,29 @@ public class EditAddressActivity extends MvpActivity<AddAddressPresenter> implem
         et_people = (EditText) findViewById(R.id.et_people);
         et_phone = (EditText) findViewById(R.id.et_phone);
         et_address = (EditText) findViewById(R.id.et_address);
-
-        tb_default = (ToggleButton) findViewById(R.id.tb_default);
-        tb_default.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    isDefault = 1;
-                } else {
-                    isDefault = 0;
-                }
-            }
-        });
+//
+        //TODO 默认的接口没有，先自己实现吧
+//        tb_default = (ToggleButton) findViewById(R.id.tb_default);
+//        tb_default.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if (isChecked) {
+//                    isDefault = 1;
+//                } else {
+//                    isDefault = 0;
+//                }
+//            }
+//        });
 
         et_people.setText(consignee);
         et_phone.setText(contact);
         et_address.setText(address);
         tv_content.setText(location);
-        if (isDefault == 1) {
-            tb_default.setChecked(true);
-        } else {
-            tb_default.setChecked(false);
-        }
+//        if (isDefault == 1) {
+//            tb_default.setChecked(true);
+//        } else {
+//            tb_default.setChecked(false);
+//        }
 
     }
 
@@ -215,7 +216,7 @@ public class EditAddressActivity extends MvpActivity<AddAddressPresenter> implem
         map.put("contact", phone);
         map.put("consignee", people);
         map.put("address", address);
-        map.put("isdefault", isDefault + "");   //1是默认 不是   该参数可不传
+//        map.put("isdefault", isDefault + "");   //1是默认 不是   该参数可不传
         Log.i("liwya", map.toString());
 
         String token = App.getInstance().getToken();

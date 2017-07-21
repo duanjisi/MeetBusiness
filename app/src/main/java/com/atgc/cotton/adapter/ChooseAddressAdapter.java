@@ -15,6 +15,8 @@ import com.atgc.cotton.R;
 import com.atgc.cotton.activity.goodsDetail.EditAddressActivity;
 import com.atgc.cotton.entity.AddressListEntity;
 import com.atgc.cotton.entity.LocalAddressEntity;
+import com.atgc.cotton.event.ChangeAddressState;
+import com.atgc.cotton.util.PreferenceUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,6 +24,8 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by liw on 2017/7/12.
@@ -102,7 +106,7 @@ public class ChooseAddressAdapter extends BaseRecycleViewAdapter {
 
     @Override
     public void onBindItemHolder(RecyclerView.ViewHolder holder, final int position) {
-        ChooseAddressHolder holder1 = (ChooseAddressHolder) holder;
+        final ChooseAddressHolder holder1 = (ChooseAddressHolder) holder;
 
         final AddressListEntity.DataBean item = (AddressListEntity.DataBean) datas.get(position);
         holder1.tv_people.setText(item.getConsignee() + "        " + item.getContact());
@@ -115,12 +119,12 @@ public class ChooseAddressAdapter extends BaseRecycleViewAdapter {
 
         String Myaddress = location + item.getAddress();
         holder1.tv_address.setText(Myaddress);
-        if (item.getIsDefault() == 1) {
-            holder1.img_choose.setImageResource(R.drawable.selected);
-
-        } else {
-            holder1.img_choose.setImageResource(R.drawable.unchecked);
-        }
+//        if (item.getIsDefault() == 1) {
+//            holder1.img_choose.setImageResource(R.drawable.selected);
+//
+//        } else {
+//            holder1.img_choose.setImageResource(R.drawable.unchecked);
+//        }
         holder1.btn_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,6 +152,23 @@ public class ChooseAddressAdapter extends BaseRecycleViewAdapter {
                 context.startActivity(intent);
 
 
+            }
+        });
+
+        holder1.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AddressListEntity.DataBean dataBean = (AddressListEntity.DataBean) datas.get(position);
+
+                dataBean.setLocation(location);     //把省市区，存进去
+
+                String addressJson = JSON.toJSONString(dataBean);
+
+                PreferenceUtils.putString(context,"addressJson",addressJson);
+                EventBus.getDefault().post(new ChangeAddressState(""));
+
+                itemListener.onItemClick(holder1.getLayoutPosition());
             }
         });
 

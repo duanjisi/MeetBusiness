@@ -55,14 +55,14 @@ public class ShoppingCarAdapter extends ListBaseAdapter<OrderGoods> {
 
                             String userId = mDataList.get(position).getUserId();//店铺id
                             int _id = mDataList.get(position).get_id();
-
+                            boolean checksss = mDataList.get(position).isChecksss();
                             int headpos = -1;
                             List<Integer> goodIds = new ArrayList<>();
                             mDataList.remove(position); //先删除掉这个data
                             notifyItemRemoved(position);
 
                             try {
-                                if(mDbUtils!=null){
+                                if (mDbUtils != null) {
 
                                     mDbUtils.delete(OrderGoods.class, WhereBuilder.b("_id", "=", _id));
                                 }
@@ -84,6 +84,25 @@ public class ShoppingCarAdapter extends ListBaseAdapter<OrderGoods> {
                             if (goodIds.size() == 0) {
                                 mDataList.remove(headpos);
                                 notifyItemRemoved(headpos);
+                            }
+                            //刷新选中金额，和全选状态
+                            List<Boolean> allChecks = new ArrayList<>(); //所有商店商品id的选中状态,用来刷新activity的全选图标
+
+                            if (mDataList.size() == 0) {     //如果没有商品了，也要去刷新全选状态
+                                mOnRefreshListener.onRfresh(mDataList, false);
+                                return;
+                            }
+
+                            for (int i = 0; i < mDataList.size(); i++) {       //所有商店所有商品的check状态     这个是为了刷新activity的Ui
+                                boolean check = mDataList.get(i).isChecksss();
+                                allChecks.add(check);
+                            }
+
+                            if (!allChecks.contains(false)) {     //所有都是全选中，通知activity刷新ui
+                                mOnRefreshListener.onRfresh(mDataList, true);
+                            }
+                            if (allChecks.contains(false)) {  //有一个没选中
+                                mOnRefreshListener.onRfresh(mDataList, false);
                             }
 
 
@@ -266,5 +285,13 @@ public class ShoppingCarAdapter extends ListBaseAdapter<OrderGoods> {
 
     public void setDb(DbUtils mDbUtils) {
         this.mDbUtils = mDbUtils;
+    }
+
+    public void chooseRefresh(boolean check) {
+        for (OrderGoods data : mDataList) {
+            data.setChecksss(check);
+        }
+        notifyDataSetChanged();
+
     }
 }

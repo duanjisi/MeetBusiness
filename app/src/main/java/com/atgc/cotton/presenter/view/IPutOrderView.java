@@ -6,4 +6,5 @@ package com.atgc.cotton.presenter.view;
 
 public interface IPutOrderView extends IBaseView {
 
+
 }

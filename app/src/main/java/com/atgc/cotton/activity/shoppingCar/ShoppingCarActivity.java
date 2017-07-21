@@ -18,6 +18,7 @@ import com.atgc.cotton.adapter.ShoppingCarAdapter;
 import com.atgc.cotton.entity.OrderGoods;
 import com.atgc.cotton.entity.OrderGoodsListEntity;
 import com.atgc.cotton.entity.ShoopingEntity;
+import com.atgc.cotton.event.RefreshShoopingCar;
 import com.atgc.cotton.presenter.ShoppingCarPresenter;
 import com.atgc.cotton.presenter.view.INormalView;
 import com.atgc.cotton.util.L;
@@ -32,6 +33,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import de.greenrobot.event.EventBus;
+import de.greenrobot.event.Subscribe;
 
 
 /**
@@ -55,13 +59,27 @@ public class ShoppingCarActivity extends MvpActivity<ShoppingCarPresenter> imple
     private TextView tv_delete;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        EventBus.getDefault().register(this);
         setContentView(R.layout.activity_shopping_car);
         initUI();
         initData();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+    @Subscribe
+    public void onEvent(RefreshShoopingCar event){
+        initData();
+        tv_num.setText("0");
+
     }
 
     private void initData() {
@@ -144,14 +162,17 @@ public class ShoppingCarActivity extends MvpActivity<ShoppingCarPresenter> imple
         });
         adapter.setOnRefreshListener(new ShoppingCarAdapter.onRefreshListener() {
             @Override
-            public void onRfresh(List<OrderGoods> datas, boolean b) {
-                if (b) {
+            public void onRfresh(List<OrderGoods> mDataList, boolean b) {
+                check = b;
+                datas = mDataList;   //数据可以传过来，但是不能再setdatas给adapter了。
+                if (check) {
                     img_choose.setImageResource(R.drawable.selected);
                 } else {
                     img_choose.setImageResource(R.drawable.unchecked);
                 }
                 String allPrice = "0";
-                for (OrderGoods data : datas) {
+
+                for (OrderGoods data : mDataList) {
                     if (data.isChecksss()) {
                         if (data.getHead() == 0) {
                             int buyNum = data.getBuyNum();
@@ -205,25 +226,21 @@ public class ShoppingCarActivity extends MvpActivity<ShoppingCarPresenter> imple
                     img_choose.setImageResource(R.drawable.unchecked);
                     check = false;
                 }
-                for (OrderGoods data : datas) {
-                    data.setChecksss(check);
-                }
+
 
                 if (!check) {
-                    tv_num.setText(null);
+                    tv_num.setText("0");
 
                 } else {
 
                     String allPrice = "0";
                     for (OrderGoods data : datas) {
                         if (data.getHead() == 0) {
-                            if (data.isChecksss()) {
                                 int buyNum = data.getBuyNum();
                                 Double goodsPrice = data.getGoodsPrice();
 //                                allPrice = allPrice + (goodsPrice * buyNum);
                                 String moneyMul = MoneyUtil.moneyMul(goodsPrice + "", buyNum + "");
                                 allPrice = MoneyUtil.moneyAdd(allPrice, moneyMul);
-                            }
                         }
 
                     }
@@ -231,13 +248,10 @@ public class ShoppingCarActivity extends MvpActivity<ShoppingCarPresenter> imple
                 }
 
 
-                adapter.setDataList(datas);
-                adapter.notifyDataSetChanged();
+                adapter.chooseRefresh(check);
 
                 break;
             case R.id.tv_delete:
-//                showToast("购买");
-                //TODO 去订单页面
                 OrderGoodsListEntity entity = new OrderGoodsListEntity();
                 List<OrderGoods> newDatas = new ArrayList<>();
 
@@ -287,7 +301,6 @@ public class ShoppingCarActivity extends MvpActivity<ShoppingCarPresenter> imple
                 entity.setData(addShopList);
 
                 String goodsJson = JSON.toJSONString(entity);
-                L.i(goodsJson);
                 //订单页
                 Intent intent = new Intent(context, WriteOrderActivity.class);
                 intent.putExtra("goodsJson", goodsJson);
@@ -307,4 +320,5 @@ public class ShoppingCarActivity extends MvpActivity<ShoppingCarPresenter> imple
     public void getDataFail() {
 
     }
+
 }
