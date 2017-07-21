@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import com.atgc.cotton.listener.RecycleViewItemListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -58,6 +59,19 @@ public abstract class BaseRecycleViewAdapter<T, VH extends RecyclerView.ViewHold
 
         if (position != (datas.size())) { // 如果移除的是最后一个，忽略
             notifyItemRangeChanged(position, this.datas.size() - position);
+        }
+    }
+
+    public void setDataList(Collection<T> list) {
+        this.datas.clear();
+        this.datas.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    public void addAll(Collection<T> list) {
+        int lastIndex = this.datas.size();
+        if (this.datas.addAll(list)) {
+            notifyItemRangeInserted(lastIndex, list.size());
         }
     }
 }

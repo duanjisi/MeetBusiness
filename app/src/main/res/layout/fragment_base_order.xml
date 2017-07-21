@@ -17,4 +17,13 @@
         android:clipToPadding="false"
         android:padding="@dimen/dp_10" />
 
+    <TextView
+        android:id="@+id/tv_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:text="空空如也~"
+        android:visibility="gone" />
+
 </LinearLayout>
