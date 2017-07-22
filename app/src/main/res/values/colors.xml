@@ -4,12 +4,17 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="white">#ffffff</color>
+    <color name="bg_rectangle">#CCCCCC</color>
     <color name="black">#000000</color>
+    <color name="bt_bg_gray">#DFDFDF</color>
+    <color name="main_color_blue">#5381c5</color>
+    <color name="background_color_gray">#f6f6f6</color>
     <color name="transparent">#00000000</color>
     <color name="text_gray_darker">#666666</color>
     <color name="menu_text_color_default">#f69600</color>
     <color name="main_checked_color">#8e97a5</color>
     <color name="main_default_color">#293d55</color>
+    <color name="text_color_yellow">#e7d09a</color>
     <!-- 线条颜色 start -->
     <color name="line_color_gray_d1">#d1d1d1</color>
     <color name="line_color_gray_d2">#dddddd</color>

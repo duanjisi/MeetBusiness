@@ -14,7 +14,6 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <uses-feature android:name="android.hardware.camera" />
@@ -104,6 +103,9 @@
             android:name=".activity.videoedit.ShareVideoActivity"
             android:screenOrientation="portrait"></activity>
         <activity
+            android:name=".activity.videoedit.SearchAddressActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
             android:name=".activity.production.mine.EditDataActivity"
             android:screenOrientation="portrait"></activity>
         <activity
@@ -157,9 +159,6 @@
             android:name=".activity.goodsDetail.WriteOrderActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.goodsDetail.WriteOrderActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.goodsDetail.ChooseAddressActivity"
             android:screenOrientation="portrait" />
 
@@ -170,6 +169,10 @@
         <activity
             android:name=".activity.goodsDetail.EditAddressActivity"
             android:screenOrientation="portrait" />
+
+        <service
+            android:name=".services.UpdateService"
+            android:enabled="true"></service>
 
         <!-- 定位需要的服务 -->
         <service android:name="com.amap.api.location.APSService" />

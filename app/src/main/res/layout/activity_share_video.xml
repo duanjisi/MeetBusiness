@@ -111,7 +111,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:text="添加地理位置>" />
+                        android:text="添加地理位置" />
                 </RelativeLayout>
 
                 <LinearLayout

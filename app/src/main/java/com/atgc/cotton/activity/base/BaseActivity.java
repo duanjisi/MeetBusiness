@@ -7,12 +7,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.atgc.cotton.App;
 import com.atgc.cotton.R;
+import com.atgc.cotton.activity.LoginActivity;
+import com.atgc.cotton.util.CommonDialogUtils;
 import com.atgc.cotton.widget.DialogFactory;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.controller.UMServiceFactory;
@@ -30,6 +33,7 @@ public class BaseActivity extends FragmentActivity {
     // 首先在您的Activity中添加如下成员变量
     final public UMSocialService mController = UMServiceFactory
             .getUMSocialService("com.umeng.share");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +41,7 @@ public class BaseActivity extends FragmentActivity {
         App.getInstance().addTempActivity(this);
         context = this;
     }
+
     protected void addQQQZonePlatform() {
         String appId = getString(R.string.qq_app_id);
         String appKey = getString(R.string.qq_app_key);
@@ -175,6 +180,22 @@ public class BaseActivity extends FragmentActivity {
         }
     }
 
+    protected void showTipsDialog() {
+        String msg = "应用未登录,你确定登录么?";
+        CommonDialogUtils.showDialog(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CommonDialogUtils.dismiss();
+            }
+        }, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivity(LoginActivity.class);
+                CommonDialogUtils.dismiss();
+            }
+        }, context, msg);
+    }
+
     /**
      * @param resId  资源ID
      * @param length true为长时间，false为短时间
@@ -207,7 +228,7 @@ public class BaseActivity extends FragmentActivity {
     }
 
     /**
-     * @param msg    内容
+     * @param msg 内容
      * @return: void
      */
     protected void showToast(String msg) {

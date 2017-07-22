@@ -10,6 +10,8 @@ public class Constants {
     public static final String ACTION_LOGOUT_RESETING = "com.boss66.meetbusiness.logout.reseting";
 
     public static final class Action {
+        //显示主页
+        public static final String SHOW_HOME_ACTION = "com.atgc.cotton.SHOW_HOME_ACTION";
         public static final String UPDATE_ACCOUNT_INFORM = "com.atgc.cotton.update.account.inform";
         public static final String EXIT_CURRENT_ACTIVITY = "com.atgc.cotton.exit.current.activity";
     }

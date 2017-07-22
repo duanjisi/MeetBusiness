@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.atgc.cotton.App;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.activity.goodsDetail.GoodsDetailActivity;
@@ -317,6 +318,7 @@ public class OtherPlayerActivity extends BaseActivity implements
         }
     }
 
+
     @Override
     public void onScrollChanged(ScrollView scrollView, int x, int y, int oldx, int oldy) {
         Log.i("info", "================x:" + x + "\n" + "y:" + y + "  oldx:" + oldx + "\n" + "oldy:" + oldy);
@@ -522,7 +524,6 @@ public class OtherPlayerActivity extends BaseActivity implements
         if (videoEntity == null) {
             return;
         }
-//        MyGoodRequest request = new MyGoodRequest(TAG, videoEntity.getGoodsId());
         MyGoodRequest request = new MyGoodRequest(TAG, "26,47,49,52");
         request.send(new BaseDataRequest.RequestCallback<BaseGood>() {
             @Override
@@ -638,6 +639,10 @@ public class OtherPlayerActivity extends BaseActivity implements
     }
 
     private void praiseRequest() {
+        if (!App.getInstance().isLogin()) {
+            showTipsDialog();
+            return;
+        }
         if (videoEntity == null) {
             return;
         }
@@ -657,6 +662,10 @@ public class OtherPlayerActivity extends BaseActivity implements
     }
 
     private void praiseUnRequest() {
+        if (!App.getInstance().isLogin()) {
+            showTipsDialog();
+            return;
+        }
         if (videoEntity == null) {
             return;
         }
@@ -710,6 +719,10 @@ public class OtherPlayerActivity extends BaseActivity implements
     }
 
     private void requestCommentStr() {
+        if (!App.getInstance().isLogin()) {
+            showTipsDialog();
+            return;
+        }
         String content = getText(editText);
         if (TextUtils.isEmpty(content)) {
             showToast("评论内容不能为空!", true);
@@ -773,6 +786,10 @@ public class OtherPlayerActivity extends BaseActivity implements
     }
 
     private void focusSomeBodyRequest() {
+        if (!App.getInstance().isLogin()) {
+            showTipsDialog();
+            return;
+        }
         if (videoEntity == null) {
             return;
         }
@@ -798,6 +815,10 @@ public class OtherPlayerActivity extends BaseActivity implements
     }
 
     private void cancelFocusRequest() {
+        if (!App.getInstance().isLogin()) {
+            showTipsDialog();
+            return;
+        }
         if (videoEntity == null) {
             return;
         }
