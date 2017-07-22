@@ -49,7 +49,7 @@ import java.util.ArrayList;
 public class OtherProActivity extends BaseActivity implements View.OnClickListener, SharePopup.OnItemSelectedListener, MorePopup.OnItemdListener {
     private static final String TAG = OtherProActivity.class.getSimpleName();
     private ImageView iv_back, iv_more, iv_bg;
-    private TextView tv_name, tv_focus, tv_fans, tv_msg, tv_fos, tv_intro;
+    private TextView tv_name, tv_focus, tv_fans, tv_fos, tv_intro;
     private VideoEntity videoEntity;
     private ImageLoader imageLoader;
     private SharePopup sharePopup;
@@ -79,14 +79,14 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
         tv_name = (TextView) findViewById(R.id.tv_name);
         tv_focus = (TextView) findViewById(R.id.tv_focus);
         tv_fans = (TextView) findViewById(R.id.tv_fans);
-        tv_msg = (TextView) findViewById(R.id.tv_msg);
+//        tv_msg = (TextView) findViewById(R.id.tv_msg);
         tv_fos = (TextView) findViewById(R.id.tv_focu);
         tv_intro = (TextView) findViewById(R.id.tv_intro);
 
         iv_back.setOnClickListener(this);
 //        iv_share.setOnClickListener(this);
         iv_more.setOnClickListener(this);
-        tv_msg.setOnClickListener(this);
+//        tv_msg.setOnClickListener(this);
         tv_fos.setOnClickListener(this);
         sharePopup = new SharePopup(context, mController);
         sharePopup.setOnItemSelectedListener(this);

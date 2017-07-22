@@ -28,7 +28,8 @@
             android:id="@+id/grid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:numColumns="3">
-        </com.atgc.cotton.widget.MyGridView>
+            android:horizontalSpacing="@dimen/dp_10"
+            android:numColumns="3"
+            android:verticalSpacing="@dimen/dp_10"></com.atgc.cotton.widget.MyGridView>
     </LinearLayout>
 </ScrollView>

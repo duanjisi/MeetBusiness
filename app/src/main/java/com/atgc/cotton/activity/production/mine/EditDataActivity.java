@@ -29,7 +29,7 @@ public class EditDataActivity extends BaseActivity implements View.OnClickListen
     private int ICON_CHANGE_REQUEST = 101;
     private int NAME_SEX_SIGNATURE_REQUEST = 102;
     private ImageView iv_back;
-    private TextView tv_save, tv_copy;
+    private TextView tv_copy;
     private RelativeLayout rl_avatar, rl_nick, rl_sex, rl_id, rl_qr_code, rl_intro;
     private CircleImageView iv_avatar;
     private TextView tv_nick, tv_sex, tv_id, tv_intro;
@@ -51,7 +51,6 @@ public class EditDataActivity extends BaseActivity implements View.OnClickListen
         headUrl = account.getAvatar();
         imageLoader = ImageLoaderUtils.createImageLoader(context);
         iv_back = (ImageView) findViewById(R.id.iv_back);
-        tv_save = (TextView) findViewById(R.id.tv_save);
         tv_copy = (TextView) findViewById(R.id.tv_tag);
         iv_avatar = (CircleImageView) findViewById(R.id.iv_avatar);
 
@@ -68,7 +67,6 @@ public class EditDataActivity extends BaseActivity implements View.OnClickListen
         tv_intro = (TextView) findViewById(R.id.tv_intro);
 
         iv_back.setOnClickListener(this);
-        tv_save.setOnClickListener(this);
         rl_avatar.setOnClickListener(this);
         rl_nick.setOnClickListener(this);
         rl_sex.setOnClickListener(this);
@@ -92,6 +90,11 @@ public class EditDataActivity extends BaseActivity implements View.OnClickListen
             sex.equals("");
         }
         tv_id.setText(account.getUserId());
+        String Sign=account.getSignature();
+        if (!TextUtils.isEmpty(Sign)){
+            isSignatureNull=false;
+            tv_intro.setText(Sign);
+        }
     }
 
     @Override
@@ -99,9 +102,6 @@ public class EditDataActivity extends BaseActivity implements View.OnClickListen
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
-                break;
-            case R.id.tv_save:
-
                 break;
             case R.id.tv_tag://点击复制用户ID
 
@@ -143,9 +143,11 @@ public class EditDataActivity extends BaseActivity implements View.OnClickListen
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ICON_CHANGE_REQUEST && resultCode == RESULT_OK && data != null) {
+            LoginStatus sLoginStatus = LoginStatus.getInstance();
             headUrl = data.getStringExtra("headicon");
             if (!TextUtils.isEmpty(headUrl)) {
                 isChange = true;
+                sLoginStatus.setAvatar(headUrl);
                 imageLoader.displayImage(headUrl, iv_avatar,
                         ImageLoaderUtils.getDisplayImageOptions());
                 EventBus.getDefault().post(new ActionEntity(Constants.Action.UPDATE_ACCOUNT_INFORM));

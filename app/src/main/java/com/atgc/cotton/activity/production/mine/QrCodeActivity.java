@@ -1,5 +1,6 @@
 package com.atgc.cotton.activity.production.mine;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +12,7 @@ import com.atgc.cotton.App;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.entity.AccountEntity;
+import com.atgc.cotton.listener.CreateImageCallback;
 import com.atgc.cotton.util.ImageLoaderUtils;
 import com.atgc.cotton.util.MakeQRCodeUtil;
 import com.atgc.cotton.util.MycsLog;
@@ -87,7 +89,14 @@ public class QrCodeActivity extends BaseActivity implements SharePopup.OnItemSel
         AccountEntity sAccount = App.getInstance().getAccountEntity();
         String user_id = sAccount.getUserId();
         String url = "https://api.66boss.com/web/download?uid=" + user_id;
-        MakeQRCodeUtil.createQRImage(url, screenW, screenW, iv_qr_code);
+        MakeQRCodeUtil.createQRImage(url, screenW, screenW, iv_qr_code, new CreateImageCallback() {
+            @Override
+            public void produce(Bitmap bit) {
+                if (bit != null) {
+                    bitmap = bit;
+                }
+            }
+        });
         String headicon = sAccount.getAvatar();
         imageLoader.displayImage(headicon, avatar,
                 ImageLoaderUtils.getDisplayImageOptions());
@@ -104,8 +113,16 @@ public class QrCodeActivity extends BaseActivity implements SharePopup.OnItemSel
         }
         tv_name.setCompoundDrawables(null, null, nav_up, null);
         tv_id.setText(sAccount.getUserId());
+        initShareData();
     }
 
+    private void initShareData() {
+        shareContent = getResources().getString(R.string.live_share_content);
+        title = App.getInstance().getAccountEntity().getUserName();
+        targetUrl = "http://www.baidu.com/";
+    }
+
+    private Bitmap bitmap;
     private String shareContent;
     private String targetUrl;
     private String title;
@@ -135,7 +152,11 @@ public class QrCodeActivity extends BaseActivity implements SharePopup.OnItemSel
                     //设置分享图片
                     weixinContent.setShareImage(new UMImage(context, imageUrl));
                 } else {
-                    weixinContent.setShareImage(new UMImage(context, R.drawable.logo_circle));
+                    if (bitmap != null) {
+                        weixinContent.setShareImage(new UMImage(context, bitmap));
+                    } else {
+                        weixinContent.setShareImage(new UMImage(context, R.drawable.logo_circle));
+                    }
                 }
                 uMediaObject = weixinContent;
                 break;
@@ -154,7 +175,11 @@ public class QrCodeActivity extends BaseActivity implements SharePopup.OnItemSel
                     //设置分享图片
                     circleMedia.setShareImage(new UMImage(context, imageUrl));
                 } else {
-                    circleMedia.setShareImage(new UMImage(context, R.drawable.ic_launcher));
+                    if (bitmap != null) {
+                        circleMedia.setShareImage(new UMImage(context, bitmap));
+                    } else {
+                        circleMedia.setShareImage(new UMImage(context, R.drawable.logo_circle));
+                    }
                 }
                 uMediaObject = circleMedia;
                 break;
@@ -170,7 +195,11 @@ public class QrCodeActivity extends BaseActivity implements SharePopup.OnItemSel
                     //设置分享图片
                     qqShareContent.setShareImage(new UMImage(context, imageUrl));
                 } else {
-                    qqShareContent.setShareImage(new UMImage(context, R.drawable.logo_circle));
+                    if (bitmap != null) {
+                        qqShareContent.setShareImage(new UMImage(context, bitmap));
+                    } else {
+                        qqShareContent.setShareImage(new UMImage(context, R.drawable.logo_circle));
+                    }
                 }
 
                 qqShareContent.setTargetUrl(targetUrl);
@@ -192,7 +221,11 @@ public class QrCodeActivity extends BaseActivity implements SharePopup.OnItemSel
                     //设置分享图片
                     qzone.setShareImage(new UMImage(context, imageUrl));
                 } else {
-                    qzone.setShareImage(new UMImage(context, R.drawable.logo_circle));
+                    if (bitmap != null) {
+                        qzone.setShareImage(new UMImage(context, bitmap));
+                    } else {
+                        qzone.setShareImage(new UMImage(context, R.drawable.logo_circle));
+                    }
                 }
                 uMediaObject = qzone;
                 break;

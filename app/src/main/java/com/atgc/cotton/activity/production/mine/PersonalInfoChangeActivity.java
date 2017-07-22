@@ -210,6 +210,26 @@ public class PersonalInfoChangeActivity extends BaseActivity implements View.OnC
 //                        cancelLoadingDialog();
 //                    }
 //                });
+                if (TextUtils.isEmpty(value)) {
+                    showToast("个人介绍为空!", true);
+                    return;
+                }
+                HashMap<String, String> map = new HashMap<>();
+                map.put("signature", value);
+                ModifyUserInfoRequest sexRequest = new ModifyUserInfoRequest(TAG, map);
+                sexRequest.send(new BaseDataRequest.RequestCallback<String>() {
+                    @Override
+                    public void onSuccess(String pojo) {
+                        cancelLoadingDialog();
+                        setBackValue(value);
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        showToast(msg, false);
+                        cancelLoadingDialog();
+                    }
+                });
             } else if ("sex".equals(changeType)) {
                 HashMap<String, String> map = new HashMap<>();
                 map.put("sex", value);

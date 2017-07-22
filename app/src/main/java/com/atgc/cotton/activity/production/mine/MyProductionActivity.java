@@ -165,6 +165,9 @@ public class MyProductionActivity extends BaseActivity implements
             case R.id.tv_fans:
 
                 break;
+            case R.id.iv_bg:
+
+                break;
             case R.id.tv_edit:
                 openActivity(EditDataActivity.class);
                 break;
@@ -315,6 +318,7 @@ public class MyProductionActivity extends BaseActivity implements
             tv_title.setCompoundDrawables(null, null, nav_up, null);
             tv_focus.setText("关注：" + entity.getFollowCount());
             tv_fans.setText("粉丝：" + entity.getFansCount());
+            tv_intro.setText(account.getSignature());
             imageLoader.displayImage(account.getAvatar(), iv_bg, ImageLoaderUtils.getDisplayImageOptions());
         }
     }

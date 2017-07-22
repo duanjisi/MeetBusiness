@@ -10,6 +10,7 @@ public class AccountEntity {
     private String Token = "";
     private String UserId = "";
     private String UserName = "";
+    private String Signature = "";
 
     public String getAvatar() {
         return Avatar;
@@ -57,6 +58,15 @@ public class AccountEntity {
 
     public void setUserName(String userName) {
         UserName = userName;
+    }
+
+
+    public String getSignature() {
+        return Signature;
+    }
+
+    public void setSignature(String signature) {
+        Signature = signature;
     }
 
     @Override

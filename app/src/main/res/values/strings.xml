@@ -87,7 +87,7 @@
     <string name="notice_qq_not_install">你未安装QQ！</string>
     <string name="msg_clipping_image">正在裁剪图片</string>
     <string name="action_clip">裁剪</string>
-    <string name="live_share_content">我正在观看老板六六的直播,一起来围观吧!</string>
+    <string name="live_share_content">我正在观看老板六六的视频,一起来围观吧!</string>
     <string name="msg_camera_invalid_permission_denied">无法打开相机，可能是权限被拒绝</string>
     <string name="msg_camera_invalid_initial_failed">相机初始化失败，无法打开相机</string>
     <string name="msg_camera_invalid_unknown_error">无法打开相机，未知错误</string>

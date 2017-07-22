@@ -51,17 +51,21 @@ public class App extends Application {
     }
 
     public AccountEntity getAccountEntity() {
-        if (sAccount == null) {
-            LoginStatus loginStatus = LoginStatus.getInstance();
-            sAccount = new AccountEntity();
-            sAccount.setAvatar(loginStatus.getAvatar());
-            sAccount.setSex(loginStatus.getSex());
-            sAccount.setMobilePhone(loginStatus.getPhone());
-            sAccount.setSex(loginStatus.getSex());
-            sAccount.setToken(loginStatus.getToken());
-            sAccount.setUserId(loginStatus.getUserid());
-            sAccount.setUserName(loginStatus.getUsername());
+        if (sAccount != null) {
+            sAccount = null;
         }
+//        if (sAccount == null) {
+        LoginStatus loginStatus = LoginStatus.getInstance();
+        sAccount = new AccountEntity();
+        sAccount.setAvatar(loginStatus.getAvatar());
+        sAccount.setSex(loginStatus.getSex());
+        sAccount.setMobilePhone(loginStatus.getPhone());
+        sAccount.setSex(loginStatus.getSex());
+        sAccount.setSignature(loginStatus.getIntro());
+        sAccount.setToken(loginStatus.getToken());
+        sAccount.setUserId(loginStatus.getUserid());
+        sAccount.setUserName(loginStatus.getUsername());
+//        }
         return sAccount;
     }
 

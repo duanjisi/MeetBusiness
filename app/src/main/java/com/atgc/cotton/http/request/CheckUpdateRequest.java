@@ -4,7 +4,6 @@ import com.atgc.cotton.entity.UpdateInfoEntity;
 import com.atgc.cotton.http.BaseDataRequest;
 import com.atgc.cotton.http.HttpUrl;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -23,8 +22,7 @@ public class CheckUpdateRequest extends BaseDataRequest<UpdateInfoEntity> {
 
     @Override
     protected Map<String, String> getParams() {
-        Map<String, String> map = new HashMap<String, String>();
-        return map;
+        return null;
     }
 
     @Override

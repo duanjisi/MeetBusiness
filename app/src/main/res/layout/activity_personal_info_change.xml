@@ -2,16 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
     android:orientation="vertical">
 
-    <include layout="@layout/common_title" />
-
-    <View
+    <include
+        layout="@layout/common_title"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="16.5dp"
-        android:background="@color/bg_gray" />
+        android:layout_height="@dimen/top_navigation_bar_height" />
+    <!--<View-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="1dp"-->
+    <!--android:layout_marginTop="16.5dp"-->
+    <!--android:background="@color/bg_gray" />-->
 
     <com.atgc.cotton.widget.ClearEditText
         android:id="@+id/et_name"

@@ -263,6 +263,7 @@ public class PersonalIconActivity extends BaseActivity implements View.OnClickLi
         String main = HttpUrl.USER_AVATAR_URL;
         HttpUtils httpUtils = new HttpUtils(60 * 1000);//实例化RequestParams对象
         com.lidroid.xutils.http.RequestParams params = new com.lidroid.xutils.http.RequestParams();
+        Log.i("info", "==============file.path:" + path);
         File file = new File(path);
         Log.i("info", "==============file.exists():" + file.exists());
         params.addHeader("Authorization", access_token);
@@ -362,7 +363,7 @@ public class PersonalIconActivity extends BaseActivity implements View.OnClickLi
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         String imageName = getNowTime() + ".jpg";
                         File file = new File(savePath, imageName);
-                        imageUri = FileProvider.getUriForFile(PersonalIconActivity.this, "im.boss66.com.fileProvider", file);//这里进行替换uri的获得方式
+                        imageUri = FileProvider.getUriForFile(PersonalIconActivity.this, "com.atgc.cotton.fileProvider", file);//这里进行替换uri的获得方式
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);//这里加入flag
                         startActivityForResult(intent, OPEN_CAMERA);
