@@ -1,5 +1,6 @@
 package com.atgc.cotton.activity.goodsDetail;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
@@ -7,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.alibaba.fastjson.JSON;
 import com.atgc.cotton.App;
@@ -16,8 +18,10 @@ import com.atgc.cotton.activity.goodsDetail.EditAddressActivity;
 import com.atgc.cotton.adapter.ChooseAddressAdapter;
 import com.atgc.cotton.entity.AddressListEntity;
 import com.atgc.cotton.event.RefreshAddress;
+import com.atgc.cotton.listener.RecycleViewItemListener;
 import com.atgc.cotton.presenter.ChooseAddressPresenter;
 import com.atgc.cotton.presenter.view.IChooseAddressView;
+import com.atgc.cotton.util.PreferenceUtils;
 
 
 import java.util.List;
@@ -38,9 +42,14 @@ public class ChooseAddressActivity extends MvpActivity<ChooseAddressPresenter> i
     private int deletePos;
 
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_choose_address);
+        initUI();
+        initData();
         EventBus.getDefault().register(this);
     }
 
@@ -50,13 +59,6 @@ public class ChooseAddressActivity extends MvpActivity<ChooseAddressPresenter> i
         EventBus.getDefault().unregister(this);
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-
-        setContentView(R.layout.activity_choose_address);
-        initUI();
-        initData();
-    }
 
     protected void initUI() {
         btnAdd = (Button) findViewById(R.id.btn_add);
@@ -74,6 +76,22 @@ public class ChooseAddressActivity extends MvpActivity<ChooseAddressPresenter> i
                 int addressId = datas.get(position).getAddressId();
                 mPresenter.deleteAddress(token, addressId);
 
+            }
+        });
+
+        //点击把地址存本地，然后通知finish掉，通知上一个页面刷新
+        adapter.setItemListener(new RecycleViewItemListener() {
+            @Override
+            public void onItemClick(int postion) {
+
+
+                finish();
+
+            }
+
+            @Override
+            public boolean onItemLongClick(int position) {
+                return false;
             }
         });
     }
@@ -113,7 +131,6 @@ public class ChooseAddressActivity extends MvpActivity<ChooseAddressPresenter> i
             adapter.setDatas(datas);
             adapter.notifyDataSetChanged();
         }
-
 
     }
 

@@ -1,5 +1,6 @@
 package com.atgc.cotton.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -266,21 +267,21 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
                     break;
                 case R.id.rb_shopping:
 //                    showToast("购物车", true);
-//                    rb_shopping.setChecked(false);
+                rb_shopping.setChecked(false);
 
-//
-//                    Intent intent = new Intent(HomePagerActivity.this, ShoppingCarActivity.class);
-//                    startActivity(intent);
-//
-//                    overridePendingTransition(R.anim.activity_in, R.anim.activity_no);
-//
-//                    handler.postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            drawerLayout.closeDrawer(rl_left);
-//                        }
-//                    },500);
-                    openActivity(ShoppingCarActivity.class);
+
+                    Intent intent = new Intent(HomePagerActivity.this, ShoppingCarActivity.class);
+                    startActivity(intent);
+
+                    overridePendingTransition(R.anim.activity_in, R.anim.activity_no);
+
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            drawerLayout.closeDrawer(rl_left);
+                        }
+                    },500);
+//                    openActivity(ShoppingCarActivity.class);
                     break;
                 case R.id.rb_order:
                     openActivity(MyOrderActivity.class);

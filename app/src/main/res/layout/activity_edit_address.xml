@@ -215,28 +215,28 @@
           android:background="@color/line_school" />
    </RelativeLayout>
 
-   <TextView
-       android:textSize="14sp"
-       android:textColor="#8e97a5"
-       android:layout_marginLeft="10dp"
-       android:text="设为默认"
-       android:layout_marginTop="15dp"
-       android:layout_below="@id/rl_where"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content" />
+   <!--<TextView-->
+       <!--android:textSize="14sp"-->
+       <!--android:textColor="#8e97a5"-->
+       <!--android:layout_marginLeft="10dp"-->
+       <!--android:text="设为默认"-->
+       <!--android:layout_marginTop="15dp"-->
+       <!--android:layout_below="@id/rl_where"-->
+       <!--android:layout_width="wrap_content"-->
+       <!--android:layout_height="wrap_content" />-->
 
-   <ToggleButton
-       android:id="@+id/tb_default"
-       android:background="@android:color/transparent"
-       android:button="@drawable/selector_switch_bt"
-       android:checked="true"
-       android:text=""
-       android:textOff=""
-       android:textOn=""
-       android:layout_alignParentRight="true"
-       android:layout_below="@id/rl_where"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content" />
+   <!--<ToggleButton-->
+       <!--android:id="@+id/tb_default"-->
+       <!--android:background="@android:color/transparent"-->
+       <!--android:button="@drawable/selector_switch_bt"-->
+       <!--android:checked="true"-->
+       <!--android:text=""-->
+       <!--android:textOff=""-->
+       <!--android:textOn=""-->
+       <!--android:layout_alignParentRight="true"-->
+       <!--android:layout_below="@id/rl_where"-->
+       <!--android:layout_width="wrap_content"-->
+       <!--android:layout_height="wrap_content" />-->
 
 
 </RelativeLayout>

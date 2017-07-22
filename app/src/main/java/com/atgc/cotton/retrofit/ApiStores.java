@@ -1,7 +1,6 @@
 package com.atgc.cotton.retrofit;
 
 
-
 import com.atgc.cotton.http.HttpUrl;
 
 import java.util.Map;
@@ -95,6 +94,47 @@ public interface ApiStores {
     @PUT("user/address/{id}")
     Observable<String> editAddress(@Header("Authorization") String token, @Path("id") int id, @PartMap Map<String, String> params);
 
+    //获取我买到的订单
+    @GET("order/")
+    Observable<String> getMyBuyOrder(@Header("Authorization") String token, @Query("status") int status, @Query("page") int page, @Query("size") int size);
+    //发送短信验证码
+    @FormUrlEncoded
+    @POST("public/regsms")
+    Observable<String> sendCode(@FieldMap Map<String, String> params);
 
+    //重置密码
+    @FormUrlEncoded
+    @POST("public/resetpsw")
+    Observable<String> resetPsw(@FieldMap Map<String, String> params);
+
+    //找回密码发送手机短信
+    @FormUrlEncoded
+    @POST("public/resetsms")
+    Observable<String> sendRestCode(@FieldMap Map<String, String> params);
+
+
+    //下订单
+    @FormUrlEncoded
+    @POST("order/")
+    Observable<String> order(@Header("Authorization") String token,@FieldMap Map<String, String> params);
+
+
+
+
+    //获取我买到的待评价订单
+    @GET("order/goods/")
+    Observable<String> getMyBuyEvaluateOrder(@Header("Authorization") String token,@Query("page") int page, @Query("size") int size);
+
+    //获取我的订单列表(我卖出的)
+    @GET("order/sale/")
+    Observable<String> getMySellOrder(@Header("Authorization") String token, @Query("status") int status, @Query("page") int page, @Query("size") int size);
+
+    //删除订单
+    @DELETE("order/{id}")
+    Observable<String> deleteMyBuyOrder(@Header("Authorization") String token, @Path("id") int id);
+
+    //买家操作订单 只操作自己的订单，操作包括：取消订单 确认收货
+    @GET("order/operate")
+    Observable<String> operateMyOrder(@Header("Authorization") String token, @FieldMap Map<String, String> params);
 
 }

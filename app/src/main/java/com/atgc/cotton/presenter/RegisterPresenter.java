@@ -15,13 +15,40 @@ import rx.schedulers.Schedulers;
 public class RegisterPresenter extends BasePresenter<IRegisterView> {
 
 
-    public RegisterPresenter(IRegisterView mvpView ) {
+    public RegisterPresenter(IRegisterView mvpView) {
         super(mvpView);
     }
 
-    public void register(Map<String,String> map) {
+    public void register(Map<String, String> map) {
         mvpView.showLoading();
         addSubscription(api.phoneRegister(map)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MyObserver<String>() {
+                    @Override
+                    public void onNext_(String model) {
+                        L.i(model);
+                        mvpView.hideLoading();
+                        mvpView.loginSucceed(model);
+                    }
+
+                    @Override
+                    public void onError_(String msg) {
+                        mvpView.hideLoading();
+                        mvpView.applyFailure(msg);
+                    }
+
+                    @Override
+                    public void onCompleted_() {
+
+                    }
+
+                }));
+    }
+
+    public void sendCode(Map<String, String> map) {
+        mvpView.showLoading();
+        addSubscription(api.sendCode(map)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MyObserver<String>() {
@@ -35,6 +62,7 @@ public class RegisterPresenter extends BasePresenter<IRegisterView> {
                     @Override
                     public void onError_(String msg) {
                         mvpView.hideLoading();
+                        mvpView.applyFailure(msg);
                     }
 
                     @Override

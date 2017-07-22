@@ -60,6 +60,7 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
     TextView tvBottom;
 
 
+
     @Override
     protected LoginPresenter createPresenter() {
         return new LoginPresenter(this, context);
@@ -116,8 +117,8 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
                 break;
             case R.id.et_pw:
                 break;
-            case R.id.tv_Reset:
-                showToast("忘记密码");
+            case R.id.tv_Reset:     //重置密码
+                openActivity(ResetPswActivity.class);
                 break;
             case R.id.btn_login:
                 login();

@@ -87,6 +87,16 @@ public class AddressListEntity {
         private int Province;
         private int UserId;
 
+        private String location;
+
+        public String getLocation() {
+            return location;
+        }
+
+        public void setLocation(String location) {
+            this.location = location;
+        }
+
         public int getAddTime() {
             return AddTime;
         }

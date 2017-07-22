@@ -8,13 +8,13 @@
         android:layout_width="match_parent"
         android:layout_height="85dp">
 
-        <ImageView
-            android:id="@+id/img_choose"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:src="@drawable/unchecked" />
+        <!--<ImageView-->
+            <!--android:id="@+id/img_choose"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:src="@drawable/unchecked" />-->
 
         <TextView
             android:id="@+id/tv_people"

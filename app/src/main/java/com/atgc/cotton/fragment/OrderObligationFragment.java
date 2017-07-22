@@ -1,80 +1,126 @@
 package com.atgc.cotton.fragment;
 
+import android.os.Handler;
 import android.util.Log;
 
 import com.atgc.cotton.activity.vendingRack.LogisticsActivity;
 import com.atgc.cotton.adapter.OrderAdapter;
+import com.atgc.cotton.entity.OrderActionEntity;
 import com.atgc.cotton.entity.OrderEntity;
+import com.atgc.cotton.entity.OrderGoodsEntity;
+import com.atgc.cotton.util.ToastUtil;
+import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
+import com.github.jdsjlzx.interfaces.OnRefreshListener;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
+
 /**
  * Created by GMARUnity on 2017/6/28.
  * 待付款
  */
 public class OrderObligationFragment extends BaseOrderFragment {
+    private List<OrderGoodsEntity> dataList;
+    private int page = 1;
+    private LRecyclerView rv_content;
+    private boolean isOnRefresh;
+    private OrderActionEntity orderActionEntity;
     private OrderAdapter orderAdapter;
-    private int postion;
 
     @Override
     protected void setAdapterAndDecor(LRecyclerView list) {
         setHasOptionsMenu(true);
+        orderActionEntity = new OrderActionEntity();
+        orderActionEntity.setChild(1);
+        orderActionEntity.setBuy(true);
+        rv_content = list;
+        dataList = new ArrayList<>();
         orderAdapter = new OrderAdapter(getActivity());
-        List<OrderEntity> dataList = new ArrayList<>();
-        setData(dataList);
         orderAdapter.setDatas(dataList);
+        mLRecyclerViewAdapter = new LRecyclerViewAdapter(orderAdapter);
+        list.setAdapter(mLRecyclerViewAdapter);
+        list.setLoadMoreEnabled(true);
+        list.refreshComplete(20);
+        rv_content.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        isOnRefresh = true;
+                        rv_content.refreshComplete(20);
+                        orderActionEntity.setRefresh(true);
+                        page = 1;
+                        orderActionEntity.setPage(1);
+                        orderActionEntity.setDoAction("OnRefresh");
+                        EventBus.getDefault().post(orderActionEntity);
+                    }
+                }, 1000);
+            }
+        });
+        rv_content.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        isOnRefresh = false;
+                        orderActionEntity.setRefresh(false);
+                        orderActionEntity.setPage(page);
+                        orderActionEntity.setDoAction("OnLoadMore");
+                        EventBus.getDefault().post(orderActionEntity);
+                    }
+                }, 1000);
+            }
+        });
         orderAdapter.setOnBtnListener(new OrderAdapter.onBtnListener() {
             @Override
-            public void onOrdBtn1(OrderEntity orderEntity) {
+            public void onOrdBtn1(OrderGoodsEntity orderEntity) {
                 btnToDo(orderEntity, 1);
             }
 
             @Override
-            public void onOrdBtn2(OrderEntity orderEntity) {
+            public void onOrdBtn2(OrderGoodsEntity orderEntity) {
                 btnToDo(orderEntity, 2);
             }
 
             @Override
-            public void onOrdBtn3(OrderEntity orderEntity, int pos) {
+            public void onOrdBtn3(OrderGoodsEntity orderEntity, int pos) {
                 btnToDo(orderEntity, 3);
-                postion = pos;
+                //postion = pos;
             }
         });
-        mLRecyclerViewAdapter = new LRecyclerViewAdapter(orderAdapter);
-        list.setAdapter(mLRecyclerViewAdapter);
     }
 
-    private void setData(List<OrderEntity> dataList) {
-        for (int i = 0; i < 12; i++) {
-            OrderEntity item = new OrderEntity();
-            if (i % 4 == 0) {
-                item.setContentType(0);
-                item.setShopName("店铺：" + i);
-                item.setHeadTag(i);
-            } else if (i % 4 == 3) {
-                item.setContentType(2);
-                item.setAllNum(2);
-                item.setFootTag(i);
+    public void getData(List<OrderGoodsEntity> list,int parentSize) {
+
+        if (list != null) {
+            if (parentSize == 20) {
+                rv_content.setNoMore(false);
+                page++;
             } else {
-                item.setGoodsNum("" + (i + 1));
-                int price = 5 + i % 2;
-                item.setGoodsPrice(String.valueOf(price));
-                int allprice = price * (i + 1);
-                item.setAllPrice(String.valueOf(allprice));
-                item.setContentType(1);
+                ToastUtil.showShort(getActivity(), "没人更多数据啦~");
+                rv_content.setNoMore(true);
             }
-            item.setOrderType(0);
-            item.setGoodsName("商品：" + i);
-            item.setGoodsContent("商品介绍：的顶顶顶顶多多多多多多多多多过过过过个二二二啊啊啊啊啊啊啊啊啊" + i);
-            dataList.add(item);
+            if (!isOnRefresh) {
+                orderAdapter.addAll(list);
+                orderAdapter.notifyDataSetChanged();
+            } else {
+                orderAdapter.setDataList(list);
+            }
+        } else {
+            ToastUtil.showShort(getActivity(), "没人更多数据啦~");
+            rv_content.setNoMore(true);
         }
     }
 
-    private void btnToDo(OrderEntity entity, int type) {
-        int orderType = entity.getOrderType();
+    private void btnToDo(OrderGoodsEntity entity, int type) {
+        orderActionEntity.setOrderid(entity.getOrderId());
+        int orderType = entity.getOrderStatus();
         switch (orderType) {//"0:待付款", "1:待发货", "2:待收货", "3:待评价"
             case 0:
                 if (type == 1) {
@@ -83,26 +129,27 @@ public class OrderObligationFragment extends BaseOrderFragment {
                     Log.i("OrderEntity:", "取消订单");
                 }
                 break;
-//            case 1:
-//                break;
             case 2:
                 if (type == 1) {
                     Log.i("OrderEntity:", "确认收货");
                 } else if (type == 2) {
-                    Log.i("OrderEntity:", "查看物流LogisticsActivity");
+                    Log.i("OrderEntity:", "查看物流");
                     openActivity(LogisticsActivity.class);
                 }
                 break;
             case 3:
                 if (type == 1) {
-                    Log.i("OrderEntity:", "评价");
-                } else if (type == 2) {
-                    Log.i("OrderEntity:", "查看物流");
-                    openActivity(LogisticsActivity.class);
-                } else {
                     Log.i("OrderEntity:", "删除订单");
                 }
                 break;
         }
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
     }
 }
