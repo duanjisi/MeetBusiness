@@ -39,7 +39,6 @@
         android:layout_marginTop="15dp"
         android:ellipsize="end"
         android:maxLines="2"
-        android:text="hhhhhhhahahaha=哈哈哈哈哈哈哈哈哈哈或或或或或或或或或或或哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈或或或或或或或或或或或哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈或或或或或或或或或或或哈哈哈哈哈哈哈哈哈哈"
         android:textColor="#293d55"
         android:textSize="15sp" />
 
@@ -62,7 +61,6 @@
         android:layout_below="@id/tv_name"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:text="广州天河"
         android:textColor="#8e97a5"
         android:textSize="12sp" />
 
@@ -74,7 +72,6 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:layout_toLeftOf="@id/tv_location"
-        android:text="月销: 200"
         android:textColor="#8e97a5" />
 
     <RelativeLayout
