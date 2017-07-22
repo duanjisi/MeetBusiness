@@ -212,6 +212,8 @@
 
         <activity android:name=".activity.ResetPswActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.MessageActivity"
+            android:screenOrientation="portrait"/>
         <!--友盟appkey-->
         <meta-data
             android:name="UMENG_APPKEY"

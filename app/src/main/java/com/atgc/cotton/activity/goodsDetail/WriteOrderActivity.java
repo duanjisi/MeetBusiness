@@ -284,6 +284,7 @@ public class WriteOrderActivity extends MvpActivity<PutOrderPresenter> implement
 
     @Override
     public void onSuccess(String s) {
+        //TODO     需要拿到订单id
         BaseResult result = JSON.parseObject(s, BaseResult.class);
         if (result != null) {
             int code = result.getCode();
@@ -379,6 +380,8 @@ public class WriteOrderActivity extends MvpActivity<PutOrderPresenter> implement
                 if (zhifubao) {
 //                    requestAlipayTrade();
                     showToast("支付宝", false);
+//                    mPresenter.order();
+
                 } else {
 //                    requestWxTrade();
                     showToast("微信", false);

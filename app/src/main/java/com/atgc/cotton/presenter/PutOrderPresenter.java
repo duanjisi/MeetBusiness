@@ -20,6 +20,11 @@ public class PutOrderPresenter extends BasePresenter<ISingleView> {
         super(mvpView);
     }
 
+    /**
+     * 下订单
+     * @param token
+     * @param map
+     */
     public void order(String token,Map<String, String> map) {
         mvpView.showLoading();
         addSubscription(api.order(token,map)
@@ -46,4 +51,37 @@ public class PutOrderPresenter extends BasePresenter<ISingleView> {
 
                 }));
     }
+
+    /**
+     * 生成支付宝支付所需要的已签名的订单信息
+     * @param token
+     * @param orderid
+     */
+    public void alipay(String token,int orderid) {
+        mvpView.showLoading();
+        addSubscription(api.alipay(token,orderid)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MyObserver<String>() {
+                    @Override
+                    public void onNext_(String model) {
+                        L.i(model);
+                        mvpView.hideLoading();
+                        mvpView.onSuccess(model);
+                    }
+
+                    @Override
+                    public void onError_(String msg) {
+                        mvpView.hideLoading();
+                        mvpView.onError(msg);
+                    }
+
+                    @Override
+                    public void onCompleted_() {
+
+                    }
+
+                }));
+    }
+
 }

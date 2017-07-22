@@ -137,4 +137,15 @@ public interface ApiStores {
     @GET("order/operate")
     Observable<String> operateMyOrder(@Header("Authorization") String token, @FieldMap Map<String, String> params);
 
+
+    //生成发起支付宝支付所需的已签名的订单信息
+    @FormUrlEncoded
+    @POST("/pay/ali/{orderid}")
+    Observable<String> alipay(@Header("Authorization") String token, @Path("orderid") int orderid);
+
+
+    //查询消息列表
+    @GET("/message/")
+    Observable<String> searchMsg(@Header("Authorization") String token, @Query("page") int page, @Query("size") int size);
+
 }
