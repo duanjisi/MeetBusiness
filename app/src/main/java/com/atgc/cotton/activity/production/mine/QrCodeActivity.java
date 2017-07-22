@@ -12,7 +12,6 @@ import com.atgc.cotton.App;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.entity.AccountEntity;
-import com.atgc.cotton.listener.CreateImageCallback;
 import com.atgc.cotton.util.ImageLoaderUtils;
 import com.atgc.cotton.util.MakeQRCodeUtil;
 import com.atgc.cotton.util.MycsLog;
