@@ -57,7 +57,7 @@ public class GoodsClassifyAdapter extends BaseRecycleViewAdapter {
         final String attrName = item.getAttrName();
         holder1.tv_content.setText(attrName);
         String attrValue = item.getAttrValue();
-        final String[] tags = attrValue.split("、");
+        final String[] tags = attrValue.split("@#");
         final int attrId = item.getAttrId();   //属性id
 
         map.put(attrName, tags[0]);     //一开始存

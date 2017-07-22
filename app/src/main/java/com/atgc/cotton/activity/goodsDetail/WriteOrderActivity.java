@@ -50,7 +50,6 @@ import de.greenrobot.event.Subscribe;
 
 /**
  * 填写订单        //后面要改成多列表的结算。
- * TODO 目前购物车数据是存本地。  最好还是走接口，接口没提供默认地址。
  * Created by liw on 2017/7/11.
  */
 public class WriteOrderActivity extends MvpActivity<PutOrderPresenter> implements ISingleView {

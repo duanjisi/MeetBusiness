@@ -7,7 +7,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,14 +90,13 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
 
     private DbUtils mDbUtils;
     private String userId;
+    private List<VendGoodsAttrEntity> newAttr;
+    private List<OrderGoods> all;
+    private String goodId="74";
+    private String buyNum;
+    private TextView tv_num;
 
     protected void initUI() {
-//        int screenWidth = UIUtils.getScreenWidth(this);
-//        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) vpImg.getLayoutParams();
-//        layoutParams.height = (int) (screenWidth*0.7);
-//        vpImg.setLayoutParams(layoutParams);
-
-
 
     }
 
@@ -110,7 +111,7 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
 //            }
 //        }
 
-        mPresenter.getGoodsDetail(Integer.parseInt("57"));
+        mPresenter.getGoodsDetail(Integer.parseInt(goodId));
         mDbUtils = DbUtils.create(this);
     }
 
@@ -162,7 +163,7 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
         ImageView img_head = (ImageView) view.findViewById(R.id.img_head);
         Glide.with(context).load(imgList.get(0)).into(img_head);
         TextView tv_price = (TextView) view.findViewById(R.id.tv_price);
-        TextView tv_num = (TextView) view.findViewById(R.id.tv_num);
+        tv_num = (TextView) view.findViewById(R.id.tv_num);
         tv_price.setText("¥ " + goodsPrice);
         tv_num.setText("库存:  " + goodsNumber);
 
@@ -173,7 +174,7 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
         LRecyclerViewAdapter lRecyclerViewAdapter = new LRecyclerViewAdapter(adapter);
         rv_content.setAdapter(lRecyclerViewAdapter);
 
-        adapter.setDatas(goodsAttr);
+        adapter.setDatas(newAttr);
         adapter.notifyDataSetChanged();
         //底部布局
         View footView = LayoutInflater.from(context).inflate(R.layout.foot_view_type, null);
@@ -181,7 +182,32 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
 
         //购买数量
         final EditText et_repertory = (EditText) footView.findViewById(R.id.et_repertory);
+        et_repertory.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s != null) {
+                    if (Integer.parseInt(s + "") == 0) {
+                        et_repertory.setText("0");
+
+                    }
+                    if (Integer.parseInt(s + "") > goodsNumber) {
+                        et_repertory.setText(goodsNumber);
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         //减购买数量
         footView.findViewById(R.id.iv_minus).setOnClickListener(new View.OnClickListener() {
@@ -204,8 +230,10 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
             public void onClick(View v) {
                 String num = et_repertory.getText().toString();
                 if (!TextUtils.isEmpty(num)) {
-                    num = Integer.parseInt(num) + 1 + "";
-                    et_repertory.setText(num);
+                    if (Integer.parseInt(num) < goodsNumber) {
+                        num = Integer.parseInt(num) + 1 + "";
+                        et_repertory.setText(num);
+                    }
 
                 }
 
@@ -216,8 +244,11 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
         view.findViewById(R.id.btn_add).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
+                String xNum = et_repertory.getText().toString();
+                if (goodsNumber <Integer.parseInt(xNum) ) {
+                    showToast("库存不足");
+                    return;
+                }
 
                 Map<String, Set<Integer>> map2 = adapter.getMap2();   //是否选中
                 Map<String, String> map = adapter.getMap();     //选中的分类类别 和，分类名
@@ -237,10 +268,10 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
                     L.i(key + value);
                     type = type + key + ":" + value + "|"; //暂时用空格分开
                 }
-                type = type.substring(0,type.length()-1);
+                type = type.substring(0, type.length() - 1);
                 //购买数量
 
-                String buyNum = et_repertory.getText().toString();
+                 buyNum = et_repertory.getText().toString();
                 String imgUrl = imgList.get(0);
 
 
@@ -320,6 +351,12 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
             @Override
             public void onClick(View v) {
                 //购买
+
+                if (goodsNumber < 1) {
+                    showToast("库存不足");
+                    return;
+                }
+
                 dialog.dismiss();
 
 
@@ -342,7 +379,7 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
                     type = type + key + ": " + value + "  ";
                 }
                 //购买数量
-                String buyNum = et_repertory.getText().toString();
+                buyNum = et_repertory.getText().toString();
                 String imgUrl = imgList.get(0);
 
 
@@ -369,7 +406,6 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
 
                 //加上商品
                 datas.add(entity);
-
 
 
                 OrderGoodsListEntity entity1 = new OrderGoodsListEntity();
@@ -414,6 +450,9 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
             mDbUtils.saveAll(list);
 //            mDbUtils.deleteAll(OrderGoods.class);      //调试用
             showToast("已加入购物车");
+            goodsNumber = goodsNumber-Integer.parseInt(buyNum);
+
+            tv_num.setText("库存:  " + goodsNumber);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -467,6 +506,46 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
 
         //用户名--即店铺名
         userName = bean.getUserName();
+
+        newAttr = new ArrayList<>();
+        List<String> keys = new ArrayList<>();
+        //给 goodsAttr做处理
+        for (int i = 0; i < goodsAttr.size(); i++) {
+            String attrName = goodsAttr.get(i).getAttrName();
+            if (!keys.contains(attrName)) {
+                keys.add(attrName);
+                newAttr.add(goodsAttr.get(i));
+            }else{
+                String attrValue1 = goodsAttr.get(i).getAttrValue();
+
+                for(int j = 0; j< newAttr.size(); j++){
+                    if(newAttr.get(j).getAttrName().equals(attrName)){
+                        String attrValue = newAttr.get(j).getAttrValue();
+                        attrValue= attrValue+"@#"+attrValue1;
+                        newAttr.get(j).setAttrValue(attrValue);
+                    }
+
+                }
+            }
+        }
+        bean.setGoodsAttr(newAttr);
+        //还有查询数据库让库存显示正确
+        try {
+            all = mDbUtils.findAll(OrderGoods.class);
+            if(all!=null){
+                for(int i =0;i<all.size();i++){
+                    if((all.get(i).getGoodsId()+"").equals(goodId)){
+                        int buyNum = all.get(i).getBuyNum();
+                        goodsNumber = goodsNumber-buyNum;
+                    }
+
+                }
+
+            }
+        } catch (DbException e) {
+            e.printStackTrace();
+        }
+
 
 
         tvPrice.setText("¥ " + goodsPrice);
