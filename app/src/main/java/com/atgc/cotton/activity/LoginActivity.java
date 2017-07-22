@@ -35,6 +35,7 @@ import butterknife.OnClick;
  */
 
 public class LoginActivity extends MvpActivity<LoginPresenter> implements INormalView {
+
     @Bind(R.id.img_back)
     ImageView img_back;
     @Bind(R.id.img_logo)

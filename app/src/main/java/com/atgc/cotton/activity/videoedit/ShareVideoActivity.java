@@ -56,8 +56,9 @@ import de.greenrobot.event.EventBus;
  * 分享视频
  */
 public class ShareVideoActivity extends BaseActivity {
+    private String geohash, address;
     private ImageView ivClose, iv_video_bg;
-    private TextView tvPublish, tv_link_goods;
+    private TextView tvPublish, tv_link_goods, tv_add_location;
     private MyListView listView;
     private VendGoodAdapter adapter;
     private EditText editText;
@@ -86,6 +87,7 @@ public class ShareVideoActivity extends BaseActivity {
         iv_video_bg = (ImageView) findViewById(R.id.iv_video_bg);
         tvPublish = (TextView) findViewById(R.id.tv_publish);
         tv_link_goods = (TextView) findViewById(R.id.tv_link_goods);
+        tv_add_location = (TextView) findViewById(R.id.tv_add_location);
         editText = (EditText) findViewById(R.id.et_content);
         mRadioGroup = (RadioGroup) findViewById(R.id.radio_group);
         tv_link_goods.setOnClickListener(new View.OnClickListener() {
@@ -97,6 +99,12 @@ public class ShareVideoActivity extends BaseActivity {
                     intent.putExtra("goodids", goodids);
                 }
                 startActivityForResult(intent, 100);
+            }
+        });
+        tv_add_location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openActvityForResult(SearchAddressActivity.class, 102);
             }
         });
         ivClose.setOnClickListener(new View.OnClickListener() {
@@ -128,6 +136,10 @@ public class ShareVideoActivity extends BaseActivity {
                 tv_link_goods.setCompoundDrawables(nav_up, null, null, null);
                 adapter.initData(list);
             }
+        } else if (requestCode == 102 && resultCode == RESULT_OK && data != null) {
+            address = data.getStringExtra("address");
+            geohash = data.getStringExtra("geohash");
+            tv_add_location.setText("" + address);
         }
     }
 
@@ -182,8 +194,14 @@ public class ShareVideoActivity extends BaseActivity {
                 params.addBodyParameter("videofile", videoFile);//视频
             }
             params.addBodyParameter("content", getText(editText));//发布的内容
-            params.addBodyParameter("location", "");//位置坐标 eg:113.1111515-23.35352
-            params.addBodyParameter("locationname", "");//位置坐标对应的名称
+
+            if (!TextUtils.isEmpty(geohash)) {
+                params.addBodyParameter("location", geohash);//位置坐标 eg:113.1111515-23.35352
+            }
+
+            if (!TextUtils.isEmpty(address)) {
+                params.addBodyParameter("locationname", address);//位置坐标对应的名称
+            }
             String goodids = getGoodids();
             if (!TextUtils.isEmpty(goodids)) {
                 Log.i("info", "==============goodsid:" + goodids);

@@ -7,7 +7,10 @@ public class HttpUrl {
     //    public static final String BASE_URL = "https://api.hmg66.com/v1/";
     public static final String BASE_URL = "https://yuetao.66boss.com/v1/";
     public static final String AUTH_URL = "https://api.66boss.com/ksauth/index.php";
-
+    /**
+     * android版本更新
+     */
+    public static final String VERSION_UPDATE = "https://app.66boss.com/update.php";
 
     /**
      * attention 关注相关接口

@@ -11,13 +11,17 @@ import android.widget.ImageView;
 
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
+import com.atgc.cotton.activity.production.other.OtherPlayerActivity;
 import com.atgc.cotton.activity.production.other.OtherProActivity;
 import com.atgc.cotton.adapter.HomePageAdapter;
 import com.atgc.cotton.entity.HomeBaseData;
+import com.atgc.cotton.entity.UpdateInfoEntity;
 import com.atgc.cotton.entity.VideoEntity;
 import com.atgc.cotton.http.BaseDataRequest;
+import com.atgc.cotton.http.request.CheckUpdateRequest;
 import com.atgc.cotton.http.request.HomePagerRequest;
 import com.atgc.cotton.listener.ItemClickListener;
+import com.atgc.cotton.util.AutoUpdateUtil;
 import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
 import com.github.jdsjlzx.interfaces.OnRefreshListener;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
@@ -57,7 +61,6 @@ public class MainActivity extends BaseActivity {
         iv_lock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                openActivity(HomePagerActivity.class);
                 openActivity(LoginActivity.class);
                 finish();
             }
@@ -90,13 +93,16 @@ public class MainActivity extends BaseActivity {
         SpacesItemDecoration decoration = new SpacesItemDecoration(16);
         lRecyclerView.addItemDecoration(decoration);
         requestDatas();
+        checkUpdate();
     }
 
     private class clickListener implements ItemClickListener {
         @Override
         public void onItemClick(View view, int position, VideoEntity video) {
             if (video != null) {
-
+                Intent intent = new Intent(context, OtherPlayerActivity.class);
+                intent.putExtra("obj", video);
+                startActivity(intent);
             }
         }
 
@@ -164,6 +170,22 @@ public class MainActivity extends BaseActivity {
 //                showToast("加载完成!", true);
             }
         }
+    }
+
+    private void checkUpdate() {
+        CheckUpdateRequest request = new CheckUpdateRequest(TAG);
+        request.send(new BaseDataRequest.RequestCallback<UpdateInfoEntity>() {
+            @Override
+            public void onSuccess(UpdateInfoEntity response) {
+                AutoUpdateUtil.update(response.getVersion(), MainActivity.this, response.getUrl(),
+                        response.getMsg(), response.getForce() != 0, false);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                showToast(msg, true);
+            }
+        });
     }
 
     private void requestMoreDatas() {

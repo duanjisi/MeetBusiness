@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.atgc.cotton.App;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.adapter.CommentAdapter;
@@ -138,6 +139,10 @@ public class CommentDetailsActivity extends BaseActivity implements AbsListView.
     }
 
     private void requestCommentStr() {
+        if (!App.getInstance().isLogin()) {
+            showTipsDialog();
+            return;
+        }
         String content = getText(editText);
         if (TextUtils.isEmpty(content)) {
             showToast("评论内容不能为空!", true);

@@ -53,6 +53,8 @@ public class VendGoodAdapter extends ABaseAdapter<VendGoodsEntity.Goods> {
         return convertView;
     }
 
+    static
+
     private class ViewHolder {
         ImageView iv_check;
         RoundImageView Riv;
@@ -70,4 +72,6 @@ public class VendGoodAdapter extends ABaseAdapter<VendGoodsEntity.Goods> {
             this.volum = (TextView) view.findViewById(R.id.tv_volum);
         }
     }
+
+
 }
