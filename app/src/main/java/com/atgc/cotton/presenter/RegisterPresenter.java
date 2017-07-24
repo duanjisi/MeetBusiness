@@ -27,7 +27,6 @@ public class RegisterPresenter extends BasePresenter<IRegisterView> {
                 .subscribe(new MyObserver<String>() {
                     @Override
                     public void onNext_(String model) {
-                        L.i(model);
                         mvpView.hideLoading();
                         mvpView.loginSucceed(model);
                     }

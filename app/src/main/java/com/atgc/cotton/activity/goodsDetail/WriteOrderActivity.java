@@ -19,6 +19,7 @@ import com.alibaba.fastjson.JSON;
 import com.atgc.cotton.App;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.MvpActivity;
+import com.atgc.cotton.activity.vendingRack.MyOrderActivity;
 import com.atgc.cotton.adapter.GoodsOrderAdapter;
 import com.atgc.cotton.entity.AddressListEntity;
 import com.atgc.cotton.entity.BaseResult;
@@ -314,12 +315,14 @@ public class WriteOrderActivity extends MvpActivity<PutOrderPresenter> implement
                     }
                     EventBus.getDefault().post(new RefreshShoopingCar(""));
                     //  先弹出付款页面，如果付款成功，跳到订单页面，如果不付款了，跳会购物车，但是这个页面都要finish。 防止多次点击多次提交订单
-                    if(dialog==null){
+//                    if(dialog==null){
+//
+//                        showDialog();
+//                    }else{
+//                        dialog.show();
+//                    }
+                    openActivity(MyOrderActivity.class);
 
-                        showDialog();
-                    }else{
-                        dialog.show();
-                    }
                 } catch (DbException e) {
                     e.printStackTrace();
                 }

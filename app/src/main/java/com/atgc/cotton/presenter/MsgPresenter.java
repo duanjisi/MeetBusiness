@@ -21,9 +21,10 @@ public class MsgPresenter extends BasePresenter<IMsgView> {
     /**
      * 查询消息
      * @param token
-     * @param map
+     * @param page
+     * @param size
      */
-    public void order(String token,int page,int size) {
+    public void searchMsg(String token,int page,int size) {
         mvpView.showLoading();
         addSubscription(api.searchMsg(token,page,size)
                 .subscribeOn(Schedulers.io())
@@ -32,11 +33,44 @@ public class MsgPresenter extends BasePresenter<IMsgView> {
                     @Override
                     public void onNext_(String model) {
                         mvpView.hideLoading();
+                        mvpView.searchMsgSuccess(model);
                     }
 
                     @Override
                     public void onError_(String msg) {
                         mvpView.hideLoading();
+                        mvpView.applyFailure(msg);
+                    }
+
+                    @Override
+                    public void onCompleted_() {
+
+                    }
+
+                }));
+    }
+
+    /**
+     * 删除消息
+     * @param token
+     * @param id
+     */
+    public void deleteMsg(String token,int id) {
+        mvpView.showLoading();
+        addSubscription(api.deleteMsg(token,id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MyObserver<String>() {
+                    @Override
+                    public void onNext_(String model) {
+                        mvpView.hideLoading();
+                        mvpView.deleteMsgSuccess(model);
+                    }
+
+                    @Override
+                    public void onError_(String msg) {
+                        mvpView.hideLoading();
+                        mvpView.applyFailure(msg);
                     }
 
                     @Override

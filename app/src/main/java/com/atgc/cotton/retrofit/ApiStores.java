@@ -140,12 +140,18 @@ public interface ApiStores {
 
     //生成发起支付宝支付所需的已签名的订单信息
     @FormUrlEncoded
-    @POST("/pay/ali/{orderid}")
+    @POST("pay/ali/{orderid}")
     Observable<String> alipay(@Header("Authorization") String token, @Path("orderid") int orderid);
 
 
     //查询消息列表
-    @GET("/message/")
+    @GET("message/")
     Observable<String> searchMsg(@Header("Authorization") String token, @Query("page") int page, @Query("size") int size);
+
+
+    //删除消息
+    @DELETE("message/{msgid}")
+    Observable<String> deleteMsg(@Header("Authorization") String token, @Path("msgid") int msgid);
+
 
 }
