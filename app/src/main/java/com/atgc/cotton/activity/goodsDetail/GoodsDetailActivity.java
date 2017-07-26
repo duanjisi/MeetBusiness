@@ -23,7 +23,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
+import com.atgc.cotton.App;
 import com.atgc.cotton.R;
+import com.atgc.cotton.activity.LoginActivity;
 import com.atgc.cotton.activity.base.MvpActivity;
 import com.atgc.cotton.adapter.GoodsClassifyAdapter;
 import com.atgc.cotton.entity.GoodsDetailEntity;
@@ -75,6 +77,8 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
     LinearLayout llOval;
     @Bind(R.id.line)
     View line;
+    @Bind(R.id.tv_evaluate)
+    TextView tvEvaluate;
 
     private Dialog dialog;
     private ArrayList<String> imgList;
@@ -92,7 +96,7 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
     private String userId;
     private List<VendGoodsAttrEntity> newAttr;
     private List<OrderGoods> all;
-    private String goodId="74";
+    private String goodId = "75";
     private String buyNum;
     private TextView tv_num;
 
@@ -101,18 +105,17 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
     }
 
     protected void initData() {
-        //TODO 先用测试数据
-//        Bundle bundle = getIntent().getExtras();
-//        if (bundle != null) {
-//            String goodId = bundle.getString("goodId", "");
-//            if (!TextUtils.isEmpty(goodId)) {
-//                mPresenter.getGoodsDetail(Integer.parseInt(goodId));
-//                mDbUtils = DbUtils.create(this);
-//            }
-//        }
-
-        mPresenter.getGoodsDetail(Integer.parseInt(goodId));
-        mDbUtils = DbUtils.create(this);
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+             goodId =  bundle.getString("goodId", "");
+            if (!TextUtils.isEmpty(goodId)) {
+                mPresenter.getGoodsDetail(Integer.parseInt(goodId));
+                mDbUtils = DbUtils.create(this);
+            }
+        }
+//          先用测试数据
+//        mPresenter.getGoodsDetail(Integer.parseInt(goodId));
+//        mDbUtils = DbUtils.create(this);
     }
 
     @Override
@@ -131,7 +134,7 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
     }
 
 
-    @OnClick({R.id.rl_classify, R.id.img_more, R.id.img_back})
+    @OnClick({R.id.rl_classify, R.id.img_more, R.id.img_back,R.id.tv_evaluate})
     public void onViewClicked(View view) {
         switch (view.getId()) {
 
@@ -148,6 +151,13 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
             case R.id.img_back:
                 finish();
                 break;
+
+            case R.id.tv_evaluate:
+                Intent intent = new Intent(GoodsDetailActivity.this, GoodsEvaluateActivity.class);
+                intent.putExtra("goodId",goodId);
+                startActivity(intent);
+                break;
+
         }
     }
 
@@ -244,8 +254,12 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
         view.findViewById(R.id.btn_add).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!App.getInstance().isLogin()){
+                    openActivity(LoginActivity.class);
+                }
+
                 String xNum = et_repertory.getText().toString();
-                if (goodsNumber <Integer.parseInt(xNum) ) {
+                if (goodsNumber < Integer.parseInt(xNum)) {
                     showToast("库存不足");
                     return;
                 }
@@ -271,7 +285,7 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
                 type = type.substring(0, type.length() - 1);
                 //购买数量
 
-                 buyNum = et_repertory.getText().toString();
+                buyNum = et_repertory.getText().toString();
                 String imgUrl = imgList.get(0);
 
 
@@ -351,6 +365,10 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
             @Override
             public void onClick(View v) {
                 //购买
+
+                if(!App.getInstance().isLogin()){
+                    openActivity(LoginActivity.class);
+                }
 
                 if (goodsNumber < 1) {
                     showToast("库存不足");
@@ -450,7 +468,7 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
             mDbUtils.saveAll(list);
 //            mDbUtils.deleteAll(OrderGoods.class);      //调试用
             showToast("已加入购物车");
-            goodsNumber = goodsNumber-Integer.parseInt(buyNum);
+            goodsNumber = goodsNumber - Integer.parseInt(buyNum);
 
             tv_num.setText("库存:  " + goodsNumber);
 
@@ -515,13 +533,13 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
             if (!keys.contains(attrName)) {
                 keys.add(attrName);
                 newAttr.add(goodsAttr.get(i));
-            }else{
+            } else {
                 String attrValue1 = goodsAttr.get(i).getAttrValue();
 
-                for(int j = 0; j< newAttr.size(); j++){
-                    if(newAttr.get(j).getAttrName().equals(attrName)){
+                for (int j = 0; j < newAttr.size(); j++) {
+                    if (newAttr.get(j).getAttrName().equals(attrName)) {
                         String attrValue = newAttr.get(j).getAttrValue();
-                        attrValue= attrValue+"@#"+attrValue1;
+                        attrValue = attrValue + "@#" + attrValue1;
                         newAttr.get(j).setAttrValue(attrValue);
                     }
 
@@ -532,11 +550,11 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
         //还有查询数据库让库存显示正确
         try {
             all = mDbUtils.findAll(OrderGoods.class);
-            if(all!=null){
-                for(int i =0;i<all.size();i++){
-                    if((all.get(i).getGoodsId()+"").equals(goodId)){
+            if (all != null) {
+                for (int i = 0; i < all.size(); i++) {
+                    if ((all.get(i).getGoodsId() + "").equals(goodId)) {
                         int buyNum = all.get(i).getBuyNum();
-                        goodsNumber = goodsNumber-buyNum;
+                        goodsNumber = goodsNumber - buyNum;
                     }
 
                 }
@@ -545,7 +563,6 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
         } catch (DbException e) {
             e.printStackTrace();
         }
-
 
 
         tvPrice.setText("¥ " + goodsPrice);
@@ -607,4 +624,5 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
         });
 
     }
+
 }

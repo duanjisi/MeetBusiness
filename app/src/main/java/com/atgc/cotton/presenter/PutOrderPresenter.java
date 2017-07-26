@@ -5,6 +5,7 @@ import com.atgc.cotton.presenter.view.ISingleView;
 import com.atgc.cotton.retrofit.MyObserver;
 import com.atgc.cotton.util.L;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import rx.android.schedulers.AndroidSchedulers;
@@ -59,7 +60,9 @@ public class PutOrderPresenter extends BasePresenter<ISingleView> {
      */
     public void alipay(String token,int orderid) {
         mvpView.showLoading();
-        addSubscription(api.alipay(token,orderid)
+        Map<String,String> map  = new HashMap<>();
+        map.put("1","1");
+        addSubscription(api.alipay(token,orderid,map)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MyObserver<String>() {

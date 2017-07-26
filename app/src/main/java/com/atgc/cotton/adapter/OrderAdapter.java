@@ -113,17 +113,17 @@ public class OrderAdapter extends BaseRecycleViewAdapter {
             }
             int goodsNum = orderEntity.getBuyNumber();
             ((MyViewHolderContent) holder).tv_goods_num.setText("x" + goodsNum);
-            int goodsPrice = orderEntity.getShopPrice();
+            double goodsPrice = orderEntity.getShopPrice();
             ((MyViewHolderContent) holder).tv_goods_price.setText("￥" + goodsPrice);
-
-            //跳转商品页
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, GoodsDetailActivity.class);
-                    mContext.startActivity(intent);
-                }
-            });
+//
+//            //跳转商品页
+//            holder.itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(mContext, GoodsDetailActivity.class);
+//                    mContext.startActivity(intent);
+//                }
+//            });
         } else if (holder instanceof MyViewHolderFooter) {
             if (position == getItemCount() - 1) {
                 ((MyViewHolderFooter) holder).v_end_line.setVisibility(View.GONE);
@@ -131,7 +131,8 @@ public class OrderAdapter extends BaseRecycleViewAdapter {
                 ((MyViewHolderFooter) holder).v_end_line.setVisibility(View.VISIBLE);
             }
             int allNum = orderEntity.getAllNum();
-            int allPrice = orderEntity.getOrderAmount();
+            float allPrice = orderEntity.getOrderAmount();
+
             ((MyViewHolderFooter) holder).tv_all_price.setText("￥" + allPrice);
             ((MyViewHolderFooter) holder).tv_all_num.setText("共" + allNum + "件：合计");
             ((MyViewHolderFooter) holder).bt_1.setOnClickListener(new View.OnClickListener() {

@@ -322,6 +322,7 @@ public class WriteOrderActivity extends MvpActivity<PutOrderPresenter> implement
 //                        dialog.show();
 //                    }
                     openActivity(MyOrderActivity.class);
+                    finish();
 
                 } catch (DbException e) {
                     e.printStackTrace();

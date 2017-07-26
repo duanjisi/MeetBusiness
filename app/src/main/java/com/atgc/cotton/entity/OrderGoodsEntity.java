@@ -11,9 +11,9 @@ public class OrderGoodsEntity implements Serializable {
     private int GoodsId;
     private String GoodsImg;
     private String GoodsName;
-    private int ShopPrice;
+    private double ShopPrice;
 
-    private int OrderAmount;
+    private float OrderAmount;
     private int OrderId;
     private String OrderSn;
     private int contentType;//0:头 1：内容 2：尾
@@ -77,11 +77,11 @@ public class OrderGoodsEntity implements Serializable {
         this.allNum = allNum;
     }
 
-    public int getOrderAmount() {
+    public float getOrderAmount() {
         return OrderAmount;
     }
 
-    public void setOrderAmount(int orderAmount) {
+    public void setOrderAmount(float orderAmount) {
         OrderAmount = orderAmount;
     }
 
@@ -157,11 +157,11 @@ public class OrderGoodsEntity implements Serializable {
         this.GoodsName = GoodsName;
     }
 
-    public int getShopPrice() {
+    public double getShopPrice() {
         return ShopPrice;
     }
 
-    public void setShopPrice(int ShopPrice) {
+    public void setShopPrice(double ShopPrice) {
         this.ShopPrice = ShopPrice;
     }
 

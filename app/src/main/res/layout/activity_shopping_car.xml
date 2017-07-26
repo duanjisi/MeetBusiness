@@ -29,6 +29,7 @@
 
         <Button
 
+            android:id="@+id/btn_edit"
             android:textColor="@color/white"
             android:layout_marginRight="10dp"
             android:layout_centerVertical="true"

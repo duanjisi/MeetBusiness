@@ -8,7 +8,7 @@
     <!--<string name="weixin_app_secret">dd51e4ff815cfe313551a86a6402e886</string>-->
     <!--<string name="qq_app_id">1106188643</string>-->
     <!--<string name="qq_app_key">dlAfz2grvlmECfgT</string>-->
-    <!--<string name="alipay_app_id">2016092201948966</string>-->
+    <string name="alipay_app_id">2016092201948966</string>
     <string name="weixin_app_id">wxac34006c18243289</string>
     <string name="weixin_app_secret">d75af34b167ca5b4debb88009aa9d12c</string>
 

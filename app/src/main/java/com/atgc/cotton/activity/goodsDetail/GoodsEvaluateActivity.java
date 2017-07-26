@@ -1,21 +1,23 @@
-package com.atgc.cotton.activity;
+package com.atgc.cotton.activity.goodsDetail;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.View;
-import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.atgc.cotton.App;
 import com.atgc.cotton.R;
+import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.activity.base.MvpActivity;
+import com.atgc.cotton.adapter.GoodsEvaluateAdapter;
 import com.atgc.cotton.adapter.MsgAdapter;
-import com.atgc.cotton.adapter.ShoppingCarAdapter;
 import com.atgc.cotton.entity.BaseResult;
+import com.atgc.cotton.entity.GoodsEvaluateEntity;
 import com.atgc.cotton.entity.MsgEntity;
-import com.atgc.cotton.presenter.MsgPresenter;
-import com.atgc.cotton.presenter.view.IMsgView;
+import com.atgc.cotton.presenter.GoodsEvaluatePresenter;
+import com.atgc.cotton.presenter.view.ISingleView;
 import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
 import com.github.jdsjlzx.interfaces.OnRefreshListener;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
@@ -30,45 +32,64 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by liw on 2017/6/28.
+ * Created by liw on 2017/7/26.
  */
 
-public class MessageActivity extends MvpActivity<MsgPresenter> implements IMsgView {
-    @Bind(R.id.img_back)
-    ImageView imgBack;
+public class GoodsEvaluateActivity extends MvpActivity<GoodsEvaluatePresenter> implements ISingleView {
+    @Bind(R.id.tv_back)
+    TextView tvBack;
     @Bind(R.id.rv_content)
     LRecyclerView rvContent;
-    private MsgAdapter adapter;
+    private GoodsEvaluateAdapter adapter;
 
     private int page = 1;
     private boolean isOnRefresh = false;      //是否是刷新
+    private String goodId;
     private String token;
-    private List<MsgEntity.DataBean> allDatas = new ArrayList<>();
-    private int delPostion = -1;
+
+    private List<GoodsEvaluateEntity.DataBean> allDatas = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_message);
+        setContentView(R.layout.activity_goods_evaluate);
         ButterKnife.bind(this);
-
         initUI();
+
         initData();
+
+    }
+
+    @Override
+    protected GoodsEvaluatePresenter createPresenter() {
+        return new GoodsEvaluatePresenter(this);
+    }
+
+    private void initData() {
+        if (isOnRefresh) {
+            page = 1;
+        }
+        mPresenter.searchEvaluate(token,Integer.parseInt(goodId),page,20);
+
     }
 
     private void initUI() {
         token = App.getInstance().getToken();
 
+        Intent intent = getIntent();
+        if (intent != null) {
+            goodId = intent.getStringExtra("goodId");
+        }
         rvContent.setLayoutManager(new LinearLayoutManager(this));
 
         rvContent.setHeaderViewColor(R.color.red_fuwa, R.color.red_fuwa_alpa_stroke, android.R.color.white);
         rvContent.setRefreshProgressStyle(ProgressStyle.Pacman); //设置下拉刷新Progress的样式
         rvContent.setFooterViewHint("拼命加载中", "我是有底线的", "网络不给力啊，点击再试一次吧");
-        adapter = new MsgAdapter(this);
+        adapter = new GoodsEvaluateAdapter(this);
         LRecyclerViewAdapter adapter1 = new LRecyclerViewAdapter(adapter);
         rvContent.setAdapter(adapter1);
 
-        rvContent.setLoadMoreEnabled(true );
+        rvContent.setLoadMoreEnabled(true);
 
 
         rvContent.setOnRefreshListener(new OnRefreshListener() {
@@ -99,56 +120,27 @@ public class MessageActivity extends MvpActivity<MsgPresenter> implements IMsgVi
                 }, 1000);
             }
         });
-        adapter.setOnDelListener(new ShoppingCarAdapter.onSwipeListener() {
-            @Override
-            public void onDel(int pos) {
-                delPostion= pos;
-                int id = allDatas.get(pos).getId();
-                mPresenter.deleteMsg(token,id);
-
-            }
-        });
     }
 
-    private void initData() {
-        if (isOnRefresh) {
-            page = 1;
-        }
-        mPresenter.searchMsg(token, page, 10);
+    @OnClick(R.id.tv_back)
+    public void onViewClicked() {
+        finish();
     }
 
     @Override
-    protected MsgPresenter createPresenter() {
-        return new MsgPresenter(this);
-    }
-
-    @OnClick({R.id.img_back})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.img_back:
-                finish();
-                break;
-
-        }
-    }
-
-    /**
-     * 查询消息访问接口成功
-     * @param s
-     */
-    @Override
-    public void searchMsgSuccess(String s) {
+    public void onSuccess(String s) {
+//        s ="{\"Status\":200,\"Code\":0,\"Name\":\"PublicController\",\"Message\":\"success\",\"Data\":[{\"AddTime\":1500363218,\"Avatar\":\"http://gb.cri.cn/mmsource/images/2006/06/13/el060613102.jpg\",\"Content\":\"测试评论商品\",\"GoodsId\":21,\"Id\":10,\"OrderId\":17,\"Pics\":[\"http://gb.cri.cn/mmsource/images/2006/06/13/el060613102.jpg\",\"http://gb.cri.cn/mmsource/images/2006/06/13/el060613102.jpg\",\"http://gb.cri.cn/mmsource/images/2006/06/13/el060613102.jpg\",\"http://gb.cri.cn/mmsource/images/2006/06/13/el060613102.jpg\"],\"Score\":5,\"UserId\":100000000,\"UserName\":\"无怨无悔\"}]}";
         BaseResult result = JSON.parseObject(s, BaseResult.class);
-        if(result.getCode()==1){
-            showToast("没有消息哦");
+        if (result.getCode() == 1) {
+            showToast("没有更多数据");
             return;
         }
-        MsgEntity msgEntity = JSON.parseObject(s, MsgEntity.class);
-        if (msgEntity != null) {
-            int code = msgEntity.getCode();
-            if (code == 0) {
 
-                List<MsgEntity.DataBean> datas = msgEntity.getData();
+        GoodsEvaluateEntity entity = JSON.parseObject(s, GoodsEvaluateEntity.class);
+        if (entity != null) {
+            int code = entity.getCode();
+            if (code == 0) {
+                List<GoodsEvaluateEntity.DataBean> datas = entity.getData();
                 if (datas.size() == 10) {
                     rvContent.setNoMore(false);
                     page++;
@@ -165,37 +157,15 @@ public class MessageActivity extends MvpActivity<MsgPresenter> implements IMsgVi
                 }
                 adapter.setDatas(allDatas);
                 adapter.notifyDataSetChanged();
-            }else {
-                showToast(msgEntity.getMessage());
             }
-
+        } else {
+            showToast("服务器异常");
         }
+
     }
 
-    /**
-     * 删除消息接口访问成功
-     * @param s
-     */
     @Override
-    public void deleteMsgSuccess(String s) {
-        BaseResult result = JSON.parseObject(s, BaseResult.class);
-        if(result!=null){
-            if(result.getCode()==0){
-                showToast("删除成功");
-                adapter.remove(delPostion);
-            }else{
-                showToast(result.getMessage());
-            }
-        }
-    }
-
-    /**
-     * 请求网络网络不好
-     * @param s
-     */
-    @Override
-    public void applyFailure(String s) {
-        showToast(s);
-
+    public void onError(String msg) {
+        showToast(msg);
     }
 }
