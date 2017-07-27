@@ -33,7 +33,7 @@ public abstract class MyObserver<T> implements Observer<T>{
             onError_(msg);
         } else {
 //            onError_(e.getMessage());
-            onError_("网络不给力");      //断网测试，不是HttpException异常,而是解析不到host的英文。
+            onError_("网络不给力");      //断网测试，不是HttpException异常,而是解析不到host的英文。(有可能是json解析异常)
         }
         onCompleted_();
     }

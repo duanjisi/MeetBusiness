@@ -58,4 +58,13 @@ public class OrderActionEntity {
     public void setBuy(boolean buy) {
         isBuy = buy;
     }
+    private float allPrice;
+
+    public float getAllPrice() {
+        return allPrice;
+    }
+
+    public void setAllPrice(float allPrice) {
+        this.allPrice = allPrice;
+    }
 }

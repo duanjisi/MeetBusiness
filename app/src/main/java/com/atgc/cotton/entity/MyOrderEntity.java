@@ -98,7 +98,7 @@ public class MyOrderEntity {
         private String ExpressName;
         private String ExpressNo;
         private String Mobile;
-        private int OrderAmount;
+        private float OrderAmount;
         private int OrderId;
         private String OrderSn;
         private int OrderStatus;
@@ -195,11 +195,11 @@ public class MyOrderEntity {
             this.Mobile = Mobile;
         }
 
-        public int getOrderAmount() {
+        public float getOrderAmount() {
             return OrderAmount;
         }
 
-        public void setOrderAmount(int OrderAmount) {
+        public void setOrderAmount(float OrderAmount) {
             this.OrderAmount = OrderAmount;
         }
 

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.atgc.cotton.widget.SwipeMenuView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:paddingTop="9dp"
+    >
+
+    <RelativeLayout
+        android:id="@+id/rl_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:scaleType="fitXY"
+            android:layout_toRightOf="@id/img_choose"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/iv_icon"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/person" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="9dp"
+            android:layout_toRightOf="@+id/iv_icon"
+            android:text="少时诵诗书所所所所所所所"
+            android:textColor="@color/text_color_black" />
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_title"
+            android:layout_below="@+id/tv_title"
+            android:layout_marginTop="20dp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:text="少时诵诗书所所所所所所所"
+            android:textColor="@color/text_color_gray_d" />
+
+
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:paddingLeft="@dimen/dp_18"
+        android:paddingRight="@dimen/dp_18"
+        android:src="@drawable/delete_goods" />
+
+</com.atgc.cotton.widget.SwipeMenuView>

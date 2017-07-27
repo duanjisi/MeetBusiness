@@ -127,10 +127,12 @@ public class OrderAllFragment extends BaseOrderFragment {
     private void btnToDo(OrderGoodsEntity entity, int type) {
         orderActionEntity.setOrderid(entity.getOrderId());
         int orderType = entity.getOrderStatus();
+
         switch (orderType) {//"0:待付款", "1:待发货", "2:待收货", "3:待评价"
             case 0:
                 if (type == 1) {
                     Log.i("OrderEntity:", "付款");
+                    orderActionEntity.setAllPrice(entity.getOrderAmount());
                     orderActionEntity.setDoAction("pay");
                 } else if (type == 2) {
                     Log.i("OrderEntity:", "取消订单");

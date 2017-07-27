@@ -54,7 +54,7 @@ public class OrderEvaluateAdapter extends BaseRecycleViewAdapter {
         }
         int goodsNum = orderEntity.getBuyNumber();
         ((MyViewHolderContent) holder).tv_goods_num.setText("x" + goodsNum);
-        int goodsPrice = orderEntity.getShopPrice();
+        double goodsPrice = orderEntity.getShopPrice();
         ((MyViewHolderContent) holder).tv_goods_price.setText("￥" + goodsPrice);
         //跳转商品页
         holder.itemView.setOnClickListener(new View.OnClickListener() {

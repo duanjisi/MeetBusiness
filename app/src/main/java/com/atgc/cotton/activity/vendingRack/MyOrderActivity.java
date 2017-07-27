@@ -3,6 +3,8 @@ package com.atgc.cotton.activity.vendingRack;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,13 +20,18 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alipay.sdk.app.PayTask;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseCompatActivity;
+import com.atgc.cotton.entity.AlipayOrder;
 import com.atgc.cotton.entity.MyOrderEntity;
 import com.atgc.cotton.entity.OrderActionEntity;
 import com.atgc.cotton.entity.OrderGoodsEntity;
+import com.atgc.cotton.entity.PayResult;
 import com.atgc.cotton.fragment.BaseOrderFragment;
 import com.atgc.cotton.fragment.OrderAllFragment;
 import com.atgc.cotton.fragment.OrderEvaluateFragment;
@@ -37,6 +44,8 @@ import com.atgc.cotton.fragment.OrderSellerShipmentsFragment;
 import com.atgc.cotton.fragment.OrderShipmentsFragment;
 import com.atgc.cotton.presenter.MyOrderPresenter;
 import com.atgc.cotton.presenter.view.IMyOrderView;
+import com.atgc.cotton.util.OkManager;
+import com.atgc.cotton.util.OrderInfoUtil2_0;
 import com.atgc.cotton.util.UIUtils;
 
 import java.util.ArrayList;
@@ -68,6 +77,54 @@ public class MyOrderActivity extends BaseCompatActivity<MyOrderPresenter> implem
     private int orderId;
     private boolean isBuy, isDelete = false;
     private Map<String, String> operateMap;
+
+    private Dialog dialog;
+    private boolean zhifubao = true; //支付宝购买
+    private List<OrderGoodsEntity> goodsEntityList;
+    private TextView tv_count;
+
+    private static final int SDK_PAY_FLAG = 2;
+    private static final int SDK_PAY_WX = 3;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+
+                case SDK_PAY_WX:
+
+                    break;
+                case SDK_PAY_FLAG:
+                    PayResult payResult = new PayResult(
+                            (Map<String, String>) msg.obj);
+                    /**
+                     * 对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
+                     */
+                    String resultStatus = payResult.getResultStatus();
+                    // 判断resultStatus 为9000则代表支付成功
+                    if (TextUtils.equals(resultStatus, "9000")) {
+                        // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
+                        showToast("支付成功", true);
+                        //TODO  刷新当前UI          但是还要和从广联调一下
+
+                        if (!isAddOneList.contains(curPos)) {
+                            isAddOneList.add(curPos);
+                            if (curPos == 4) {
+                                mPresenter.getMyBuyEvaluateOrder(1, 20);
+                            } else {
+                                mPresenter.getMyBuyOrder(curPos + 1, 1, 20);
+                            }
+                        }
+                    } else {
+                        // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
+                        showToast("支付失败", true);
+                    }
+
+                    break;
+
+            }
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -238,13 +295,56 @@ public class MyOrderActivity extends BaseCompatActivity<MyOrderPresenter> implem
 
     }
 
+
+    /**
+     * 通过支付宝拿到订单号
+     * @param order
+     */
+    @Override
+    public void alipaySuccess(AlipayOrder order) {
+
+        //TODO 调起支付宝支付
+
+        bindDataAlipay(order);
+
+
+    }
+
+    private void bindDataAlipay(AlipayOrder order) {
+        if (order != null) {
+            cancelLoadingDialog();
+            /**
+             * 这里只是为了方便直接向商户展示支付宝的整个支付流程；所以Demo中加签过程直接放在客户端完成；
+             * 真实App里，privateKey等数据严禁放在客户端，加签过程务必要放在服务端完成；
+             * 防止商户私密数据泄露，造成不必要的资金损失，及面临各种安全风险；
+             * orderInfo的获取必须来自服务端；
+             */
+            final String orderInfo = order.getData().getOrderStr();
+            Runnable payRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    PayTask alipay = new PayTask(MyOrderActivity.this);
+                    Map<String, String> result = alipay.payV2(orderInfo, true);
+                    Log.i("msp", result.toString());
+
+                    Message msg = new Message();
+                    msg.what = SDK_PAY_FLAG;
+                    msg.obj = result;
+                    handler.sendMessage(msg);
+                }
+            };
+            Thread payThread = new Thread(payRunnable);
+            payThread.start();
+        }
+    }
+
     private void updateFragmentPage(boolean isBuy, List<MyOrderEntity.DataBean> list) {
         if (list == null) {
             showToast("没有更多数据", false);
             return;
         }
         int parentSize = list.size();
-        List<OrderGoodsEntity> goodsEntityList = new ArrayList<>();
+        goodsEntityList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             MyOrderEntity.DataBean pater = list.get(i);
             if (pater != null) {
@@ -369,6 +469,14 @@ public class MyOrderActivity extends BaseCompatActivity<MyOrderPresenter> implem
                             mPresenter.operateMyOrder(operateMap);
                             break;
                         case "pay"://付款
+                            float allPrice =  entity.getAllPrice();
+                            int orderid = entity.getOrderid();
+                            if (dialog == null) {
+                                showPayDialog(allPrice,orderid);
+                            } else {
+                                tv_count.setText(allPrice+"元");
+                                dialog.show();
+                            }
 
                             break;
                         case "confirmGoods"://确认收货
@@ -396,6 +504,79 @@ public class MyOrderActivity extends BaseCompatActivity<MyOrderPresenter> implem
 
     }
 
+    private void showPayDialog(float allPrice, final int orderid) {
+        dialog = new Dialog(this, R.style.Dialog_full);
+        View view_dialog = View.inflate(this,
+                R.layout.pop_pay, null);
+
+
+        dialog.setContentView(view_dialog);
+
+
+        Window dialogWindow = dialog.getWindow();
+
+        final ImageView img_zhifubao_choose = (ImageView) view_dialog.findViewById(R.id.img_zhifubao_choose);
+        final ImageView img_wx_choose = (ImageView) view_dialog.findViewById(R.id.img_wx_choose);
+        tv_count = (TextView) view_dialog.findViewById(R.id.tv_count);
+        tv_count.setText(allPrice+"元");
+
+        view_dialog.findViewById(R.id.rl_zhifubao).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                img_zhifubao_choose.setImageResource(R.drawable.money_choose);
+                img_wx_choose.setImageResource(R.drawable.money_nochoose);
+                zhifubao = true;
+            }
+        });
+        view_dialog.findViewById(R.id.rl_weixin).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                img_wx_choose.setImageResource(R.drawable.money_choose);
+                img_zhifubao_choose.setImageResource(R.drawable.money_nochoose);
+                zhifubao = false;
+            }
+        });
+        view_dialog.findViewById(R.id.tv_buy).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (zhifubao) {
+//                    requestAlipayTrade();
+                    showToast("支付宝", false);
+
+                    mPresenter.aliPay(orderid);
+                } else {
+//                    requestWxTrade();
+                    showToast("微信", false);
+                }
+                dialog.dismiss();
+            }
+        });
+        view_dialog.findViewById(R.id.img_xx).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        TextView tv_buy = (TextView) view_dialog.findViewById(R.id.tv_buy);
+        int screenWidth = UIUtils.getScreenWidth(this);
+
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) tv_buy.getLayoutParams();
+        layoutParams.width = (int) (screenWidth * 0.9);
+        tv_buy.setLayoutParams(layoutParams);
+
+        dialogWindow.setWindowAnimations(R.style.ActionSheetDialogAnimation);
+        dialogWindow.setBackgroundDrawableResource(android.R.color.transparent); //加上可以在底部对其屏幕底部
+
+
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.gravity = Gravity.BOTTOM;
+        dialogWindow.setAttributes(lp);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
     class PagerAdapter extends FragmentPagerAdapter {
 
         public PagerAdapter(FragmentManager fm) {

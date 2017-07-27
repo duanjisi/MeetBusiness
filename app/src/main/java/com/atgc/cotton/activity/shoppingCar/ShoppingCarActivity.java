@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,6 +58,8 @@ public class ShoppingCarActivity extends MvpActivity<ShoppingCarPresenter> imple
 
     private TextView tv_num;
     private TextView tv_delete;
+    private Button btn_edit;
+    private boolean isEdit = false;
 
 
 
@@ -206,6 +209,10 @@ public class ShoppingCarActivity extends MvpActivity<ShoppingCarPresenter> imple
         tv_delete = (TextView) findViewById(R.id.tv_delete);
 
         tv_delete.setOnClickListener(this);
+        btn_edit = (Button) findViewById(R.id.btn_edit);
+
+        btn_edit.setOnClickListener(this);
+        findViewById(R.id.img_back).setOnClickListener(this);
     }
 
     @Override
@@ -296,8 +303,6 @@ public class ShoppingCarActivity extends MvpActivity<ShoppingCarPresenter> imple
                     //再把商品data add进去
                     addShopList.add(newDatas.get(i));
                 }
-
-
                 entity.setData(addShopList);
 
                 String goodsJson = JSON.toJSONString(entity);
@@ -305,8 +310,35 @@ public class ShoppingCarActivity extends MvpActivity<ShoppingCarPresenter> imple
                 Intent intent = new Intent(context, WriteOrderActivity.class);
                 intent.putExtra("goodsJson", goodsJson);
                 startActivity(intent);
+                break;
+            case R.id.btn_edit:
+
+                if(!isEdit){
+                    btn_edit.setText("完成");
+                    adapter.setEdit(true);
 
 
+                }else{
+                    btn_edit.setText("编辑");
+                    adapter.setEdit(false);
+                    List<OrderGoods> dataList = adapter.getDataList();
+                    List<OrderGoods> list = new ArrayList<>();
+                    try {
+                        mDbUtils.deleteAll(OrderGoods.class);
+                        for(int i =0;i<dataList.size();i++){
+                            if(dataList.get(i).getHead()==0){
+                                list.add(dataList.get(i));
+                            }
+                        }
+                        mDbUtils.saveAll(list);
+                    } catch (DbException e) {
+                        e.printStackTrace();
+                    }
+                }
+                isEdit = !isEdit;
+                break;
+            case R.id.img_back:
+                finish();
                 break;
         }
     }

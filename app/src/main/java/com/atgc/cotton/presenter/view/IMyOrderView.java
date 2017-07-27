@@ -1,5 +1,6 @@
 package com.atgc.cotton.presenter.view;
 
+import com.atgc.cotton.entity.AlipayOrder;
 import com.atgc.cotton.entity.MyOrderEntity;
 import com.atgc.cotton.entity.OrderGoodsEntity;
 
@@ -13,4 +14,5 @@ public interface IMyOrderView extends IBaseView {
     void getMyEvaluateOrderSuccess(List<OrderGoodsEntity> lsit);
     void deleteOrderSuccess();
     void onError(String msg);
+    void alipaySuccess(AlipayOrder order);
 }

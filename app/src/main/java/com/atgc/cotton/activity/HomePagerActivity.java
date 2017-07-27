@@ -3,6 +3,7 @@ package com.atgc.cotton.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -23,6 +24,7 @@ import com.atgc.cotton.App;
 import com.atgc.cotton.Constants;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
+import com.atgc.cotton.activity.production.mine.EditDataActivity;
 import com.atgc.cotton.activity.production.mine.MyProductionActivity;
 import com.atgc.cotton.activity.shoppingCar.ShoppingCarActivity;
 import com.atgc.cotton.activity.vendingRack.MyOrderActivity;
@@ -44,6 +46,10 @@ import java.util.ArrayList;
 
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
+
+import de.greenrobot.event.EventBus;
+import de.greenrobot.event.Subscribe;
+import de.greenrobot.event.ThreadMode;
 
 /**
  * Created by Johnny on 2017/6/1.
@@ -72,10 +78,11 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
     private Handler handler;
     private Button btn_login;
     private TextView tv_name;
-
+    private boolean isExit;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         setContentView(R.layout.home_activity);
         EventBus.getDefault().register(this);
         App.getInstance().addTempActivity(this);
@@ -90,6 +97,11 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 
     private void initViews() {
         handler = new Handler();
@@ -165,7 +177,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
 //                break;
             case R.id.iv_avatar:
 //                openActivity(testActivity.class);
-                openActivity(LoginActivity.class);
+                openActivity(EditDataActivity.class);
                 break;
         }
     }
@@ -247,29 +259,31 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
         public void onCheckedChanged(RadioGroup arg0, int arg1) {
             switch (arg1) {
                 case R.id.rb_setting:
-                    showToast("个人设置", true);
+                    rb_setting.setChecked(false);
                     openActivity(PersonalSetActivity.class);
                     rb_setting.setChecked(false);
                     closeDrawer();
                     break;
                 case R.id.rb_production:
+                    rb_production.setChecked(false);
                     openActivity(MyProductionActivity.class);
                     rb_production.setChecked(false);
                     closeDrawer();
 //                    openActivity(OtherPlayerActivity.class);
                     break;
                 case R.id.rb_video:
+                    rb_video.setChecked(false);
                     openActivity(RecordVideoActivity.class);
                     rb_video.setChecked(false);
                     closeDrawer();
                     break;
                 case R.id.rb_price:
+                    rb_price.setChecked(false);
                     openActivity(VendingRackHomeActivity.class);
                     rb_price.setChecked(false);
                     closeDrawer();
                     break;
                 case R.id.rb_shopping:
-//                    showToast("购物车", true);
                     rb_shopping.setChecked(false);
 
 
@@ -287,6 +301,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
 //                    openActivity(ShoppingCarActivity.class);
                     break;
                 case R.id.rb_order:
+                    rb_order.setChecked(false);
                     openActivity(MyOrderActivity.class);
                     rb_order.setChecked(false);
                     closeDrawer();
@@ -349,5 +364,39 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if(!isExit){
+           showToast("再按一次退出应用");
+            isExit = true;
+            EventBus.getDefault().post(isExit);
+        }else{
+            super.onBackPressed();
+        }
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.Async)
+    public void onEventExit(Boolean isBool){
+        SystemClock.sleep(1000);
+        isExit = false;
+    }
+
+
+    @Subscribe
+    public void onEvent(ActionEntity entity){
+      if(entity.getAction().equals(Constants.Action.UPDATE_ACCOUNT_INFORM )){
+          String avatar = LoginStatus.getInstance().getAvatar();
+          String username = LoginStatus.getInstance().getUsername();
+          if (!TextUtils.isEmpty(avatar)) {
+              Glide.with(context).load(avatar).into(ivAvatar);
+          }
+          if (!TextUtils.isEmpty(username)) {
+              tv_name.setText(username);
+          }
+       }
     }
 }

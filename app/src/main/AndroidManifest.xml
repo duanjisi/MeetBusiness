@@ -85,6 +85,7 @@
         <activity android:name=".activity.testActivity"></activity>
         <activity
             android:name=".activity.shoppingCar.ShoppingCarActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activity.videoedit.RecordVideoActivity"
@@ -163,9 +164,6 @@
             android:screenOrientation="portrait" />
 
 
-        <activity android:name=".activity.goodsDetail.ChooseAddressActivity"
-            android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.goodsDetail.EditAddressActivity"
             android:screenOrientation="portrait" />
@@ -212,6 +210,25 @@
 
         <activity android:name=".activity.ResetPswActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.MessageActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.goodsDetail.GoodsEvaluateActivity"
+            android:screenOrientation="portrait"/>
+
+
+        <!--支付宝start-->
+        <activity
+            android:name="com.alipay.sdk.app.H5PayActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind"></activity>
+        <activity
+            android:name="com.alipay.sdk.auth.AuthActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind"></activity>
+
+        <!-- 支付宝end -->
         <!--友盟appkey-->
         <meta-data
             android:name="UMENG_APPKEY"

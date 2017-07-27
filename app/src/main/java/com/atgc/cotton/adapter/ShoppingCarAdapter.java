@@ -1,17 +1,24 @@
 package com.atgc.cotton.adapter;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.atgc.cotton.R;
 import com.atgc.cotton.adapter.base.ListBaseAdapter;
 import com.atgc.cotton.adapter.base.SuperViewHolder;
 import com.atgc.cotton.entity.OrderGoods;
+import com.atgc.cotton.util.L;
 import com.atgc.cotton.widget.SwipeMenuView;
 import com.bumptech.glide.Glide;
 import com.lidroid.xutils.DbUtils;
@@ -117,7 +124,7 @@ public class ShoppingCarAdapter extends ListBaseAdapter<OrderGoods> {
                     }
                 });
 
-                OrderGoods entity = mDataList.get(position);
+                final OrderGoods entity = mDataList.get(position);
                 ImageView iv_icon = holder.getView(R.id.iv_icon);
                 ImageView img_choose = holder.getView(R.id.img_choose);
                 Glide.with(mContext).load(entity.getImgUrl()).into(iv_icon);
@@ -127,7 +134,7 @@ public class ShoppingCarAdapter extends ListBaseAdapter<OrderGoods> {
                 tv_content.setText(entity.getType());
                 TextView tv_price = holder.getView(R.id.tv_price);
                 tv_price.setText("¥ " + entity.getGoodsPrice());
-                TextView tv_num = holder.getView(R.id.tv_num);
+                final TextView tv_num = holder.getView(R.id.tv_num);
                 tv_num.setText("x" + entity.getBuyNum());
 
                 final boolean check1 = mDataList.get(position).isChecksss();
@@ -183,6 +190,64 @@ public class ShoppingCarAdapter extends ListBaseAdapter<OrderGoods> {
                         notifyDataSetChanged();
                     }
                 });
+
+                LinearLayout ll_edit = holder.getView(R.id.ll_edit);
+                if (edit) {
+                    ll_edit.setVisibility(View.VISIBLE);
+                } else {
+                    ll_edit.setVisibility(View.GONE);
+                }
+                ImageView iv_minus = holder.getView(R.id.iv_minus);
+                ImageView iv_add = holder.getView(R.id.iv_add);
+                final EditText et_repertory = holder.getView(R.id.et_repertory);
+                final int buyNum = entity.getBuyNum();
+                et_repertory.setText(buyNum + "");
+                iv_minus.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        int num = Integer.parseInt(et_repertory.getText().toString());
+                        if (num > 1) {
+                            et_repertory.setText(num - 1 + "");
+                            tv_num.setText(num - 1 + "");
+                            entity.setBuyNum(num-1);
+                        }
+
+                    }
+                });
+                iv_add.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        int num = Integer.parseInt(et_repertory.getText().toString());
+                        et_repertory.setText(num + 1 + "");
+                        tv_num.setText(num + 1 + "");
+                        entity.setBuyNum(num+1);
+                    }
+                });
+
+                et_repertory.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                    @Override
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+
+                        String num = v.getText().toString();
+                        if (num .equals("" ) || num.equals("0")) {
+
+                            et_repertory.setText("1");
+                            tv_num.setText("x"+1);
+                            entity.setBuyNum(Integer.parseInt(1+""));
+                        }else{
+                            tv_num.setText("x"+num);
+                            entity.setBuyNum(Integer.parseInt(num+""));
+                        }
+
+                        return false;
+
+                    }
+                });
+
+
                 break;
             case 1:
                 TextView tv_shop_name = holder.getView(R.id.tv_shop_name);
@@ -205,7 +270,7 @@ public class ShoppingCarAdapter extends ListBaseAdapter<OrderGoods> {
                             }
                         }
 
-                        List<Boolean> allChecks = new ArrayList<Boolean>(); //所有id的选中状态
+                        List<Boolean> allChecks = new ArrayList<Boolean>(); //所有id``````````mm  的选中状态
                         for (int i = 0; i < mDataList.size(); i++) {
                             boolean check2 = mDataList.get(i).isChecksss();
                             allChecks.add(check2);
@@ -225,6 +290,7 @@ public class ShoppingCarAdapter extends ListBaseAdapter<OrderGoods> {
         }
 
     }
+
 
     @Override
     public SuperViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -293,5 +359,12 @@ public class ShoppingCarAdapter extends ListBaseAdapter<OrderGoods> {
         }
         notifyDataSetChanged();
 
+    }
+
+    private boolean edit = false;
+
+    public void setEdit(boolean edit) {
+        this.edit = edit;
+        notifyDataSetChanged();
     }
 }
