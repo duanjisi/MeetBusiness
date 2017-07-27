@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.atgc.cotton.App;
+import com.atgc.cotton.Constants;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.activity.production.mine.MyProductionActivity;
@@ -28,6 +29,7 @@ import com.atgc.cotton.activity.vendingRack.MyOrderActivity;
 import com.atgc.cotton.activity.vendingRack.VendingRackHomeActivity;
 import com.atgc.cotton.activity.videoedit.RecordVideoActivity;
 import com.atgc.cotton.config.LoginStatus;
+import com.atgc.cotton.entity.ActionEntity;
 import com.atgc.cotton.fragment.MainDiscoverFragment;
 import com.atgc.cotton.fragment.MainFocusFragment;
 import com.atgc.cotton.fragment.MainFragment;
@@ -39,6 +41,9 @@ import com.bumptech.glide.Glide;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
+
+import de.greenrobot.event.EventBus;
+import de.greenrobot.event.Subscribe;
 
 /**
  * Created by Johnny on 2017/6/1.
@@ -72,6 +77,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity);
+        EventBus.getDefault().register(this);
         App.getInstance().addTempActivity(this);
         rl_line = (RelativeLayout) findViewById(R.id.rl_line);
         ViewTreeObserver vto2 = rl_line.getViewTreeObserver();
@@ -319,5 +325,29 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
                     break;
             }
         }
+    }
+
+    @Subscribe
+    public void onMessageEvent(ActionEntity event) {
+        if (event != null) {
+            String action = event.getAction();
+            String tag = (String) event.getData();
+            if (action.equals(Constants.Action.UPDATE_ACCOUNT_INFORM)) {
+                LoginStatus sLoginStatus = LoginStatus.getInstance();
+                if (tag.equals("avatar")) {
+                    String avatar = sLoginStatus.getAvatar();
+                    imageLoader.displayImage(avatar, ivAvatar, ImageLoaderUtils.getDisplayImageOptions());
+                } else if (tag.equals("name")) {
+                    String name = sLoginStatus.getUsername();
+                    tv_name.setText(name);
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

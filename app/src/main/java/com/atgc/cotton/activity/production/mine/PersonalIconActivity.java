@@ -220,7 +220,7 @@ public class PersonalIconActivity extends BaseActivity implements View.OnClickLi
                 } else {
                     path = imageUri.toString();
                 }
-                if (Build.VERSION.SDK_INT >= 24 && path.contains("im.boss66.com.fileProvider") &&
+                if (Build.VERSION.SDK_INT >= 24 && path.contains("com.atgc.cotton.fileProvider") &&
                         path.contains("/IMProject/")) {
                     String[] arr = path.split("/IMProject/");
                     if (arr != null && arr.length > 1) {
