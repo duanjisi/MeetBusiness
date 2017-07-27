@@ -162,6 +162,7 @@ public class EditDataActivity extends BaseActivity implements View.OnClickListen
                     case "name":
                         tv_nick.setText("" + value);
                         sLoginStatus.setUser_name(value);
+                        EventBus.getDefault().post(new ActionEntity(Constants.Action.UPDATE_ACCOUNT_INFORM));
                         break;
                     case "sex":
                         tv_sex.setText("" + value);

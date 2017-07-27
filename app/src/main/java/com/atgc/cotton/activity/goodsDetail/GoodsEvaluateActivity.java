@@ -131,7 +131,7 @@ public class GoodsEvaluateActivity extends MvpActivity<GoodsEvaluatePresenter> i
     public void onSuccess(String s) {
 //        s ="{\"Status\":200,\"Code\":0,\"Name\":\"PublicController\",\"Message\":\"success\",\"Data\":[{\"AddTime\":1500363218,\"Avatar\":\"http://gb.cri.cn/mmsource/images/2006/06/13/el060613102.jpg\",\"Content\":\"测试评论商品\",\"GoodsId\":21,\"Id\":10,\"OrderId\":17,\"Pics\":[\"http://gb.cri.cn/mmsource/images/2006/06/13/el060613102.jpg\",\"http://gb.cri.cn/mmsource/images/2006/06/13/el060613102.jpg\",\"http://gb.cri.cn/mmsource/images/2006/06/13/el060613102.jpg\",\"http://gb.cri.cn/mmsource/images/2006/06/13/el060613102.jpg\"],\"Score\":5,\"UserId\":100000000,\"UserName\":\"无怨无悔\"}]}";
         BaseResult result = JSON.parseObject(s, BaseResult.class);
-        if (result.getCode() == 1) {
+        if (result.getCode() ==1) {
             showToast("没有更多数据");
             return;
         }

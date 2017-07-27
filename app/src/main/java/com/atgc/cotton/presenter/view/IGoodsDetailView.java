@@ -9,4 +9,8 @@ import com.atgc.cotton.entity.GoodsDetailEntity;
 public interface IGoodsDetailView extends IBaseView {
 
     void getGoodsSuccess(GoodsDetailEntity.DataBean  bean);
+
+    void getEvaluteSuccess(String s);
+
+    void onError(String s);
 }

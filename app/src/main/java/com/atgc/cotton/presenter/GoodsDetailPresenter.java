@@ -51,4 +51,38 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView>{
                 }));
     }
 
+
+
+    /**
+     * 查询评价
+     * @param token
+     * @param page
+     * @param size
+     */
+    public void searchEvaluate(String token,int id,int page,int size) {
+        mvpView.showLoading();
+        addSubscription(api.searchEvaluate(token,id,page,size)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MyObserver<String>() {
+                    @Override
+                    public void onNext_(String model) {
+                        mvpView.hideLoading();
+                        mvpView.getEvaluteSuccess(model);
+                    }
+
+                    @Override
+                    public void onError_(String msg) {
+                        mvpView.hideLoading();
+                        mvpView.onError(msg);
+                    }
+
+                    @Override
+                    public void onCompleted_() {
+
+                    }
+
+                }));
+    }
+
 }

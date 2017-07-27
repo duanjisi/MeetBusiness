@@ -28,14 +28,18 @@ import com.atgc.cotton.R;
 import com.atgc.cotton.activity.LoginActivity;
 import com.atgc.cotton.activity.base.MvpActivity;
 import com.atgc.cotton.adapter.GoodsClassifyAdapter;
+import com.atgc.cotton.entity.BaseResult;
 import com.atgc.cotton.entity.GoodsDetailEntity;
+import com.atgc.cotton.entity.GoodsEvaluateEntity;
 import com.atgc.cotton.entity.OrderGoods;
 import com.atgc.cotton.entity.OrderGoodsListEntity;
+import com.atgc.cotton.entity.PhotoInfo;
 import com.atgc.cotton.entity.VendGoodsAttrEntity;
 import com.atgc.cotton.presenter.GoodsDetailPresenter;
 import com.atgc.cotton.presenter.view.IGoodsDetailView;
 import com.atgc.cotton.util.L;
 import com.atgc.cotton.util.UIUtils;
+import com.atgc.cotton.widget.MultiImageView;
 import com.bumptech.glide.Glide;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
@@ -79,6 +83,18 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
     View line;
     @Bind(R.id.tv_evaluate)
     TextView tvEvaluate;
+    @Bind(R.id.img_head)
+    ImageView imgHead;
+    @Bind(R.id.tv_title)
+    TextView tvTitle;
+    @Bind(R.id.tv_content)
+    TextView tvContent;
+    @Bind(R.id.multiImagView)
+    MultiImageView multiImagView;
+    @Bind(R.id.ll_evaluate)
+    LinearLayout llEvaluate;
+    @Bind(R.id.tv_more)
+    TextView tvMore;
 
     private Dialog dialog;
     private ArrayList<String> imgList;
@@ -107,7 +123,7 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
     protected void initData() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-             goodId =  bundle.getString("goodId", "");
+            goodId = bundle.getString("goodId", "");
             if (!TextUtils.isEmpty(goodId)) {
                 mPresenter.getGoodsDetail(Integer.parseInt(goodId));
                 mDbUtils = DbUtils.create(this);
@@ -116,6 +132,7 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
 //          先用测试数据
 //        mPresenter.getGoodsDetail(Integer.parseInt(goodId));
 //        mDbUtils = DbUtils.create(this);
+        mPresenter.searchEvaluate(App.getInstance().getToken(), Integer.parseInt(goodId), 1, 10);
     }
 
     @Override
@@ -134,7 +151,7 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
     }
 
 
-    @OnClick({R.id.rl_classify, R.id.img_more, R.id.img_back,R.id.tv_evaluate})
+    @OnClick({R.id.rl_classify, R.id.img_more, R.id.img_back, R.id.tv_evaluate,R.id.tv_more})
     public void onViewClicked(View view) {
         switch (view.getId()) {
 
@@ -154,8 +171,13 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
 
             case R.id.tv_evaluate:
                 Intent intent = new Intent(GoodsDetailActivity.this, GoodsEvaluateActivity.class);
-                intent.putExtra("goodId",goodId);
+                intent.putExtra("goodId", goodId);
                 startActivity(intent);
+                break;
+            case R.id.tv_more:
+                Intent intent1 = new Intent(GoodsDetailActivity.this, GoodsEvaluateActivity.class);
+                intent1.putExtra("goodId", goodId);
+                startActivity(intent1);
                 break;
 
         }
@@ -254,7 +276,7 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
         view.findViewById(R.id.btn_add).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!App.getInstance().isLogin()){
+                if (!App.getInstance().isLogin()) {
                     openActivity(LoginActivity.class);
                 }
 
@@ -366,7 +388,7 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
             public void onClick(View v) {
                 //购买
 
-                if(!App.getInstance().isLogin()){
+                if (!App.getInstance().isLogin()) {
                     openActivity(LoginActivity.class);
                 }
 
@@ -622,6 +644,51 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
 
             }
         });
+
+    }
+
+    @Override
+    public void getEvaluteSuccess(String s) {
+        BaseResult result = JSON.parseObject(s, BaseResult.class);
+        if (result.getCode() ==1) {
+            showToast("没有更多数据");
+            return;
+        }
+        GoodsEvaluateEntity entity = JSON.parseObject(s, GoodsEvaluateEntity.class);
+        if (entity != null) {
+            int code = entity.getCode();
+            if (code == 0) {
+                List<GoodsEvaluateEntity.DataBean> datas = entity.getData();
+
+                GoodsEvaluateEntity.DataBean dataBean = datas.get(0);
+
+                llEvaluate.setVisibility(View.VISIBLE);
+                Glide.with(context).load(dataBean.getAvatar()).into(imgHead);
+                tvTitle.setText(dataBean.getContent());
+                tvContent.setText(dataBean.getContent());
+                List<String> pics = dataBean.getPics();
+                List<PhotoInfo> photos = new ArrayList<>();
+                for (String s1 : pics) {
+                    PhotoInfo photoInfo = new PhotoInfo();
+                    photoInfo.file_thumb = s1;
+                    photoInfo.type = 0;
+                    photos.add(photoInfo);
+                }
+                multiImagView.setSceenW(UIUtils.getScreenWidth(context));
+                multiImagView.setList(photos);
+
+            }
+        } else {
+            showToast("服务器异常");
+        }
+
+
+    }
+
+    @Override
+    public void onError(String s) {
+
+        showToast(s);
 
     }
 

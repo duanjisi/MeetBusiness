@@ -17,7 +17,7 @@ public class GoodsEvaluatePresenter extends BasePresenter<ISingleView> {
 
 
     /**
-     * 查询
+     * 查询评价
      * @param token
      * @param page
      * @param size
