@@ -5,5 +5,6 @@ package com.atgc.cotton.presenter;
  */
 
 public interface IBasePresenter {
+
     void unsubcrible();
 }

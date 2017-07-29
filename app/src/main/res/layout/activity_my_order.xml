@@ -39,7 +39,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/dp_14"
                     android:padding="@dimen/dp_6"
-                    android:text="买家"
+                    android:text="我买到的"
                     android:textColor="@drawable/selector_order_top_text"
                     android:textSize="@dimen/sp_16" />
 
@@ -49,7 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_14"
                     android:padding="@dimen/dp_6"
-                    android:text="卖家"
+                    android:text="我卖出的"
                     android:textColor="@drawable/selector_order_top_text"
                     android:textSize="@dimen/sp_16" />
 

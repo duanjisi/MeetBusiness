@@ -651,7 +651,7 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
     public void getEvaluteSuccess(String s) {
         BaseResult result = JSON.parseObject(s, BaseResult.class);
         if (result.getCode() ==1) {
-            showToast("没有更多数据");
+//            showToast("没有更多数据");
             return;
         }
         GoodsEvaluateEntity entity = JSON.parseObject(s, GoodsEvaluateEntity.class);
