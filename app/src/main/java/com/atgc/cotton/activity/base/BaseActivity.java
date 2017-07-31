@@ -192,6 +192,7 @@ public class BaseActivity extends FragmentActivity {
             public void onClick(View v) {
                 openActivity(LoginActivity.class);
                 CommonDialogUtils.dismiss();
+                finish();
             }
         }, context, msg);
     }

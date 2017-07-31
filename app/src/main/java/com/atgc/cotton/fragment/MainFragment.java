@@ -91,15 +91,16 @@ public abstract class MainFragment extends BaseFragment implements AMapLocationL
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        lRecyclerView.refreshComplete(PAGER_NUM);
                         if (getType() != TYPE_NEAR) {
                             showToast("刷新完成", false);
-                            lRecyclerView.refreshComplete(PAGER_NUM);
                             requestDatas();
                         }
                     }
                 }, 1000);
             }
         });
+
         lRecyclerView.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {

@@ -46,9 +46,6 @@ import java.util.ArrayList;
 
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
-
-import de.greenrobot.event.EventBus;
-import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
 
 /**
@@ -79,10 +76,10 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
     private Button btn_login;
     private TextView tv_name;
     private boolean isExit;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
         setContentView(R.layout.home_activity);
         EventBus.getDefault().register(this);
         App.getInstance().addTempActivity(this);
@@ -361,42 +358,34 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Override
     public void onBackPressed() {
-
-        if(!isExit){
-           showToast("再按一次退出应用");
+        if (!isExit) {
+            showToast("再按一次退出应用");
             isExit = true;
             EventBus.getDefault().post(isExit);
-        }else{
+        } else {
             super.onBackPressed();
         }
-
     }
 
     @Subscribe(threadMode = ThreadMode.Async)
-    public void onEventExit(Boolean isBool){
+    public void onEventExit(Boolean isBool) {
         SystemClock.sleep(1000);
         isExit = false;
     }
 
 
     @Subscribe
-    public void onEvent(ActionEntity entity){
-      if(entity.getAction().equals(Constants.Action.UPDATE_ACCOUNT_INFORM )){
-          String avatar = LoginStatus.getInstance().getAvatar();
-          String username = LoginStatus.getInstance().getUsername();
-          if (!TextUtils.isEmpty(avatar)) {
-              Glide.with(context).load(avatar).into(ivAvatar);
-          }
-          if (!TextUtils.isEmpty(username)) {
-              tv_name.setText(username);
-          }
-       }
+    public void onEvent(ActionEntity entity) {
+        if (entity.getAction().equals(Constants.Action.UPDATE_ACCOUNT_INFORM)) {
+            String avatar = LoginStatus.getInstance().getAvatar();
+            String username = LoginStatus.getInstance().getUsername();
+            if (!TextUtils.isEmpty(avatar)) {
+                Glide.with(context).load(avatar).into(ivAvatar);
+            }
+            if (!TextUtils.isEmpty(username)) {
+                tv_name.setText(username);
+            }
+        }
     }
 }

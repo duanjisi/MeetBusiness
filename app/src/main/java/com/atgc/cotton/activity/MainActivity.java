@@ -69,6 +69,7 @@ public class MainActivity extends BaseActivity {
                 finish();
             }
         });
+
         lRecyclerView.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -82,6 +83,7 @@ public class MainActivity extends BaseActivity {
                 }, 1000);
             }
         });
+
         lRecyclerView.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
@@ -94,6 +96,7 @@ public class MainActivity extends BaseActivity {
                 }, 1000);
             }
         });
+
         SpacesItemDecoration decoration = new SpacesItemDecoration(16);
         lRecyclerView.addItemDecoration(decoration);
         requestDatas();

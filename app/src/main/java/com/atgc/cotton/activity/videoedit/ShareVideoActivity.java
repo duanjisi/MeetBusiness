@@ -38,11 +38,15 @@ import com.umeng.socialize.bean.HandlerRequestCode;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.bean.SocializeEntity;
 import com.umeng.socialize.bean.StatusCode;
+import com.umeng.socialize.controller.UMSocialService;
 import com.umeng.socialize.controller.listener.SocializeListeners;
 import com.umeng.socialize.media.QQShareContent;
 import com.umeng.socialize.media.QZoneShareContent;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMediaObject;
+import com.umeng.socialize.sso.QZoneSsoHandler;
+import com.umeng.socialize.sso.UMQQSsoHandler;
+import com.umeng.socialize.weixin.controller.UMWXHandler;
 import com.umeng.socialize.weixin.media.CircleShareContent;
 import com.umeng.socialize.weixin.media.WeiXinShareContent;
 
@@ -123,6 +127,7 @@ public class ShareVideoActivity extends BaseActivity {
         if (!TextUtils.isEmpty(BgPath)) {
             imageLoader.displayImage("file://" + BgPath, iv_video_bg, ImageLoaderUtils.getDisplayImageOptions());
         }
+        initSharePlatform(mController);
     }
 
     @Override
@@ -285,6 +290,28 @@ public class ShareVideoActivity extends BaseActivity {
             imageUrl = videoPath.replace(".mov", ".jpg");
         }
         targetUrl = videoPath;
+    }
+
+    private void initSharePlatform(UMSocialService umSocialService) {
+        String weixinAppId =getString(R.string.weixin_app_id);
+        String weixinAppSecret = getString(R.string.weixin_app_secret);
+        // 添加微信平台
+        UMWXHandler wxHandler = new UMWXHandler(context, weixinAppId, weixinAppSecret);
+        wxHandler.addToSocialSDK();
+
+        // 添加微信朋友圈
+        UMWXHandler wxCircleHandler = new UMWXHandler(context, weixinAppId, weixinAppSecret);
+        wxCircleHandler.setToCircle(true);
+        wxCircleHandler.addToSocialSDK();
+
+        String qqAppId = getString(R.string.qq_app_id);
+        String qqAppSecret = getString(R.string.qq_app_key);
+        //参数1为当前Activity，参数2为开发者在QQ互联申请的APP ID，参数3为开发者在QQ互联申请的APP kEY.
+        UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler((android.app.Activity) context, qqAppId, qqAppSecret);
+        qqSsoHandler.addToSocialSDK();
+
+        QZoneSsoHandler qZoneSsoHandler = new QZoneSsoHandler((android.app.Activity) context, qqAppId, qqAppSecret);
+        qZoneSsoHandler.addToSocialSDK();
     }
 
     private boolean isThird = false;
