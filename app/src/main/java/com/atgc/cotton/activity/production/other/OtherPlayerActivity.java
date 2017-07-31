@@ -321,7 +321,6 @@ public class OtherPlayerActivity extends BaseActivity implements
 
     @Override
     public void onScrollChanged(ScrollView scrollView, int x, int y, int oldx, int oldy) {
-        Log.i("info", "================x:" + x + "\n" + "y:" + y + "  oldx:" + oldx + "\n" + "oldy:" + oldy);
         switchView(y);
     }
 
@@ -524,7 +523,11 @@ public class OtherPlayerActivity extends BaseActivity implements
         if (videoEntity == null) {
             return;
         }
-        MyGoodRequest request = new MyGoodRequest(TAG, "26,47,49,52");
+        String goodids = videoEntity.getGoodsId();
+        if (TextUtils.isEmpty(goodids)) {
+            return;
+        }
+        MyGoodRequest request = new MyGoodRequest(TAG, goodids);
         request.send(new BaseDataRequest.RequestCallback<BaseGood>() {
             @Override
             public void onSuccess(BaseGood pojo) {
