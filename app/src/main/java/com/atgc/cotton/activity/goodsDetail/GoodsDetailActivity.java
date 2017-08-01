@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -124,6 +125,7 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             goodId = bundle.getString("goodId", "");
+            Log.i("info", "===============goodId:" + goodId);
             if (!TextUtils.isEmpty(goodId)) {
                 mPresenter.getGoodsDetail(Integer.parseInt(goodId));
                 mDbUtils = DbUtils.create(this);
@@ -151,7 +153,7 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
     }
 
 
-    @OnClick({R.id.rl_classify, R.id.img_more, R.id.img_back, R.id.tv_evaluate,R.id.tv_more})
+    @OnClick({R.id.rl_classify, R.id.img_more, R.id.img_back, R.id.tv_evaluate, R.id.tv_more})
     public void onViewClicked(View view) {
         switch (view.getId()) {
 
@@ -187,7 +189,6 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
      * 选择分类dialog
      */
     private void showGoodsDialog() {
-
         dialog = new Dialog(this, R.style.Dialog_full);
         View view = View.inflate(this, R.layout.dialog_goods, null);
         dialog.setContentView(view);
@@ -230,9 +231,7 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
                     if (Integer.parseInt(s + "") > goodsNumber) {
                         et_repertory.setText(goodsNumber);
                     }
-
                 }
-
             }
 
             @Override
@@ -521,7 +520,6 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
             views.add(imageView);
 
             ImageView view1 = new ImageView(this);
-
             if (i == 0) {
                 view1.setImageResource(R.drawable.oval_choose);
             } else {
@@ -650,46 +648,45 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
     @Override
     public void getEvaluteSuccess(String s) {
         BaseResult result = JSON.parseObject(s, BaseResult.class);
-        if (result.getCode() ==1) {
+        if (result.getCode() == 1) {
 //            showToast("没有更多数据");
             return;
         }
+        Log.i("info", "====================s:" + s);
         GoodsEvaluateEntity entity = JSON.parseObject(s, GoodsEvaluateEntity.class);
         if (entity != null) {
             int code = entity.getCode();
             if (code == 0) {
                 List<GoodsEvaluateEntity.DataBean> datas = entity.getData();
-
-                GoodsEvaluateEntity.DataBean dataBean = datas.get(0);
-
-                llEvaluate.setVisibility(View.VISIBLE);
-                Glide.with(context).load(dataBean.getAvatar()).into(imgHead);
-                tvTitle.setText(dataBean.getContent());
-                tvContent.setText(dataBean.getContent());
-                List<String> pics = dataBean.getPics();
-                List<PhotoInfo> photos = new ArrayList<>();
-                for (String s1 : pics) {
-                    PhotoInfo photoInfo = new PhotoInfo();
-                    photoInfo.file_thumb = s1;
-                    photoInfo.type = 0;
-                    photos.add(photoInfo);
+                Log.i("info", "====================datas:" + datas);
+                if (datas != null && datas.size() != 0) {
+                    GoodsEvaluateEntity.DataBean dataBean = datas.get(0);
+                    llEvaluate.setVisibility(View.VISIBLE);
+                    if (dataBean != null) {
+                        Glide.with(context).load(dataBean.getAvatar()).into(imgHead);
+                        tvTitle.setText(dataBean.getContent());
+                        tvContent.setText(dataBean.getContent());
+                        List<String> pics = dataBean.getPics();
+                        List<PhotoInfo> photos = new ArrayList<>();
+                        for (String s1 : pics) {
+                            PhotoInfo photoInfo = new PhotoInfo();
+                            photoInfo.file_thumb = s1;
+                            photoInfo.type = 0;
+                            photos.add(photoInfo);
+                        }
+                        multiImagView.setSceenW(UIUtils.getScreenWidth(context));
+                        multiImagView.setList(photos);
+                    }
                 }
-                multiImagView.setSceenW(UIUtils.getScreenWidth(context));
-                multiImagView.setList(photos);
-
             }
         } else {
             showToast("服务器异常");
         }
-
-
     }
 
     @Override
     public void onError(String s) {
-
+        Log.i("info", "================msg:" + s);
         showToast(s);
-
     }
-
 }

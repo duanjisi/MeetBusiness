@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-
 import com.alibaba.fastjson.JSON;
 import com.atgc.cotton.App;
 import com.atgc.cotton.Constants;
@@ -21,9 +20,7 @@ import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
-
 import net.jodah.typetools.TypeResolver;
-
 import java.io.IOException;
 import java.util.Map;
 
@@ -46,7 +43,6 @@ public abstract class BaseDataRequest<T> {
         mTag = tag;
         mParams = params;
     }
-
 
     public void send(final RequestCallback callback) {
         String url = getApiUrl();
@@ -260,11 +256,9 @@ public abstract class BaseDataRequest<T> {
             return getApiPath();
         }
     }
-
     public interface RequestCallback<T> {
         void onSuccess(T pojo);
 
         void onFailure(String msg);
     }
-
 }

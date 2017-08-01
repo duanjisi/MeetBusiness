@@ -1,5 +1,6 @@
 package com.atgc.cotton.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,7 +21,7 @@ public class GoodsEvaluateEntity {
     private int Code;
     private String Name;
     private String Message;
-    private List<DataBean> Data;
+    private List<DataBean> Data=new ArrayList<>();
 
     public int getStatus() {
         return Status;

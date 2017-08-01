@@ -2,11 +2,8 @@ package com.atgc.cotton.presenter;
 
 import com.alibaba.fastjson.JSON;
 import com.atgc.cotton.entity.GoodsDetailEntity;
-import com.atgc.cotton.presenter.view.IBaseView;
 import com.atgc.cotton.presenter.view.IGoodsDetailView;
-import com.atgc.cotton.presenter.view.INormalView;
 import com.atgc.cotton.retrofit.MyObserver;
-import com.atgc.cotton.util.L;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -15,10 +12,10 @@ import rx.schedulers.Schedulers;
  * 请求接口，然后通过view来显示隐藏加载框
  * Created by liw on 2017/7/5.
  */
-public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView>{
+public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView> {
 
 
-    public GoodsDetailPresenter(IGoodsDetailView mvpView ) {
+    public GoodsDetailPresenter(IGoodsDetailView mvpView) {
         super(mvpView);
     }
 
@@ -32,7 +29,7 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView>{
                     public void onNext_(String model) {
                         mvpView.hideLoading();
                         GoodsDetailEntity entity = JSON.parseObject(model, GoodsDetailEntity.class);
-                        if(entity!=null){
+                        if (entity != null) {
                             GoodsDetailEntity.DataBean bean = entity.getData();
                             mvpView.getGoodsSuccess(bean);
                         }
@@ -52,16 +49,16 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView>{
     }
 
 
-
     /**
      * 查询评价
+     *
      * @param token
      * @param page
      * @param size
      */
-    public void searchEvaluate(String token,int id,int page,int size) {
+    public void searchEvaluate(String token, int id, int page, int size) {
         mvpView.showLoading();
-        addSubscription(api.searchEvaluate(token,id,page,size)
+        addSubscription(api.searchEvaluate(id, page, size)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MyObserver<String>() {
@@ -81,8 +78,6 @@ public class GoodsDetailPresenter extends BasePresenter<IGoodsDetailView>{
                     public void onCompleted_() {
 
                     }
-
                 }));
     }
-
 }

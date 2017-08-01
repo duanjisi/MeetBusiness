@@ -18,13 +18,14 @@ public class GoodsEvaluatePresenter extends BasePresenter<ISingleView> {
 
     /**
      * 查询评价
+     *
      * @param token
      * @param page
      * @param size
      */
-    public void searchEvaluate(String token,int id,int page,int size) {
+    public void searchEvaluate(String token, int id, int page, int size) {
         mvpView.showLoading();
-        addSubscription(api.searchEvaluate(token,id,page,size)
+        addSubscription(api.searchEvaluate(id, page, size)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MyObserver<String>() {
@@ -44,7 +45,6 @@ public class GoodsEvaluatePresenter extends BasePresenter<ISingleView> {
                     public void onCompleted_() {
 
                     }
-
                 }));
     }
 }

@@ -6,7 +6,6 @@ import com.atgc.cotton.http.HttpUrl;
 import java.util.Map;
 
 import okhttp3.RequestBody;
-import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
@@ -15,12 +14,10 @@ import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
-import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
-import rx.Observer;
 
 /**
  * Created by liw on 2017/7/5.
@@ -97,6 +94,7 @@ public interface ApiStores {
     //获取我买到的订单
     @GET("order/")
     Observable<String> getMyBuyOrder(@Header("Authorization") String token, @Query("status") int status, @Query("page") int page, @Query("size") int size);
+
     //发送短信验证码
     @FormUrlEncoded
     @POST("public/regsms")
@@ -116,14 +114,12 @@ public interface ApiStores {
     //下订单
     @FormUrlEncoded
     @POST("order/")
-    Observable<String> order(@Header("Authorization") String token,@FieldMap Map<String, String> params);
-
-
+    Observable<String> order(@Header("Authorization") String token, @FieldMap Map<String, String> params);
 
 
     //获取我买到的待评价订单
     @GET("order/goods/")
-    Observable<String> getMyBuyEvaluateOrder(@Header("Authorization") String token,@Query("page") int page, @Query("size") int size);
+    Observable<String> getMyBuyEvaluateOrder(@Header("Authorization") String token, @Query("page") int page, @Query("size") int size);
 
     //获取我的订单列表(我卖出的)
     @GET("order/sale/")
@@ -154,10 +150,12 @@ public interface ApiStores {
     Observable<String> deleteMsg(@Header("Authorization") String token, @Path("msgid") int msgid);
 
 
+    //    //查询消息列表
+//    @GET("public/goodscomm/{goodsid}")
+//    Observable<String> searchEvaluate(@Header("Authorization") String token,@Path("goodsid") int goodsid, @Query("page") int page, @Query("size") int size);
 
     //查询消息列表
     @GET("public/goodscomm/{goodsid}")
-    Observable<String> searchEvaluate(@Header("Authorization") String token,@Path("goodsid") int goodsid, @Query("page") int page, @Query("size") int size);
-
+    Observable<String> searchEvaluate(@Path("goodsid") int goodsid, @Query("page") int page, @Query("size") int size);
 
 }

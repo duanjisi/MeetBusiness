@@ -527,6 +527,7 @@ public class OtherPlayerActivity extends BaseActivity implements
         if (TextUtils.isEmpty(goodids)) {
             return;
         }
+        Log.i("info", "========================gooodids:" + videoEntity.getGoodsId());
         MyGoodRequest request = new MyGoodRequest(TAG, goodids);
         request.send(new BaseDataRequest.RequestCallback<BaseGood>() {
             @Override
