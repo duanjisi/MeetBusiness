@@ -28,6 +28,7 @@ import com.atgc.cotton.App;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.LoginActivity;
 import com.atgc.cotton.activity.base.MvpActivity;
+import com.atgc.cotton.activity.shoppingCar.ShoppingCarActivity;
 import com.atgc.cotton.adapter.GoodsClassifyAdapter;
 import com.atgc.cotton.entity.BaseResult;
 import com.atgc.cotton.entity.GoodsDetailEntity;
@@ -62,7 +63,6 @@ import butterknife.OnClick;
  */
 
 public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> implements IGoodsDetailView {
-
 
     @Bind(R.id.tv_name)
     TextView tvName;
@@ -108,7 +108,6 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
     private String userName;
     private List<VendGoodsAttrEntity> goodsAttr;
     private int goodsId;
-
     private DbUtils mDbUtils;
     private String userId;
     private List<VendGoodsAttrEntity> newAttr;
@@ -224,16 +223,16 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s != null) {
-                    if (Integer.parseInt(s + "") == 0) {
-                        et_repertory.setText("0");
-
-                    }
-                    if (Integer.parseInt(s + "") > goodsNumber) {
-                        et_repertory.setText(goodsNumber);
+                    if (!s.equals("")) {
+                        if (Integer.parseInt(s + "") == 0) {
+                            et_repertory.setText("0");
+                        }
+                        if (Integer.parseInt(s + "") > goodsNumber) {
+                            et_repertory.setText(goodsNumber);
+                        }
                     }
                 }
             }
-
             @Override
             public void afterTextChanged(Editable s) {
 
@@ -284,13 +283,11 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
                     showToast("库存不足");
                     return;
                 }
-
                 Map<String, Set<Integer>> map2 = adapter.getMap2();   //是否选中
                 Map<String, String> map = adapter.getMap();     //选中的分类类别 和，分类名
                 for (Map.Entry<String, Set<Integer>> entry : map2.entrySet()) {
                     String key = entry.getKey();
                     Set<Integer> value = entry.getValue();
-
                     if (value.isEmpty()) { //选中状态为空
                         showToast("请选择: " + key);
                         return;
@@ -303,12 +300,13 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
                     L.i(key + value);
                     type = type + key + ":" + value + "|"; //暂时用空格分开
                 }
-                type = type.substring(0, type.length() - 1);
-                //购买数量
 
+                if (!TextUtils.isEmpty(type)) {
+                    type = type.substring(0, type.length() - 1);
+                }
+                //购买数量
                 buyNum = et_repertory.getText().toString();
                 String imgUrl = imgList.get(0);
-
 
                 //加入购物车的商品
                 OrderGoods entity = new OrderGoods();
@@ -322,22 +320,16 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
                 entity.setUserId(userId);
 
                 //加入购物车，即存入数据库
-
                 try {
                     //查询数据库，如果看是插入还是更新.  通过商品id和商品分类
-//
                     List<OrderGoods> list = mDbUtils.findAll(OrderGoods.class);
-
 
                     List<OrderGoods> entityList = new ArrayList<OrderGoods>();
 
                     if (list == null || list.size() == 0) {
-
                         //数据库没商品
                         entityList.add(entity);
-
                         saveAll(entityList);
-
                     } else {
                         //数据库有商品
                         if (list.size() > 0) {
@@ -354,7 +346,6 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
                                 int num = list.get(i).getBuyNum();
                                 //id相同，type相同就更新，否则插入
                                 if (id == goodsId && type1.equals(type)) {
-
                                     isUpdata = true;
                                     updataNum = num;
                                     updataPos = i;
@@ -367,18 +358,11 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
                                 list.add(entity);
                                 saveAll(list);
                             }
-
-
                         }
-
                     }
-
-
                 } catch (DbException e) {
                     e.printStackTrace();
                 }
-
-
             }
         });
 
@@ -386,25 +370,19 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
             @Override
             public void onClick(View v) {
                 //购买
-
                 if (!App.getInstance().isLogin()) {
                     openActivity(LoginActivity.class);
                 }
-
                 if (goodsNumber < 1) {
                     showToast("库存不足");
                     return;
                 }
-
                 dialog.dismiss();
-
-
                 Map<String, Set<Integer>> map2 = adapter.getMap2();   //是否选中
                 Map<String, String> map = adapter.getMap();     //选中的分类类别 和，分类名
                 for (Map.Entry<String, Set<Integer>> entry : map2.entrySet()) {
                     String key = entry.getKey();
                     Set<Integer> value = entry.getValue();
-
                     if (value.isEmpty()) { //选中状态为空
                         showToast("请选择: " + key);
                         return;
@@ -420,8 +398,6 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
                 //购买数量
                 buyNum = et_repertory.getText().toString();
                 String imgUrl = imgList.get(0);
-
-
                 OrderGoods entity = new OrderGoods();
                 entity.setBuyNum(Integer.parseInt(buyNum));
                 entity.setGoodsName(goodsName);
@@ -442,14 +418,10 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
                 orderGoodsEntity.setUserId(userId);
                 datas.add(orderGoodsEntity);
 
-
                 //加上商品
                 datas.add(entity);
-
-
                 OrderGoodsListEntity entity1 = new OrderGoodsListEntity();
                 entity1.setData(datas);
-
                 String goodsJson = JSON.toJSONString(entity1);
                 L.i(goodsJson);
                 //订单页
@@ -490,14 +462,19 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
 //            mDbUtils.deleteAll(OrderGoods.class);      //调试用
             showToast("已加入购物车");
             goodsNumber = goodsNumber - Integer.parseInt(buyNum);
-
             tv_num.setText("库存:  " + goodsNumber);
-
+            goShoppingCar();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+
+    private void goShoppingCar() {
+        Intent intent = new Intent(context, ShoppingCarActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.activity_in, R.anim.activity_no);
+    }
 
     /**
      * 查询商品详情成功
@@ -506,7 +483,6 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
      */
     @Override
     public void getGoodsSuccess(GoodsDetailEntity.DataBean bean) {
-
         imgList = new ArrayList<>();      //商品图链接
         views = new ArrayList<>();   //商品图
         point_views = new ArrayList<>();    //小圆点
@@ -548,21 +524,21 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
         newAttr = new ArrayList<>();
         List<String> keys = new ArrayList<>();
         //给 goodsAttr做处理
-        for (int i = 0; i < goodsAttr.size(); i++) {
-            String attrName = goodsAttr.get(i).getAttrName();
-            if (!keys.contains(attrName)) {
-                keys.add(attrName);
-                newAttr.add(goodsAttr.get(i));
-            } else {
-                String attrValue1 = goodsAttr.get(i).getAttrValue();
-
-                for (int j = 0; j < newAttr.size(); j++) {
-                    if (newAttr.get(j).getAttrName().equals(attrName)) {
-                        String attrValue = newAttr.get(j).getAttrValue();
-                        attrValue = attrValue + "@#" + attrValue1;
-                        newAttr.get(j).setAttrValue(attrValue);
+        if (goodsAttr != null && goodsAttr.size() != 0) {
+            for (int i = 0; i < goodsAttr.size(); i++) {
+                String attrName = goodsAttr.get(i).getAttrName();
+                if (!keys.contains(attrName)) {
+                    keys.add(attrName);
+                    newAttr.add(goodsAttr.get(i));
+                } else {
+                    String attrValue1 = goodsAttr.get(i).getAttrValue();
+                    for (int j = 0; j < newAttr.size(); j++) {
+                        if (newAttr.get(j).getAttrName().equals(attrName)) {
+                            String attrValue = newAttr.get(j).getAttrValue();
+                            attrValue = attrValue + "@#" + attrValue1;
+                            newAttr.get(j).setAttrValue(attrValue);
+                        }
                     }
-
                 }
             }
         }
@@ -576,19 +552,14 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
                         int buyNum = all.get(i).getBuyNum();
                         goodsNumber = goodsNumber - buyNum;
                     }
-
                 }
-
             }
         } catch (DbException e) {
             e.printStackTrace();
         }
 
-
         tvPrice.setText("¥ " + goodsPrice);
-
         tvName.setText(goodsName);
-
         vpImg.setAdapter(new PagerAdapter() {
             @Override
             public int getCount() {
@@ -608,14 +579,13 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
 
             @Override
             public Object instantiateItem(ViewGroup container, int position) {
-
                 ImageView view = views.get(position);
                 Glide.with(context).load(imgList.get(position)).into(view);
                 container.addView(view);
                 return view;
-
             }
         });
+
         vpImg.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

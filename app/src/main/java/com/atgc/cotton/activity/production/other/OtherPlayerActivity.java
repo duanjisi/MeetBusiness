@@ -40,6 +40,7 @@ import com.atgc.cotton.util.ImageLoaderUtils;
 import com.atgc.cotton.util.MycsLog;
 import com.atgc.cotton.util.TimeUtil;
 import com.atgc.cotton.util.UIUtils;
+import com.atgc.cotton.util.Utils;
 import com.atgc.cotton.widget.CircleImageView;
 import com.atgc.cotton.widget.MorePopup;
 import com.atgc.cotton.widget.MyListView;
@@ -195,11 +196,14 @@ public class OtherPlayerActivity extends BaseActivity implements
         mEditKit.setOnInfoListener(mOnInfoListener);
         Bundle bundle = getIntent().getExtras();
         videoEntity = (VideoEntity) bundle.getSerializable("obj");
-//        url = bundle.getString(SRC_URL);
-        Log.i("info", "============feedid:" + videoEntity.getId() + "\n" + "userid:" + videoEntity.getUserId());
         String url = videoEntity.getMediaPath();
         if (!TextUtils.isEmpty(url)) {
-            mEditKit.setEditPreviewUrl(url);
+            if (Utils.isVideoFile(url)) {
+                mEditKit.setEditPreviewUrl(url);
+            } else {
+                showToast("视频格式不对!", true);
+                finish();
+            }
         }
     }
 

@@ -29,13 +29,13 @@ import com.atgc.cotton.config.LoginStatus;
 import com.atgc.cotton.entity.AccountEntity;
 import com.atgc.cotton.entity.ActionEntity;
 import com.atgc.cotton.entity.ChangeAvatarEntity;
-import com.atgc.cotton.entity.MyNumEntity;
+import com.atgc.cotton.entity.FansEntity;
 import com.atgc.cotton.fragment.MyLikeFragment;
 import com.atgc.cotton.fragment.MyProFragment;
 import com.atgc.cotton.fragment.ProductFragment;
 import com.atgc.cotton.http.BaseDataRequest;
 import com.atgc.cotton.http.HttpUrl;
-import com.atgc.cotton.http.request.MyNumRequest;
+import com.atgc.cotton.http.request.FansRequest;
 import com.atgc.cotton.listener.PermissionListener;
 import com.atgc.cotton.listenter.ListenerConstans;
 import com.atgc.cotton.listenter.ViewPagerListener;
@@ -130,13 +130,13 @@ public class MyProductionActivity extends BaseActivity implements
             if (action.equals(Constants.Action.UPDATE_ACCOUNT_INFORM)) {
                 LoginStatus sLoginStatus = LoginStatus.getInstance();
                 if (tag.equals("avatar")) {
-                    String avatar=sLoginStatus.getAvatar();
+                    String avatar = sLoginStatus.getAvatar();
                     imageLoader.displayImage(avatar, iv_bg, ImageLoaderUtils.getDisplayImageOptions());
                 } else if (tag.equals("name")) {
-                    String name=sLoginStatus.getUsername();
+                    String name = sLoginStatus.getUsername();
                     tv_title.setText(name);
                 } else if (tag.equals("sex")) {
-                    String sex=sLoginStatus.getSex();
+                    String sex = sLoginStatus.getSex();
                     Drawable nav_up = null;
                     if (sex.equals("0")) {
                         nav_up = getResources().getDrawable(R.drawable.works_man);
@@ -147,7 +147,7 @@ public class MyProductionActivity extends BaseActivity implements
                     }
                     tv_title.setCompoundDrawables(null, null, nav_up, null);
                 } else if (tag.equals("signature")) {
-                    String signature=sLoginStatus.getIntro();
+                    String signature = sLoginStatus.getIntro();
                     tv_intro.setText(signature);
                 }
             }
@@ -402,15 +402,29 @@ public class MyProductionActivity extends BaseActivity implements
 
 
     private void request() {
+//        showLoadingDialog();
+//        MyNumRequest request = new MyNumRequest(TAG);
+//        request.send(new BaseDataRequest.RequestCallback<MyNumEntity>() {
+//            @Override
+//            public void onSuccess(MyNumEntity pojo) {
+//                cancelLoadingDialog();
+//                bindDatas(pojo);
+//            }
+//
+//            @Override
+//            public void onFailure(String msg) {
+//                cancelLoadingDialog();
+//                showToast(msg, true);
+//            }
+//        });
         showLoadingDialog();
-        MyNumRequest request = new MyNumRequest(TAG);
-        request.send(new BaseDataRequest.RequestCallback<MyNumEntity>() {
+        FansRequest request = new FansRequest(TAG, account.getUserId());
+        request.send(new BaseDataRequest.RequestCallback<FansEntity>() {
             @Override
-            public void onSuccess(MyNumEntity pojo) {
+            public void onSuccess(FansEntity pojo) {
                 cancelLoadingDialog();
                 bindDatas(pojo);
             }
-
             @Override
             public void onFailure(String msg) {
                 cancelLoadingDialog();
@@ -419,12 +433,12 @@ public class MyProductionActivity extends BaseActivity implements
         });
     }
 
-    private void bindDatas(MyNumEntity entity) {
+    private void bindDatas(FansEntity entity) {
         if (entity != null) {
             String sex = account.getSex();
             tv_title.setText(account.getUserName());
             Drawable nav_up = null;
-            if (sex.equals("0")) {
+            if (sex.equals("1")) {
                 nav_up = getResources().getDrawable(R.drawable.works_man);
                 nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
             } else {

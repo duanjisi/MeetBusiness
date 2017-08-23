@@ -167,7 +167,11 @@ public class EditDataActivity extends BaseActivity implements View.OnClickListen
                         break;
                     case "sex":
                         tv_sex.setText("" + value);
-                        sLoginStatus.setSex(value);
+                        if (value.equals("男")) {
+                            sLoginStatus.setSex("1");
+                        } else {
+                            sLoginStatus.setSex("2");
+                        }
                         action = new ActionEntity(Constants.Action.UPDATE_ACCOUNT_INFORM, "sex");
                         break;
                     case "signature":
@@ -183,7 +187,7 @@ public class EditDataActivity extends BaseActivity implements View.OnClickListen
                         }
                         break;
                 }
-                if (action!=null){
+                if (action != null) {
                     EventBus.getDefault().post(action);
                 }
             }

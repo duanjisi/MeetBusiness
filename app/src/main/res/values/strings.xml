@@ -23,7 +23,7 @@
     <string name="error_server_down">服务器异常，请稍候再试...</string>
     <string name="other_login">使用其他方式登录</string>
 
-
+    <string name="pay_result_tip">这个界面用于显示第三方app通过微信支付的结果</string>
     <string name="main_setting">个人设置</string>
     <string name="main_production">我的作品</string>
     <string name="main_video">上传视频</string>

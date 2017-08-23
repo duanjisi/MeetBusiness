@@ -1,5 +1,6 @@
 package com.atgc.cotton.activity.vendingRack;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -9,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,9 +20,16 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
+import com.atgc.cotton.App;
+import com.atgc.cotton.Constants;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
+import com.atgc.cotton.entity.AccountEntity;
+import com.atgc.cotton.entity.ChangeAvatarEntity;
 import com.atgc.cotton.entity.OrderGoodsEntity;
+import com.atgc.cotton.http.HttpUrl;
 import com.atgc.cotton.listener.PermissionListener;
 import com.atgc.cotton.util.FileUtils;
 import com.atgc.cotton.util.PermissonUtil.PermissionUtil;
@@ -31,9 +40,13 @@ import com.atgc.cotton.util.UIUtils;
 import com.atgc.cotton.widget.ActionSheet;
 import com.atgc.cotton.widget.GlideRoundTransform;
 import com.atgc.cotton.widget.MyRatingBar;
-
 import com.atgc.cotton.widget.RoundImageView;
 import com.bumptech.glide.Glide;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,6 +79,9 @@ public class OrderEvaluateActivity extends BaseActivity implements View.OnClickL
     private HashMap<Integer, View> imgMap;
     private HashMap<Integer, String> imgStrMap;
     private int sceenW;
+    private OrderGoodsEntity orderEntity;
+    private AccountEntity accountEntity;
+    private String access_token;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,6 +94,8 @@ public class OrderEvaluateActivity extends BaseActivity implements View.OnClickL
         imgMap = new HashMap<>();
         imgStrMap = new HashMap<>();
         sceenW = UIUtils.getScreenWidth(this);
+        accountEntity = App.getInstance().getAccountEntity();
+        access_token = accountEntity.getToken();
         ll_img = (LinearLayout) findViewById(R.id.ll_img);
         et_content = (EditText) findViewById(R.id.et_content);
         starBar = (MyRatingBar) findViewById(R.id.ratingBar);
@@ -118,7 +136,7 @@ public class OrderEvaluateActivity extends BaseActivity implements View.OnClickL
         });
         Intent intent = getIntent();
         if (intent != null) {
-            OrderGoodsEntity orderEntity = (OrderGoodsEntity) intent.getSerializableExtra("data");
+            orderEntity = (OrderGoodsEntity) intent.getSerializableExtra("data");
         }
     }
 
@@ -126,7 +144,7 @@ public class OrderEvaluateActivity extends BaseActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_upload:
-
+                uploadImageFile();
                 break;
             case R.id.tv_back:
                 finish();
@@ -305,5 +323,84 @@ public class OrderEvaluateActivity extends BaseActivity implements View.OnClickL
         //获取文件路径
         photoPath = tempFile.getAbsolutePath();
         return tempFile;
+    }
+
+    private void uploadImageFile() {
+        String main = HttpUrl.GOODS_COMMENT;
+        HttpUtils httpUtils = new HttpUtils(60 * 1000);//实例化RequestParams对象
+        com.lidroid.xutils.http.RequestParams params = new com.lidroid.xutils.http.RequestParams();
+        params.addHeader("Authorization", access_token);
+        params.addBodyParameter("orderid", "" + orderEntity.getOrderId());
+        params.addBodyParameter("goodsid", "" + orderEntity.getGoodsId());
+        String content = getText(et_content);
+        if (!TextUtils.isEmpty(content)) {
+            params.addBodyParameter("content", content);
+        }
+        String score = "" + starBar.getRating();
+        if (!score.equals("") && !score.equals("0.0")) {
+            params.addBodyParameter("score", score);
+        } else {
+            showToast("评分不能为空！", true);
+            return;
+        }
+        for (int i = 0; i < 9; i++) {
+            String path = imgStrMap.get(i);
+            if (!TextUtils.isEmpty(path)) {
+                File file = new File(path);
+                if (file.exists() && file.length() > 0) {
+                    params.addBodyParameter("pic" + i, file);
+                }
+            }
+        }
+        showLoadingDialog();
+        httpUtils.send(HttpRequest.HttpMethod.POST, main, params, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                try {
+                    cancelLoadingDialog();
+                    Log.i("info", "==============responseInfo:" + responseInfo.result);
+                    ChangeAvatarEntity entity = JSON.parseObject(responseInfo.result, ChangeAvatarEntity.class);
+                    if (entity != null) {
+                        if (entity.Status == 401) {
+                            Intent intent = new Intent();
+                            intent.setAction(Constants.ACTION_LOGOUT_RESETING);
+                            App.getInstance().sendBroadcast(intent);
+                        } else {
+                            ToastUtil.showShort(context, "发布成功!");
+                            Intent intent = new Intent();
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        }
+                    }
+                } catch (JSONException e) {
+                    ToastUtil.showShort(context, "上传失败");
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                Log.i("info", "==============HttpException:" + e.getMessage());
+                int code = e.getExceptionCode();
+                if (code == 401) {
+                    goLogin();
+                } else {
+                    cancelLoadingDialog();
+                    showToast(s, false);
+                }
+            }
+        });
+    }
+
+    private void goLogin() {
+        Intent intent = new Intent();
+        intent.setAction(Constants.ACTION_LOGOUT_RESETING);
+        App.getInstance().sendBroadcast(intent);
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private String getNowTime() {
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMddHHmmssSS");
+        return dateFormat.format(date);
     }
 }

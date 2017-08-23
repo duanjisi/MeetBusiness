@@ -8,6 +8,8 @@ import com.atgc.cotton.entity.AlipayOrder;
 import com.atgc.cotton.entity.BaseResult;
 import com.atgc.cotton.entity.MyOrderEntity;
 import com.atgc.cotton.entity.OrderEvaluateEntity;
+import com.atgc.cotton.entity.PayWx;
+import com.atgc.cotton.entity.WxOrder;
 import com.atgc.cotton.presenter.view.IMyOrderView;
 import com.atgc.cotton.retrofit.MyObserver;
 
@@ -187,9 +189,219 @@ public class MyOrderPresenter extends BasePresenter<IMyOrderView> {
 
     //买家操作订单 只操作自己的订单，操作包括：取消订单 确认收货
     //操作类型 cancel:取消订单 confirm:确认收货
-    public void operateMyOrder(Map<String,String> map){
+//    public void operateMyOrder(Map<String,String> map){
+//        mvpView.showLoading();
+//        addSubscription(api.operateMyOrder(App.getInstance().getToken(), map)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new MyObserver<String>() {
+//                    @Override
+//                    public void onNext_(String s) {
+//                        mvpView.hideLoading();
+//                        BaseResult result = BaseResult.parse(s);
+//                        if (result != null) {
+//                            if (result.getCode() == 0 && result.getStatus() == 200) {
+//                                mvpView.deleteOrderSuccess();
+//                            } else {
+//                                mvpView.onError(result.getMessage());
+//                            }
+//                        } else {
+//                            mvpView.onError("服务器异常，请稍后重试");
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onError_(String msg) {
+//                        mvpView.hideLoading();
+//                        mvpView.onError(msg);
+//                    }
+//
+//                    @Override
+//                    public void onCompleted_() {
+//
+//                    }
+//                }));
+//    }
+
+    //操作类型 cancel:取消订单
+    public void cancelOrder(int orderid) {
         mvpView.showLoading();
-        addSubscription(api.operateMyOrder(App.getInstance().getToken(), map)
+        addSubscription(api.cancelOrder(App.getInstance().getToken(), orderid)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MyObserver<String>() {
+                    @Override
+                    public void onNext_(String s) {
+                        mvpView.hideLoading();
+                        BaseResult result = BaseResult.parse(s);
+                        if (result != null) {
+                            if (result.getCode() == 0 && result.getStatus() == 200) {
+                                mvpView.deleteOrderSuccess();
+                            } else {
+                                mvpView.onError(result.getMessage());
+                            }
+                        } else {
+                            mvpView.onError("服务器异常，请稍后重试");
+                        }
+                    }
+
+                    @Override
+                    public void onError_(String msg) {
+                        mvpView.hideLoading();
+                        mvpView.onError(msg);
+                    }
+
+                    @Override
+                    public void onCompleted_() {
+
+                    }
+                }));
+    }
+
+    //confirm:确认收货
+    public void confirmOrder(int orderid) {
+        mvpView.showLoading();
+        addSubscription(api.confirmOrder(App.getInstance().getToken(), orderid)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MyObserver<String>() {
+                    @Override
+                    public void onNext_(String s) {
+                        mvpView.hideLoading();
+                        BaseResult result = BaseResult.parse(s);
+                        if (result != null) {
+                            if (result.getCode() == 0 && result.getStatus() == 200) {
+                                mvpView.deleteOrderSuccess();
+                            } else {
+                                mvpView.onError(result.getMessage());
+                            }
+                        } else {
+                            mvpView.onError("服务器异常，请稍后重试");
+                        }
+                    }
+
+                    @Override
+                    public void onError_(String msg) {
+                        mvpView.hideLoading();
+                        mvpView.onError(msg);
+                    }
+
+                    @Override
+                    public void onCompleted_() {
+
+                    }
+                }));
+    }
+
+    //cancelRefund:买家取消退款申请
+    public void cancelRefund(int orderid) {
+        mvpView.showLoading();
+        addSubscription(api.cancelRefund(App.getInstance().getToken(), orderid)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MyObserver<String>() {
+                    @Override
+                    public void onNext_(String s) {
+                        mvpView.hideLoading();
+                        BaseResult result = BaseResult.parse(s);
+                        if (result != null) {
+                            if (result.getCode() == 0 && result.getStatus() == 200) {
+                                mvpView.deleteOrderSuccess();
+                            } else {
+                                mvpView.onError(result.getMessage());
+                            }
+                        } else {
+                            mvpView.onError("服务器异常，请稍后重试");
+                        }
+                    }
+
+                    @Override
+                    public void onError_(String msg) {
+                        mvpView.hideLoading();
+                        mvpView.onError(msg);
+                    }
+
+                    @Override
+                    public void onCompleted_() {
+
+                    }
+                }));
+    }
+
+    //refund:买退款申请
+    public void refund(int orderid) {
+        mvpView.showLoading();
+        addSubscription(api.refund(App.getInstance().getToken(), orderid)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MyObserver<String>() {
+                    @Override
+                    public void onNext_(String s) {
+                        mvpView.hideLoading();
+                        BaseResult result = BaseResult.parse(s);
+                        if (result != null) {
+                            if (result.getCode() == 0 && result.getStatus() == 200) {
+                                mvpView.deleteOrderSuccess();
+                            } else {
+                                mvpView.onError(result.getMessage());
+                            }
+                        } else {
+                            mvpView.onError("服务器异常，请稍后重试");
+                        }
+                    }
+
+                    @Override
+                    public void onError_(String msg) {
+                        mvpView.hideLoading();
+                        mvpView.onError(msg);
+                    }
+
+                    @Override
+                    public void onCompleted_() {
+
+                    }
+                }));
+    }
+
+    //agreeRefund:卖家同意退款
+    public void agreeRefund(int orderid) {
+        mvpView.showLoading();
+        addSubscription(api.agreeRefund(App.getInstance().getToken(), orderid, "android")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MyObserver<String>() {
+                    @Override
+                    public void onNext_(String s) {
+                        mvpView.hideLoading();
+                        BaseResult result = BaseResult.parse(s);
+                        if (result != null) {
+                            if (result.getCode() == 0 && result.getStatus() == 200) {
+                                mvpView.deleteOrderSuccess();
+                            } else {
+                                mvpView.onError(result.getMessage());
+                            }
+                        } else {
+                            mvpView.onError("服务器异常，请稍后重试");
+                        }
+                    }
+
+                    @Override
+                    public void onError_(String msg) {
+                        mvpView.hideLoading();
+                        mvpView.onError(msg);
+                    }
+
+                    @Override
+                    public void onCompleted_() {
+
+                    }
+                }));
+    }
+
+    //disAgreeRefund:卖家拒绝退款
+    public void disAgreeRefund(int orderid) {
+        mvpView.showLoading();
+        addSubscription(api.disAgreeRefund(App.getInstance().getToken(), orderid)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MyObserver<String>() {
@@ -225,10 +437,10 @@ public class MyOrderPresenter extends BasePresenter<IMyOrderView> {
      * 支付宝付款
      */
     public void aliPay(int id) {
-        Map<String,String> map  = new HashMap<>();
-        map.put("1","1");
+        Map<String, String> map = new HashMap<>();
+        map.put("1", "1");
         mvpView.showLoading();
-        addSubscription(api.alipay(App.getInstance().getToken(), id,map)
+        addSubscription(api.alipay(App.getInstance().getToken(), id, map)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MyObserver<String>() {
@@ -236,17 +448,58 @@ public class MyOrderPresenter extends BasePresenter<IMyOrderView> {
                     public void onNext_(String s) {
                         mvpView.hideLoading();
                         AlipayOrder alipayOrder = JSON.parseObject(s, AlipayOrder.class);
-                        if(alipayOrder!=null){
+                        if (alipayOrder != null) {
                             int code = alipayOrder.getCode();
-                            if(code==0){
+                            if (code == 0) {
                                 mvpView.alipaySuccess(alipayOrder);
 
-                            }else{
+                            } else {
                                 mvpView.onError(alipayOrder.getMessage());
                             }
 
-                        }else {
+                        } else {
                             mvpView.onError(alipayOrder.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onError_(String msg) {
+                        mvpView.hideLoading();
+                        mvpView.onError(msg);
+                    }
+
+                    @Override
+                    public void onCompleted_() {
+
+                    }
+                }));
+    }
+
+    /**
+     * 微信付款
+     */
+    public void wxPay(int id) {
+        mvpView.showLoading();
+        addSubscription(api.wxpay(App.getInstance().getToken(), id, "android")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MyObserver<String>() {
+                    @Override
+                    public void onNext_(String s) {
+                        mvpView.hideLoading();
+                        WxOrder wxOrder = JSON.parseObject(s, WxOrder.class);
+                        if (wxOrder != null) {
+                            int code = wxOrder.getCode();
+                            if (code == 0) {
+                                PayWx data = wxOrder.getData();
+                                if (data != null) {
+                                    mvpView.wxpaySuccess(data);
+                                }
+                            } else {
+                                mvpView.onError(wxOrder.getMessage());
+                            }
+                        } else {
+                            mvpView.onError(wxOrder.getMessage());
                         }
                     }
 

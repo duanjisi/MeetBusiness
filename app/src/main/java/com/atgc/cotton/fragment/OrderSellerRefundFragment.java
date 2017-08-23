@@ -3,10 +3,8 @@ package com.atgc.cotton.fragment;
 import android.os.Handler;
 import android.util.Log;
 
-import com.atgc.cotton.activity.vendingRack.LogisticsActivity;
 import com.atgc.cotton.adapter.OrderAdapter;
 import com.atgc.cotton.entity.OrderActionEntity;
-import com.atgc.cotton.entity.OrderEntity;
 import com.atgc.cotton.entity.OrderGoodsEntity;
 import com.atgc.cotton.util.ToastUtil;
 import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
@@ -96,8 +94,7 @@ public class OrderSellerRefundFragment extends BaseOrderFragment {
         });
     }
 
-    public void getData(List<OrderGoodsEntity> list,int parentSize) {
-
+    public void getData(List<OrderGoodsEntity> list, int parentSize) {
         if (list != null) {
             if (parentSize == 20) {
                 rv_content.setNoMore(false);
@@ -134,7 +131,13 @@ public class OrderSellerRefundFragment extends BaseOrderFragment {
                 break;
             case 6:
                 if (type == 1) {
-                    Log.i("OrderEntity:", "退款");
+                    Log.i("OrderEntity:", "同意退款");
+                    orderActionEntity.setDoAction("agreeRefund");
+                    EventBus.getDefault().post(orderActionEntity);
+                } else if (type == 2) {
+                    Log.i("OrderEntity:", "拒绝退款");
+                    orderActionEntity.setDoAction("disAgreeRefund");
+                    EventBus.getDefault().post(orderActionEntity);
                 }
                 break;
         }

@@ -103,6 +103,7 @@
                 android:layout_height="55dp">
 
                 <TextView
+                    android:id="@+id/tv_nick_tag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -132,8 +133,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_10"
                     android:layout_marginRight="17.5dp"
                     android:layout_toLeftOf="@+id/iv_tag1"
+                    android:gravity="right"
+                    android:layout_toRightOf="@+id/tv_nick_tag"
+                    android:singleLine="true"
                     android:text="Andy" />
             </RelativeLayout>
 

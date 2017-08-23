@@ -2,12 +2,10 @@ package com.atgc.cotton.fragment;
 
 import android.os.Handler;
 import android.util.Log;
-import android.view.View;
 
 import com.atgc.cotton.activity.vendingRack.LogisticsActivity;
 import com.atgc.cotton.adapter.OrderAdapter;
 import com.atgc.cotton.entity.OrderActionEntity;
-import com.atgc.cotton.entity.OrderEntity;
 import com.atgc.cotton.entity.OrderGoodsEntity;
 import com.atgc.cotton.util.ToastUtil;
 import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
@@ -142,6 +140,8 @@ public class OrderReceivingFragment extends BaseOrderFragment {
             case 2:
                 if (type == 1) {
                     Log.i("OrderEntity:", "确认收货");
+                    orderActionEntity.setDoAction("confirmGoods");
+                    EventBus.getDefault().post(orderActionEntity);
                 } else if (type == 2) {
                     Log.i("OrderEntity:", "查看物流");
                     openActivity(LogisticsActivity.class);

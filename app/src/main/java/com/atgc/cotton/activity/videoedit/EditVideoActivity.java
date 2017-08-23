@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.MediaMetadataRetriever;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
@@ -70,6 +71,7 @@ import com.ksyun.media.streamer.framework.AVConst;
 import com.ksyun.media.streamer.kit.StreamerConstants;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -552,7 +554,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             String fileName = str.substring(0, str.indexOf("."));
             img_path = FileUtils.saveBitmap(bmp, fileName + ".png");
         } else {
-            img_path = Constants.CACHE_IMG_DIR + "temp.png";
+            getBitmapsFromVideo();
         }
 //        showComposingDialog();
         mEditKit.setTargetResolution(VIDEO_RESOLUTION);
@@ -1173,6 +1175,12 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
 
 
     private void initDatas(VideoThumbnailInfo[] listData) {
+        VideoThumbnailInfo data = listData[0];
+        if (data != null) {
+            VideoThumbnailTask.loadBitmap(this, iv_video_bg,
+                    null, (long) (data.mCurrentTime * 1000), data,
+                    mEditKit, null);
+        }
         int width = (UIUtils.getScreenWidth(context) - UIUtils.dip2px(context, 80)) / 8;
         for (int i = 0; i < listData.length; i++) {
             VideoThumbnailInfo info = listData[i];
@@ -1196,29 +1204,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             imageView.setTag(info);
             imageView.setOnClickListener(new clickListener());
             linearLayout.addView(imageView);
-        }
-        VideoThumbnailInfo info = listData[0];
-        if (info != null) {
-            Log.i("info", "================0000000000000000");
-            VideoThumbnailTask.loadBitmap(this, iv_video_bg,
-                    null, (long) (info.mCurrentTime * 1000), info,
-                    mEditKit, null);
-//            VideoThumbnailTask.loadBitmap(this, iv_video_bg,
-//                    null, (long) (info.mCurrentTime * 1000), info,
-//                    mEditKit, null, new VideoThumbnailTask.callback() {
-//                        @Override
-//                        public void size(final int width, final int height) {
-//                            Log.i("info", "=============width:" + width + "\n" + "height:" + height);
-//                            handler.post(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, RelativeLayout.LayoutParams.WRAP_CONTENT);
-////                                    content_layout.setLayoutParams(params);
-//                                    tvContent.setLayoutParams(params);
-//                                }
-//                            });
-//                        }
-//                    });
         }
     }
 
@@ -1425,4 +1410,41 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         return new BitmapDrawable(bmp);
     }
 
+
+    public void getBitmapsFromVideo() {
+//        String dataPath = Environment.getExternalStorageDirectory() + "/testVideo.mp4";
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        retriever.setDataSource(url);
+// 取得视频的长度(单位为毫秒)
+        String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+// 取得视频的长度(单位为秒)
+        int seconds = Integer.valueOf(time) / 1000;
+        String str = FileUtils.getFileNameFromPath(url);
+        String fileName = str.substring(0, str.indexOf("."));
+// 得到每一秒时刻的bitmap比如第一秒,第二秒
+        Bitmap bitmap = retriever.getFrameAtTime(1000 * 1000, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+        String path = Constants.CACHE_IMG_DIR + fileName + ".jpg";
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(path);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 80, fos);
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            img_path = path;
+        }
+//        for (int i = 1; i <= seconds; i++) {
+//            Bitmap bitmap = retriever.getFrameAtTime(i * 1000 * 1000, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+//            String path = Constants.CACHE_IMG_DIR + fileName + ".png";
+//            FileOutputStream fos = null;
+//            try {
+//                fos = new FileOutputStream(path);
+//                bitmap.compress(Bitmap.CompressFormat.PNG, 80, fos);
+//                fos.close();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+    }
 }

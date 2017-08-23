@@ -6,7 +6,6 @@ import android.util.Log;
 import com.atgc.cotton.activity.vendingRack.LogisticsActivity;
 import com.atgc.cotton.adapter.OrderAdapter;
 import com.atgc.cotton.entity.OrderActionEntity;
-import com.atgc.cotton.entity.OrderEntity;
 import com.atgc.cotton.entity.OrderGoodsEntity;
 import com.atgc.cotton.util.ToastUtil;
 import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
@@ -96,8 +95,7 @@ public class OrderObligationFragment extends BaseOrderFragment {
         });
     }
 
-    public void getData(List<OrderGoodsEntity> list,int parentSize) {
-
+    public void getData(List<OrderGoodsEntity> list, int parentSize) {
         if (list != null) {
             if (parentSize == 20) {
                 rv_content.setNoMore(false);
@@ -125,9 +123,13 @@ public class OrderObligationFragment extends BaseOrderFragment {
             case 0:
                 if (type == 1) {
                     Log.i("OrderEntity:", "付款");
+                    orderActionEntity.setAllPrice(entity.getOrderAmount());
+                    orderActionEntity.setDoAction("pay");
                 } else if (type == 2) {
                     Log.i("OrderEntity:", "取消订单");
+                    orderActionEntity.setDoAction("cancelOrder");
                 }
+                EventBus.getDefault().post(orderActionEntity);
                 break;
             case 2:
                 if (type == 1) {

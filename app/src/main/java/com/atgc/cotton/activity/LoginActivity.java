@@ -75,7 +75,6 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
         initUI();
         initData();
     }
-
     /**
      * 登录成功回调
      *

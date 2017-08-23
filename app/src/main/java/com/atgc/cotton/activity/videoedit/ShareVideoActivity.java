@@ -193,10 +193,12 @@ public class ShareVideoActivity extends BaseActivity {
             Log.i("info", "=================BgPath:" + BgPath + "\n" + "length:" + file.length());
             if (file.exists() && file.length() > 0) {
                 params.addBodyParameter("coverfile", file);//封面
+                Log.i("info", "=================coverfile");
             }
             File videoFile = new File(videoPath);
             if (videoFile.exists() && videoFile.length() > 0) {
                 params.addBodyParameter("videofile", videoFile);//视频
+                Log.i("info", "=================videoFile");
             }
             params.addBodyParameter("content", getText(editText));//发布的内容
 

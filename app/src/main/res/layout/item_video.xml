@@ -41,6 +41,9 @@
             android:layout_toRightOf="@+id/iv_author"
             android:drawablePadding="4dp"
             android:drawableRight="@drawable/lady"
+            android:ellipsize="end"
+            android:maxEms="4"
+            android:singleLine="true"
             android:text="Andy"
             android:textColor="#293d55"
             android:textSize="16sp" />

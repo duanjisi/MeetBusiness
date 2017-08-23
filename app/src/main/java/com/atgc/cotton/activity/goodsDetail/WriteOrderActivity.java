@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -29,9 +30,7 @@ import com.atgc.cotton.entity.OrderGoodsListEntity;
 import com.atgc.cotton.event.ChangeAddressState;
 import com.atgc.cotton.event.RefreshShoopingCar;
 import com.atgc.cotton.presenter.PutOrderPresenter;
-import com.atgc.cotton.presenter.view.IPutOrderView;
 import com.atgc.cotton.presenter.view.ISingleView;
-import com.atgc.cotton.util.L;
 import com.atgc.cotton.util.MoneyUtil;
 import com.atgc.cotton.util.PreferenceUtils;
 import com.atgc.cotton.util.UIUtils;
@@ -85,7 +84,7 @@ public class WriteOrderActivity extends MvpActivity<PutOrderPresenter> implement
     private DbUtils mDbUtils;
     private List<OrderGoods> dbList;
 
-    private  String allPrice = "0";
+    private String allPrice = "0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +99,6 @@ public class WriteOrderActivity extends MvpActivity<PutOrderPresenter> implement
 
     private void initData() {
         initAddress();
-
         mDbUtils = DbUtils.create(this);
         try {
             dbList = mDbUtils.findAll(OrderGoods.class);
@@ -237,7 +235,9 @@ public class WriteOrderActivity extends MvpActivity<PutOrderPresenter> implement
                 map.put("province", province + "");
                 map.put("city", city + "");
                 map.put("district", district + "");
-                map.put("address", address);
+                if (!TextUtils.isEmpty(address)) {
+                    map.put("address", address);
+                }
                 map.put("consignee", consignee);
                 map.put("mobile", contact);
                 map.put("paytype", 1 + "");    //1 在线支付，2银行转账
@@ -292,7 +292,6 @@ public class WriteOrderActivity extends MvpActivity<PutOrderPresenter> implement
             if (code == 0) {
                 //提交成功
                 try {
-
                     List<Integer> ids = new ArrayList<>();
                     for (int i = 0; i < datas.size(); i++) {
                         int id = datas.get(i).get_id();
@@ -310,20 +309,18 @@ public class WriteOrderActivity extends MvpActivity<PutOrderPresenter> implement
 
                         }
                     }
-                    if (dbList.size() > 0) {
+                    if (dbList != null && dbList.size() > 0) {
                         mDbUtils.saveAll(dbList);
                     }
                     EventBus.getDefault().post(new RefreshShoopingCar(""));
                     //  先弹出付款页面，如果付款成功，跳到订单页面，如果不付款了，跳会购物车，但是这个页面都要finish。 防止多次点击多次提交订单
 //                    if(dialog==null){
-//
 //                        showDialog();
 //                    }else{
 //                        dialog.show();
 //                    }
                     openActivity(MyOrderActivity.class);
                     finish();
-
                 } catch (DbException e) {
                     e.printStackTrace();
                 }
@@ -360,7 +357,7 @@ public class WriteOrderActivity extends MvpActivity<PutOrderPresenter> implement
         final ImageView img_zhifubao_choose = (ImageView) view_dialog.findViewById(R.id.img_zhifubao_choose);
         final ImageView img_wx_choose = (ImageView) view_dialog.findViewById(R.id.img_wx_choose);
         TextView tv_count = (TextView) view_dialog.findViewById(R.id.tv_count);
-        tv_count.setText(allPrice+"元");
+        tv_count.setText(allPrice + "元");
 
         view_dialog.findViewById(R.id.rl_zhifubao).setOnClickListener(new View.OnClickListener() {
             @Override

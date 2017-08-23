@@ -62,6 +62,15 @@ public class Utils {
         return "";
     }
 
+    public static boolean isVideoFile(String url) {
+        String end = FileUtils.getFileNameFromPath(url);
+        if (end.contains(".mp4") ||
+                end.contains(".mov")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 //    @SuppressLint("NewApi")
 //    public static void enableStrictMode() {
 //        if (Utils.hasGingerbread()) {
@@ -342,7 +351,6 @@ public class Utils {
         }
         return false;
     }
-
 
 
     public static void saveVideoFile(Context context, String path, long paramLong) {

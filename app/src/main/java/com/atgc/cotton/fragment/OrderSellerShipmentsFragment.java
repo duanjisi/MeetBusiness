@@ -1,12 +1,12 @@
 package com.atgc.cotton.fragment;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
 
-import com.atgc.cotton.activity.vendingRack.LogisticsActivity;
+import com.atgc.cotton.activity.vendingRack.DeliverGoodsActivity;
 import com.atgc.cotton.adapter.OrderAdapter;
 import com.atgc.cotton.entity.OrderActionEntity;
-import com.atgc.cotton.entity.OrderEntity;
 import com.atgc.cotton.entity.OrderGoodsEntity;
 import com.atgc.cotton.util.ToastUtil;
 import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
@@ -96,7 +96,7 @@ public class OrderSellerShipmentsFragment extends BaseOrderFragment {
         });
     }
 
-    public void getData(List<OrderGoodsEntity> list,int parentSize) {
+    public void getData(List<OrderGoodsEntity> list, int parentSize) {
 
         if (list != null) {
             if (parentSize == 20) {
@@ -121,10 +121,14 @@ public class OrderSellerShipmentsFragment extends BaseOrderFragment {
     private void btnToDo(OrderGoodsEntity entity, int type) {
         orderActionEntity.setOrderid(entity.getOrderId());
         int orderType = entity.getOrderStatus();
+        Intent intent = null;
         switch (orderType) {
             case 1:
                 if (type == 1) {
                     Log.i("OrderEntity:", "确认发货");
+                    intent = new Intent(getContext(), DeliverGoodsActivity.class);
+                    intent.putExtra("orderid", entity.getOrderId());
+                    startActivity(intent);
                 }
                 break;
             case 3:

@@ -100,7 +100,7 @@ public class MainActivity extends BaseActivity {
         SpacesItemDecoration decoration = new SpacesItemDecoration(16);
         lRecyclerView.addItemDecoration(decoration);
         requestDatas();
-        checkUpdate();
+//        checkUpdate();
     }
 
     private class clickListener implements ItemClickListener {

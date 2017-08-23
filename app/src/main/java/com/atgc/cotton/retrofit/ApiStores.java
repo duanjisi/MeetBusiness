@@ -133,12 +133,38 @@ public interface ApiStores {
     @GET("order/operate")
     Observable<String> operateMyOrder(@Header("Authorization") String token, @FieldMap Map<String, String> params);
 
+    //取消订单
+    @POST("order/cancel/{orderid}")
+    Observable<String> cancelOrder(@Header("Authorization") String token, @Path("orderid") int orderid);
+
+    //取消订单
+    @POST("order/confirm/{orderid}")
+    Observable<String> confirmOrder(@Header("Authorization") String token, @Path("orderid") int orderid);
+
+    //买家取消申请退款
+    @POST("order/cancelrefund/{orderid}")
+    Observable<String> cancelRefund(@Header("Authorization") String token, @Path("orderid") int orderid);
+
+    //买家申请退款
+    @POST("order/refund/{orderid}")
+    Observable<String> refund(@Header("Authorization") String token, @Path("orderid") int orderid);
+
+    //卖家同意退款
+    @POST("order/agreerefund/{orderid}")
+    Observable<String> agreeRefund(@Header("Authorization") String token, @Path("orderid") int orderid, @Query("platform") String platform);
+
+    //卖家拒绝退款
+    @POST("order/disagreerefund/{orderid}")
+    Observable<String> disAgreeRefund(@Header("Authorization") String token, @Path("orderid") int orderid);
 
     //生成发起支付宝支付所需的已签名的订单信息
     @FormUrlEncoded
     @POST("pay/ali/{orderid}")
     Observable<String> alipay(@Header("Authorization") String token, @Path("orderid") int orderid, @FieldMap Map<String, String> params);
 
+    //微信支付
+    @POST("pay/wx/{orderid}")
+    Observable<String> wxpay(@Header("Authorization") String token, @Path("orderid") int orderid, @Query("platform") String platform);
 
     //查询消息列表
     @GET("message/")

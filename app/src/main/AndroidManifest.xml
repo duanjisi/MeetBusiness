@@ -47,6 +47,12 @@
             android:name=".activity.HomePagerActivity"
             android:screenOrientation="portrait"></activity>
         <activity
+            android:name=".activity.im.MainImActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.im.ContactsActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
             android:name=".activity.vendingRack.VendingRackHomeActivity"
             android:screenOrientation="portrait"></activity>
         <activity
@@ -55,6 +61,10 @@
             android:windowSoftInputMode="adjustPan"></activity>
         <activity
             android:name=".activity.vendingRack.MyOrderActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name=".activity.vendingRack.DeliverGoodsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"></activity>
         <activity
@@ -85,8 +95,8 @@
         <activity android:name=".activity.testActivity"></activity>
         <activity
             android:name=".activity.shoppingCar.ShoppingCarActivity"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"></activity>
         <activity
             android:name=".activity.videoedit.RecordVideoActivity"
             android:screenOrientation="portrait"></activity>
@@ -204,16 +214,40 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name=".activity.PersonalSetActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop" />
 
-        <activity android:name=".activity.ResetPswActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.MessageActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.goodsDetail.GoodsEvaluateActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.PersonalSetActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.AboutUsActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.ChangePhoneActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.WalletActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.ChangePwsActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.BindPhoneActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.VerifyPhoneActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.ResetPswActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MessageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.goodsDetail.GoodsEvaluateActivity"
+            android:screenOrientation="portrait" />
 
 
         <!--支付宝start-->

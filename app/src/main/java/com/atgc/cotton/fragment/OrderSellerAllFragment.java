@@ -1,9 +1,10 @@
 package com.atgc.cotton.fragment;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
 
-import com.atgc.cotton.activity.vendingRack.LogisticsActivity;
+import com.atgc.cotton.activity.vendingRack.DeliverGoodsActivity;
 import com.atgc.cotton.adapter.OrderAdapter;
 import com.atgc.cotton.entity.OrderActionEntity;
 import com.atgc.cotton.entity.OrderGoodsEntity;
@@ -126,10 +127,14 @@ public class OrderSellerAllFragment extends BaseOrderFragment {
     private void btnToDo(OrderGoodsEntity entity, int type) {
         orderActionEntity.setOrderid(entity.getOrderId());
         int orderType = entity.getOrderStatus();
+        Intent intent = null;
         switch (orderType) {
             case 1:
                 if (type == 1) {
                     Log.i("OrderEntity:", "确认发货");
+                    intent = new Intent(getContext(), DeliverGoodsActivity.class);
+                    intent.putExtra("orderid", entity.getOrderId());
+                    startActivity(intent);
                 }
                 break;
             case 3:

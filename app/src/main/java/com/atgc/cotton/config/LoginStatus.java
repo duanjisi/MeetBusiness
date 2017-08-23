@@ -112,4 +112,9 @@ public class LoginStatus {
         editor.apply();
     }
 
+    public void setPhone(String phone) {
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putString(PHONE, phone);
+        editor.apply();
+    }
 }

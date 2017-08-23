@@ -1,15 +1,9 @@
 package com.atgc.cotton.fragment;
 
 import android.os.Handler;
-import android.util.Log;
 
-import com.atgc.cotton.activity.vendingRack.LogisticsActivity;
-import com.atgc.cotton.activity.vendingRack.MyOrderActivity;
-import com.atgc.cotton.activity.vendingRack.OrderEvaluateActivity;
-import com.atgc.cotton.adapter.OrderAdapter;
 import com.atgc.cotton.adapter.OrderEvaluateAdapter;
 import com.atgc.cotton.entity.OrderActionEntity;
-import com.atgc.cotton.entity.OrderEntity;
 import com.atgc.cotton.entity.OrderGoodsEntity;
 import com.atgc.cotton.util.ToastUtil;
 import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
@@ -101,6 +95,11 @@ public class OrderEvaluateFragment extends BaseOrderFragment {
             ToastUtil.showShort(getActivity(), "没人更多数据啦~");
             rv_content.setNoMore(true);
         }
+    }
+
+
+    public void setOnRefresh(boolean onRefresh) {
+        isOnRefresh = onRefresh;
     }
 
     public int getPage() {

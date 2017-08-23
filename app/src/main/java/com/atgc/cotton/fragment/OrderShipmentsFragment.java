@@ -6,7 +6,6 @@ import android.util.Log;
 import com.atgc.cotton.activity.vendingRack.LogisticsActivity;
 import com.atgc.cotton.adapter.OrderAdapter;
 import com.atgc.cotton.entity.OrderActionEntity;
-import com.atgc.cotton.entity.OrderEntity;
 import com.atgc.cotton.entity.OrderGoodsEntity;
 import com.atgc.cotton.util.ToastUtil;
 import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
@@ -30,6 +29,7 @@ public class OrderShipmentsFragment extends BaseOrderFragment {
     private boolean isOnRefresh;
     private OrderActionEntity orderActionEntity;
     private OrderAdapter orderAdapter;
+
     @Override
     protected void setAdapterAndDecor(LRecyclerView list) {
         setHasOptionsMenu(true);
@@ -85,17 +85,17 @@ public class OrderShipmentsFragment extends BaseOrderFragment {
 
             @Override
             public void onOrdBtn2(OrderGoodsEntity orderEntity) {
-                btnToDo(orderEntity,2);
+                btnToDo(orderEntity, 2);
             }
 
             @Override
-            public void onOrdBtn3(OrderGoodsEntity orderEntity,int pos) {
+            public void onOrdBtn3(OrderGoodsEntity orderEntity, int pos) {
                 btnToDo(orderEntity, 3);
             }
         });
     }
 
-    public void getData(List<OrderGoodsEntity> list,int parentSize) {
+    public void getData(List<OrderGoodsEntity> list, int parentSize) {
         if (list != null) {
             if (parentSize == 20) {
                 rv_content.setNoMore(false);
@@ -133,6 +133,13 @@ public class OrderShipmentsFragment extends BaseOrderFragment {
                     Log.i("OrderEntity:", "付款");
                 } else if (type == 2) {
                     Log.i("OrderEntity:", "取消订单");
+                }
+                break;
+            case 1:
+                if (type == 1) {
+                    Log.i("OrderEntity:", "申请退款");
+                    orderActionEntity.setDoAction("refund");
+                    EventBus.getDefault().post(orderActionEntity);
                 }
                 break;
             case 2:

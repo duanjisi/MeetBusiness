@@ -43,6 +43,11 @@ public class HttpUrl {
     public static final String USER = BASE_URL + "user/";
     public static final String MODIFY_NICK_URL = BASE_URL + "user/name";
     public static final String USER_AVATAR_URL = USER + "avatar";
+    public static final String CHANGE_PWS_URL = USER + "changepsw";
+    public static final String BIND_PHONE = USER + "bind";
+    public static final String BIND_SMS_QRCODE = USER + "bindsms";
+    public static final String PHONE_UNBIND = USER + "unbindsms";
+    public static final String PHONE_VERIFY = USER + "validunbindsms";
     /**
      * 售货架相关接口
      */
@@ -56,4 +61,9 @@ public class HttpUrl {
 
     //添加收货地址
     public static final String ADD_ADDRESS = BASE_URL + "user/address";
+
+    //order 订单相关接口
+    public static final String DELIVER_GOODS = BASE_URL + "order/shipping";
+    //order 商品评价接口
+    public static final String GOODS_COMMENT = BASE_URL + "order/comment";
 }

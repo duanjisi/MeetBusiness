@@ -104,7 +104,7 @@ public class QrCodeActivity extends BaseActivity implements SharePopup.OnItemSel
         tv_name.setText("" + user_name);
         String sex = sAccount.getSex();
         Drawable nav_up = null;
-        if (sex.equals("0")) {
+        if (sex.equals("1")) {
             nav_up = getResources().getDrawable(R.drawable.works_man);
             nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
         } else {

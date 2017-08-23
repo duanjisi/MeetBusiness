@@ -14,5 +14,6 @@ public class Constants {
         public static final String SHOW_HOME_ACTION = "com.atgc.cotton.SHOW_HOME_ACTION";
         public static final String UPDATE_ACCOUNT_INFORM = "com.atgc.cotton.update.account.inform";
         public static final String EXIT_CURRENT_ACTIVITY = "com.atgc.cotton.exit.current.activity";
+        public static final String PHONE_BIND_STATE = "com.atgc.cotton.phone.bind.state";
     }
 }

@@ -92,6 +92,8 @@ public class LocalVideoFilesActivity extends BaseActivity {
                 Log.i("pos:", "" + position);
                 if (vEntty != null) {
                     String filePath = vEntty.filePath;
+                    String img = vEntty.img;
+                    Log.i("info", "================img:" + img);
                     Intent intent = new Intent();
                     intent.putExtra("filePath", filePath);
                     setResult(RESULT_OK, intent);
@@ -176,6 +178,8 @@ public class LocalVideoFilesActivity extends BaseActivity {
                         .getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
                 String mineType = cursor.getString(cursor
                         .getColumnIndexOrThrow(MediaStore.Video.Media.MIME_TYPE));
+                String magic = cursor.getString(cursor
+                        .getColumnIndexOrThrow(MediaStore.Video.Media.MINI_THUMB_MAGIC));
                 // duration：MediaStore.Audio.Media.DURATION
                 int duration = cursor
                         .getInt(cursor
@@ -190,10 +194,10 @@ public class LocalVideoFilesActivity extends BaseActivity {
                     entty.filePath = url;
                     entty.duration = duration;
                     entty.size = size;
+                    entty.img = magic;
                     mList.add(entty);
                 }
             } while (cursor.moveToNext());
-
         }
         if (cursor != null) {
             cursor.close();

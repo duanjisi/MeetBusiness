@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.atgc.cotton.activity.vendingRack.LogisticsActivity;
 import com.atgc.cotton.adapter.OrderAdapter;
-import com.atgc.cotton.adapter.OrderEvaluateAdapter;
 import com.atgc.cotton.entity.OrderActionEntity;
 import com.atgc.cotton.entity.OrderGoodsEntity;
 import com.atgc.cotton.util.ToastUtil;
@@ -127,8 +126,7 @@ public class OrderAllFragment extends BaseOrderFragment {
     private void btnToDo(OrderGoodsEntity entity, int type) {
         orderActionEntity.setOrderid(entity.getOrderId());
         int orderType = entity.getOrderStatus();
-
-        switch (orderType) {//"0:待付款", "1:待发货", "2:待收货", "3:待评价"
+        switch (orderType) {//"0:待付款", "1:待发货", "2:待收货", "3:待评价", "4:取消退款申请"
             case 0:
                 if (type == 1) {
                     Log.i("OrderEntity:", "付款");
@@ -154,6 +152,13 @@ public class OrderAllFragment extends BaseOrderFragment {
                 if (type == 1) {
                     Log.i("OrderEntity:", "删除订单");
                     orderActionEntity.setDoAction("delete");
+                    EventBus.getDefault().post(orderActionEntity);
+                }
+                break;
+            case 4:
+                if (type == 1) {
+                    Log.i("OrderEntity:", "取消退款申请");
+                    orderActionEntity.setDoAction("cancelrefund");
                     EventBus.getDefault().post(orderActionEntity);
                 }
                 break;

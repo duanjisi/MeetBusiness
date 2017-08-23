@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -16,9 +15,11 @@ import com.atgc.cotton.R;
 import com.atgc.cotton.activity.goodsDetail.GoodsDetailActivity;
 import com.atgc.cotton.activity.vendingRack.MyOrderActivity;
 import com.atgc.cotton.activity.vendingRack.OrderEvaluateActivity;
-import com.atgc.cotton.entity.OrderEntity;
 import com.atgc.cotton.entity.OrderGoodsEntity;
+import com.atgc.cotton.util.ImageLoaderUtils;
 import com.atgc.cotton.util.UIUtils;
+import com.atgc.cotton.widget.RoundImageView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * Created by GMARUnity on 2017/7/15.
@@ -26,6 +27,7 @@ import com.atgc.cotton.util.UIUtils;
  */
 public class OrderEvaluateAdapter extends BaseRecycleViewAdapter {
     private LayoutInflater mInflater;
+    private ImageLoader imageLoader;
     private Context mContext;
     private int sceenW;
 
@@ -33,6 +35,7 @@ public class OrderEvaluateAdapter extends BaseRecycleViewAdapter {
         mContext = context;
         mInflater = LayoutInflater.from(context);
         sceenW = UIUtils.getScreenWidth(mContext);
+        imageLoader = ImageLoaderUtils.createImageLoader(context);
     }
 
     @Override
@@ -52,6 +55,12 @@ public class OrderEvaluateAdapter extends BaseRecycleViewAdapter {
         if (!TextUtils.isEmpty(goodsName)) {
             ((MyViewHolderContent) holder).tv_goods_name.setText(goodsName);
         }
+
+        String imgBg = orderEntity.getGoodsImg();
+        if (!TextUtils.isEmpty(imgBg)) {
+            imageLoader.displayImage(imgBg, ((MyViewHolderContent) holder).iv_icon, ImageLoaderUtils.getDisplayImageOptions());
+        }
+
         int goodsNum = orderEntity.getBuyNumber();
         ((MyViewHolderContent) holder).tv_goods_num.setText("x" + goodsNum);
         double goodsPrice = orderEntity.getShopPrice();
@@ -70,7 +79,7 @@ public class OrderEvaluateAdapter extends BaseRecycleViewAdapter {
                 OrderGoodsEntity orderEntity = (OrderGoodsEntity) datas.get(position);
                 Intent intent = new Intent(mContext, OrderEvaluateActivity.class);
                 intent.putExtra("data", orderEntity);
-                ((MyOrderActivity)mContext).startActivityForResult(intent,101);
+                ((MyOrderActivity) mContext).startActivityForResult(intent, 101);
                 //mContext.sta(intent);
             }
         });
@@ -83,13 +92,13 @@ public class OrderEvaluateAdapter extends BaseRecycleViewAdapter {
 
     class MyViewHolderContent extends RecyclerView.ViewHolder {
         private Button bt_evaluate;
-        private ImageView iv_icon;
+        private RoundImageView iv_icon;
         private TextView tv_goods_name, tv_goods_content, tv_goods_price, tv_goods_num;
 
         public MyViewHolderContent(View view) {
             super(view);
             bt_evaluate = (Button) view.findViewById(R.id.bt_evaluate);
-            iv_icon = (ImageView) view.findViewById(R.id.iv_icon);
+            iv_icon = (RoundImageView) view.findViewById(R.id.iv_icon);
             tv_goods_name = (TextView) view.findViewById(R.id.tv_goods_name);
             tv_goods_content = (TextView) view.findViewById(R.id.tv_goods_content);
             tv_goods_price = (TextView) view.findViewById(R.id.tv_goods_price);
