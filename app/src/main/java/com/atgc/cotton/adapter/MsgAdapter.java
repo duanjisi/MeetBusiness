@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.atgc.cotton.R;
@@ -28,7 +29,7 @@ public class MsgAdapter extends BaseRecycleViewAdapter {
     @Override
     public void onBindItemHolder(RecyclerView.ViewHolder holder, final int position) {
         MsgViewHolder holder1 = (MsgViewHolder) holder;
-        MsgEntity.DataBean data = (MsgEntity.DataBean) datas.get(position);
+        final MsgEntity.DataBean data = (MsgEntity.DataBean) datas.get(position);
         Glide.with(context).load(data.getAvatar()).into(holder1.iv_icon);
         String userName = data.getUserName();
 
@@ -43,8 +44,14 @@ public class MsgAdapter extends BaseRecycleViewAdapter {
                 mOnSwipeListener.onDel(position);
             }
         });
-
-
+        holder1.rl_content.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (itemClickListener != null) {
+                    itemClickListener.onItemClick(data);
+                }
+            }
+        });
     }
 
     @Override
@@ -60,7 +67,7 @@ public class MsgAdapter extends BaseRecycleViewAdapter {
 
     public class MsgViewHolder extends RecyclerView.ViewHolder {
 
-
+        RelativeLayout rl_content;
         ImageView iv_icon;
         ImageView iv_delete;
         TextView tv_title;
@@ -68,11 +75,11 @@ public class MsgAdapter extends BaseRecycleViewAdapter {
 
         public MsgViewHolder(View itemView) {
             super(itemView);
+            rl_content = (RelativeLayout) itemView.findViewById(R.id.rl_content);
             iv_icon = (ImageView) itemView.findViewById(R.id.iv_icon);
             iv_delete = (ImageView) itemView.findViewById(R.id.iv_delete);
             tv_title = (TextView) itemView.findViewById(R.id.tv_title);
             tv_content = (TextView) itemView.findViewById(R.id.tv_content);
-
         }
     }
 
@@ -84,10 +91,19 @@ public class MsgAdapter extends BaseRecycleViewAdapter {
         void onDel(int pos);
     }
 
+    public interface ItemClickListener {
+        void onItemClick(MsgEntity.DataBean bean);
+    }
+
+    private ItemClickListener itemClickListener;
+
     private ShoppingCarAdapter.onSwipeListener mOnSwipeListener;
 
     public void setOnDelListener(ShoppingCarAdapter.onSwipeListener mOnDelListener) {
         this.mOnSwipeListener = mOnDelListener;
     }
 
+    public void setItemClickListener(ItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
 }

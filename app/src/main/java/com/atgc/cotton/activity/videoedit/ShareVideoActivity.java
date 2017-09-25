@@ -1,7 +1,8 @@
 package com.atgc.cotton.activity.videoedit;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -84,8 +85,12 @@ public class ShareVideoActivity extends BaseActivity {
             videoPath = bundle.getString("videoPath", "");
             BgPath = bundle.getString("BgPath", "");
         }
+        if (!TextUtils.isEmpty(BgPath)) {
+            Bitmap bitmap = BitmapFactory.decodeFile(BgPath);
+            Log.i("info", "width:" + bitmap.getWidth() + "\n" + "height:" + bitmap.getHeight());
+        }
         listView = (MyListView) findViewById(R.id.listview);
-        adapter = new VendGoodAdapter(context);
+        adapter = new VendGoodAdapter(context, new itemRemoveCallBack());
         listView.setAdapter(adapter);
         ivClose = (ImageView) findViewById(R.id.iv_close);
         iv_video_bg = (ImageView) findViewById(R.id.iv_video_bg);
@@ -130,15 +135,33 @@ public class ShareVideoActivity extends BaseActivity {
         initSharePlatform(mController);
     }
 
+    private class itemRemoveCallBack implements VendGoodAdapter.itemRemoveCallBack {
+        @Override
+        public void onRemoveItem(VendGoodsEntity.Goods good) {
+            if (good != null) {
+                ArrayList<VendGoodsEntity.Goods> goodses = (ArrayList<VendGoodsEntity.Goods>) adapter.getData();
+                if (goodses != null && goodses.size() != 0) {
+                    for (VendGoodsEntity.Goods entity : goodses) {
+                        if (good.getGoodsId().equals(entity.getGoodsId())) {
+                            goodses.remove(entity);
+                            adapter.notifyDataSetChanged();
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
             ArrayList<VendGoodsEntity.Goods> list = (ArrayList<VendGoodsEntity.Goods>) data.getSerializableExtra("list");
             if (list != null && list.size() != 0) {
-                Drawable nav_up = getResources().getDrawable(R.drawable.selected);
-                nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
-                tv_link_goods.setCompoundDrawables(nav_up, null, null, null);
+//                Drawable nav_up = getResources().getDrawable(R.drawable.selected);
+//                nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+//                tv_link_goods.setCompoundDrawables(nav_up, null, null, null);
                 adapter.initData(list);
             }
         } else if (requestCode == 102 && resultCode == RESULT_OK && data != null) {
@@ -201,7 +224,6 @@ public class ShareVideoActivity extends BaseActivity {
                 Log.i("info", "=================videoFile");
             }
             params.addBodyParameter("content", getText(editText));//发布的内容
-
             if (!TextUtils.isEmpty(geohash)) {
                 params.addBodyParameter("location", geohash);//位置坐标 eg:113.1111515-23.35352
             }
@@ -295,7 +317,7 @@ public class ShareVideoActivity extends BaseActivity {
     }
 
     private void initSharePlatform(UMSocialService umSocialService) {
-        String weixinAppId =getString(R.string.weixin_app_id);
+        String weixinAppId = getString(R.string.weixin_app_id);
         String weixinAppSecret = getString(R.string.weixin_app_secret);
         // 添加微信平台
         UMWXHandler wxHandler = new UMWXHandler(context, weixinAppId, weixinAppSecret);

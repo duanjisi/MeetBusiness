@@ -21,6 +21,8 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.atgc.cotton.entity.Motion;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,6 +35,8 @@ import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+
+import de.greenrobot.event.EventBus;
 
 public class Utils {
 
@@ -71,7 +75,8 @@ public class Utils {
             return false;
         }
     }
-//    @SuppressLint("NewApi")
+
+    //    @SuppressLint("NewApi")
 //    public static void enableStrictMode() {
 //        if (Utils.hasGingerbread()) {
 //            StrictMode.ThreadPolicy.Builder threadPolicyBuilder =
@@ -92,6 +97,12 @@ public class Utils {
 //            StrictMode.setVmPolicy(vmPolicyBuilder.build());
 //        }
 //    }
+    public static void sendImMessage(int action, String msg) {
+        Motion motion = Motion.getInstance();
+        motion.setAction(action);
+        motion.setData(msg);
+        EventBus.getDefault().post(motion);
+    }
 
     /**
      * Get a file path from a Uri. This will get the the path for Storage Access
@@ -416,5 +427,17 @@ public class Utils {
             rank = 3;
         }
         return rank;
+    }
+
+
+    public static String getUserAgent(Context context) {
+        String agent = "YueTao/"
+                + AppUtil.getVersionName(context) + " ("
+                + AppUtil.getPackageName(context) + ";"
+                + "Android "
+                + AppUtil.getSystemVersion() + ") "
+                + "okhttp/2.4.0";
+        Log.i("info", "====================agent:" + agent);
+        return agent;
     }
 }

@@ -1,5 +1,6 @@
 package com.atgc.cotton.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -12,8 +13,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.atgc.cotton.App;
 import com.atgc.cotton.R;
-import com.atgc.cotton.activity.goodsDetail.GoodsDetailActivity;
+import com.atgc.cotton.activity.goodsDetail.OrderDetailsActivity;
+import com.atgc.cotton.activity.production.mine.MyProductionActivity;
+import com.atgc.cotton.activity.production.other.OtherProActivity;
+import com.atgc.cotton.entity.AccountEntity;
 import com.atgc.cotton.entity.OrderGoodsEntity;
 import com.atgc.cotton.util.ImageLoaderUtils;
 import com.atgc.cotton.util.UIUtils;
@@ -30,12 +35,16 @@ public class OrderAdapter extends BaseRecycleViewAdapter {
     private int sceenW;
     private boolean isBuy = true;
     private ImageLoader imageLoader;
+    private AccountEntity account;
+    private int page = 0;
 
-    public OrderAdapter(Context context) {
+    public OrderAdapter(Context context, int mPage) {
         mContext = context;
+        this.page = mPage;
         mInflater = LayoutInflater.from(context);
-        orderSellTypes = new String[]{"等待买家付款", "等待卖家发货", "等待买家收货", "订单已取消", "已完成", "未知状态", "等待卖家退款"};
-        orderTypes = new String[]{"待付款", "待发货", "待收货", "订单已取消", "已完成", "未知状态"};
+        account = App.getInstance().getAccountEntity();
+        orderSellTypes = new String[]{"等待买家付款", "等待卖家发货", "等待买家收货", "订单已取消", "已完成", "未知状态", "等待卖家退款", "已退款"};
+        orderTypes = new String[]{"待付款", "待发货", "待收货", "订单已取消", "已完成", "未知状态", "退款成功"};
         sceenW = UIUtils.getScreenWidth(mContext);
         imageLoader = ImageLoaderUtils.createImageLoader(context);
     }
@@ -65,7 +74,7 @@ public class OrderAdapter extends BaseRecycleViewAdapter {
     public void onBindItemHolder(RecyclerView.ViewHolder holder, int position) {
         final int pos = position;
         final OrderGoodsEntity orderEntity = (OrderGoodsEntity) datas.get(position);
-        String orderState = orderEntity.getOrdState();
+        final String orderState = orderEntity.getOrdState();
         int orderType = 0;
         switch (orderState) {
             case "1000":
@@ -95,17 +104,45 @@ public class OrderAdapter extends BaseRecycleViewAdapter {
             case "2005":
                 orderType = 6;
                 break;
+            case "1006":
+            case "2006":
+                orderType = 7;
+                break;
         }
         if (holder instanceof MyViewHolderHeader) {
-            String storeName = orderEntity.getStoreName();
-            if (isBuy && orderType != 6) {
-                ((MyViewHolderHeader) holder).tv_order_state.setText(orderTypes[orderType]);
+            String storeName = "";
+//            && orderType != 6
+            if (isBuy) {
+                if (orderType != 7) {
+                    ((MyViewHolderHeader) holder).tv_order_state.setText(orderTypes[orderType]);
+                } else {
+                    ((MyViewHolderHeader) holder).tv_order_state.setText(orderTypes[orderType - 1]);
+                }
+                storeName = orderEntity.getStoreName();
             } else {
                 ((MyViewHolderHeader) holder).tv_order_state.setText(orderSellTypes[orderType]);
+                storeName = account.getUserName();
             }
             if (!TextUtils.isEmpty(storeName)) {
                 ((MyViewHolderHeader) holder).tv_store_name.setText(storeName);
             }
+            ((MyViewHolderHeader) holder).tv_store_name.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = null;
+                    if (isBuy) {
+                        if (!account.getUserId().equals(orderEntity.getSupplierId())) {
+                            intent = new Intent(mContext, OtherProActivity.class);
+                            intent.putExtra("orderEntity", orderEntity);
+                        } else {
+                            intent = new Intent(mContext, MyProductionActivity.class);
+                        }
+                    } else {
+                        intent = new Intent(mContext, MyProductionActivity.class);
+                    }
+                    mContext.startActivity(intent);
+                }
+            });
         } else if (holder instanceof MyViewHolderContent) {
             String goodsContent = orderEntity.getGoodsAttr();
             if (!TextUtils.isEmpty(goodsContent)) {
@@ -119,20 +156,32 @@ public class OrderAdapter extends BaseRecycleViewAdapter {
             ((MyViewHolderContent) holder).tv_goods_num.setText("x" + goodsNum);
             double goodsPrice = orderEntity.getShopPrice();
             ((MyViewHolderContent) holder).tv_goods_price.setText("￥" + goodsPrice);
-
             String goodsImg = orderEntity.getGoodsImg();
             if (!TextUtils.isEmpty(goodsImg)) {
                 imageLoader.displayImage(goodsImg, ((MyViewHolderContent) holder).iv_icon, ImageLoaderUtils.getDisplayImageOptions());
             }
+            final int finalOrderType = orderType;
             ((MyViewHolderContent) holder).rlContent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String goodId = "" + orderEntity.getGoodsId();
-                    if (!TextUtils.isEmpty(goodId)) {
-                        Intent intent = new Intent(mContext, GoodsDetailActivity.class);
-                        intent.putExtra("goodId", goodId);
-                        mContext.startActivity(intent);
+                    String orderStr = "";
+//                    && finalOrderType != 6
+                    if (isBuy) {
+                        if (finalOrderType != 7) {
+                            orderStr = orderTypes[finalOrderType];
+                        } else {
+                            orderStr = orderTypes[finalOrderType - 1];
+                        }
+                    } else {
+                        orderStr = orderSellTypes[finalOrderType];
                     }
+                    Intent intent = new Intent(mContext, OrderDetailsActivity.class);
+                    intent.putExtra("obj", orderEntity);
+                    intent.putExtra("orderStr", orderStr);
+                    intent.putExtra("orderType", finalOrderType);
+                    intent.putExtra("isBuy", isBuy);
+                    intent.putExtra("page", page);
+                    ((Activity) mContext).startActivityForResult(intent, 102);
                 }
             });
 //            //跳转商品页
@@ -162,6 +211,7 @@ public class OrderAdapter extends BaseRecycleViewAdapter {
                     }
                 }
             });
+
             ((MyViewHolderFooter) holder).bt_2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -170,6 +220,7 @@ public class OrderAdapter extends BaseRecycleViewAdapter {
                     }
                 }
             });
+
             ((MyViewHolderFooter) holder).bt_3.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -237,17 +288,18 @@ public class OrderAdapter extends BaseRecycleViewAdapter {
                         ((MyViewHolderFooter) holder).bt_2.setText("拒绝退款");
                         ((MyViewHolderFooter) holder).bt_2.setVisibility(View.VISIBLE);
                     } else {
+                        ((MyViewHolderFooter) holder).bt_2.setVisibility(View.GONE);
                         ((MyViewHolderFooter) holder).bt_1.setVisibility(View.GONE);
                     }
                     break;
-                case 7:
-                    if (isBuy) {
-                        ((MyViewHolderFooter) holder).bt_1.setVisibility(View.VISIBLE);
-                        ((MyViewHolderFooter) holder).bt_1.setText("申请退款");
-                        ((MyViewHolderFooter) holder).bt_2.setVisibility(View.GONE);
-                        ((MyViewHolderFooter) holder).bt_3.setVisibility(View.GONE);
-                    }
-                    break;
+//                case 7:
+//                    if (isBuy) {
+//                        ((MyViewHolderFooter) holder).bt_1.setVisibility(View.VISIBLE);
+//                        ((MyViewHolderFooter) holder).bt_1.setText("申请退款");
+//                        ((MyViewHolderFooter) holder).bt_2.setVisibility(View.GONE);
+//                        ((MyViewHolderFooter) holder).bt_3.setVisibility(View.GONE);
+//                    }
+//                    break;
                 default:
                     ((MyViewHolderFooter) holder).bt_1.setVisibility(View.GONE);
                     ((MyViewHolderFooter) holder).bt_2.setVisibility(View.GONE);

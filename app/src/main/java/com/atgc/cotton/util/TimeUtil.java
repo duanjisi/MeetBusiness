@@ -1,5 +1,7 @@
 package com.atgc.cotton.util;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -48,10 +50,106 @@ public final class TimeUtil {
         return date1;// 2012-10-03 23:41:31
     }
 
+    public static String getDateTimeStr(long time) {
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date1 = format1.format(new Date(time));
+        return date1;// 2012-10-03 23:41:31
+    }
+
     public static String getDateTime(String time) {
         long a = Long.parseLong(time);
         long b = (long) (a * 1000.0);
         return getDateTimeEN(b);
+    }
+
+    public static String getDate(String time) {
+        long a = Long.parseLong(time);
+        long b = (long) (a * 1000.0);
+        return getDateTimeStr(b);
+    }
+
+//    public static String[] getTimes(String time) {
+//        long a = Long.parseLong(time);
+//        long b = (long) (a * 1000.0);
+//        String str = getDateTimeStr(b);
+//        String[] strs = str.split("-");
+////        int year = Integer.parseInt(strs[0]);
+////        int month = Integer.parseInt(strs[1]);
+////        int day = Integer.parseInt(strs[2]);
+////        int hour = Integer.parseInt(strs[3]);
+////        int second = Integer.parseInt(strs[4]);
+//        return strs;
+//    }
+
+
+    public static String getTimeStr(String time) {
+        String str = "";
+        long[] times = getDistanceTimes(getDate(time), getDate("" + (System.currentTimeMillis() / 1000)));
+        if (times[0] < 1) {
+            if (times[1] < 1) {
+                if (times[2] < 1) {
+                    if (times[3] < 1) {
+                        if (times[4] < 1) {
+                            if (times[5] < 1) {
+                                str = times[5] + "秒前";
+                            }
+                        } else {
+                            str = times[4] + "分钟前";
+                        }
+                    } else {
+                        str = times[3] + "小时前";
+                    }
+                } else {
+                    str = times[2] + "天前";
+                }
+            } else {
+                str = times[1] + "月前";
+            }
+        } else {
+            str = times[0] + "年前";
+        }
+        return str;
+    }
+
+    /**
+     * 两个时间相差距离多少天多少小时多少分多少秒
+     *
+     * @param str1 时间参数 1 格式：1990-01-01 12:00:00
+     * @param str2 时间参数 2 格式：2009-01-01 12:00:00
+     * @return long[] 返回值为：{年，月，天, 时, 分, 秒}
+     */
+    public static long[] getDistanceTimes(String str1, String str2) {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date one;
+        Date two;
+        long year = 0;
+        long month = 0;
+        long day = 0;
+        long hour = 0;
+        long min = 0;
+        long sec = 0;
+        try {
+            one = df.parse(str1);
+            two = df.parse(str2);
+            long time1 = one.getTime();
+            long time2 = two.getTime();
+            long diff;
+            if (time1 < time2) {
+                diff = time2 - time1;
+            } else {
+                diff = time1 - time2;
+            }
+            year = diff / (365 * 30 * 24 * 60 * 60 * 1000);
+            month = diff / (30 * 24 * 60 * 60 * 1000);
+            day = diff / (24 * 60 * 60 * 1000);
+            hour = (diff / (60 * 60 * 1000) - day * 24);
+            min = ((diff / (60 * 1000)) - day * 24 * 60 - hour * 60);
+            sec = (diff / 1000 - day * 24 * 60 * 60 - hour * 60 * 60 - min * 60);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long[] times = {year, month, day, hour, min, sec};
+        return times;
     }
 
     public static String getCurrentDateTime(long time) {

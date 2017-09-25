@@ -44,13 +44,13 @@
             android:layout_marginLeft="80dp"
             android:layout_marginRight="80dp"
             android:orientation="horizontal"
-            android:weightSum="3">
+            android:weightSum="2">
 
-            <RadioButton
-                android:id="@+id/rb_friend"
-                style="@style/MessageRadioBtn"
-                android:checked="true"
-                android:text="@string/im_friend" />
+            <!--<RadioButton-->
+            <!--android:id="@+id/rb_friend"-->
+            <!--style="@style/MessageRadioBtn"-->
+            <!--android:checked="true"-->
+            <!--android:text="@string/im_friend" />-->
 
             <!--<View-->
             <!--android:layout_width="1px"-->
@@ -63,6 +63,7 @@
             <RadioButton
                 android:id="@+id/rb_info"
                 style="@style/MessageRadioBtn"
+                android:checked="true"
                 android:text="@string/im_info" />
 
             <!--<View-->

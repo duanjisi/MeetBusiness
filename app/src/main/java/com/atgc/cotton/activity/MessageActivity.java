@@ -1,8 +1,10 @@
 package com.atgc.cotton.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -10,6 +12,7 @@ import com.alibaba.fastjson.JSON;
 import com.atgc.cotton.App;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.MvpActivity;
+import com.atgc.cotton.activity.production.other.OtherPlayerActivity;
 import com.atgc.cotton.adapter.MsgAdapter;
 import com.atgc.cotton.adapter.ShoppingCarAdapter;
 import com.atgc.cotton.entity.BaseResult;
@@ -68,7 +71,7 @@ public class MessageActivity extends MvpActivity<MsgPresenter> implements IMsgVi
         LRecyclerViewAdapter adapter1 = new LRecyclerViewAdapter(adapter);
         rvContent.setAdapter(adapter1);
 
-        rvContent.setLoadMoreEnabled(true );
+        rvContent.setLoadMoreEnabled(true);
 
 
         rvContent.setOnRefreshListener(new OnRefreshListener() {
@@ -102,10 +105,24 @@ public class MessageActivity extends MvpActivity<MsgPresenter> implements IMsgVi
         adapter.setOnDelListener(new ShoppingCarAdapter.onSwipeListener() {
             @Override
             public void onDel(int pos) {
-                delPostion= pos;
+                delPostion = pos;
                 int id = allDatas.get(pos).getId();
-                mPresenter.deleteMsg(token,id);
+                mPresenter.deleteMsg(token, id);
 
+            }
+        });
+
+        adapter.setItemClickListener(new MsgAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(MsgEntity.DataBean bean) {
+                if (bean != null) {
+                    String feedId = "" + bean.getFeedId();
+                    if (!TextUtils.isEmpty(feedId)) {
+                        Intent intent = new Intent(context, OtherPlayerActivity.class);
+                        intent.putExtra("feedid", feedId);
+                        startActivity(intent);
+                    }
+                }
             }
         });
     }
@@ -134,12 +151,13 @@ public class MessageActivity extends MvpActivity<MsgPresenter> implements IMsgVi
 
     /**
      * 查询消息访问接口成功
+     *
      * @param s
      */
     @Override
     public void searchMsgSuccess(String s) {
         BaseResult result = JSON.parseObject(s, BaseResult.class);
-        if(result.getCode()==1){
+        if (result.getCode() == 1) {
             showToast("没有消息哦");
             return;
         }
@@ -165,7 +183,7 @@ public class MessageActivity extends MvpActivity<MsgPresenter> implements IMsgVi
                 }
                 adapter.setDatas(allDatas);
                 adapter.notifyDataSetChanged();
-            }else {
+            } else {
                 showToast(msgEntity.getMessage());
             }
 
@@ -174,16 +192,17 @@ public class MessageActivity extends MvpActivity<MsgPresenter> implements IMsgVi
 
     /**
      * 删除消息接口访问成功
+     *
      * @param s
      */
     @Override
     public void deleteMsgSuccess(String s) {
         BaseResult result = JSON.parseObject(s, BaseResult.class);
-        if(result!=null){
-            if(result.getCode()==0){
+        if (result != null) {
+            if (result.getCode() == 0) {
                 showToast("删除成功");
                 adapter.remove(delPostion);
-            }else{
+            } else {
                 showToast(result.getMessage());
             }
         }
@@ -191,6 +210,7 @@ public class MessageActivity extends MvpActivity<MsgPresenter> implements IMsgVi
 
     /**
      * 请求网络网络不好
+     *
      * @param s
      */
     @Override

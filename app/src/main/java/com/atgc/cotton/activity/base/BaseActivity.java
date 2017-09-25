@@ -122,6 +122,12 @@ public class BaseActivity extends FragmentActivity {
         startActivityForResult(intent, requestCode);
     }
 
+    protected void setTextView(TextView tv, String str) {
+        if (!TextUtils.isEmpty(str)) {
+            tv.setText(str);
+        }
+    }
+
     /**
      * 显示加载进度条
      *

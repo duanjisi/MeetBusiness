@@ -1,6 +1,5 @@
 package com.atgc.cotton.http.request;
 
-import com.atgc.cotton.entity.FocusEntity;
 import com.atgc.cotton.http.BaseDataRequest;
 import com.atgc.cotton.http.HttpUrl;
 
@@ -10,7 +9,7 @@ import java.util.Map;
  * Created by Johnny on 2017/7/7.
  * 判断关注情况
  */
-public class FocusJudgeRequest extends BaseDataRequest<FocusEntity> {
+public class FocusJudgeRequest extends BaseDataRequest<String> {
 
     public FocusJudgeRequest(String tag, Object... params) {
         super(tag, params);

@@ -18,6 +18,13 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  */
 public class VendGoodAdapter extends ABaseAdapter<VendGoodsEntity.Goods> {
     private ImageLoader imageLoader;
+    private itemRemoveCallBack itemRemoveCallBack;
+
+    public VendGoodAdapter(Context context, itemRemoveCallBack callBack) {
+        super(context);
+        this.itemRemoveCallBack = callBack;
+        imageLoader = ImageLoaderUtils.createImageLoader(context);
+    }
 
     public VendGoodAdapter(Context context) {
         super(context);
@@ -25,7 +32,7 @@ public class VendGoodAdapter extends ABaseAdapter<VendGoodsEntity.Goods> {
     }
 
     @Override
-    protected View setConvertView(int position, VendGoodsEntity.Goods entity, View convertView) {
+    protected View setConvertView(int position, final VendGoodsEntity.Goods entity, View convertView) {
         ViewHolder holder = null;
         if (convertView == null) {
             convertView = View.inflate(getContext(), R.layout.item_vend_goods, null);
@@ -35,12 +42,15 @@ public class VendGoodAdapter extends ABaseAdapter<VendGoodsEntity.Goods> {
             holder = (ViewHolder) convertView.getTag();
         }
         if (entity != null) {
-            if (entity.isSelected()) {
-                holder.iv_check.setImageResource(R.drawable.selected);
+            if (itemRemoveCallBack != null) {
+                holder.iv_check.setImageResource(R.drawable.delete_item);
             } else {
-                holder.iv_check.setImageResource(R.drawable.unchecked);
+                if (entity.isSelected()) {
+                    holder.iv_check.setImageResource(R.drawable.selected);
+                } else {
+                    holder.iv_check.setImageResource(R.drawable.unchecked);
+                }
             }
-
             holder.describe.setText(entity.getGoodsName());
             holder.content.setText(entity.getGoodsAttr());
             holder.price.setText("￥ " + entity.getShopPrice());
@@ -49,11 +59,23 @@ public class VendGoodAdapter extends ABaseAdapter<VendGoodsEntity.Goods> {
             if (!TextUtils.isEmpty(imageUrl)) {
                 imageLoader.displayImage(imageUrl, holder.Riv, ImageLoaderUtils.getDisplayImageOptions());
             }
+
+            holder.iv_check.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (itemRemoveCallBack != null) {
+                        itemRemoveCallBack.onRemoveItem(entity);
+                    }
+                }
+            });
         }
         return convertView;
     }
 
-    static
+    public interface itemRemoveCallBack {
+        void onRemoveItem(VendGoodsEntity.Goods good);
+    }
+
 
     private class ViewHolder {
         ImageView iv_check;
@@ -72,6 +94,4 @@ public class VendGoodAdapter extends ABaseAdapter<VendGoodsEntity.Goods> {
             this.volum = (TextView) view.findViewById(R.id.tv_volum);
         }
     }
-
-
 }

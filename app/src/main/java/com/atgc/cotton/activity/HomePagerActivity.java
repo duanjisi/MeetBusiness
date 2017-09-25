@@ -20,11 +20,13 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.atgc.cotton.App;
 import com.atgc.cotton.Constants;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.activity.im.MainImActivity;
+import com.atgc.cotton.activity.im.PrivateLetterActivity;
 import com.atgc.cotton.activity.production.mine.EditDataActivity;
 import com.atgc.cotton.activity.production.mine.MyProductionActivity;
 import com.atgc.cotton.activity.shoppingCar.ShoppingCarActivity;
@@ -32,18 +34,30 @@ import com.atgc.cotton.activity.vendingRack.MyOrderActivity;
 import com.atgc.cotton.activity.vendingRack.VendingRackHomeActivity;
 import com.atgc.cotton.activity.videoedit.RecordVideoActivity;
 import com.atgc.cotton.config.LoginStatus;
+import com.atgc.cotton.db.dao.CityDao;
+import com.atgc.cotton.db.dao.DistrictDao;
+import com.atgc.cotton.db.dao.ProvinceDao;
 import com.atgc.cotton.entity.ActionEntity;
+import com.atgc.cotton.entity.LocalAddressEntity;
+import com.atgc.cotton.entity.RegionEntity;
 import com.atgc.cotton.fragment.MainDiscoverFragment;
 import com.atgc.cotton.fragment.MainFocusFragment;
 import com.atgc.cotton.fragment.MainFragment;
+import com.atgc.cotton.fragment.MainHotFragment;
 import com.atgc.cotton.fragment.MainNearFragment;
+import com.atgc.cotton.service.ChatService;
 import com.atgc.cotton.util.ImageLoaderUtils;
+import com.atgc.cotton.util.PreferenceUtils;
 import com.atgc.cotton.util.UIUtils;
 import com.atgc.cotton.widget.CircleImageView;
 import com.bumptech.glide.Glide;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
@@ -62,19 +76,28 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
     private static final int VIEW_PAGER_PAGE_1 = 0;
     private static final int VIEW_PAGER_PAGE_2 = 1;
     private static final int VIEW_PAGER_PAGE_3 = 2;
-    private static final int PAGE_COUNT = 3;
+    private static final int VIEW_PAGER_PAGE_4 = 3;
+    private static final int PAGE_COUNT = 4;
     private RadioGroup mRadioGroup, mRadioMenu;
     private ImageView mCursorIm;
     private int mCursorImWidth;
     private ViewPager mViewPager;
     private ArrayList<Fragment> mFragments = new ArrayList<Fragment>();
-    private MainFragment mainFocusFragment, mainDiscoverFragment, mainNearFragment;
-    private RadioButton mFocus, mDiscover, mNear;
+    private MainFragment mainFocusFragment, mainDiscoverFragment, mainNearFragment, mainHotFragment;
+    private RadioButton mFocus, mDiscover, mHot, mNear;
     private RadioButton rb_setting, rb_production, rb_video, rb_shopping, rb_price, rb_order;
     private Handler handler;
     private Button btn_login;
     private TextView tv_name;
     private boolean isExit;
+
+
+    private List<LocalAddressEntity.ThreeChild> proviceList;       //省
+    private List<LocalAddressEntity.FourChild> cityList;      //市
+    private List<LocalAddressEntity.LastChild> districtList;   //县
+    private ProvinceDao provinceDao;
+    private CityDao cityDao;
+    private DistrictDao districtDao;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,6 +123,10 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void initViews() {
+        provinceDao = ProvinceDao.getInstance();
+        cityDao = CityDao.getInstance();
+        districtDao = DistrictDao.getInstance();
+
         handler = new Handler();
         imageLoader = ImageLoaderUtils.createImageLoader(context);
         mCursorIm = (ImageView) findViewById(R.id.im_cursor);
@@ -108,6 +135,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
         mRadioMenu = (RadioGroup) findViewById(R.id.bottom_navigation_rg);
         mFocus = (RadioButton) findViewById(R.id.rb_focus);
         mDiscover = (RadioButton) findViewById(R.id.rb_discover);
+        mHot = (RadioButton) findViewById(R.id.rb_hot);
         mNear = (RadioButton) findViewById(R.id.rb_near);
 
         ivAvatar = (CircleImageView) findViewById(R.id.iv_avatar);
@@ -141,7 +169,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
         mViewPager.setOffscreenPageLimit(PAGE_COUNT - 1);
         mViewPager.setAdapter(adapter);
         mViewPager.addOnPageChangeListener(new MyPageChangeListener());
-        mViewPager.setCurrentItem(VIEW_PAGER_PAGE_1);
+        mViewPager.setCurrentItem(VIEW_PAGER_PAGE_2);
 
         rb_setting = (RadioButton) findViewById(R.id.rb_setting);
         rb_production = (RadioButton) findViewById(R.id.rb_production);
@@ -149,8 +177,8 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
         rb_shopping = (RadioButton) findViewById(R.id.rb_shopping);
         rb_price = (RadioButton) findViewById(R.id.rb_price);
         rb_order = (RadioButton) findViewById(R.id.rb_order);
-
         tv_name = (TextView) findViewById(R.id.tv_name);
+        ChatService.startChatService(context);
         String avatar = LoginStatus.getInstance().getAvatar();
         String username = LoginStatus.getInstance().getUsername();
         if (!TextUtils.isEmpty(avatar)) {
@@ -158,6 +186,18 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
         }
         if (!TextUtils.isEmpty(username)) {
             tv_name.setText(username);
+        }
+        boolean isInited = PreferenceUtils.getBoolean(context, Constants.INIT_ADDRESS_DATA, false);
+        if (!isInited) {
+            new myThread().start();
+        }
+    }
+
+    private class myThread extends Thread {
+        @Override
+        public void run() {
+            super.run();
+            initProvinceDatas();
         }
     }
 
@@ -167,19 +207,20 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
         switch (view.getId()) {
             case R.id.tv_active:
                 intent = new Intent(context, MainImActivity.class);
-                intent.putExtra("currentIndex",0);
+                intent.putExtra("currentIndex", 0);
                 startActivity(intent);
                 break;
             case R.id.tv_msg:
-                intent = new Intent(context, MainImActivity.class);
-                intent.putExtra("currentIndex",1);
-                startActivity(intent);
-//                openActivity(MessageActivity.class);
+//                intent = new Intent(context, MainImActivity.class);
+//                intent.putExtra("currentIndex", 1);
+//                startActivity(intent);
+                openActivity(MessageActivity.class);
                 break;
             case R.id.tv_info:
-                intent = new Intent(context, MainImActivity.class);
-                intent.putExtra("currentIndex",2);
-                startActivity(intent);
+//                intent = new Intent(context, MainImActivity.class);
+//                intent.putExtra("currentIndex", 1);
+//                startActivity(intent);
+                openActivity(PrivateLetterActivity.class);
                 break;
             case R.id.iv_avatar:
 //                openActivity(testActivity.class);
@@ -191,10 +232,12 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
     private void addData() {
         mainFocusFragment = new MainFocusFragment();
         mainDiscoverFragment = new MainDiscoverFragment();
+        mainHotFragment = new MainHotFragment();
         mainNearFragment = new MainNearFragment();
 
         mFragments.add(mainFocusFragment);
         mFragments.add(mainDiscoverFragment);
+        mFragments.add(mainHotFragment);
         mFragments.add(mainNearFragment);
     }
 
@@ -251,6 +294,9 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
                     mDiscover.setChecked(true);
                     break;
                 case VIEW_PAGER_PAGE_3:
+                    mHot.setChecked(true);
+                    break;
+                case VIEW_PAGER_PAGE_4:
                     mNear.setChecked(true);
                     break;
                 default:
@@ -291,7 +337,6 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
                     break;
                 case R.id.rb_shopping:
                     rb_shopping.setChecked(false);
-
                     Intent intent = new Intent(HomePagerActivity.this, ShoppingCarActivity.class);
                     startActivity(intent);
                     overridePendingTransition(R.anim.activity_in, R.anim.activity_no);
@@ -335,8 +380,11 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
                 case R.id.rb_discover:
                     mViewPager.setCurrentItem(VIEW_PAGER_PAGE_2);
                     break;
-                case R.id.rb_near:
+                case R.id.rb_hot:
                     mViewPager.setCurrentItem(VIEW_PAGER_PAGE_3);
+                    break;
+                case R.id.rb_near:
+                    mViewPager.setCurrentItem(VIEW_PAGER_PAGE_4);
                     break;
                 default:
                     break;
@@ -392,5 +440,56 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
                 tv_name.setText(username);
             }
         }
+    }
+
+
+    private LocalAddressEntity initCityData() {
+        LocalAddressEntity jsonDate = null;
+        try {
+            InputStreamReader inputStreamReader = new InputStreamReader(context.getAssets().open("province.json"), "UTF-8");
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String line;
+            StringBuilder stringBuilder = new StringBuilder();
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+            bufferedReader.close();
+            inputStreamReader.close();
+            jsonDate = JSON.parseObject(stringBuilder.toString(), LocalAddressEntity.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return jsonDate;
+    }
+
+
+    protected void initProvinceDatas() {
+        LocalAddressEntity jsonDate = initCityData();
+        if (jsonDate == null) {
+            return;
+        }
+        LocalAddressEntity.SecondChild result = jsonDate.getResult();
+        proviceList = result.getList();
+        for (int i = 0; i < proviceList.size(); i++) {
+            String value = proviceList.get(i).getRegion_name(); //省
+            String key = proviceList.get(i).getRegion_id();
+            provinceDao.save(new RegionEntity(key, value));
+            cityList = proviceList.get(i).getList();
+            for (int j = 0; j < cityList.size(); j++) {
+                // 遍历省下面的所有市的数据
+                String key2 = cityList.get(j).getRegion_id();
+                String value2 = cityList.get(j).getRegion_name();
+                cityDao.save(new RegionEntity(key2, value2));
+                //县
+                districtList = cityList.get(j).getList();
+                for (int k = 0; k < districtList.size(); k++) {
+                    // 遍历市下面所有区/县的数据
+                    String key3 = districtList.get(k).getRegion_id();
+                    String value3 = districtList.get(k).getRegion_name();
+                    districtDao.save(new RegionEntity(key3, value3));
+                }
+            }
+        }
+        PreferenceUtils.putBoolean(context, Constants.INIT_ADDRESS_DATA, true);
     }
 }

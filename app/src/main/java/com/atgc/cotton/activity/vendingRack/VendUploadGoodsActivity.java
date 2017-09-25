@@ -77,7 +77,6 @@ public class VendUploadGoodsActivity extends BaseCompatActivity<VendUploadPresen
     private VendUploadGoodsAdapter adapter;
     private List<VendGoodsAttrEntity> list;
     private int attrSize = 1;
-
     private LinearLayout ll_img;
     private View v_add_img;
     private EditText et_repertory, et_price;
@@ -126,8 +125,8 @@ public class VendUploadGoodsActivity extends BaseCompatActivity<VendUploadPresen
         rv_content = (LRecyclerView) findViewById(R.id.rv_content);
         tv_back.setOnClickListener(this);
         bt_upload.setOnClickListener(this);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
         mBottomSheetBehavior = BottomSheetBehavior.from(bt_upload);
         adapter = new VendUploadGoodsAdapter(this);
         list = new LinkedList<>();
@@ -290,7 +289,12 @@ public class VendUploadGoodsActivity extends BaseCompatActivity<VendUploadPresen
                     return;
                 }
                 parmMap.put("name", name);
-                parmMap.put("number", String.valueOf(repertoryNum));
+                String num = et_repertory.getText().toString().trim();
+                if (!num.equals("" + repertoryNum)) {
+                    parmMap.put("number", num);
+                } else {
+                    parmMap.put("number", String.valueOf(repertoryNum));
+                }
                 String price = et_price.getText().toString().trim();
                 if (TextUtils.isEmpty(price)) {
                     showToast("价格不能为空", false);
@@ -413,6 +417,13 @@ public class VendUploadGoodsActivity extends BaseCompatActivity<VendUploadPresen
             imgStrMap.remove(tag);
             addSize--;
         }
+
+        View add_img = ll_img.getChildAt(ll_img.getChildCount() - 1);
+        if (addSize == 8) {
+            UIUtils.hindView(add_img);
+        } else if (addSize < 8) {
+            UIUtils.showView(add_img);
+        }
         if (imgMap.size() > 0) {
             View img = ll_img.getChildAt(0);
             TextView tv_img = (TextView) img.findViewById(R.id.tv_img);
@@ -499,7 +510,7 @@ public class VendUploadGoodsActivity extends BaseCompatActivity<VendUploadPresen
                         startActivityForResult(intent, OPEN_CAMERA);
                     }
                 } else if (cameraType == OPEN_ALBUM) {
-                    int size = 4 - addSize;
+                    int size = 8 - addSize;
                     MultiImageSelector.create(VendUploadGoodsActivity.this).
                             showCamera(false).
                             count(size)
@@ -539,7 +550,7 @@ public class VendUploadGoodsActivity extends BaseCompatActivity<VendUploadPresen
                 } else {
                     path = imageUri.toString();
                 }
-                if (isChange){
+                if (isChange) {
                     newUploadList.add(path);
                 }
                 imgStrMap.put(addTag, path);
@@ -551,7 +562,7 @@ public class VendUploadGoodsActivity extends BaseCompatActivity<VendUploadPresen
                 int size = selectPicList.size();
                 for (int i = 0; i < size; i++) {
                     String path = selectPicList.get(i);
-                    if (isChange){
+                    if (isChange) {
                         newUploadList.add(path);
                     }
                     imgStrMap.put(addTag, path);

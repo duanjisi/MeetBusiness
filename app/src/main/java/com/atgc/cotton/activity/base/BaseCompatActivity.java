@@ -3,7 +3,6 @@ package com.atgc.cotton.activity.base;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.atgc.cotton.R;
@@ -12,11 +11,13 @@ import com.atgc.cotton.widget.DialogFactory;
 
 /**
  * Created by GMARUnity on 2017/7/10.
+ * AppCompatActivity
  */
-public abstract class BaseCompatActivity<P extends BasePresenter> extends AppCompatActivity {
+public abstract class BaseCompatActivity<P extends BasePresenter> extends BaseActivity {
     // 进度条
     private ProgressDialog mProgressDialog;
     protected P mPresenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

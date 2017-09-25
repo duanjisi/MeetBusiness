@@ -2,13 +2,16 @@ apply plugin: 'com.android.application'
 
 android {
     useLibrary 'org.apache.http.legacy'
+    aaptOptions.cruncherEnabled = false
     compileSdkVersion 24
-    buildToolsVersion '25.0.3'
+//    buildToolsVersion '25.0.3'
+    buildToolsVersion '25.0.2'
+    aaptOptions.useNewCruncher = false
     defaultConfig {
         applicationId "com.atgc.cotton"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 1
+        versionCode 2
         versionName "2.0.0"
         multiDexEnabled true
     }
@@ -23,7 +26,7 @@ android {
     }
 
     dexOptions {
-        javaMaxHeapSize "4g"
+        javaMaxHeapSize "5g"
     }
 
     buildTypes {
@@ -51,26 +54,27 @@ android {
 //    }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             zipAlignEnabled true
             debuggable false
             // 移除无用的resource文件
-            shrinkResources true
+            shrinkResources false
             signingConfig signingConfigs.release
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
                     if (output.outputFile != null && output.outputFile.name.endsWith('.apk')
                             && 'release'.equals(variant.buildType.name)) {
                         def apkFile = new File(
                                 output.outputFile.getParent(),
-                                "MeetBus_v${variant.versionName}.apk")
+                                "66Boss_v${variant.versionName}.apk")
                         output.outputFile = apkFile
                     }
                 }
             }
         }
     }
+
     lintOptions {
         checkReleaseBuilds false
         abortOnError false
@@ -81,12 +85,15 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.1.1'
+    compile 'com.android.support:design:24.1.1'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'com.alibaba:fastjson:1.2.9'
     compile 'net.jodah:typetools:0.4.0'
     compile 'com.umeng.analytics:analytics:latest.integration'
-//    compile 'com.android.support:recyclerview-v7:24.2.0'
-    compile 'com.android.support:recyclerview-v7:23.0.0'
+    compile 'com.wuxiaolong.pullloadmorerecyclerview:library:1.1.2'
+    //    compile 'com.android.support:recyclerview-v7:24.2.0'
+
+    //    compile 'com.android.support:recyclerview-v7:23.0.0'
     compile 'com.github.jdsjlzx:LRecyclerView:1.3.4'
     compile 'com.android.support:design:24.1.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
@@ -114,4 +121,8 @@ dependencies {
     compile files('libs/AMap_Location_V3.3.0_20170118.jar')
     compile files('libs/httpmime-4.1.3.jar')
     compile files('libs/AMap_Search_V4.0.0_20170111.jar')
+    compile 'com.tencent.bugly:crashreport_upgrade:latest.release'
+    compile files('libs/autobahn.jar')
+    compile 'org.java-websocket:Java-WebSocket:1.3.0'
+    compile 'com.loopj.android:android-async-http:1.4.5'
 }

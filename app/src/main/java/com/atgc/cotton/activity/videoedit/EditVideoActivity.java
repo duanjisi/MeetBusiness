@@ -85,6 +85,7 @@ import de.greenrobot.event.Subscribe;
  * Created by Johnny on 2017/6/26.
  */
 public class EditVideoActivity extends BaseActivity implements View.OnClickListener, StickerView.OnStickerTouchListener {
+
     private int[] bubbles = {R.drawable.bubble_00, R.drawable.bubble_01,
             R.drawable.bubble_02, R.drawable.bubble_03,
             R.drawable.bubble_04, R.drawable.bubble_05,
@@ -96,7 +97,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     public final static int VIDEO_BITRATE = 1000;
     public final static int AUDIO_BITRATE = 64;
     public final static int VIDEO_RESOLUTION = StreamerConstants.VIDEO_RESOLUTION_480P;
-    public final static int ENCODE_TYPE = AVConst.CODEC_ID_HEVC;
+    public final static int ENCODE_TYPE = AVConst.CODEC_ID_AVC;
     public final static int ENCODE_METHOD = StreamerConstants.ENCODE_METHOD_SOFTWARE;
     public final static int ENCODE_PROFILE = VideoEncodeFormat.ENCODE_PROFILE_BALANCE;
 
@@ -113,7 +114,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     private RadioGroup mRadioGroup;
     private View vFilter, vSound, vTailor;
     private ImageView ivClose;
-    private TextView tvNext, tvSwitcher, tvRecord, tvNative, tvMore;
+    private TextView tvNext, tvSwitcher, tvRecord, tvOnline, tvNative, tvMore;
     private RelativeLayout content_layout;
     private ImageView iv_video_bg;
     private TextView tvContent, tv00, tv01, tv02;
@@ -226,6 +227,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         tvNext = (TextView) findViewById(R.id.tv_next);
         tvSwitcher = (TextView) findViewById(R.id.tv_switcher_voice);
         tvRecord = (TextView) findViewById(R.id.tv_record);
+        tvOnline = (TextView) findViewById(R.id.tv_online);
         tvNative = (TextView) findViewById(R.id.tv_native);
         tvMore = (TextView) findViewById(R.id.tv_more);
 //        gallery = (Gallery) findViewById(R.id.gallery);
@@ -237,6 +239,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         tvNext.setOnClickListener(this);
         tvSwitcher.setOnClickListener(this);
         tvRecord.setOnClickListener(this);
+        tvOnline.setOnClickListener(this);
         tvNative.setOnClickListener(this);
         tvMore.setOnClickListener(this);
         initEditKit();
@@ -499,6 +502,17 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             case R.id.tv_record://录音
                 getPermission();
                 break;
+            case R.id.tv_online://在线
+                openActvityForResult(OnlineMusicActivity.class, 101);
+//                SoundUtil2.getInstance().playRecorder(context, "http://ytcdn.66boss.com/data/" +
+//                        "yuetao/music/Audio%20Highs%20-%20%E7%B3%96%E5%88%86%E3%81%A8%E3%82%89%E3%81%" +
+//                        "AD%E3%81%87%E3%81%A8%E3%81%AA%E3%81%81%E3%83%BC.mp3", new SoundUtil2.CompletionListener() {
+//                    @Override
+//                    public void onCompletion() {
+//                         showToast("播放完成!",true);
+//                    }
+//                });
+                break;
             case R.id.tv_native://本地
                 openActvityForResult(LocalMusicActivity.class, 101);
                 break;
@@ -552,7 +566,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         if (bmp != null) {
             String str = FileUtils.getFileNameFromPath(url);
             String fileName = str.substring(0, str.indexOf("."));
-            img_path = FileUtils.saveBitmap(bmp, fileName + ".png");
+            img_path = FileUtils.saveBitmap(bmp, fileName + ".jpeg");
         } else {
             getBitmapsFromVideo();
         }
@@ -792,12 +806,14 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
         mEditKit.onResume();
+        mEditKit.resumeEditPreview();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mEditKit.onPause();
+        mEditKit.pauseEditPreview();
     }
 
     @Override
@@ -1423,11 +1439,11 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         String fileName = str.substring(0, str.indexOf("."));
 // 得到每一秒时刻的bitmap比如第一秒,第二秒
         Bitmap bitmap = retriever.getFrameAtTime(1000 * 1000, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
-        String path = Constants.CACHE_IMG_DIR + fileName + ".jpg";
+        String path = Constants.CACHE_IMG_DIR + fileName + ".jpeg";
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(path);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 80, fos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fos);
             fos.close();
         } catch (Exception e) {
             e.printStackTrace();

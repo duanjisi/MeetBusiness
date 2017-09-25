@@ -3,9 +3,11 @@ package com.atgc.cotton.wxapi;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.atgc.cotton.Constants;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.entity.OrderActionEntity;
+import com.atgc.cotton.util.PreferenceUtils;
 import com.tencent.mm.sdk.constants.ConstantsAPI;
 import com.tencent.mm.sdk.modelbase.BaseReq;
 import com.tencent.mm.sdk.modelbase.BaseResp;
@@ -45,7 +47,12 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
             if (resp.errCode == 0) {
                 showToast("支付成功!", true);
                 OrderActionEntity actionEntity = new OrderActionEntity();
-                actionEntity.setDoAction("wxPaySucessed");
+                boolean isDetailsPager = PreferenceUtils.getBoolean(context, Constants.WX_POINT_PAY_KEY, false);
+                if (!isDetailsPager) {
+                    actionEntity.setDoAction("wxPaySucessed");
+                } else {
+                    actionEntity.setDoAction("wxDetailsPaySucessed");
+                }
                 EventBus.getDefault().post(actionEntity);
                 finish();
             } else {

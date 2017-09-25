@@ -33,7 +33,7 @@
             android:layout_marginLeft="80dp"
             android:layout_marginRight="80dp"
             android:orientation="horizontal"
-            android:weightSum="3">
+            android:weightSum="4">
 
             <RadioButton
                 android:id="@+id/rb_focus"
@@ -54,6 +54,10 @@
                 style="@style/MessageRadioBtn"
                 android:text="@string/main_discover" />
 
+            <RadioButton
+                android:id="@+id/rb_hot"
+                style="@style/MessageRadioBtn"
+                android:text="@string/main_hot" />
             <!--<View-->
             <!--android:layout_width="1px"-->
             <!--android:layout_height="match_parent"-->
@@ -85,7 +89,6 @@
                 android:scaleType="matrix"
                 tools:ignore="ContentDescription" />
         </RelativeLayout>
-
 
         <View
             android:id="@+id/line"

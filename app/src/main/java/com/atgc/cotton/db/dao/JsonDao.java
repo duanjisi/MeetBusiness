@@ -72,8 +72,10 @@ public class JsonDao extends ColumnHelper<JsonEntity> {
 //            c.moveToFirst();
 //            this.delete(entity.getAuthKey(), entity.getUserId());
 //        }
+
         this.delete(entity.getAuthKey(), entity.getUserId());
         DBHelper.getInstance(mContext).insert(JsonEntityColumn.TABLE_NAME, getValues(entity));
+
 //        MycsLog.i(entity.toString());
 //        if (c != null) {
 //            c.close();

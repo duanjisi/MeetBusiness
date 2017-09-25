@@ -37,7 +37,7 @@ public class OrderSellerRefundFragment extends BaseOrderFragment {
         orderActionEntity.setBuy(true);
         rv_content = list;
         dataList = new ArrayList<>();
-        orderAdapter = new OrderAdapter(getActivity());
+        orderAdapter = new OrderAdapter(getActivity(), 4);
         orderAdapter.getIsBuy(false);
         orderAdapter.setDatas(dataList);
         mLRecyclerViewAdapter = new LRecyclerViewAdapter(orderAdapter);

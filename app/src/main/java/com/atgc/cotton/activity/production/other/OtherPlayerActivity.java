@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -19,6 +21,7 @@ import com.atgc.cotton.App;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.activity.goodsDetail.GoodsDetailActivity;
+import com.atgc.cotton.activity.production.mine.MyProductionActivity;
 import com.atgc.cotton.adapter.CommentAdapter;
 import com.atgc.cotton.entity.BaseComment;
 import com.atgc.cotton.entity.BaseGood;
@@ -29,6 +32,7 @@ import com.atgc.cotton.entity.VideoEntity;
 import com.atgc.cotton.http.BaseDataRequest;
 import com.atgc.cotton.http.request.ComOrReplyRequest;
 import com.atgc.cotton.http.request.CommentsRequest;
+import com.atgc.cotton.http.request.DeleteVideoRequest;
 import com.atgc.cotton.http.request.FocusCancelRequest;
 import com.atgc.cotton.http.request.FocusJudgeRequest;
 import com.atgc.cotton.http.request.FocusSomeOneRequest;
@@ -36,6 +40,7 @@ import com.atgc.cotton.http.request.LikeStatusRequest;
 import com.atgc.cotton.http.request.MyGoodRequest;
 import com.atgc.cotton.http.request.PraiseNoRequest;
 import com.atgc.cotton.http.request.PraiseRequest;
+import com.atgc.cotton.http.request.VideoDetailsRequest;
 import com.atgc.cotton.util.ImageLoaderUtils;
 import com.atgc.cotton.util.MycsLog;
 import com.atgc.cotton.util.TimeUtil;
@@ -82,6 +87,8 @@ public class OtherPlayerActivity extends BaseActivity implements
     private MorePopup morePopup;
     private RelativeLayout rl_top_bar;
     private ImageLoader imageLoader;
+    private HorizontalScrollView horizontalScrollView;
+    private TextView tvTag;
     private CircleImageView iv_avatar, iv_header;
     private ImageView iv_back, iv_more, iv_like, iv_share;
     private TextView tv_title, tv_intro, tv_name, tv_nick, tv_time,
@@ -102,6 +109,7 @@ public class OtherPlayerActivity extends BaseActivity implements
     private VideoEntity videoEntity;
     private boolean hasLike = false;
     private boolean isFocus = false;
+    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +126,9 @@ public class OtherPlayerActivity extends BaseActivity implements
         rl_top_bar = (RelativeLayout) findViewById(R.id.rl_top_bar);
         iv_back = (ImageView) findViewById(R.id.iv_back);
         iv_more = (ImageView) findViewById(R.id.iv_more);
+
+        horizontalScrollView = (HorizontalScrollView) findViewById(R.id.gallery);
+        tvTag = (TextView) findViewById(R.id.tv_tag);
 
         iv_share = (ImageView) findViewById(R.id.iv_share);
         iv_like = (ImageView) findViewById(R.id.iv_like);
@@ -140,13 +151,16 @@ public class OtherPlayerActivity extends BaseActivity implements
         editText = (EditText) findViewById(R.id.editText);
         btn_comment = (Button) findViewById(R.id.btn_comment);
         listView = (MyListView) findViewById(R.id.listview);
+        setPadding(tv_focus);
+        setPadding(tv_focus2);
         adapter = new CommentAdapter(context);
         listView.setAdapter(adapter);
 
         sharePopup = new SharePopup(context, mController);
         sharePopup.setOnItemSelectedListener(this);
-        morePopup = new MorePopup(context, false);
-        morePopup.setOnItemSelectedListener(this);
+
+//        morePopup = new MorePopup(context, false);
+//        morePopup.setOnItemSelectedListener(this);
 
         mEditPreviewView = (GLSurfaceView) findViewById(R.id.edit_preview);
         iv_back.setOnClickListener(this);
@@ -157,6 +171,8 @@ public class OtherPlayerActivity extends BaseActivity implements
         tv_focus2.setOnClickListener(this);
         tv_qure_more.setOnClickListener(this);
         btn_comment.setOnClickListener(this);
+        iv_header.setOnClickListener(this);
+        tv_nick.setOnClickListener(this);
 
         scrollView = (MyScrollView) findViewById(R.id.scrollview);
         middle = findViewById(R.id.item_midle);
@@ -172,9 +188,20 @@ public class OtherPlayerActivity extends BaseActivity implements
         relativeLayout.getLayoutParams().height = (int) mImageHeight;
 //        mEditPreviewView.getLayoutParams().width = (int) mImageWidth;
 //        mEditPreviewView.getLayoutParams().height = (int) mImageHeight;
+        String feedId = "";
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            videoEntity = (VideoEntity) bundle.getSerializable("obj");
+            feedId = getIntent().getExtras().getString("feedid", "");
+        }
         initEditKit();
-        bindData();
-        startEditPreview();
+        if (!TextUtils.isEmpty(feedId)) {
+            requestVideo(feedId);
+        } else {
+            initData();
+            bindData();
+            startEditPreview();
+        }
     }
 
     private void initShareData() {
@@ -194,8 +221,10 @@ public class OtherPlayerActivity extends BaseActivity implements
         mEditKit.setDisplayPreview(mEditPreviewView);
         mEditKit.setOnErrorListener(mOnErrorListener);
         mEditKit.setOnInfoListener(mOnInfoListener);
-        Bundle bundle = getIntent().getExtras();
-        videoEntity = (VideoEntity) bundle.getSerializable("obj");
+    }
+
+    private void initData() {
+        String userId = videoEntity.getUserId();
         String url = videoEntity.getMediaPath();
         if (!TextUtils.isEmpty(url)) {
             if (Utils.isVideoFile(url)) {
@@ -205,6 +234,12 @@ public class OtherPlayerActivity extends BaseActivity implements
                 finish();
             }
         }
+        if (userId.equals(App.getInstance().getUid())) {
+            morePopup = new MorePopup(context, false, true);
+        } else {
+            morePopup = new MorePopup(context, false, false);
+        }
+        morePopup.setOnItemSelectedListener(this);
     }
 
     private void bindData() {
@@ -214,7 +249,7 @@ public class OtherPlayerActivity extends BaseActivity implements
             imageLoader.displayImage(videoEntity.getAvatar(), iv_avatar, ImageLoaderUtils.getDisplayImageOptions());
 
             tv_nick.setText(videoEntity.getUserName());
-            tv_desc.setText(videoEntity.getSignature());
+            tv_desc.setText(videoEntity.getContent());
             tv_time.setText(TimeUtil.getDateTime(videoEntity.getAddTime()));
             tv_play_num.setText(videoEntity.getBrowseCount() + "播放");
             tv_like.setText(videoEntity.getLikeCount());
@@ -234,6 +269,35 @@ public class OtherPlayerActivity extends BaseActivity implements
         mEditKit.setLooping(true);
         //开启预览
         mEditKit.startEditPreview();
+        isFocusRequest();
+    }
+
+
+    private void requestVideo(String feedid) {
+        showLoadingDialog();
+        VideoDetailsRequest request = new VideoDetailsRequest(TAG, feedid);
+        request.send(new BaseDataRequest.RequestCallback<VideoEntity>() {
+            @Override
+            public void onSuccess(VideoEntity pojo) {
+                cancelLoadingDialog();
+                initVideo(pojo);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                cancelLoadingDialog();
+                showToast(msg, true);
+            }
+        });
+    }
+
+    private void initVideo(VideoEntity video) {
+        if (video != null) {
+            this.videoEntity = video;
+            initData();
+            bindData();
+            startEditPreview();
+        }
     }
 
     @Override
@@ -255,11 +319,30 @@ public class OtherPlayerActivity extends BaseActivity implements
         mEditKit.release();
     }
 
+    private void goPersonPager() {
+        if (videoEntity == null) {
+            return;
+        }
+        if (videoEntity.getUserId().equals(App.getInstance().getUid())) {
+            openActivity(MyProductionActivity.class);
+        } else {
+            Intent intent = new Intent(context, OtherProActivity.class);
+            intent.putExtra("obj", videoEntity);
+            startActivity(intent);
+        }
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
+                break;
+            case R.id.icon_header:
+                goPersonPager();
+                break;
+            case R.id.tv_nick:
+                goPersonPager();
                 break;
             case R.id.iv_more:
                 if (!isFinishing()) {
@@ -519,7 +602,41 @@ public class OtherPlayerActivity extends BaseActivity implements
             case 2://加入黑名单
                 showToast("加入黑名单", true);
                 break;
+            case 3://删除当前视频
+                requestDeleteVideo();
+                break;
         }
+    }
+
+    private void requestDeleteVideo() {
+        if (videoEntity == null) {
+            return;
+        }
+        String feedid = videoEntity.getId();
+        if (TextUtils.isEmpty(feedid)) {
+            return;
+        }
+        showLoadingDialog();
+        DeleteVideoRequest request = new DeleteVideoRequest(TAG, feedid);
+        request.send(new BaseDataRequest.RequestCallback<String>() {
+            @Override
+            public void onSuccess(String pojo) {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        cancelLoadingDialog();
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                }, 1000);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                cancelLoadingDialog();
+                showToast(msg, true);
+            }
+        });
     }
 
 
@@ -529,6 +646,8 @@ public class OtherPlayerActivity extends BaseActivity implements
         }
         String goodids = videoEntity.getGoodsId();
         if (TextUtils.isEmpty(goodids)) {
+            UIUtils.hindView(horizontalScrollView);
+            UIUtils.hindView(tvTag);
             return;
         }
         Log.i("info", "========================gooodids:" + videoEntity.getGoodsId());
@@ -583,6 +702,9 @@ public class OtherPlayerActivity extends BaseActivity implements
                     imageLoader.displayImage(bean.getGoodsImg(), imageView, ImageLoaderUtils.getDisplayImageOptions());
                     addContainerView(container, imageView, UIUtils.dip2px(context, 108));
                 }
+            } else {
+                UIUtils.hindView(horizontalScrollView);
+                UIUtils.hindView(tvTag);
             }
         }
     }
@@ -764,12 +886,12 @@ public class OtherPlayerActivity extends BaseActivity implements
             return;
         }
         FocusJudgeRequest request = new FocusJudgeRequest(TAG, videoEntity.getUserId());
-        request.send(new BaseDataRequest.RequestCallback<FocusEntity>() {
+        request.send(new BaseDataRequest.RequestCallback<String>() {
             @Override
-            public void onSuccess(FocusEntity pojo) {
+            public void onSuccess(String str) {
                 cancelLoadingDialog();
-                if (pojo != null) {
-                    if (pojo.isFollow()) {
+                if (!TextUtils.isEmpty(str)) {
+                    if (isFocus(str)) {
                         isFocus = true;
                         tv_focus.setText("已关注");
                         tv_focus.setBackgroundResource(R.drawable.bg_edit_btn);
@@ -791,6 +913,22 @@ public class OtherPlayerActivity extends BaseActivity implements
                 showToast(msg, true);
             }
         });
+    }
+
+    private void setPadding(TextView tv) {
+        int d = (int) resources.getDimension(R.dimen.dp_11);
+        tv.setPadding(d, 0, d, 0);
+    }
+
+    private boolean isFocus(String json) {
+        boolean flag = false;
+        try {
+            JSONObject object = new JSONObject(json);
+            flag = object.getBoolean("IsFollow");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return flag;
     }
 
     private void focusSomeBodyRequest() {

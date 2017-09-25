@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+
 import com.alibaba.fastjson.JSON;
 import com.atgc.cotton.App;
 import com.atgc.cotton.Constants;
@@ -15,12 +16,15 @@ import com.atgc.cotton.db.dao.JsonDao;
 import com.atgc.cotton.util.MycsLog;
 import com.atgc.cotton.util.NetworkUtil;
 import com.atgc.cotton.util.ToastUtil;
+import com.atgc.cotton.util.Utils;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
+
 import net.jodah.typetools.TypeResolver;
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -35,19 +39,22 @@ public abstract class BaseDataRequest<T> {
     public static final int REQUEST_METHOD_POST = 1010;
     public static final int REQUEST_METHOD_PUT = 1011;
     public static final int REQUEST_METHOD_DELETE = 1100;
-
     private Handler mHandler = new Handler(Looper.getMainLooper());
+    private String agent;
 
     protected BaseDataRequest(String tag, Object... params) {
         mGenericPojoClazz = (Class<T>) TypeResolver.resolveRawArgument(BaseDataRequest.class, getClass());
         mTag = tag;
         mParams = params;
+        agent = Utils.getUserAgent(App.getInstance());
     }
 
     public void send(final RequestCallback callback) {
         String url = getApiUrl();
         final Request.Builder builder = new Request.Builder()
-                .url(url);
+                .url(url)
+                .removeHeader("User-Agent")
+                .addHeader("User-Agent", agent);
         if (!url.contains("public")) {
             Log.i("info", "===================Token:" + App.getInstance().getToken());
             if (App.getInstance().isLogin()) {
@@ -256,6 +263,7 @@ public abstract class BaseDataRequest<T> {
             return getApiPath();
         }
     }
+
     public interface RequestCallback<T> {
         void onSuccess(T pojo);
 

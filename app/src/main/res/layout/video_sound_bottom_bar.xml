@@ -95,11 +95,23 @@
             android:textSize="13.5sp" />
 
         <TextView
-            android:id="@+id/tv_record"
+            android:id="@+id/tv_online"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dp_11"
             android:layout_toLeftOf="@+id/tv_native"
+            android:background="@drawable/bg_edit_btn"
+            android:padding="@dimen/dp_10"
+            android:text="在 线"
+            android:textColor="@color/main_default_color"
+            android:textSize="13.5sp" />
+
+        <TextView
+            android:id="@+id/tv_record"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_11"
+            android:layout_toLeftOf="@+id/tv_online"
             android:background="@drawable/bg_edit_btn"
             android:padding="@dimen/dp_10"
             android:text="录 音"

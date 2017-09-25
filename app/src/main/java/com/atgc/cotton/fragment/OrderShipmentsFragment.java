@@ -39,7 +39,7 @@ public class OrderShipmentsFragment extends BaseOrderFragment {
         rv_content = list;
         dataList = new ArrayList<>();
 //        setData();
-        orderAdapter = new OrderAdapter(getActivity());
+        orderAdapter = new OrderAdapter(getActivity(), 3);
         orderAdapter.setDatas(dataList);
         mLRecyclerViewAdapter = new LRecyclerViewAdapter(orderAdapter);
         list.setAdapter(mLRecyclerViewAdapter);

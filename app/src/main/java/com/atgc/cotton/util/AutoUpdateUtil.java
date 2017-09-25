@@ -32,7 +32,8 @@ public class AutoUpdateUtil {
                 AlertDialog alert;
                 Builder builder = new Builder(context)
                         .setTitle(maxVersion + "版本更新")
-                        .setMessage("更新内容:\n" + content + "\n是否更新？").setPositiveButton("确定", new OnClickListener() {
+                        .setMessage("更新内容:\n" + content + "\n是否更新？")
+                        .setPositiveButton("确定", new OnClickListener() {
                             @Override
                             public void onClick(
                                     DialogInterface paramDialogInterface,

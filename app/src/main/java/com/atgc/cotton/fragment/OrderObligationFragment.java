@@ -38,7 +38,7 @@ public class OrderObligationFragment extends BaseOrderFragment {
         orderActionEntity.setBuy(true);
         rv_content = list;
         dataList = new ArrayList<>();
-        orderAdapter = new OrderAdapter(getActivity());
+        orderAdapter = new OrderAdapter(getActivity(), 2);
         orderAdapter.setDatas(dataList);
         mLRecyclerViewAdapter = new LRecyclerViewAdapter(orderAdapter);
         list.setAdapter(mLRecyclerViewAdapter);

@@ -3,6 +3,7 @@ package com.atgc.cotton.activity.production.other;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -14,6 +15,9 @@ import com.atgc.cotton.adapter.ProductAdapter;
 import com.atgc.cotton.entity.FansEntity;
 import com.atgc.cotton.entity.FocusEntity;
 import com.atgc.cotton.entity.HomeBaseData;
+import com.atgc.cotton.entity.MemberEntity;
+import com.atgc.cotton.entity.OrderGoodsEntity;
+import com.atgc.cotton.entity.UserInfo;
 import com.atgc.cotton.entity.VideoEntity;
 import com.atgc.cotton.http.BaseDataRequest;
 import com.atgc.cotton.http.request.FansRequest;
@@ -21,6 +25,7 @@ import com.atgc.cotton.http.request.FocusCancelRequest;
 import com.atgc.cotton.http.request.FocusJudgeRequest;
 import com.atgc.cotton.http.request.FocusSomeOneRequest;
 import com.atgc.cotton.http.request.OtherProRequest;
+import com.atgc.cotton.http.request.UserInfoRequest;
 import com.atgc.cotton.util.ImageLoaderUtils;
 import com.atgc.cotton.util.MycsLog;
 import com.atgc.cotton.widget.MorePopup;
@@ -40,6 +45,9 @@ import com.umeng.socialize.media.UMediaObject;
 import com.umeng.socialize.weixin.media.CircleShareContent;
 import com.umeng.socialize.weixin.media.WeiXinShareContent;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 /**
@@ -50,7 +58,8 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
     private static final String TAG = OtherProActivity.class.getSimpleName();
     private ImageView iv_back, iv_more, iv_bg;
     private TextView tv_name, tv_focus, tv_fans, tv_fos, tv_intro;
-    private VideoEntity videoEntity;
+    //    private VideoEntity videoEntity;
+    private String userId;
     private ImageLoader imageLoader;
     private SharePopup sharePopup;
     private MorePopup morePopup;
@@ -60,17 +69,56 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
     private ProductAdapter adapter;
     private boolean loadMore = true;
     private boolean isFocus = false;
+    private String signature, sex, avatar, userName;
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_other_production);
-        initViews();
+        init();
+    }
+
+    private void init() {
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            String userid = bundle.getString("userid", "");
+            if (!TextUtils.isEmpty(userid)) {
+                requestUserInfo(userid);
+            } else {
+                VideoEntity videoEntity = (VideoEntity) bundle.getSerializable("obj");
+                MemberEntity memberEntity = (MemberEntity) bundle.getSerializable("member");
+                OrderGoodsEntity orderEntity = (OrderGoodsEntity) bundle.getSerializable("orderEntity");
+                if (videoEntity != null) {
+                    userId = videoEntity.getUserId();
+                    signature = videoEntity.getSignature();
+                    sex = videoEntity.getSex();
+                    avatar = videoEntity.getAvatar();
+                    userName = videoEntity.getUserName();
+                }
+
+                if (memberEntity != null) {
+                    userId = memberEntity.getUserId();
+                    signature = memberEntity.getSignature();
+                    sex = memberEntity.getSex();
+                    avatar = memberEntity.getAvatar();
+                    userName = memberEntity.getUserName();
+                }
+
+                if (orderEntity != null) {
+                    userId = "" + orderEntity.getSupplierId();
+                    signature = orderEntity.getSupplierSignture();
+                    sex = orderEntity.getSupplierSex();
+                    avatar = orderEntity.getSupplierAvatar();
+                    userName = orderEntity.getStoreName();
+                }
+                initViews();
+            }
+        }
     }
 
     private void initViews() {
         imageLoader = ImageLoaderUtils.createImageLoader(context);
-        videoEntity = (VideoEntity) getIntent().getExtras().getSerializable("obj");
         iv_back = (ImageView) findViewById(R.id.iv_back);
 //        iv_share = (ImageView) findViewById(R.id.iv_share);
         iv_more = (ImageView) findViewById(R.id.iv_more);
@@ -161,29 +209,51 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    private void requestDatas() {
-        if (videoEntity != null) {
-            showLoadingDialog();
-            OtherProRequest request = new OtherProRequest(TAG, videoEntity.getUserId(), "" + pager, "" + PAGER_NUM);
-            request.send(new BaseDataRequest.RequestCallback<HomeBaseData>() {
-                @Override
-                public void onSuccess(HomeBaseData pojo) {
-                    cancelLoadingDialog();
-                    initDatas(pojo);
+    private void requestUserInfo(String id) {
+        showLoadingDialog();
+        UserInfoRequest request = new UserInfoRequest(TAG, id);
+        request.send(new BaseDataRequest.RequestCallback<UserInfo>() {
+            @Override
+            public void onSuccess(UserInfo pojo) {
+                if (pojo != null) {
+                    userId = pojo.getUserId();
+                    signature = pojo.getSignature();
+                    sex = pojo.getSex();
+                    avatar = pojo.getAvatar();
+                    userName = pojo.getUserName();
+                    initViews();
                 }
+            }
 
-                @Override
-                public void onFailure(String msg) {
-                    cancelLoadingDialog();
-                    if (msg.equals("no record")) {
-                        gridView.onFinishLoading(false, null);
-                        loadMore = false;
-                    } else {
-                        showToast("数据加载完成", true);
-                    }
+            @Override
+            public void onFailure(String msg) {
+                cancelFocusRequest();
+                showToast(msg, true);
+            }
+        });
+    }
+
+    private void requestDatas() {
+        showLoadingDialog();
+        OtherProRequest request = new OtherProRequest(TAG, userId, "" + pager, "" + PAGER_NUM);
+        request.send(new BaseDataRequest.RequestCallback<HomeBaseData>() {
+            @Override
+            public void onSuccess(HomeBaseData pojo) {
+                cancelLoadingDialog();
+                initDatas(pojo);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                cancelLoadingDialog();
+                if (msg.equals("no record")) {
+                    gridView.onFinishLoading(false, null);
+                    loadMore = false;
+                } else {
+//                    showToast("数据加载完成", true);
                 }
-            });
-        }
+            }
+        });
     }
 
     private void initDatas(HomeBaseData baseData) {
@@ -197,56 +267,55 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
                 gridView.onFinishLoading(false, null);
             }
 
-            if (videoEntity != null) {
-                tv_intro.setText(videoEntity.getSignature());
-                String sex = videoEntity.getSex();
-                tv_name.setText(videoEntity.getUserName());
-                Drawable nav_up = null;
-                if (sex.equals("0")) {
-                    nav_up = getResources().getDrawable(R.drawable.works_man);
-                    nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
-                } else {
-                    nav_up = getResources().getDrawable(R.drawable.works_lady);
-                    nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
-                }
-                tv_name.setCompoundDrawables(null, null, nav_up, null);
+//            if (videoEntity != null) {
+            tv_intro.setText(signature);
+//                String sex = videoEntity.getSex();
+            tv_name.setText(userName);
+            Drawable nav_up = null;
+            if (sex.equals("1")) {
+                nav_up = getResources().getDrawable(R.drawable.works_man);
+                nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+            } else {
+                nav_up = getResources().getDrawable(R.drawable.works_lady);
+                nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+            }
+            tv_name.setCompoundDrawables(null, null, nav_up, null);
 //                tv_focus.setText("关注：" + videoEntity.getFollowCount());
 //                tv_fans.setText("粉丝：" + videoEntity.getFansCount());
-                String videoPath = videoEntity.getMediaPath();
-                String imageUrl = "";
-                if (videoPath.contains(".mp4")) {
-                    imageUrl = videoPath.replace(".mp4", ".jpg");
-                } else if (videoPath.contains(".mov")) {
-                    imageUrl = videoPath.replace(".mov", ".jpg");
-                }
-                imageLoader.displayImage(imageUrl, iv_bg, ImageLoaderUtils.getDisplayImageOptions());
-            }
+
+//                String videoPath = videoEntity.getMediaPath();
+//                String imageUrl = "";
+//                if (videoPath.contains(".mp4")) {
+//                    imageUrl = videoPath.replace(".mp4", ".jpg");
+//                } else if (videoPath.contains(".mov")) {
+//                    imageUrl = videoPath.replace(".mov", ".jpg");
+//                }
+            imageLoader.displayImage(avatar, iv_bg, ImageLoaderUtils.getDisplayImageOptions());
         }
     }
+//    }
 
     private void requestMoreDatas() {
-        if (videoEntity != null) {
-            pager++;
-            OtherProRequest request = new OtherProRequest(TAG, videoEntity.getUserId(), "" + pager, "" + PAGER_NUM);
-            request.send(new BaseDataRequest.RequestCallback<HomeBaseData>() {
-                @Override
-                public void onSuccess(HomeBaseData pojo) {
-                    cancelLoadingDialog();
-                    bindData(pojo);
-                }
+        pager++;
+        OtherProRequest request = new OtherProRequest(TAG, userId, "" + pager, "" + PAGER_NUM);
+        request.send(new BaseDataRequest.RequestCallback<HomeBaseData>() {
+            @Override
+            public void onSuccess(HomeBaseData pojo) {
+                cancelLoadingDialog();
+                bindData(pojo);
+            }
 
-                @Override
-                public void onFailure(String msg) {
-                    cancelLoadingDialog();
-                    if (msg.equals("no record")) {
-                        gridView.onFinishLoading(false, null);
-                        loadMore = false;
-                    } else {
-                        showToast("数据加载完成", true);
-                    }
+            @Override
+            public void onFailure(String msg) {
+                cancelLoadingDialog();
+                if (msg.equals("no record")) {
+                    gridView.onFinishLoading(false, null);
+                    loadMore = false;
+                } else {
+//                    showToast("数据加载完成", true);
                 }
-            });
-        }
+            }
+        });
     }
 
     private void bindData(HomeBaseData homeBaseData) {
@@ -256,7 +325,7 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
             if (videos != null && size != 0) {
                 gridView.onFinishLoading(true, videos);
             } else {
-                showToast("加载完成!", true);
+//                showToast("加载完成!", true);
                 gridView.onFinishLoading(false, null);
                 loadMore = false;
             }
@@ -264,10 +333,7 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void requestFans() {
-        if (videoEntity == null) {
-            return;
-        }
-        FansRequest request = new FansRequest(TAG, videoEntity.getUserId());
+        FansRequest request = new FansRequest(TAG, userId);
         request.send(new BaseDataRequest.RequestCallback<FansEntity>() {
             @Override
             public void onSuccess(FansEntity pojo) {
@@ -408,16 +474,16 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
      * 是否关注请求
      */
     private void isFocusRequest() {
-        if (videoEntity == null) {
-            return;
-        }
-        FocusJudgeRequest request = new FocusJudgeRequest(TAG, videoEntity.getUserId());
-        request.send(new BaseDataRequest.RequestCallback<FocusEntity>() {
+//        if (videoEntity == null) {
+//            return;
+//        }
+        FocusJudgeRequest request = new FocusJudgeRequest(TAG, userId);
+        request.send(new BaseDataRequest.RequestCallback<String>() {
             @Override
-            public void onSuccess(FocusEntity pojo) {
+            public void onSuccess(String pojo) {
                 cancelLoadingDialog();
-                if (pojo != null) {
-                    if (pojo.isFollow()) {
+                if (!TextUtils.isEmpty(pojo)) {
+                    if (isFocus(pojo)) {
                         isFocus = true;
                         tv_fos.setBackgroundResource(R.drawable.bg_edit_blue);
                     } else {
@@ -435,11 +501,22 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
         });
     }
 
-    private void focusSomeBodyRequest() {
-        if (videoEntity == null) {
-            return;
+    private boolean isFocus(String json) {
+        boolean flag = false;
+        try {
+            JSONObject object = new JSONObject(json);
+            flag = object.getBoolean("IsFollow");
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        FocusSomeOneRequest request = new FocusSomeOneRequest(TAG, videoEntity.getUserId(), "他人作品");
+        return flag;
+    }
+
+    private void focusSomeBodyRequest() {
+//        if (videoEntity == null) {
+//            return;
+//        }
+        FocusSomeOneRequest request = new FocusSomeOneRequest(TAG, userId, "他人作品");
         request.send(new BaseDataRequest.RequestCallback<FocusEntity>() {
             @Override
             public void onSuccess(FocusEntity pojo) {
@@ -458,10 +535,10 @@ public class OtherProActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void cancelFocusRequest() {
-        if (videoEntity == null) {
-            return;
-        }
-        FocusCancelRequest request = new FocusCancelRequest(TAG, videoEntity.getUserId());
+//        if (videoEntity == null) {
+//            return;
+//        }
+        FocusCancelRequest request = new FocusCancelRequest(TAG, userId);
         request.send(new BaseDataRequest.RequestCallback<String>() {
             @Override
             public void onSuccess(String pojo) {

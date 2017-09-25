@@ -70,7 +70,6 @@ public class LocalMusicActivity extends BaseActivity {
         layoutManager.setOrientation(OrientationHelper.VERTICAL);
         //设置布局管理器
         rv_content.setLayoutManager(layoutManager);
-
         rv_content.addOnItemTouchListener(new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {

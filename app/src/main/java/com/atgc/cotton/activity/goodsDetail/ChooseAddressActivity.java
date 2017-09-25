@@ -1,28 +1,23 @@
 package com.atgc.cotton.activity.goodsDetail;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSON;
 import com.atgc.cotton.App;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.MvpActivity;
-import com.atgc.cotton.activity.goodsDetail.EditAddressActivity;
 import com.atgc.cotton.adapter.ChooseAddressAdapter;
 import com.atgc.cotton.entity.AddressListEntity;
 import com.atgc.cotton.event.RefreshAddress;
 import com.atgc.cotton.listener.RecycleViewItemListener;
 import com.atgc.cotton.presenter.ChooseAddressPresenter;
 import com.atgc.cotton.presenter.view.IChooseAddressView;
-import com.atgc.cotton.util.PreferenceUtils;
-
 
 import java.util.List;
 
@@ -35,12 +30,12 @@ import de.greenrobot.event.Subscribe;
  */
 public class ChooseAddressActivity extends MvpActivity<ChooseAddressPresenter> implements IChooseAddressView, View.OnClickListener {
     private Button btnAdd;
+    private ImageView iv_back;
     private RecyclerView rvAddress;
     private ChooseAddressAdapter adapter;
     private String token;
     private List<AddressListEntity.DataBean> datas;
     private int deletePos;
-
 
 
     @Override
@@ -61,8 +56,10 @@ public class ChooseAddressActivity extends MvpActivity<ChooseAddressPresenter> i
 
 
     protected void initUI() {
+        iv_back = (ImageView) findViewById(R.id.iv_back);
         btnAdd = (Button) findViewById(R.id.btn_add);
         btnAdd.setOnClickListener(this);
+        iv_back.setOnClickListener(this);
         rvAddress = (RecyclerView) findViewById(R.id.rv_address);
         adapter = new ChooseAddressAdapter(this);
         rvAddress.setLayoutManager(new LinearLayoutManager(this));
@@ -98,6 +95,7 @@ public class ChooseAddressActivity extends MvpActivity<ChooseAddressPresenter> i
 
     /**
      * 添加地址后通知刷新
+     *
      * @param event
      */
     @Subscribe
@@ -131,7 +129,6 @@ public class ChooseAddressActivity extends MvpActivity<ChooseAddressPresenter> i
             adapter.setDatas(datas);
             adapter.notifyDataSetChanged();
         }
-
     }
 
     /**
@@ -154,6 +151,13 @@ public class ChooseAddressActivity extends MvpActivity<ChooseAddressPresenter> i
 
     @Override
     public void onClick(View v) {
-        openActivity(EditAddressActivity.class);
+        switch (v.getId()) {
+            case R.id.iv_back:
+                finish();
+                break;
+            case R.id.btn_add:
+                openActivity(EditAddressActivity.class);
+                break;
+        }
     }
 }

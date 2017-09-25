@@ -25,9 +25,11 @@ public class HomePagerRequest extends BaseDataRequest<HomeBaseData> {
     protected Map<String, String> getParams() {
         String page = (String) mParams[0];
         String size = (String) mParams[1];
+        String sortby = (String) mParams[2];
         Map<String, String> map = new HashMap<String, String>();
         map.put("page", page);
         map.put("size", size);
+        map.put("sortby", sortby);
         return map;
     }
 

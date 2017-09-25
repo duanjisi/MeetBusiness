@@ -38,7 +38,7 @@ public class OrderSellerAllFragment extends BaseOrderFragment {
         orderActionEntity.setBuy(true);
         rv_content = list;
         dataList = new ArrayList<>();
-        orderAdapter = new OrderAdapter(getActivity());
+        orderAdapter = new OrderAdapter(getActivity(), 1);
         orderAdapter.getIsBuy(false);
         orderAdapter.setDatas(dataList);
         mLRecyclerViewAdapter = new LRecyclerViewAdapter(orderAdapter);
@@ -144,7 +144,13 @@ public class OrderSellerAllFragment extends BaseOrderFragment {
                 break;
             case 6:
                 if (type == 1) {
-                    Log.i("OrderEntity:", "退款");
+                    Log.i("OrderEntity:", "同意退款");
+                    orderActionEntity.setDoAction("agreeRefund");
+                    EventBus.getDefault().post(orderActionEntity);
+                } else if (type == 2) {
+                    Log.i("OrderEntity:", "拒绝退款");
+                    orderActionEntity.setDoAction("disAgreeRefund");
+                    EventBus.getDefault().post(orderActionEntity);
                 }
                 break;
         }

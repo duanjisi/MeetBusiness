@@ -1,15 +1,19 @@
 package com.atgc.cotton.activity;
 
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,7 +21,10 @@ import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.MvpActivity;
 import com.atgc.cotton.presenter.LoginPresenter;
 import com.atgc.cotton.presenter.view.INormalView;
+import com.atgc.cotton.util.PrefKey;
+import com.atgc.cotton.util.PreferenceUtils;
 import com.atgc.cotton.util.UIUtils;
+import com.atgc.cotton.widget.InputDetector;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.controller.listener.SocializeListeners;
 import com.umeng.socialize.exception.SocializeException;
@@ -58,8 +65,10 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
     LinearLayout llBottom;
     @Bind(R.id.tv_bottom)
     TextView tvBottom;
+    @Bind(R.id.rl_root)
+    RelativeLayout rootLayout;
 
-
+    private InputDetector detector;
 
     @Override
     protected LoginPresenter createPresenter() {
@@ -72,9 +81,33 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        sizeHeight();
         initUI();
         initData();
+//        detector.with(this).bindToET(et_account).build();
     }
+
+    private int maxHeight = 0;
+
+    private void sizeHeight() {
+        rootLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                // TODO Auto-generated method stub
+                Rect r = new Rect();
+                rootLayout.getWindowVisibleDisplayFrame(r);
+                //r.top 是状态栏高度
+                int screenHeight = rootLayout.getRootView().getHeight();
+                int softHeight = screenHeight - (r.bottom - r.top);
+                if (softHeight >= maxHeight) {
+                    maxHeight = softHeight;
+                }
+                Log.i("info", "Size: " + softHeight);
+                //boolean visible = heightDiff > screenHeight / 3;
+            }
+        });
+    }
+
     /**
      * 登录成功回调
      *
@@ -83,6 +116,7 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
     @Override
     public void getDataSuccess(String s) {
 //        showToast(s);
+        PreferenceUtils.putInt(context, PrefKey.SORFT_HEIGHT_KEY, maxHeight);
         finish();
         openActivity(HomePagerActivity.class);
     }
@@ -96,9 +130,11 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
     }
 
     protected void initUI() {
-
-        tv_register.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
-        tv_register.getPaint().setAntiAlias(true);//抗锯齿
+        TextPaint paint = tv_register.getPaint();
+        if (paint != null) {
+            paint.setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
+            paint.setAntiAlias(true);//抗锯齿
+        }
     }
 
     protected void initData() {

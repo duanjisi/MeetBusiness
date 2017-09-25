@@ -13,7 +13,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="andrfile_paths.xmloid.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <uses-feature android:name="android.hardware.camera" />
@@ -40,6 +40,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--<activity-->
+        <!--android:name=".activity.test.MainTestActivity"-->
+        <!--android:label="@string/app_name"-->
+        <!--android:screenOrientation="portrait"-->
+        <!--android:theme="@style/AppTheme">-->
+        <!--<intent-filter>-->
+        <!--<action android:name="android.intent.action.MAIN" />-->
+        <!--<category android:name="android.intent.category.LAUNCHER" />-->
+        <!--</intent-filter>-->
+        <!--</activity>-->
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait"></activity>
@@ -51,6 +61,12 @@
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activity.im.ContactsActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.im.ChatActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.im.PrivateLetterActivity"
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activity.vendingRack.VendingRackHomeActivity"
@@ -104,6 +120,9 @@
             android:name=".activity.videoedit.EditVideoActivity"
             android:screenOrientation="portrait"></activity>
         <activity
+            android:name=".activity.videoedit.OnlineMusicActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
             android:name=".activity.videoedit.LocalVideoFilesActivity"
             android:screenOrientation="portrait"></activity>
 
@@ -140,7 +159,9 @@
         <activity
             android:name=".activity.production.mine.MyProductionActivity"
             android:screenOrientation="portrait"></activity>
-
+        <activity
+            android:name=".activity.production.mine.ListActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activity.production.other.OtherProActivity"
             android:screenOrientation="portrait"></activity>
@@ -179,9 +200,12 @@
             android:screenOrientation="portrait" />
 
         <service
-            android:name=".services.UpdateService"
+            android:name=".service.UpdateService"
             android:enabled="true"></service>
-
+        <service
+            android:name=".service.ChatService"
+            android:enabled="true"
+            android:exported="false"></service>
         <!-- 定位需要的服务 -->
         <service android:name="com.amap.api.location.APSService" />
         <meta-data
@@ -248,7 +272,9 @@
         <activity
             android:name=".activity.goodsDetail.GoodsEvaluateActivity"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".activity.goodsDetail.OrderDetailsActivity"
+            android:screenOrientation="portrait" />
 
         <!--支付宝start-->
         <activity
@@ -262,6 +288,12 @@
             android:exported="false"
             android:screenOrientation="behind"></activity>
 
+        <receiver android:name=".receiver.BootReceiver">
+            <intent-filter>
+                <!-- 监听的动作类型，这里是监听网络连接的状态  -->
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
         <!-- 支付宝end -->
         <!--友盟appkey-->
         <meta-data

@@ -12,9 +12,11 @@ import android.widget.TextView;
 import com.atgc.cotton.App;
 import com.atgc.cotton.Constants;
 import com.atgc.cotton.R;
+import com.atgc.cotton.Session;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.entity.AccountEntity;
 import com.atgc.cotton.entity.ActionEntity;
+import com.atgc.cotton.util.Utils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,7 +36,7 @@ public class PersonalSetActivity extends BaseActivity {
     TextView tvVolum;
     @Bind(R.id.rl_cache)
     RelativeLayout rlCache;
-//    @Bind(R.id.tv_auth_state)
+    //    @Bind(R.id.tv_auth_state)
 //    TextView tvAuthState;
 //    @Bind(R.id.rl_auth)
 //    RelativeLayout rlAuth;
@@ -44,7 +46,7 @@ public class PersonalSetActivity extends BaseActivity {
     RelativeLayout rlPhone;
     @Bind(R.id.rl_pws)
     RelativeLayout rlPws;
-//    @Bind(R.id.rl_wallet)
+    //    @Bind(R.id.rl_wallet)
 //    RelativeLayout rlWallet;
     @Bind(R.id.rl_about)
     RelativeLayout rlAbout;
@@ -159,6 +161,7 @@ public class PersonalSetActivity extends BaseActivity {
                 break;
             case R.id.tv_exit_login:
                 App.getInstance().logout();
+                Utils.sendImMessage(Session.ACTION_STOP_CHAT_SERVICE, null);
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {

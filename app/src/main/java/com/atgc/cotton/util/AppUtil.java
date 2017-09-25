@@ -12,9 +12,15 @@ public class AppUtil {
     public static String getVersionName(Context context) {
         return getPackageInfo(context).versionName;
     }
+
     //版本号
     public static int getVersionCode(Context context) {
         return getPackageInfo(context).versionCode;
+    }
+
+    //包名
+    public static String getPackageName(Context context) {
+        return getPackageInfo(context).packageName;
     }
 
     private static PackageInfo getPackageInfo(Context context) {
@@ -29,4 +35,14 @@ public class AppUtil {
         }
         return pi;
     }
+
+    /**
+     * 获取当前手机系统版本号
+     *
+     * @return 系统版本号
+     */
+    public static String getSystemVersion() {
+        return android.os.Build.VERSION.RELEASE;
+    }
+
 }

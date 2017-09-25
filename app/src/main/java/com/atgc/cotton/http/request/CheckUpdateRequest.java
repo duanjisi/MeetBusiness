@@ -32,6 +32,6 @@ public class CheckUpdateRequest extends BaseDataRequest<UpdateInfoEntity> {
 
     @Override
     protected int getRequestMethod() {
-        return REQUEST_METHOD_POST;
+        return REQUEST_METHOD_GET;
     }
 }

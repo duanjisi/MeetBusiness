@@ -4,49 +4,55 @@ package com.atgc.cotton.entity;
  * Created by Johnny on 2016/9/21.
  */
 public class UpdateInfoEntity {
-    private String version = "";
-    private String up_time = "";
-    private String msg = "";
-    private int force = 0;
-    private String url = "";
+//    private String version = "";
+//    private String up_time = "";
+//    private String msg = "";
+//    private int force = 0;
+//    private String url = "";
 
-    public String getVersion() {
-        return version;
+    private String APKUrl = "";
+    private String AppVersion = "";
+    private boolean UpForce = false;
+    private String UpMsg = "";
+    private String UpTime = "";
+
+    public String getAPKUrl() {
+        return APKUrl;
     }
 
-    public void setVersion(String version) {
-        this.version = version;
+    public void setAPKUrl(String APKUrl) {
+        this.APKUrl = APKUrl;
     }
 
-    public String getUp_time() {
-        return up_time;
+    public String getAppVersion() {
+        return AppVersion;
     }
 
-    public void setUp_time(String up_time) {
-        this.up_time = up_time;
+    public void setAppVersion(String appVersion) {
+        AppVersion = appVersion;
     }
 
-    public String getMsg() {
-        return msg;
+    public boolean isUpForce() {
+        return UpForce;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
+    public void setUpForce(boolean upForce) {
+        UpForce = upForce;
     }
 
-    public int getForce() {
-        return force;
+    public String getUpMsg() {
+        return UpMsg;
     }
 
-    public void setForce(int force) {
-        this.force = force;
+    public void setUpMsg(String upMsg) {
+        UpMsg = upMsg;
     }
 
-    public String getUrl() {
-        return url;
+    public String getUpTime() {
+        return UpTime;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setUpTime(String upTime) {
+        UpTime = upTime;
     }
 }

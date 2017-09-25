@@ -4,12 +4,12 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -17,16 +17,11 @@ import android.widget.ToggleButton;
 import com.alibaba.fastjson.JSON;
 import com.atgc.cotton.App;
 import com.atgc.cotton.R;
-import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.activity.base.MvpActivity;
 import com.atgc.cotton.entity.LocalAddressEntity;
 import com.atgc.cotton.event.RefreshAddress;
-import com.atgc.cotton.http.HttpUrl;
 import com.atgc.cotton.presenter.AddAddressPresenter;
-import com.atgc.cotton.presenter.view.IBaseView;
 import com.atgc.cotton.presenter.view.INormalView;
-import com.atgc.cotton.util.L;
-import com.atgc.cotton.util.OkManager;
 import com.atgc.cotton.widget.wheel.ArrayWheelAdapter;
 import com.atgc.cotton.widget.wheel.OnWheelChangedListener;
 import com.atgc.cotton.widget.wheel.WheelView;
@@ -123,6 +118,11 @@ public class EditAddressActivity extends MvpActivity<AddAddressPresenter> implem
             address = intent.getStringExtra("address");
             isDefault = intent.getIntExtra("isDefault", -1);
             addressId = intent.getIntExtra("id", -1);
+
+            province_id = "" + intent.getIntExtra("province_id", -1);
+            city_id = "" + intent.getIntExtra("city_id", -1);
+            county_id = "" + intent.getIntExtra("county_id", -1);
+
             location = intent.getStringExtra("location");
         }
         findViewById(R.id.img_back).setOnClickListener(this);
@@ -177,25 +177,20 @@ public class EditAddressActivity extends MvpActivity<AddAddressPresenter> implem
                 finish();
                 break;
             case R.id.btn_save: //编辑或保存
-                if (consignee != null) {
-
+                if (!TextUtils.isEmpty(consignee)) {
                     editAddress();
                 } else {
-
                     saveAddress();
                 }
                 break;
             case R.id.rl_address: //省市区
                 showAddressSelection();
-
                 break;
             case R.id.tv_choose: //省市区
                 showAddressSelection();
 
                 break;
         }
-
-
     }
 
     private void editAddress() {
@@ -266,7 +261,6 @@ public class EditAddressActivity extends MvpActivity<AddAddressPresenter> implem
             e.printStackTrace();
         }
         return jsonDate;
-
     }
 
 

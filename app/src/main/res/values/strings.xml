@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">老板六六</string>
+    <string name="app_name">66boss</string>
     <string name="loading">数据加载中， 请稍候&#8230;</string>
     <string name="compose">正在合成</string>
     <!--QQ,微信开放平台-->
@@ -98,4 +98,11 @@
 
     <string name="opera_confirm">确定</string>
     <string name="opera_quit">退出</string>
+
+    <string name="xlistview_header_hint_normal">下拉刷新</string>
+    <string name="xlistview_header_hint_ready">释放立即刷新</string>
+    <string name="xlistview_header_hint_loading">正在刷新...</string>
+    <string name="xlistview_header_last_time">上次更新：</string>
+    <string name="xlistview_footer_hint_normal">查看更多</string>
+    <string name="xlistview_footer_hint_ready">松开载入更多</string>
 </resources>

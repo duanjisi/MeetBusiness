@@ -111,10 +111,8 @@ public class LocalAddressEntity {
         public void setRegion_name(String region_name) {
             this.region_name = region_name;
         }
-
         private String region_id;
         private String region_name;
-
 
     }
 

@@ -14,7 +14,6 @@ import android.widget.RelativeLayout;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.fragment.BaseFragment;
-import com.atgc.cotton.fragment.ImFriendFragment;
 import com.atgc.cotton.fragment.ImInfoFragment;
 import com.atgc.cotton.fragment.ImMsgFragment;
 import com.atgc.cotton.util.UIUtils;
@@ -27,18 +26,17 @@ import java.util.ArrayList;
 public class MainImActivity extends BaseActivity {
     private static final int VIEW_PAGER_PAGE_1 = 0;
     private static final int VIEW_PAGER_PAGE_2 = 1;
-    private static final int VIEW_PAGER_PAGE_3 = 2;
-    private static final int PAGE_COUNT = 3;
+    //    private static final int VIEW_PAGER_PAGE_3 = 2;
+    private static final int PAGE_COUNT = 2;
     private RelativeLayout rl_line;
     private ImageView iv_back, iv_msg;
     private ImageView mCursorIm;
     private int mCursorImWidth;
     private ViewPager mViewPager;
     private ArrayList<Fragment> mFragments = new ArrayList<Fragment>();
-    private BaseFragment
-            imFriendFragment, imInfoFragment, imMsgFragment;
+    private BaseFragment imInfoFragment, imMsgFragment;
     private RadioGroup mRadioGroup;
-    private RadioButton mFriend, mInfo, mMsg;
+    private RadioButton mInfo, mMsg;
     private int currentIndex = 0;
 
     @Override
@@ -74,7 +72,7 @@ public class MainImActivity extends BaseActivity {
         rl_line = (RelativeLayout) findViewById(R.id.rl_line);
         mCursorIm = (ImageView) findViewById(R.id.im_cursor);
         mCursorImWidth = UIUtils.setCursorIm(context, rl_line, mCursorIm, PAGE_COUNT);
-        mFriend = (RadioButton) findViewById(R.id.rb_friend);
+//        mFriend = (RadioButton) findViewById(R.id.rb_friend);
         mInfo = (RadioButton) findViewById(R.id.rb_info);
         mMsg = (RadioButton) findViewById(R.id.rb_msg);
 
@@ -93,19 +91,19 @@ public class MainImActivity extends BaseActivity {
             case 1:
                 mViewPager.setCurrentItem(VIEW_PAGER_PAGE_2);
                 break;
-            case 2:
-                mViewPager.setCurrentItem(VIEW_PAGER_PAGE_3);
-                break;
+//            case 2:
+//                mViewPager.setCurrentItem(VIEW_PAGER_PAGE_3);
+//                break;
         }
     }
 
 
     private void addData() {
-        imFriendFragment = new ImFriendFragment();
+//        imFriendFragment = new ImFriendFragment();
         imInfoFragment = new ImInfoFragment();
         imMsgFragment = new ImMsgFragment();
 
-        mFragments.add(imFriendFragment);
+//        mFragments.add(imFriendFragment);
         mFragments.add(imInfoFragment);
         mFragments.add(imMsgFragment);
     }
@@ -156,13 +154,13 @@ public class MainImActivity extends BaseActivity {
         @Override
         public void onPageSelected(int arg0) {
             switch (arg0) {
+//                case VIEW_PAGER_PAGE_1:
+//                    mFriend.setChecked(true);
+//                    break;
                 case VIEW_PAGER_PAGE_1:
-                    mFriend.setChecked(true);
-                    break;
-                case VIEW_PAGER_PAGE_2:
                     mInfo.setChecked(true);
                     break;
-                case VIEW_PAGER_PAGE_3:
+                case VIEW_PAGER_PAGE_2:
                     mMsg.setChecked(true);
                     break;
                 default:
@@ -176,14 +174,14 @@ public class MainImActivity extends BaseActivity {
         @Override
         public void onCheckedChanged(RadioGroup arg0, int arg1) {
             switch (arg1) {
-                case R.id.rb_friend:
+//                case R.id.rb_friend:
+//                    mViewPager.setCurrentItem(VIEW_PAGER_PAGE_1);
+//                    break;
+                case R.id.rb_info:
                     mViewPager.setCurrentItem(VIEW_PAGER_PAGE_1);
                     break;
-                case R.id.rb_info:
-                    mViewPager.setCurrentItem(VIEW_PAGER_PAGE_2);
-                    break;
                 case R.id.rb_msg:
-                    mViewPager.setCurrentItem(VIEW_PAGER_PAGE_3);
+                    mViewPager.setCurrentItem(VIEW_PAGER_PAGE_2);
                     break;
                 default:
                     break;

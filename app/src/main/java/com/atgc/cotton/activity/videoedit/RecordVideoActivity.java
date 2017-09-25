@@ -26,13 +26,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.atgc.cotton.App;
 import com.atgc.cotton.Constants;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
+import com.atgc.cotton.entity.AccountEntity;
 import com.atgc.cotton.entity.ActionEntity;
 import com.atgc.cotton.entity.AuthEntity;
 import com.atgc.cotton.http.BaseDataRequest;
 import com.atgc.cotton.http.request.AuthRequest;
+import com.atgc.cotton.util.ImageLoaderUtils;
+import com.atgc.cotton.widget.RoundImageView;
 import com.atgc.cotton.widget.recordclip.RecordProgressController;
 import com.atgc.cotton.widget.recordclip.filter.ImgFaceunityFilter;
 import com.ksyun.media.shortvideo.kit.KSYRecordKit;
@@ -44,6 +48,7 @@ import com.ksyun.media.streamer.framework.AVConst;
 import com.ksyun.media.streamer.kit.KSYStreamer;
 import com.ksyun.media.streamer.kit.StreamerConstants;
 import com.ksyun.media.streamer.logstats.StatsLogReport;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
 
@@ -64,7 +69,7 @@ public class RecordVideoActivity extends BaseActivity implements View.OnClickLis
     public final static int VIDEO_BITRATE = 1000;
     public final static int AUDIO_BITRATE = 64;
     public final static int VIDEO_RESOLUTION = StreamerConstants.VIDEO_RESOLUTION_480P;
-    public final static int ENCODE_TYPE = AVConst.CODEC_ID_HEVC;
+    public final static int ENCODE_TYPE = AVConst.CODEC_ID_AVC;
     public final static int ENCODE_METHOD = StreamerConstants.ENCODE_METHOD_SOFTWARE;
     public final static int ENCODE_PROFILE = VideoEncodeFormat.ENCODE_PROFILE_BALANCE;
     private final int READ_VIDEO = 4;//本地视频
@@ -85,6 +90,9 @@ public class RecordVideoActivity extends BaseActivity implements View.OnClickLis
     private KSYRecordKit mKSYRecordKit;
     private boolean mHWEncoderUnsupported;
     private boolean mSWEncoderUnsupported;
+    private RoundImageView imageView;
+    private ImageLoader imageLoader;
+    private AccountEntity account;
     private ImgFaceunityFilter mImgFaceunityFilter;
     private Handler mMainHandler = new Handler();
 
@@ -110,10 +118,13 @@ public class RecordVideoActivity extends BaseActivity implements View.OnClickLis
 
 
     private void initViews() {
+        account = App.getInstance().getAccountEntity();
+        imageLoader = ImageLoaderUtils.createImageLoader(context);
         ivClose = (ImageView) findViewById(R.id.iv_close);
         iv_record = (ImageView) findViewById(R.id.iv_record);
         ll_photo = (LinearLayout) findViewById(R.id.ll_photo);
 
+        imageView = (RoundImageView) findViewById(R.id.iv_avatar);
         tvNext = (TextView) findViewById(R.id.tv_next);
         tvDelete = (TextView) findViewById(R.id.tv_delete);
         mSwitchCameraView = findViewById(R.id.switch_cam);
@@ -136,6 +147,7 @@ public class RecordVideoActivity extends BaseActivity implements View.OnClickLis
         //拍摄时长变更回调
         mRecordProgressCtl.setRecordingLengthChangedListener(mRecordLengthChangedListener);
         mRecordProgressCtl.start();
+        imageLoader.displayImage(account.getAvatar(), imageView, ImageLoaderUtils.getDisplayImageOptions());
         initKSYRecorder();
         CameraTouchHelper cameraTouchHelper = new CameraTouchHelper();
         cameraTouchHelper.setCameraCapture(mKSYRecordKit.getCameraCapture());
@@ -150,6 +162,7 @@ public class RecordVideoActivity extends BaseActivity implements View.OnClickLis
         mKSYRecordKit = new KSYRecordKit(this);
         mKSYRecordKit.setPreviewFps(FRAME_RATE);
         mKSYRecordKit.setTargetFps(FRAME_RATE);
+
         mKSYRecordKit.setVideoKBitrate(VIDEO_BITRATE);
         mKSYRecordKit.setAudioBitrate(AUDIO_BITRATE);
         mKSYRecordKit.setPreviewResolution(VIDEO_RESOLUTION);

@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
-    android:paddingTop="9dp"
-    >
+    android:paddingTop="9dp">
 
     <RelativeLayout
         android:id="@+id/rl_content"
@@ -13,12 +12,12 @@
         android:gravity="center_vertical">
 
         <ImageView
-            android:scaleType="fitXY"
-            android:layout_toRightOf="@id/img_choose"
-            android:layout_marginLeft="10dp"
             android:id="@+id/iv_icon"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/img_choose"
+            android:scaleType="fitXY"
             android:src="@drawable/person" />
 
         <TextView
@@ -37,11 +36,10 @@
             android:layout_alignLeft="@+id/tv_title"
             android:layout_below="@+id/tv_title"
             android:layout_marginTop="20dp"
-            android:maxLines="2"
             android:ellipsize="end"
+            android:maxLines="2"
             android:text="少时诵诗书所所所所所所所"
             android:textColor="@color/text_color_gray_d" />
-
 
 
     </RelativeLayout>

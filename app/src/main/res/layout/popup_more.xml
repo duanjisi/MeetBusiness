@@ -63,6 +63,19 @@
         android:gravity="center"
         android:text="加入黑名单" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_color_gray_d1"
+        android:orientation="horizontal"></LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_delete_video"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:gravity="center"
+        android:text="删除" />
+
     <TextView
         android:id="@+id/tv_cancle"
         android:layout_width="match_parent"

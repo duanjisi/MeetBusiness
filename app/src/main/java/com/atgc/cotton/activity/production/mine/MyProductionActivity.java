@@ -262,6 +262,7 @@ public class MyProductionActivity extends BaseActivity implements
 
     @Override
     public void onClick(View view) {
+        Intent intent = null;
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
@@ -276,10 +277,14 @@ public class MyProductionActivity extends BaseActivity implements
 //                }
 //                break;
             case R.id.tv_focus:
-
+                intent = new Intent(context, ListActivity.class);
+                intent.putExtra("type", 1);
+                startActivity(intent);
                 break;
             case R.id.tv_fans:
-
+                intent = new Intent(context, ListActivity.class);
+                intent.putExtra("type", 2);
+                startActivity(intent);
                 break;
             case R.id.iv_bg:
 
@@ -425,6 +430,7 @@ public class MyProductionActivity extends BaseActivity implements
                 cancelLoadingDialog();
                 bindDatas(pojo);
             }
+
             @Override
             public void onFailure(String msg) {
                 cancelLoadingDialog();

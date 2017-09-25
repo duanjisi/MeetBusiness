@@ -20,6 +20,7 @@ public class VideoEntity implements Serializable {
     private String UserId = "";
     private String UserName = "";
     private String Signature = "";
+    private String Distance = "";
 
     public String getSignature() {
         return Signature;
@@ -155,5 +156,13 @@ public class VideoEntity implements Serializable {
 
     public void setUserName(String userName) {
         UserName = userName;
+    }
+
+    public String getDistance() {
+        return Distance;
+    }
+
+    public void setDistance(String distance) {
+        Distance = distance;
     }
 }

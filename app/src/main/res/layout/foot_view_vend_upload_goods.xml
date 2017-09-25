@@ -22,14 +22,22 @@
         android:layout_height="1px"
         android:background="@color/line_color_gray_d2" />
 
-    <LinearLayout
-        android:id="@+id/ll_img"
+    <HorizontalScrollView
+        android:id="@+id/gallery"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_height="108dp"
+        android:layout_marginTop="9dp"
+        android:scrollbars="none">
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+        </LinearLayout>
+    </HorizontalScrollView>
 
     <View
         android:layout_width="match_parent"
@@ -64,12 +72,12 @@
             android:background="@null"
             android:imeOptions="actionNext"
             android:inputType="number"
+            android:maxLength="9"
             android:paddingBottom="@dimen/dp_14"
             android:paddingLeft="@dimen/dp_22"
             android:paddingRight="@dimen/dp_22"
             android:paddingTop="@dimen/dp_14"
             android:singleLine="true"
-            android:maxLength="9"
             android:text="0"
             android:textColor="@color/text_color_black"
             android:textCursorDrawable="@drawable/shape_edittext_cursor" />

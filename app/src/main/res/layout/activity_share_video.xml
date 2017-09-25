@@ -128,12 +128,11 @@
                 android:layout_marginLeft="@dimen/dp_11"
                 android:layout_marginRight="@dimen/dp_11"
                 android:layout_marginTop="22dp">
-
+                <!--android:drawableLeft="@drawable/unchecked"-->
                 <TextView
                     android:id="@+id/tv_link_goods"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/unchecked"
                     android:drawablePadding="@dimen/dp_11"
                     android:text="添加关联商品" />
 

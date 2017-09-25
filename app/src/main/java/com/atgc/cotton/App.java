@@ -6,10 +6,17 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 
 import com.atgc.cotton.config.LoginStatus;
+import com.atgc.cotton.db.MessageDB;
 import com.atgc.cotton.entity.AccountEntity;
+import com.atgc.cotton.util.SoundUtil;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.tavendo.autobahn.WebSocket;
+import de.tavendo.autobahn.WebSocketConnection;
+
 
 /**
  * Created by Johnny on 2017/5/16.
@@ -18,12 +25,16 @@ public class App extends Application {
     private static App mApplication;
     private List<Activity> tempActivityList;
     private AccountEntity sAccount;
+    private MessageDB mMsgDB;
+    private WebSocket webSocket;
 
     @Override
     public void onCreate() {
         super.onCreate();
         MultiDex.install(this);
+        CrashReport.initCrashReport(getApplicationContext(), "55772aba74", false);
         mApplication = this;
+        mMsgDB = new MessageDB(this);
     }
 
     @Override
@@ -34,6 +45,16 @@ public class App extends Application {
 
     public synchronized static App getInstance() {
         return mApplication;
+    }
+
+    public synchronized MessageDB getMessageDB() {
+        if (mMsgDB == null)
+            mMsgDB = new MessageDB(this);
+        return mMsgDB;
+    }
+
+    public SoundUtil getSoundUtil() {
+        return SoundUtil.getInstance();
     }
 
     public String getUid() {
@@ -48,6 +69,14 @@ public class App extends Application {
             return LoginStatus.getInstance().getToken();
         }
         return sAccount.getToken();
+    }
+
+    public WebSocket getWebSocket() {
+        if (webSocket != null) {
+            webSocket = null;
+        }
+        webSocket = new WebSocketConnection();
+        return webSocket;
     }
 
     public AccountEntity getAccountEntity() {

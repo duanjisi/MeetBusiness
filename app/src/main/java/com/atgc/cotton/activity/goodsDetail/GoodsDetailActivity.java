@@ -233,6 +233,7 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
                     }
                 }
             }
+
             @Override
             public void afterTextChanged(Editable s) {
 
@@ -276,6 +277,11 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
             public void onClick(View v) {
                 if (!App.getInstance().isLogin()) {
                     openActivity(LoginActivity.class);
+                }
+
+                if (("" + goodsPrice).equals("0.0")) {
+                    showToast("商品价格为零");
+                    return;
                 }
 
                 String xNum = et_repertory.getText().toString();

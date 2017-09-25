@@ -246,7 +246,10 @@ public class WriteOrderActivity extends MvpActivity<PutOrderPresenter> implement
 
                 break;
             case R.id.rl_has_address:
-                openActivity(ChooseAddressActivity.class);
+//                openActivity(ChooseAddressActivity.class);
+                Intent intent = new Intent(context, ChooseAddressActivity.class);
+                intent.putExtra("goodsJson", goodsJson);
+                startActivity(intent);
                 break;
         }
     }

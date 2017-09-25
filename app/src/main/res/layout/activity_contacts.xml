@@ -22,6 +22,7 @@
             android:src="@drawable/nav_close" />
 
         <TextView
+            android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -30,22 +31,54 @@
             android:textSize="22sp" />
     </RelativeLayout>
 
-    <EditText
-        android:id="@+id/et_keywords"
+    <RelativeLayout
+        android:id="@+id/rl_top"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_below="@+id/rl_top_bar"
         android:layout_margin="@dimen/dp_10"
-        android:paddingLeft="@dimen/dp_6"
-        android:background="@drawable/bg_round_white"
-        android:hint="我要收索联系人..."
-        android:textColor="@color/bg_color02" />
+        android:background="@drawable/bg_round_white">
+
+        <EditText
+            android:id="@+id/et_keywords"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:hint="我要收索联系人..."
+            android:paddingLeft="@dimen/dp_6"
+            android:singleLine="true"
+            android:textColor="@color/bg_color02"
+            android:textColorHint="@color/text_gray" />
+
+        <ImageButton
+            android:id="@+id/search_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="3dp"
+            android:background="@android:color/transparent"
+            android:padding="6dp"
+            android:src="@drawable/ease_search_clear"
+            android:visibility="invisible" />
+    </RelativeLayout>
+    <!--<EditText-->
+    <!--android:id="@+id/et_keywords"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="40dp"-->
+    <!--android:layout_below="@+id/rl_top_bar"-->
+    <!--android:layout_margin="@dimen/dp_10"-->
+    <!--android:background="@drawable/bg_round_white"-->
+    <!--android:hint="我要收索联系人..."-->
+    <!--android:paddingLeft="@dimen/dp_6"-->
+    <!--android:textColor="@color/bg_color02"-->
+    <!--android:textColorHint="@color/text_gray" />-->
 
     <ListView
         android:id="@+id/listview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/et_keywords"
+        android:layout_below="@+id/rl_top"
         android:background="@color/white">
 
     </ListView>

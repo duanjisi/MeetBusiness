@@ -1,12 +1,9 @@
 package com.atgc.cotton.fragment;
 
 import android.os.Handler;
-import android.util.Log;
 
-import com.atgc.cotton.activity.vendingRack.LogisticsActivity;
 import com.atgc.cotton.adapter.OrderAdapter;
 import com.atgc.cotton.entity.OrderActionEntity;
-import com.atgc.cotton.entity.OrderEntity;
 import com.atgc.cotton.entity.OrderGoodsEntity;
 import com.atgc.cotton.util.ToastUtil;
 import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
@@ -39,7 +36,7 @@ public class OrderSellerObligationFragment extends BaseOrderFragment {
         orderActionEntity.setBuy(true);
         rv_content = list;
         dataList = new ArrayList<>();
-        orderAdapter = new OrderAdapter(getActivity());
+        orderAdapter = new OrderAdapter(getActivity(), 2);
         orderAdapter.getIsBuy(false);
         orderAdapter.setDatas(dataList);
         mLRecyclerViewAdapter = new LRecyclerViewAdapter(orderAdapter);
@@ -80,7 +77,7 @@ public class OrderSellerObligationFragment extends BaseOrderFragment {
         });
     }
 
-    public void getData(List<OrderGoodsEntity> list,int parentSize) {
+    public void getData(List<OrderGoodsEntity> list, int parentSize) {
 
         if (list != null) {
             if (parentSize == 20) {

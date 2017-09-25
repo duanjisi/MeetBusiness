@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F6F6F6"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom">
+
+        <RelativeLayout
+            android:id="@+id/rl_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/btn_option"
+                android:layout_alignTop="@+id/btn_option"
+                android:layout_marginLeft="11dp"
+                android:layout_marginRight="11dp"
+                android:layout_toLeftOf="@+id/iv_chat_face"
+                android:background="@drawable/frame_btn"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:hint="请输入内容"
+                android:imeOptions="flagNoExtractUi|flagNoFullscreen|actionDone"
+                android:textColorHint="@color/text_color_gray_9" />
+
+            <ImageView
+                android:id="@+id/iv_chat_face"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="11dp"
+                android:layout_toLeftOf="@+id/btn_option"
+                android:background="@drawable/hp_chat_expression" />
+
+            <Button
+                android:id="@+id/btn_option"
+                android:layout_width="66dp"
+                android:layout_height="38.5dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="8.25dp"
+                android:layout_marginRight="11dp"
+                android:layout_marginTop="8.25dp"
+                android:background="#ABC123"
+                android:text="发送"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:id="@+id/bottom_line"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:orientation="horizontal"></LinearLayout>
+        </RelativeLayout>
+
+        <GridView
+            android:id="@+id/grid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl_top"
+            android:horizontalSpacing="@dimen/dp_11"
+            android:numColumns="8"
+            android:verticalSpacing="@dimen/dp_11"
+            android:visibility="gone"></GridView>
+    </RelativeLayout>
+
+</ScrollView>

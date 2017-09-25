@@ -7,21 +7,31 @@ public class HttpUrl {
     //    public static final String BASE_URL = "https://api.hmg66.com/v1/";
     public static final String BASE_URL = "https://yuetao.66boss.com/v1/";
     public static final String AUTH_URL = "https://api.66boss.com/ksauth/index.php";
+    public static final String WS_URL = "wss://ytwsim.66boss.com/server";
     /**
      * android版本更新
      */
-    public static final String VERSION_UPDATE = "https://app.66boss.com/update.php";
-
+//    public static final String VERSION_UPDATE = "https://app.66boss.com/update.php";
+    public static final String VERSION_UPDATE = BASE_URL + "public/checkupdate";
+    /**
+     * music 关注相关接口
+     */
+    public static final String ONLINE_MUSICES = BASE_URL + "music/";
+    public static final String ONLINE_MUSIC_CATES = BASE_URL + "music/cate";
+    public static final String ONLINE_MUSIC_SEARCH = BASE_URL + "music/search";
     /**
      * attention 关注相关接口
      */
     public static final String NUM_URL = BASE_URL + "attention/statistics";//获取我的粉丝总数，关注总数
     public static final String BASE_FOCUS = BASE_URL + "attention/";//获取我的粉丝总数，关注总数
-
+    public static final String ATTENTION_LIST_FOCUS = BASE_URL + "attention/mine";//获取我的关注列表
+    public static final String ATTENTION_LIST_FANS = BASE_URL + "attention/myfans";//获取我的粉丝列表
+    public static final String ATTENTION_SEARCH = BASE_URL + "attention/search";//收索
     /**
      * public公共接口
      */
     public static final String HOME_PAGER_URL = BASE_URL + "public/feed";//获取首页发现数据列表
+    public static final String VIDEO_DETAILS_URL = BASE_URL + "public/feedinfo/";
     public static final String LOGIN_URL = BASE_URL + "public/login";
     public static final String REGISTER_URL = BASE_URL + "public/register";
     public static final String MY_GOODS_URL = BASE_URL + "public/goodsmulti";
@@ -37,6 +47,7 @@ public class HttpUrl {
     public static final String MY_LIKE = BASE_URL + "feed/like";
     public static final String COM_REPLY = BASE_URL + "feed/commentary/";
     public static final String LIKE_STATUS = BASE_URL + "feed/isapproval/";
+    public static final String DELETE_VIDEO = BASE_URL + "feed/";
     /**
      * user公共接口
      */

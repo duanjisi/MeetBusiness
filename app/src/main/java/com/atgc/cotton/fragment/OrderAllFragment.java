@@ -38,7 +38,7 @@ public class OrderAllFragment extends BaseOrderFragment {
         rv_content = list;
         dataList = new ArrayList<>();
 //        setData();
-        orderAdapter = new OrderAdapter(getActivity());
+        orderAdapter = new OrderAdapter(getActivity(), 1);
         orderAdapter.setDatas(dataList);
         mLRecyclerViewAdapter = new LRecyclerViewAdapter(orderAdapter);
         list.setAdapter(mLRecyclerViewAdapter);
@@ -137,6 +137,13 @@ public class OrderAllFragment extends BaseOrderFragment {
                     orderActionEntity.setDoAction("cancelOrder");
                 }
                 EventBus.getDefault().post(orderActionEntity);
+                break;
+            case 1:
+                if (type == 1) {
+                    Log.i("OrderEntity:", "申请退款");
+                    orderActionEntity.setDoAction("refund");
+                    EventBus.getDefault().post(orderActionEntity);
+                }
                 break;
             case 2:
                 if (type == 1) {

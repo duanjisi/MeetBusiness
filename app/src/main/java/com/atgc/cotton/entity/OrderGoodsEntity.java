@@ -16,6 +16,8 @@ public class OrderGoodsEntity implements Serializable {
     private float OrderAmount;
     private int OrderId;
     private String OrderSn;
+    private String Consignee;
+    private String Mobile;
     private int contentType;//0:头 1：内容 2：尾
     private int allNum;
     private int ShippingStatus;
@@ -24,10 +26,36 @@ public class OrderGoodsEntity implements Serializable {
 
     private String OrdState;
 
+    private String SupplierAvatar;
+    private String SupplierSex;//商家性别
+    private String SupplierSignture;//商家签名
+
+
     private String SupplierName;//店铺名字
     private int SupplierId;//店铺id
-
     int orderType;//"0:待付款", "1:待发货", "2:待收货", "3:待评价"
+
+    private int Province;
+    private int City;
+    private int District;
+    private String Address;
+    private String goodsJson;
+
+    public String getMobile() {
+        return Mobile;
+    }
+
+    public void setMobile(String mobile) {
+        Mobile = mobile;
+    }
+
+    public String getConsignee() {
+        return Consignee;
+    }
+
+    public void setConsignee(String consignee) {
+        Consignee = consignee;
+    }
 
     public String getOrdState() {
         return OrdState;
@@ -171,5 +199,77 @@ public class OrderGoodsEntity implements Serializable {
 
     public void setSupplierId(int supplierId) {
         SupplierId = supplierId;
+    }
+
+    public int getProvince() {
+        return Province;
+    }
+
+    public void setProvince(int province) {
+        Province = province;
+    }
+
+    public int getCity() {
+        return City;
+    }
+
+    public void setCity(int city) {
+        City = city;
+    }
+
+    public int getDistrict() {
+        return District;
+    }
+
+    public void setDistrict(int district) {
+        District = district;
+    }
+
+    public String getAddress() {
+        return Address;
+    }
+
+    public void setAddress(String address) {
+        Address = address;
+    }
+
+    public String getSupplierAvatar() {
+        return SupplierAvatar;
+    }
+
+    public void setSupplierAvatar(String supplierAvatar) {
+        SupplierAvatar = supplierAvatar;
+    }
+
+    public String getSupplierSex() {
+        return SupplierSex;
+    }
+
+    public void setSupplierSex(String supplierSex) {
+        SupplierSex = supplierSex;
+    }
+
+    public String getSupplierSignture() {
+        return SupplierSignture;
+    }
+
+    public void setSupplierSignture(String supplierSignture) {
+        SupplierSignture = supplierSignture;
+    }
+
+    public String getSupplierName() {
+        return SupplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        SupplierName = supplierName;
+    }
+
+    public String getGoodsJson() {
+        return goodsJson;
+    }
+
+    public void setGoodsJson(String goodsJson) {
+        this.goodsJson = goodsJson;
     }
 }

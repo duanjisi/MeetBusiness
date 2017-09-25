@@ -97,7 +97,18 @@ public abstract class ProductFragment extends BaseFragment {
             if (videoEntity != null) {
                 Intent intent = new Intent(getContext(), OtherPlayerActivity.class);
                 intent.putExtra("obj", videoEntity);
-                startActivity(intent);
+//                startActivity(intent);
+                startActivityForResult(intent, 102, null);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 102 && resultCode == getActivity().RESULT_OK) {
+            if (getType() == 1) {
+                requestDatas();
             }
         }
     }
@@ -118,6 +129,7 @@ public abstract class ProductFragment extends BaseFragment {
 
 
     private void requestDatas() {
+        pager = 1;
         BaseDataRequest request = null;
         switch (getType()) {
             case 1:
@@ -152,6 +164,7 @@ public abstract class ProductFragment extends BaseFragment {
         if (homeBaseData != null) {
             ArrayList<VideoEntity> videos = homeBaseData.getData();
             int size = videos.size();
+            adapter.removeAllItems();
             if (videos != null && size != 0) {
 //                if (size == PAGER_NUM) {
 //                    lRecyclerView.setNoMore(false);
@@ -159,7 +172,6 @@ public abstract class ProductFragment extends BaseFragment {
 //                    lRecyclerView.setNoMore(true);
 //                }
 //                adapter.initDatas(videos);
-                adapter.removeAllItems();
                 adapter.addMoreItems(videos);
             } else {
 //                lRecyclerView.setNoMore(true);
@@ -216,7 +228,7 @@ public abstract class ProductFragment extends BaseFragment {
                 gridView.onFinishLoading(true, videos);
             } else {
 //                lRecyclerView.setNoMore(true);
-                showToast("加载完成!", true);
+//                showToast("加载完成!", true);
                 gridView.onFinishLoading(false, null);
                 loadMore = false;
             }

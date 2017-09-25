@@ -1,5 +1,7 @@
 package com.atgc.cotton.entity;
 
+import com.alibaba.fastjson.JSON;
+
 import java.util.List;
 
 /**
@@ -88,7 +90,6 @@ public class MyOrderEntity {
          * SupplierId : 100000096
          * UserId : 100000096
          */
-
         private String OrdState;
         private int AddTime;
         private String Address;
@@ -112,6 +113,9 @@ public class MyOrderEntity {
         private int SupplierId;////店铺id
         private int UserId;
         private String SupplierName;//店铺名字
+        private String SupplierAvatar;
+        private String SupplierSex;//商家性别
+        private String SupplierSignture;//商家签名
 
         public String getOrdState() {
             return OrdState;
@@ -299,7 +303,62 @@ public class MyOrderEntity {
             this.UserId = UserId;
         }
 
+        public String getSupplierAvatar() {
+            return SupplierAvatar;
+        }
+
+        public void setSupplierAvatar(String supplierAvatar) {
+            SupplierAvatar = supplierAvatar;
+        }
+
+        public String getSupplierSex() {
+            return SupplierSex;
+        }
+
+        public void setSupplierSex(String supplierSex) {
+            SupplierSex = supplierSex;
+        }
+
+        public String getSupplierSignture() {
+            return SupplierSignture;
+        }
+
+        public void setSupplierSignture(String supplierSignture) {
+            SupplierSignture = supplierSignture;
+        }
+
         public List<OrderGoodsEntity> getGoodsList() {
+            if (GoodsList != null && GoodsList.size() > 0) {
+                for (OrderGoodsEntity endEntity : GoodsList) {
+                    endEntity.setContentType(1);
+                    endEntity.setConsignee(Consignee);
+                    endEntity.setMobile(Mobile);
+                    endEntity.setOrderSn(OrderSn);
+
+                    endEntity.setOrdState(OrdState);
+                    endEntity.setStoreName(SupplierName);
+                    endEntity.setPayStatus(PayStatus);
+                    endEntity.setOrderStatus(OrderStatus);
+                    endEntity.setShippingStatus(ShippingStatus);
+
+                    endEntity.setProvince(Province);
+                    endEntity.setCity(City);
+                    endEntity.setDistrict(District);
+                    endEntity.setAddress(Address);
+
+                    endEntity.setSupplierId(SupplierId);
+                    endEntity.setSupplierAvatar(SupplierAvatar);
+                    endEntity.setSupplierSex(SupplierSex);
+                    endEntity.setSupplierSignture(SupplierSignture);
+                    endEntity.setOrderAmount(OrderAmount);
+                }
+            }
+
+            if (GoodsList != null && GoodsList.size() > 0) {
+                for (OrderGoodsEntity endEntity : GoodsList) {
+                    endEntity.setGoodsJson(JSON.toJSONString(GoodsList));
+                }
+            }
             return GoodsList;
         }
 

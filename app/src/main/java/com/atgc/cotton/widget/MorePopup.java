@@ -18,6 +18,7 @@ public class MorePopup extends BasePopup implements View.OnClickListener {
     private OnItemdListener mOnItemSelectedListener;
     private Context context;
     private boolean isTopShow = true;
+    private boolean isDelete = false;
 
     public MorePopup(Context context) {
         super(context);
@@ -42,14 +43,34 @@ public class MorePopup extends BasePopup implements View.OnClickListener {
         setContentView(popView);
     }
 
+    public MorePopup(Context context, boolean show, boolean isDelete) {
+        super(context);
+        this.context = context;
+        this.isTopShow = show;
+        this.isDelete = isDelete;
+        setAnimationStyle(R.style.popwin_anim_style);
+        setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+        setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        View popView = LayoutInflater.from(context).inflate(R.layout.popup_more, null);
+        initViews(popView);
+        setContentView(popView);
+    }
+
     private void initViews(View view) {
         if (!isTopShow) {
             view.findViewById(R.id.rl_id).setVisibility(View.GONE);
         } else {
             view.findViewById(R.id.rl_id).setOnClickListener(this);
         }
+
+        if (isDelete) {
+            view.findViewById(R.id.tv_delete_video).setOnClickListener(this);
+        } else {
+            view.findViewById(R.id.tv_delete_video).setVisibility(View.GONE);
+        }
         view.findViewById(R.id.tv_inform).setOnClickListener(this);
         view.findViewById(R.id.tv_add_black_name).setOnClickListener(this);
+//        view.findViewById(R.id.tv_delete_video).setOnClickListener(this);
         view.findViewById(R.id.tv_cancle).setOnClickListener(this);
     }
 
@@ -72,6 +93,12 @@ public class MorePopup extends BasePopup implements View.OnClickListener {
                 dismiss();
                 if (mOnItemSelectedListener != null) {
                     mOnItemSelectedListener.onItemClick(2);
+                }
+                break;
+            case R.id.tv_delete_video:
+                dismiss();
+                if (mOnItemSelectedListener != null) {
+                    mOnItemSelectedListener.onItemClick(3);
                 }
                 break;
             case R.id.tv_cancle:

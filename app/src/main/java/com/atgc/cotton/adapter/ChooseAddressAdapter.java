@@ -140,6 +140,9 @@ public class ChooseAddressAdapter extends BaseRecycleViewAdapter {
                 String address = item.getAddress(); //详细地址
                 int isDefault = item.getIsDefault(); //是否默认
                 int addressId = item.getAddressId();
+                int province_id = item.getProvince();
+                int city_id = item.getCity();
+                int county_id = item.getDistrict();
 
                 Intent intent = new Intent(context, EditAddressActivity.class);
                 intent.putExtra("contact", contact);
@@ -147,11 +150,13 @@ public class ChooseAddressAdapter extends BaseRecycleViewAdapter {
                 intent.putExtra("address", address);
                 intent.putExtra("isDefault", isDefault);
                 intent.putExtra("id", addressId);
+
+                intent.putExtra("province_id", province_id);
+                intent.putExtra("city_id", city_id);
+                intent.putExtra("county_id", county_id);
+
                 intent.putExtra("location", location);
-
                 context.startActivity(intent);
-
-
             }
         });
 
@@ -165,7 +170,7 @@ public class ChooseAddressAdapter extends BaseRecycleViewAdapter {
 
                 String addressJson = JSON.toJSONString(dataBean);
 
-                PreferenceUtils.putString(context,"addressJson",addressJson);
+                PreferenceUtils.putString(context, "addressJson", addressJson);
                 EventBus.getDefault().post(new ChangeAddressState(""));
 
                 itemListener.onItemClick(holder1.getLayoutPosition());

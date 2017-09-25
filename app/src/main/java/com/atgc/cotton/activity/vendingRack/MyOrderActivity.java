@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -45,6 +44,7 @@ import com.atgc.cotton.fragment.OrderSellerShipmentsFragment;
 import com.atgc.cotton.fragment.OrderShipmentsFragment;
 import com.atgc.cotton.presenter.MyOrderPresenter;
 import com.atgc.cotton.presenter.view.IMyOrderView;
+import com.atgc.cotton.util.CommonDialogUtils;
 import com.atgc.cotton.util.UIUtils;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
@@ -63,7 +63,7 @@ import de.greenrobot.event.ThreadMode;
  */
 public class MyOrderActivity extends BaseCompatActivity<MyOrderPresenter> implements View.OnClickListener, IMyOrderView {
 
-    private Toolbar toolbar;
+    //    private Toolbar toolbar;
     private TextView tv_back, tv_buyer, tv_seller;
     //private TabLayout tablayout,tablayout_1;
     private ViewPager viewpager, viewpager_1;
@@ -149,7 +149,7 @@ public class MyOrderActivity extends BaseCompatActivity<MyOrderPresenter> implem
         tv_buyer = (TextView) findViewById(R.id.tv_buyer);
         viewpager_1 = (ViewPager) findViewById(R.id.viewpager_1);
         viewpager = (ViewPager) findViewById(R.id.viewpager);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        toolbar = (Toolbar) findViewById(R.id.toolbar);
         //tablayout = (TabLayout) findViewById(R.id.tablayout);
         tv_back = (TextView) findViewById(R.id.tv_back);
         tv_back.setOnClickListener(new View.OnClickListener() {
@@ -158,8 +158,8 @@ public class MyOrderActivity extends BaseCompatActivity<MyOrderPresenter> implem
                 finish();
             }
         });
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
         viewpager.setOffscreenPageLimit(5);
         viewpager.setCurrentItem(0);
         viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -369,7 +369,7 @@ public class MyOrderActivity extends BaseCompatActivity<MyOrderPresenter> implem
     private void updateFragmentPage(boolean isBuy, List<MyOrderEntity.DataBean> list) {
         Log.i("info", "===================list:" + list + "list.size():" + list.size());
         if (list == null) {
-            showToast("没有更多数据", false);
+//            showToast("没有更多数据", false);
             return;
         }
         int parentSize = list.size();
@@ -381,17 +381,24 @@ public class MyOrderActivity extends BaseCompatActivity<MyOrderPresenter> implem
                 OrderGoodsEntity entity = new OrderGoodsEntity();
                 entity.setOrdState(orderState);
                 entity.setContentType(0);
+
                 entity.setStoreName(pater.getSupplierName());
+                entity.setSupplierId(pater.getSupplierId());
+                entity.setSupplierAvatar(pater.getSupplierAvatar());
+                entity.setSupplierSex(pater.getSupplierSex());
+                entity.setSupplierSignture(pater.getSupplierSignture());
+
                 entity.setPayStatus(pater.getPayStatus());
                 entity.setOrderStatus(pater.getOrderStatus());
                 entity.setShippingStatus(pater.getShippingStatus());
+
                 goodsEntityList.add(entity);
                 List<OrderGoodsEntity> GoodsList = pater.getGoodsList();
                 goodsEntityList.addAll(GoodsList);
                 int allNum = 0;
                 for (OrderGoodsEntity goodsEntity : GoodsList) {
-                    goodsEntity.setContentType(1);
-                    goodsEntity.setOrdState(orderState);
+//                    goodsEntity.setContentType(1);
+//                    goodsEntity.setOrdState(orderState);
                     allNum = allNum + goodsEntity.getBuyNumber();
                 }
                 OrderGoodsEntity endEntity = new OrderGoodsEntity();
@@ -487,17 +494,6 @@ public class MyOrderActivity extends BaseCompatActivity<MyOrderPresenter> implem
                         case "delete"://删除订单
                             showDeleteDialog();
                             break;
-                        case "cancelOrder"://取消订单
-//                            if (operateMap == null) {
-//                                operateMap = new HashMap<>();
-//                            } else {
-//                                operateMap.clear();
-//                            }
-//                            operateMap.put("orderid", String.valueOf(orderId));
-//                            operateMap.put("type", "cancel");
-//                            mPresenter.operateMyOrder(operateMap);
-                            mPresenter.cancelOrder(orderId);
-                            break;
                         case "pay"://付款
                             float allPrice = entity.getAllPrice();
                             int orderid = entity.getOrderid();
@@ -507,29 +503,6 @@ public class MyOrderActivity extends BaseCompatActivity<MyOrderPresenter> implem
                                 tv_count.setText(allPrice + "元");
                                 dialog.show();
                             }
-                            break;
-                        case "confirmGoods"://确认收货
-//                            if (operateMap == null) {
-//                                operateMap = new HashMap<>();
-//                            } else {
-//                                operateMap.clear();
-//                            }
-//                            operateMap.put("orderid", String.valueOf(orderId));
-//                            operateMap.put("type", "cancel");
-//                            mPresenter.operateMyOrder(operateMap);
-                            mPresenter.confirmOrder(orderId);
-                            break;
-                        case "cancelrefund"://取消退款申请
-                            mPresenter.cancelRefund(orderId);
-                            break;
-                        case "refund"://退款申请
-                            mPresenter.refund(orderId);
-                            break;
-                        case "agreeRefund"://同意退款
-                            mPresenter.agreeRefund(orderId);
-                            break;
-                        case "disAgreeRefund"://拒绝退款
-                            mPresenter.disAgreeRefund(orderId);
                             break;
                         case "wxPaySucessed"://加载更多
                             if (curPos == 4) {
@@ -546,10 +519,68 @@ public class MyOrderActivity extends BaseCompatActivity<MyOrderPresenter> implem
                                 mPresenter.getMySellOrder(entity.getChild() + 1, entity.getPage(), 20);
                             }
                             break;
+                        default:
+                            showOperationDialog(action, orderId);
+                            break;
                     }
                 }
             }
         }
+    }
+
+    protected void showOperationDialog(final String action, final int orderId) {
+        String msg = "";
+        switch (action) {
+            case "cancelOrder"://取消订单
+                msg = "是否取消当前订单？";
+                break;
+            case "confirmGoods"://确认收货
+                msg = "是否确认收货？";
+                break;
+            case "cancelrefund"://取消退款申请
+                msg = "是否取消当前订单退款申请？";
+                break;
+            case "refund"://退款申请
+                msg = "是否申请退款？";
+                break;
+            case "agreeRefund":////同意退款
+                msg = "是否同意退款？";
+                break;
+            case "disAgreeRefund"://拒绝退款
+                msg = "是否拒绝退款？";
+                break;
+        }
+        CommonDialogUtils.showDialog(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CommonDialogUtils.dismiss();
+            }
+        }, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (action) {
+                    case "cancelOrder"://取消订单
+                        mPresenter.cancelOrder(orderId);
+                        break;
+                    case "confirmGoods"://确认收货
+                        mPresenter.confirmOrder(orderId);
+                        break;
+                    case "cancelrefund"://取消退款申请
+                        mPresenter.cancelRefund(orderId);
+                        break;
+                    case "refund"://退款申请
+                        mPresenter.refund(orderId);
+                        break;
+                    case "agreeRefund":////同意退款
+                        mPresenter.agreeRefund(orderId);
+                        break;
+                    case "disAgreeRefund"://拒绝退款
+                        mPresenter.disAgreeRefund(orderId);
+                        break;
+                }
+                CommonDialogUtils.dismiss();
+            }
+        }, MyOrderActivity.this, msg);
     }
 
     private void showPayDialog(float allPrice, final int orderid) {
@@ -679,6 +710,16 @@ public class MyOrderActivity extends BaseCompatActivity<MyOrderPresenter> implem
                 ((OrderEvaluateFragment) evaluateFragment).setPage(1);
                 ((OrderEvaluateFragment) evaluateFragment).setOnRefresh(true);
                 mPresenter.getMyBuyEvaluateOrder(1, 20);
+            }
+        } else if (requestCode == 102 && resultCode == RESULT_OK) {//刷新
+            if (data != null) {
+                boolean isBuy = data.getBooleanExtra("isBuy", true);
+                int page = data.getIntExtra("page", 1);
+                if (isBuy) {
+                    mPresenter.getMyBuyOrder(curPos + 1, page, 20);
+                } else {
+                    mPresenter.getMySellOrder(curTwoPos + 1, page, 20);
+                }
             }
         }
     }
