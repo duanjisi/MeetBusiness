@@ -14,7 +14,7 @@ import com.atgc.cotton.util.MycsLog;
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "train.db";
-    public static final int DB_VERSION = 8;
+    public static final int DB_VERSION = 9;
 
     private SQLiteDatabase db;
 

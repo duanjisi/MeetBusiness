@@ -98,7 +98,7 @@ public class VideoThumbnailTask extends AsyncTask<Long, Void, Bitmap> {
 //        if (mContext.mBeginClip) {
 //            return null;
 //        }
-        Bitmap bitmap = mRetriever.getVideoThumbnailAtTime(mMS, 0, 0);
+        Bitmap bitmap = mRetriever.getVideoThumbnailAtTime(mMS, 0, 0, true);
         if (bitmap == null) {
             Log.w("test", "can't get frame at" + mMS);
 

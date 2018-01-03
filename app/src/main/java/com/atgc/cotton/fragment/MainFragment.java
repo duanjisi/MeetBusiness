@@ -74,11 +74,12 @@ public abstract class MainFragment extends BaseFragment implements AMapLocationL
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initViews(view);
-        if (getType() == TYPE_NEAR) {
-            getPermission();
-        } else {
-            requestDatas();
-        }
+//        if (getType() == TYPE_NEAR) {
+//            getPermission();
+//        } else {
+//            requestDatas();
+//        }
+        requestDatas();
     }
 
 
@@ -245,13 +246,22 @@ public abstract class MainFragment extends BaseFragment implements AMapLocationL
                 mRecyclerViewAdapter.getDataList().clear();
                 if (size == PAGER_NUM) {
                     pager++;
-                } else {
-                    pullLoadMoreRecyclerView.setHasMore(false);
                 }
+//                else {
+//                    pullLoadMoreRecyclerView.setHasMore(false);
+//                }
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         mRecyclerViewAdapter.addAllData(videos);
+                        pullLoadMoreRecyclerView.setPullLoadMoreCompleted();
+                    }
+                }, 1000);
+            } else {
+                pullLoadMoreRecyclerView.setHasMore(false);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
                         pullLoadMoreRecyclerView.setPullLoadMoreCompleted();
                     }
                 }, 1000);
@@ -333,13 +343,22 @@ public abstract class MainFragment extends BaseFragment implements AMapLocationL
             if (videos != null && size != 0) {
                 if (size == PAGER_NUM) {
                     pager++;
-                } else {
-                    pullLoadMoreRecyclerView.setHasMore(false);
                 }
+//                else {
+//                    pullLoadMoreRecyclerView.setHasMore(false);
+//                }
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         mRecyclerViewAdapter.addAllData(videos);
+                        pullLoadMoreRecyclerView.setPullLoadMoreCompleted();
+                    }
+                }, 1000);
+            } else {
+                pullLoadMoreRecyclerView.setHasMore(false);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
                         pullLoadMoreRecyclerView.setPullLoadMoreCompleted();
                     }
                 }, 1000);
@@ -442,7 +461,6 @@ public abstract class MainFragment extends BaseFragment implements AMapLocationL
 
     private void requestNear(String lgt, String lat) {
         Log.i("info", "====================" + "lgt:" + lgt + "\n" + "lat:" + lat);
-        pullLoadMoreRecyclerView.setHasMore(false);
         NearRequest request = new NearRequest(TAG, lgt, lat);
         showLoadingDialog();
         request.send(new BaseDataRequest.RequestCallback<HomeBaseData>() {
@@ -466,12 +484,18 @@ public abstract class MainFragment extends BaseFragment implements AMapLocationL
             final ArrayList<VideoEntity> videos = homeBaseData.getData();
             if (videos != null && videos.size() != 0) {
                 mRecyclerViewAdapter.getDataList().clear();
-//                adapter.setDatas(videos);
-//                adapter.initDatas(videos);
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         mRecyclerViewAdapter.addAllData(videos);
+                        pullLoadMoreRecyclerView.setPullLoadMoreCompleted();
+                    }
+                }, 1000);
+            } else {
+                pullLoadMoreRecyclerView.setHasMore(false);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
                         pullLoadMoreRecyclerView.setPullLoadMoreCompleted();
                     }
                 }, 1000);

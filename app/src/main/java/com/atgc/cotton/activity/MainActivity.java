@@ -1,6 +1,7 @@
 package com.atgc.cotton.activity;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -20,7 +21,10 @@ import com.atgc.cotton.fragment.MainFragment;
 import com.atgc.cotton.fragment.MainHotFragment;
 import com.atgc.cotton.http.BaseDataRequest;
 import com.atgc.cotton.http.request.CheckUpdateRequest;
+import com.atgc.cotton.listener.PermissionListener;
 import com.atgc.cotton.util.AutoUpdateUtil;
+import com.atgc.cotton.util.PermissonUtil.PermissionUtil;
+import com.atgc.cotton.util.ToastUtil;
 import com.atgc.cotton.util.UIUtils;
 
 import java.util.ArrayList;
@@ -42,6 +46,7 @@ public class MainActivity extends BaseActivity {
     private ArrayList<Fragment> mFragments = new ArrayList<Fragment>();
     private MainFragment mainDiscoverFragment, mainHotFragment;
     private RadioButton mDiscover, mHot;
+    private PermissionListener permissionListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,13 +86,12 @@ public class MainActivity extends BaseActivity {
         mViewPager.setAdapter(adapter);
         mViewPager.addOnPageChangeListener(new MyPageChangeListener());
         mViewPager.setCurrentItem(VIEW_PAGER_PAGE_1);
-        checkUpdate();
+        getPermission();
     }
 
     private void addData() {
         mainDiscoverFragment = new MainDiscoverFragment();
         mainHotFragment = new MainHotFragment();
-
         mFragments.add(mainDiscoverFragment);
         mFragments.add(mainHotFragment);
     }
@@ -106,6 +110,35 @@ public class MainActivity extends BaseActivity {
                 showToast(msg, true);
             }
         });
+    }
+
+    private void getPermission() {
+        permissionListener = new PermissionListener() {
+            @Override
+            public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+                PermissionUtil.onRequestPermissionsResult(this, requestCode, permissions, permissionListener);
+            }
+
+            @Override
+            public void onRequestPermissionSuccess() {
+                checkUpdate();
+            }
+
+            @Override
+            public void onRequestPermissionError() {
+                ToastUtil.showShort(context, "请给予定位权限");
+            }
+        };
+        PermissionUtil
+                .with(this)
+                .permissions(
+                        PermissionUtil.PERMISSIONS_SD_READ_WRITE //读写手机sd权限
+                ).request(permissionListener);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        PermissionUtil.onRequestPermissionsResult(this, requestCode, permissions, permissionListener);
     }
 
     private class PagerAdapter extends FragmentPagerAdapter {

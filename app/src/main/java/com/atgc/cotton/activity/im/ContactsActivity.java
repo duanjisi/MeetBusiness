@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -36,7 +37,7 @@ import butterknife.OnClick;
  * Created by Johnny on 2017-08-22.
  * 联系人
  */
-public class ContactsActivity extends BaseActivity {
+public class ContactsActivity extends BaseActivity implements AbsListView.OnScrollListener {
     private static final String TAG = ContactsActivity.class.getSimpleName();
     private String keyWords;
     private InputMethodManager inputMethodManager;
@@ -107,7 +108,25 @@ public class ContactsActivity extends BaseActivity {
         adapter = new MemberAdapter(context);
         listview.setAdapter(adapter);
         listview.setOnItemClickListener(new ItemClickListener());
+        listview.setOnScrollListener(this);
         request();
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        // 当不滚动时
+        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+            // 判断是否滚动到底部
+            if (view.getLastVisiblePosition() == view.getCount() - 1) {
+                //加载更多功能的代码
+                requestMore();
+            }
+        }
+    }
+
+    @Override
+    public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
     }
 
     private class ItemClickListener implements AdapterView.OnItemClickListener {
@@ -156,6 +175,34 @@ public class ContactsActivity extends BaseActivity {
             ArrayList<MemberEntity> list = baseMember.getData();
             if (list != null && list.size() != 0) {
                 adapter.initData(list);
+            }
+        }
+    }
+
+    private void requestMore() {
+        page++;
+        BaseDataRequest request = new MemberFocusRequest(TAG, "" + page, "" + pageNum);
+        showLoadingDialog();
+        request.send(new BaseDataRequest.RequestCallback<BaseMember>() {
+            @Override
+            public void onSuccess(BaseMember pojo) {
+                cancelLoadingDialog();
+                addDatas(pojo);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                cancelLoadingDialog();
+                showToast(msg, true);
+            }
+        });
+    }
+
+    private void addDatas(BaseMember baseMember) {
+        if (baseMember != null) {
+            ArrayList<MemberEntity> list = baseMember.getData();
+            if (list != null && list.size() != 0) {
+                adapter.addData(list);
             }
         }
     }

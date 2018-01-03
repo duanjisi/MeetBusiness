@@ -30,7 +30,7 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/rl_top_bar"
         android:layout_centerHorizontal="true"
@@ -53,11 +53,13 @@
             android:textSize="16sp" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
             android:layout_marginTop="@dimen/dp_11"
-            android:text="一个商品交易展示平台"
+            android:text="@string/about"
             android:textSize="16sp" />
     </LinearLayout>
 

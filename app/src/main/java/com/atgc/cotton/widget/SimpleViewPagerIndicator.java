@@ -20,7 +20,7 @@ public class SimpleViewPagerIndicator extends LinearLayout {
     private static final int COLOR_INDICATOR_COLOR = Color.BLACK;
 
     private String[] mTitles;
-    private int mTabCount;
+    private int mTabCount=2;
     private int mIndicatorColor = COLOR_INDICATOR_COLOR;
     private float mTranslationX;
     private Paint mPaint = new Paint();

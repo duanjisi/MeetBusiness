@@ -2,14 +2,13 @@ package com.atgc.cotton.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.atgc.cotton.R;
-import com.atgc.cotton.activity.vendingRack.VendUploadGoodsActivity;
+import com.atgc.cotton.activity.goodsDetail.GoodsDetailActivity;
 import com.atgc.cotton.activity.vendingRack.VendingRackHomeActivity;
 import com.atgc.cotton.adapter.base.ListBaseAdapter;
 import com.atgc.cotton.adapter.base.SuperViewHolder;
@@ -18,8 +17,6 @@ import com.atgc.cotton.util.UIUtils;
 import com.atgc.cotton.widget.GlideRoundTransform;
 import com.atgc.cotton.widget.SwipeMenuView;
 import com.bumptech.glide.Glide;
-
-import java.util.List;
 
 /**
  * Created by GMARUnity on 2017/6/19.
@@ -61,7 +58,7 @@ public class VendingRackHomeAdapter extends ListBaseAdapter<VendGoodsEntity.Good
             tv_num.setText("库存：" + item.getGoodsNumber());
             tv_title.setText("" + item.getGoodsName());
             tv_content.setText("" + item.getGoodsAttr());
-            tv_price.setText("￥" + item.getShopPrice());
+            tv_price.setText("￥" + item.getShopPrice() + "/" + item.getUnits());
         }
         //这句话关掉IOS阻塞式交互效果 并依次打开左滑右滑
         ((SwipeMenuView) holder.itemView).setIos(false).setLeftSwipe(true);
@@ -82,9 +79,12 @@ public class VendingRackHomeAdapter extends ListBaseAdapter<VendGoodsEntity.Good
             @Override
             public void onClick(View v) {
                 VendGoodsEntity.Goods item = (VendGoodsEntity.Goods) getItem(position);
-                Intent intent = new Intent(context, VendUploadGoodsActivity.class);
-                intent.putExtra("goodsId", item.getGoodsId());
-                ((VendingRackHomeActivity) context).startActivityForResult(intent, 101);
+//                Intent intent = new Intent(context, VendUploadGoodsActivity.class);
+//                intent.putExtra("goodsId", item.getGoodsId());
+//                ((VendingRackHomeActivity) context).startActivityForResult(intent, 101);
+                Intent intent = new Intent(context, GoodsDetailActivity.class);
+                intent.putExtra("goodId", item.getGoodsId());
+                ((VendingRackHomeActivity) context).startActivity(intent);
             }
         });
     }

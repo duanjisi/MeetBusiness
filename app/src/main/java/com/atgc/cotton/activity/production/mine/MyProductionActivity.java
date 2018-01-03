@@ -29,12 +29,14 @@ import com.atgc.cotton.config.LoginStatus;
 import com.atgc.cotton.entity.AccountEntity;
 import com.atgc.cotton.entity.ActionEntity;
 import com.atgc.cotton.entity.ChangeAvatarEntity;
+import com.atgc.cotton.entity.CountEntity;
 import com.atgc.cotton.entity.FansEntity;
 import com.atgc.cotton.fragment.MyLikeFragment;
 import com.atgc.cotton.fragment.MyProFragment;
 import com.atgc.cotton.fragment.ProductFragment;
 import com.atgc.cotton.http.BaseDataRequest;
 import com.atgc.cotton.http.HttpUrl;
+import com.atgc.cotton.http.request.CountRequest;
 import com.atgc.cotton.http.request.FansRequest;
 import com.atgc.cotton.listener.PermissionListener;
 import com.atgc.cotton.listenter.ListenerConstans;
@@ -118,7 +120,7 @@ public class MyProductionActivity extends BaseActivity implements
         ListenerConstans.mQunZuPager = this;
         EventBus.getDefault().register(this);
         initViews();
-        initDatas();
+        initDatas(null);
         initEvents();
     }
 
@@ -195,7 +197,8 @@ public class MyProductionActivity extends BaseActivity implements
         request();
     }
 
-    private void initDatas() {
+    private void initDatas(CountEntity countEntity) {
+//        final String[] mTitles = new String[]{"作品(" + countEntity.getFeedCount() + ")", "喜欢(" + countEntity.getLinkCount() + ")"};
         mIndicator.setTitles(mTitles);
         myProFragment = new MyProFragment();
         likeFragment = new MyLikeFragment();
@@ -215,6 +218,7 @@ public class MyProductionActivity extends BaseActivity implements
 
         mViewPager.setAdapter(mAdapter);
         mViewPager.setCurrentItem(0);
+//        initEvents();
     }
 
     private void initEvents() {
@@ -406,6 +410,23 @@ public class MyProductionActivity extends BaseActivity implements
     }
 
 
+    private void requestCount() {
+        CountRequest request = new CountRequest(TAG);
+        request.send(new BaseDataRequest.RequestCallback<CountEntity>() {
+            @Override
+            public void onSuccess(CountEntity pojo) {
+                cancelLoadingDialog();
+//                initDatas(pojo);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                cancelLoadingDialog();
+                showToast(msg, true);
+            }
+        });
+    }
+
     private void request() {
 //        showLoadingDialog();
 //        MyNumRequest request = new MyNumRequest(TAG);
@@ -457,6 +478,7 @@ public class MyProductionActivity extends BaseActivity implements
             tv_intro.setText(account.getSignature());
             imageLoader.displayImage(account.getAvatar(), iv_bg, ImageLoaderUtils.getDisplayImageOptions());
         }
+        requestCount();
     }
 
     @Override

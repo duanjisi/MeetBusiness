@@ -61,10 +61,10 @@ import de.greenrobot.event.Subscribe;
  */
 public class RecordVideoActivity extends BaseActivity implements View.OnClickListener {
     private static String TAG = "RecordActivity";
-    public static final int MAX_DURATION = 5 * 60 * 1000;  //最长拍摄时长
+    //    public static final int MAX_DURATION = 5 * 60 * 1000;  //最长拍摄时长
+    public static final int MAX_DURATION = 30 * 1000;  //最长拍摄时长
     public static final int MIN_DURATION = 5 * 1000;  //最短拍摄时长
     private final static int PERMISSION_REQUEST_CAMERA_AUDIOREC = 1;
-
     public final static int FRAME_RATE = 20;
     public final static int VIDEO_BITRATE = 1000;
     public final static int AUDIO_BITRATE = 64;
@@ -330,10 +330,11 @@ public class RecordVideoActivity extends BaseActivity implements View.OnClickLis
                         @Override
                         public void run() {
                             //到达最大拍摄时长时，需要主动停止录制
-                            stopRecord(false);
+//                            stopRecord(false);
 //                            mRecordView.getDrawable().setLevel(1);
 //                            mRecordView.setEnabled(false);
-                            showToast("录制结束，请继续操作", true);
+//                            showToast("录制结束，请继续操作", true);
+                            onNextClick();
                         }
                     });
                 }
@@ -372,10 +373,9 @@ public class RecordVideoActivity extends BaseActivity implements View.OnClickLis
             final MegerFilesAlertDialog dialog = new MegerFilesAlertDialog(this, R.style.dialog);
             dialog.setCancelable(false);
             dialog.show();
-            mKSYRecordKit.stopRecord(outFile, new KSYRecordKit.MegerFilesFinishedListener() {
+            mKSYRecordKit.stopRecord(outFile, new KSYRecordKit.MergeFilesFinishedListener() {
                 @Override
                 public void onFinished(final String filePath) {
-
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -732,8 +732,9 @@ public class RecordVideoActivity extends BaseActivity implements View.OnClickLis
             public void onSuccess(AuthEntity pojo) {
                 Log.i("info", "=================:" + pojo.toString());
                 //初始化鉴权信息
-                AuthInfoManager.getInstance().setAuthInfo(getApplicationContext(),
-                        pojo.getAuthorization(), pojo.getAmz());
+//                AuthInfoManager.getInstance().setAuthInfo(getApplicationContext(),
+//                        pojo.getAuthorization(), pojo.getAmz());
+                AuthInfoManager.getInstance().setAuthInfo(pojo.getAuthorization(), pojo.getAmz());
                 //添加鉴权结果回调接口(不是必须)
                 AuthInfoManager.getInstance().addAuthResultListener(mCheckAuthResultListener);
                 //开始向KSServer申请鉴权

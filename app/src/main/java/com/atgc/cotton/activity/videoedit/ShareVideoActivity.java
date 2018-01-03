@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,9 +68,12 @@ public class ShareVideoActivity extends BaseActivity {
     private MyListView listView;
     private VendGoodAdapter adapter;
     private EditText editText;
-    private RadioGroup mRadioGroup;
+    //    private RadioGroup mRadioGroup;
+    private RadioButton mRbQQ, mRbZone, mRbWX, mRbCicler;
     private String videoPath, BgPath;
     private ImageLoader imageLoader;
+
+    private ArrayList<RadioButton> Rbs = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +102,17 @@ public class ShareVideoActivity extends BaseActivity {
         tv_link_goods = (TextView) findViewById(R.id.tv_link_goods);
         tv_add_location = (TextView) findViewById(R.id.tv_add_location);
         editText = (EditText) findViewById(R.id.et_content);
-        mRadioGroup = (RadioGroup) findViewById(R.id.radio_group);
+
+        mRbQQ = (RadioButton) findViewById(R.id.rb_qq);
+        mRbZone = (RadioButton) findViewById(R.id.rb_zone);
+        mRbWX = (RadioButton) findViewById(R.id.rb_wx);
+        mRbCicler = (RadioButton) findViewById(R.id.rb_wx_circle);
+        Rbs.add(mRbQQ);
+        Rbs.add(mRbZone);
+        Rbs.add(mRbWX);
+        Rbs.add(mRbCicler);
+        initRadioButton();
+//        mRadioGroup = (RadioGroup) findViewById(R.id.radio_group);
         tv_link_goods.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,6 +124,7 @@ public class ShareVideoActivity extends BaseActivity {
                 startActivityForResult(intent, 100);
             }
         });
+
         tv_add_location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,11 +143,75 @@ public class ShareVideoActivity extends BaseActivity {
                 uploadVideoFile();
             }
         });
-        mRadioGroup.setOnCheckedChangeListener(new CheckListener());
+//        mRadioGroup.setOnCheckedChangeListener(new CheckListener());
         if (!TextUtils.isEmpty(BgPath)) {
             imageLoader.displayImage("file://" + BgPath, iv_video_bg, ImageLoaderUtils.getDisplayImageOptions());
         }
         initSharePlatform(mController);
+    }
+
+
+    private void initRadioButton() {
+        for (int i = 0; i < Rbs.size(); i++) {
+            RadioButton rb = Rbs.get(i);
+            rb.setOnClickListener(new mClickListener());
+        }
+    }
+
+    private class mClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            selectView((RadioButton) view);
+        }
+    }
+
+    private void selectView(RadioButton radioButton) {
+        boolean checked = radioButton.isChecked();
+        int mId = radioButton.getId();
+        for (int i = 0; i < Rbs.size(); i++) {
+            RadioButton rb = Rbs.get(i);
+            if (rb.getId() == mId) {
+                radioButton.setChecked(!checked);
+            } else {
+                rb.setChecked(false);
+            }
+        }
+        switch (mId) {
+            case R.id.rb_qq:
+                if (radioButton.isChecked()) {
+                    isThird = true;
+                    shareMedia = SHARE_MEDIA.QQ;
+                } else {
+                    isThird = false;
+                }
+                break;
+            case R.id.rb_zone:
+                if (radioButton.isChecked()) {
+                    isThird = true;
+                    shareMedia = SHARE_MEDIA.QZONE;
+                } else {
+                    isThird = false;
+                }
+                break;
+            case R.id.rb_wx:
+                if (radioButton.isChecked()) {
+                    isThird = true;
+                    shareMedia = SHARE_MEDIA.WEIXIN;
+                } else {
+                    isThird = false;
+                }
+                break;
+            case R.id.rb_wx_circle:
+                if (radioButton.isChecked()) {
+                    isThird = true;
+                    shareMedia = SHARE_MEDIA.WEIXIN_CIRCLE;
+                } else {
+                    isThird = false;
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     private class itemRemoveCallBack implements VendGoodAdapter.itemRemoveCallBack {
@@ -176,20 +255,40 @@ public class ShareVideoActivity extends BaseActivity {
         public void onCheckedChanged(RadioGroup arg0, int arg1) {
             switch (arg1) {
                 case R.id.rb_qq:
-                    isThird = true;
-                    shareMedia = SHARE_MEDIA.QQ;
+                    if (mRbQQ.isChecked()) {
+                        isThird = true;
+                        shareMedia = SHARE_MEDIA.QQ;
+                    } else {
+                        isThird = false;
+                        mRbQQ.setChecked(false);
+                    }
                     break;
                 case R.id.rb_zone:
-                    isThird = true;
-                    shareMedia = SHARE_MEDIA.QZONE;
+                    if (mRbZone.isChecked()) {
+                        isThird = true;
+                        shareMedia = SHARE_MEDIA.QZONE;
+                    } else {
+                        isThird = false;
+                        mRbZone.setChecked(false);
+                    }
                     break;
                 case R.id.rb_wx:
-                    isThird = true;
-                    shareMedia = SHARE_MEDIA.WEIXIN;
+                    if (mRbWX.isChecked()) {
+                        isThird = true;
+                        shareMedia = SHARE_MEDIA.WEIXIN;
+                    } else {
+                        isThird = false;
+                        mRbWX.setChecked(false);
+                    }
                     break;
                 case R.id.rb_wx_circle:
-                    isThird = true;
-                    shareMedia = SHARE_MEDIA.WEIXIN_CIRCLE;
+                    if (mRbCicler.isChecked()) {
+                        isThird = true;
+                        shareMedia = SHARE_MEDIA.WEIXIN_CIRCLE;
+                    } else {
+                        isThird = false;
+                        mRbCicler.setChecked(false);
+                    }
                     break;
                 default:
                     break;
@@ -286,9 +385,13 @@ public class ShareVideoActivity extends BaseActivity {
     private String getGoodids() {
         ArrayList<VendGoodsEntity.Goods> goodses = (ArrayList<VendGoodsEntity.Goods>) adapter.getData();
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < goodses.size(); i++) {
+        int size = goodses.size();
+        for (int i = 0; i < size; i++) {
             VendGoodsEntity.Goods good = goodses.get(i);
-            sb.append(",").append(good.getGoodsId());
+            if (i != 0 && size > 1) {
+                sb.append(",");
+            }
+            sb.append(good.getGoodsId());
         }
         return sb.toString();
     }

@@ -14,7 +14,8 @@
             android:id="@+id/id_topview"
             layout="@layout/item_pro_other_header"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"></include>
+            android:layout_height="wrap_content">
+        </include>
 
         <TextView
             android:id="@+id/tv_works"

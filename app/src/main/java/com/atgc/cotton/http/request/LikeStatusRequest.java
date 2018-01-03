@@ -16,7 +16,7 @@ public class LikeStatusRequest extends BaseDataRequest<String> {
 
     @Override
     protected boolean isParse() {
-        return true;
+        return false;
     }
 
     @Override

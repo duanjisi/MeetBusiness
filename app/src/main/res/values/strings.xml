@@ -11,7 +11,7 @@
     <string name="alipay_app_id">2016092201948966</string>
     <string name="weixin_app_id">wxac34006c18243289</string>
     <string name="weixin_app_secret">d75af34b167ca5b4debb88009aa9d12c</string>
-
+    <string name="save_photo">保存图片</string>
     <string name="qq_app_id">1105592272</string>
     <string name="qq_app_key">oZVFYZysIJFJhXx4</string>
     <string name="umeng_key">595af6c307fe652140000242</string>
@@ -88,6 +88,11 @@
     <string name="msg_clipping_image">正在裁剪图片</string>
     <string name="action_clip">裁剪</string>
     <string name="live_share_content">我正在观看老板六六的视频,一起来围观吧!</string>
+    <string name="app_share_content">66boss每天给你新的惊喜，你也一起来玩吧~</string>
+    <string name="app_share_title">66boss是一款内容电商平台~</string>
+    <string name="app_share_target">http://www.66boss.com/app/download.html</string>
+
+    <string name="about">66boss以重内容轻电商的app平台，专门为企业和个人提高商品运营速率，销售和推广提供方案，是记录商品内容的好工具！</string>
     <string name="msg_camera_invalid_permission_denied">无法打开相机，可能是权限被拒绝</string>
     <string name="msg_camera_invalid_initial_failed">相机初始化失败，无法打开相机</string>
     <string name="msg_camera_invalid_unknown_error">无法打开相机，未知错误</string>

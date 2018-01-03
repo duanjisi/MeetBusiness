@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <!--250dp-->
         <android.support.v4.view.ViewPager
             android:id="@+id/vp_img"
             android:layout_width="match_parent"
@@ -24,14 +25,14 @@
         </LinearLayout>
 
         <ImageView
-            android:visibility="gone"
             android:id="@+id/img_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
-            android:src="@drawable/play_more" />
+            android:src="@drawable/play_more"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_name"
@@ -115,12 +116,12 @@
             android:background="@color/line_school" />
 
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/ll_evaluate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/line"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -143,29 +144,29 @@
             </LinearLayout>
 
             <TextView
-                android:layout_marginLeft="10dp"
                 android:id="@+id/tv_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp" />
 
             <com.atgc.cotton.widget.MultiImageView
-                android:layout_marginLeft="10dp"
                 android:id="@+id/multiImagView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp">
 
             </com.atgc.cotton.widget.MultiImageView>
 
             <TextView
-                android:layout_marginBottom="30dp"
                 android:id="@+id/tv_more"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
                 android:gravity="center"
                 android:text="查看更多"
-                android:textColor="@color/edit_red"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:textColor="@color/edit_red" />
 
         </LinearLayout>
 
@@ -178,7 +179,6 @@
             android:layout_alignTop="@+id/img_more"
             android:src="@drawable/play_return" />
     </RelativeLayout>
-
 
 
 </ScrollView>

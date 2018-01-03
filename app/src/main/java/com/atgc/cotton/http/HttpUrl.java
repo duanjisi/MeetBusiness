@@ -8,6 +8,12 @@ public class HttpUrl {
     public static final String BASE_URL = "https://yuetao.66boss.com/v1/";
     public static final String AUTH_URL = "https://api.66boss.com/ksauth/index.php";
     public static final String WS_URL = "wss://ytwsim.66boss.com/server";
+    public static final String BASE_SEARCH = "https://s.66boss.com/search/";
+
+    public static final String SEARCH_USER = BASE_SEARCH + "user";
+    public static final String SEARCH_VIDEO = BASE_SEARCH + "feed";
+    public static final String SEARCH_GOOD = BASE_SEARCH + "goods";
+
     /**
      * android版本更新
      */
@@ -37,6 +43,7 @@ public class HttpUrl {
     public static final String MY_GOODS_URL = BASE_URL + "public/goodsmulti";
     public static final String COMMENTS_URL = BASE_URL + "public/commentary/";
     public static final String FOCUS_FANS_URL = BASE_URL + "public/followstat/";
+    public static final String UNIT_URL = BASE_URL + "public/getunits";
     /**
      * 发布feed相关接口
      */
@@ -59,6 +66,7 @@ public class HttpUrl {
     public static final String BIND_SMS_QRCODE = USER + "bindsms";
     public static final String PHONE_UNBIND = USER + "unbindsms";
     public static final String PHONE_VERIFY = USER + "validunbindsms";
+    public static final String COUNT_URL = USER + "countandlike";
     /**
      * 售货架相关接口
      */

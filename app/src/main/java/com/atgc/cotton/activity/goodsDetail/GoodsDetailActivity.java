@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.atgc.cotton.App;
 import com.atgc.cotton.R;
+import com.atgc.cotton.activity.ImagePagerActivity;
 import com.atgc.cotton.activity.LoginActivity;
 import com.atgc.cotton.activity.base.MvpActivity;
 import com.atgc.cotton.activity.shoppingCar.ShoppingCarActivity;
@@ -482,6 +483,21 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
         overridePendingTransition(R.anim.activity_in, R.anim.activity_no);
     }
 
+    private class clickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            String url = (String) view.getTag();
+            ImagePagerActivity.ImageSize imageSize = new ImagePagerActivity.ImageSize(view.getMeasuredWidth(), view.getMeasuredHeight());
+            int position = 0;
+            for (int i = 0; i < imgList.size(); i++) {
+                if (imgList.get(i).equals(url)) {
+                    position = i;
+                }
+            }
+            ImagePagerActivity.startImagePagerActivity(context, imgList, position, imageSize, false);
+        }
+    }
+
     /**
      * 查询商品详情成功
      *
@@ -494,11 +510,31 @@ public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> imple
         point_views = new ArrayList<>();    //小圆点
 
         List<GoodsDetailEntity.DataBean.GoodsGalleryBean> goodsGallery = bean.getGoodsGallery();
+
         for (int i = 0; i < goodsGallery.size(); i++) {
             String imgUrl = goodsGallery.get(i).getImgUrl();
             imgList.add(imgUrl);
+        }
+
+        for (int i = 0; i < goodsGallery.size(); i++) {
+            final String imgUrl = goodsGallery.get(i).getImgUrl();
+//            imgList.add(imgUrl);
             ImageView imageView = new ImageView(this);
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setLayoutParams(new ViewPager.LayoutParams());
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ImagePagerActivity.ImageSize imageSize = new ImagePagerActivity.ImageSize(view.getMeasuredWidth(), view.getMeasuredHeight());
+                    int position = 0;
+                    for (int i = 0; i < imgList.size(); i++) {
+                        if (imgList.get(i).equals(imgUrl)) {
+                            position = i;
+                        }
+                    }
+                    ImagePagerActivity.startImagePagerActivity(context, imgList, position, imageSize, false);
+                }
+            });
             views.add(imageView);
 
             ImageView view1 = new ImageView(this);

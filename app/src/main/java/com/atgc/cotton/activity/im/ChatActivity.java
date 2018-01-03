@@ -200,8 +200,10 @@ public class ChatActivity extends BaseActivity implements
             object.put("msg", obj1);
 
             JSONObject obj2 = new JSONObject();
-            obj2.put("username", account.getUserName());
-            obj2.put("avatar", account.getAvatar());
+            obj2.put("sendername", account.getUserName());
+            obj2.put("senderavatar", account.getAvatar());
+            obj2.put("receivername", title);
+            obj2.put("receiveravatar", toAvatar);
             object.put("ext", obj2);
             return object.toString();
         } catch (JSONException e) {

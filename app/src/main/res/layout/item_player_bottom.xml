@@ -93,11 +93,13 @@
                 <TextView
                     android:id="@+id/tv_like"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_centerInParent="true"
                     android:drawableLeft="@drawable/play_like_default"
                     android:drawablePadding="@dimen/dp_11"
                     android:gravity="center"
+                    android:paddingLeft="@dimen/dp_11"
+                    android:paddingRight="@dimen/dp_11"
                     android:text="5000"
                     android:textColor="@color/main_checked_color" />
             </RelativeLayout>
@@ -118,10 +120,13 @@
                 <TextView
                     android:id="@+id/tv_share"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_centerInParent="true"
                     android:drawableLeft="@drawable/play_share"
                     android:drawablePadding="@dimen/dp_11"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/dp_11"
+                    android:paddingRight="@dimen/dp_11"
                     android:text="分享"
                     android:textColor="@color/main_checked_color" />
             </RelativeLayout>

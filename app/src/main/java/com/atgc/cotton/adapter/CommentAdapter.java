@@ -1,10 +1,12 @@
 package com.atgc.cotton.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
 
 import com.atgc.cotton.R;
+import com.atgc.cotton.activity.production.other.OtherProActivity;
 import com.atgc.cotton.adapter.base.ABaseAdapter;
 import com.atgc.cotton.entity.Comment;
 import com.atgc.cotton.util.ImageLoaderUtils;
@@ -25,7 +27,7 @@ public class CommentAdapter extends ABaseAdapter<Comment> {
     }
 
     @Override
-    protected View setConvertView(int position, Comment entity, View convertView) {
+    protected View setConvertView(int position,final Comment entity, View convertView) {
         ViewHolder holder = null;
         if (convertView == null) {
             convertView = View.inflate(getContext(), R.layout.item_comment, null);
@@ -39,6 +41,15 @@ public class CommentAdapter extends ABaseAdapter<Comment> {
             holder.tv_time.setText(TimeUtil.getDateTime(entity.getAddTime()));
             holder.tv_msg.setText(entity.getContent());
             imageLoader.displayImage(entity.getUidFromAvatar(), holder.image, ImageLoaderUtils.getDisplayImageOptions());
+
+            holder.image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(mContext, OtherProActivity.class);
+                    intent.putExtra("userid", entity.getUidFrom());
+                    mContext.startActivity(intent);
+                }
+            });
         }
         return convertView;
     }

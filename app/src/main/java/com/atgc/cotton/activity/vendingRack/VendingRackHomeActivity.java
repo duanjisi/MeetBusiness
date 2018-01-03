@@ -131,6 +131,7 @@ public class VendingRackHomeActivity extends BaseCompatActivity<VendRackPresente
                 break;
             case R.id.tv_back:
                 finish();
+//                showTipsDialog();
                 break;
         }
     }
@@ -168,6 +169,23 @@ public class VendingRackHomeActivity extends BaseCompatActivity<VendRackPresente
     public void onError(String msg) {
         showToast(msg, false);
     }
+
+
+//    protected void showTipsDialog() {
+//        String msg = "你确定退出当前页面么?";
+//        CommonDialogUtils.showDialog(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                CommonDialogUtils.dismiss();
+//            }
+//        }, new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                CommonDialogUtils.dismiss();
+//                finish();
+//            }
+//        }, context, msg);
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

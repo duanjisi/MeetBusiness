@@ -133,8 +133,8 @@ public class ChatService extends Service {
             String sender = "";
             String sender_avatar = "";
             if (obj2 != null) {
-                sender = obj2.getString("username");
-                sender_avatar = obj2.getString("avatar");
+                sender = obj2.getString("sendername");
+                sender_avatar = obj2.getString("senderavatar");
             }
             MessageItem item = new MessageItem(MessageItem.MESSAGE_TYPE_TXT,
                     sender, 0,

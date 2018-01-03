@@ -4,7 +4,6 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -13,7 +12,6 @@ import com.atgc.cotton.R;
 import com.atgc.cotton.adapter.base.ListBaseAdapter;
 import com.atgc.cotton.adapter.base.SuperViewHolder;
 import com.atgc.cotton.entity.VendGoodsAttrEntity;
-import com.atgc.cotton.widget.SwipeMenuView;
 
 /**
  * Created by GMARUnity on 2017/6/19.
@@ -92,7 +90,7 @@ public class VendUploadGoodsAdapter extends ListBaseAdapter<VendGoodsAttrEntity>
         et_content.setText(content);
 //
         //这句话关掉IOS阻塞式交互效果 并依次打开左滑右滑
-        ((SwipeMenuView) holder.itemView).setIos(false).setLeftSwipe(true);
+//        ((SwipeMenuView) holder.itemView).setIos(false).setLeftSwipe(true);
 //
         iv_delete.setOnClickListener(new View.OnClickListener() {
             @Override

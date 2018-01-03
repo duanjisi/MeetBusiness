@@ -25,6 +25,16 @@
             android:layout_marginLeft="11dp"
             android:src="@drawable/home_page_menu" />
 
+        <ImageView
+            android:id="@+id/iv_search"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/dp_11"
+            android:paddingRight="@dimen/dp_11"
+            android:src="@drawable/search_icon" />
+
         <RadioGroup
             android:id="@+id/radio_group"
             android:layout_width="match_parent"
@@ -33,7 +43,7 @@
             android:layout_marginLeft="80dp"
             android:layout_marginRight="80dp"
             android:orientation="horizontal"
-            android:weightSum="4">
+            android:weightSum="3">
 
             <RadioButton
                 android:id="@+id/rb_focus"
@@ -66,10 +76,10 @@
             <!--android:layout_marginTop="8dp"-->
             <!--android:background="@color/line_color_gray_d1" />-->
 
-            <RadioButton
-                android:id="@+id/rb_near"
-                style="@style/MessageRadioBtn"
-                android:text="@string/main_near" />
+            <!--<RadioButton-->
+            <!--android:id="@+id/rb_near"-->
+            <!--style="@style/MessageRadioBtn"-->
+            <!--android:text="@string/main_near" />-->
 
         </RadioGroup>
 

@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.atgc.cotton.widget.SwipeMenuView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clickable="true"
-    android:padding="9dp">
+    android:clickable="true">
 
     <LinearLayout
+        android:id="@+id/ll"
+        android:padding="9dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/iv_delete"
+        android:layout_marginRight="@dimen/dp_11"
         android:orientation="vertical">
 
         <LinearLayout
@@ -65,16 +68,17 @@
                 android:textSize="14sp" />
 
         </LinearLayout>
-
     </LinearLayout>
 
     <ImageView
         android:id="@+id/iv_delete"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:paddingBottom="@dimen/dp_18"
         android:paddingLeft="@dimen/dp_18"
         android:paddingRight="@dimen/dp_18"
+        android:paddingTop="@dimen/dp_18"
         android:src="@drawable/delete_goods" />
-
-</com.atgc.cotton.widget.SwipeMenuView>
+</RelativeLayout>

@@ -17,7 +17,7 @@ public class PraiseNoRequest extends BaseDataRequest<String> {
 
     @Override
     protected boolean isParse() {
-        return true;
+        return false;
     }
 
     @Override

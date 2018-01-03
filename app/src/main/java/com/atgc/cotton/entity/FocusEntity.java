@@ -4,7 +4,7 @@ package com.atgc.cotton.entity;
  * Created by Johnny on 2017/7/12.
  */
 public class FocusEntity {
-    private Boolean IsFollow;
+    private boolean IsFollow = false;
     private String Id = "";
 
     public String getId() {

@@ -296,12 +296,14 @@
 ####################Bugly end##################
 
 ####################金山云 start##################
--keep class com.ksyun.** {
-  *;
-}
--keep class com.ksy.statlibrary.** {
-  *;
-}
+#-keep class com.ksyun.** {
+#  *;
+#}
+#-keep class com.ksy.statlibrary.** {
+#  *;
+#}
+-keep class com.ksyun.media.player.**{ *; }
+-keep class com.ksy.statlibrary.**{ *;}
 ####################金山云 end##################
 
 

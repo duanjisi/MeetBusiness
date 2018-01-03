@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/iv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/dp_11"
+            android:paddingRight="@dimen/dp_11"
+            android:src="@drawable/nav_close" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="搜索"
+            android:textColor="@color/main_default_color"
+            android:textSize="22sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@color/background_color">
+
+        <!--<EditText-->
+        <!--android:id="@+id/et_keyword"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_marginBottom="@dimen/dp_6"-->
+        <!--android:layout_marginLeft="@dimen/dp_11"-->
+        <!--android:layout_marginRight="@dimen/dp_11"-->
+        <!--android:layout_marginTop="@dimen/dp_6"-->
+        <!--android:background="@drawable/bg_round_white"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:paddingLeft="@dimen/dp_11"-->
+        <!--android:textColorHint="@color/hint_text_color"-->
+        <!--android:hint="收索用户、商品、视频" />-->
+        <EditText
+            android:id="@+id/et_keyword"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/dp_6"
+            android:layout_marginLeft="@dimen/dp_11"
+            android:layout_marginRight="@dimen/dp_11"
+            android:layout_marginTop="@dimen/dp_6"
+            android:background="@drawable/bg_round_white"
+            android:hint="搜索用户、商品、视频"
+            android:paddingLeft="@dimen/dp_6"
+            android:singleLine="true"
+            android:textColor="@color/bg_color02"
+            android:textColorHint="@color/text_gray" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <RadioGroup
+            android:id="@+id/radio_group"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/rl_line"
+            android:layout_marginLeft="80dp"
+            android:layout_marginRight="80dp"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <RadioButton
+                android:id="@+id/rb_user"
+                style="@style/MessageRadioBtn"
+                android:checked="true"
+                android:text="@string/main_user" />
+
+            <!--<View-->
+            <!--android:layout_width="1px"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_gravity="center_horizontal|center_vertical"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:background="@color/line_color_gray_d1" />-->
+
+            <RadioButton
+                android:id="@+id/rb_video"
+                style="@style/MessageRadioBtn"
+                android:text="@string/main_videos" />
+
+            <RadioButton
+                android:id="@+id/rb_goods"
+                style="@style/MessageRadioBtn"
+                android:text="@string/main_good" />
+        </RadioGroup>
+
+        <RelativeLayout
+            android:id="@+id/rl_line"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/line"
+            android:layout_alignLeft="@+id/radio_group"
+            android:layout_alignRight="@+id/radio_group">
+
+            <ImageView
+                android:id="@+id/im_cursor"
+                android:layout_width="wrap_content"
+                android:layout_height="1.6dip"
+                android:background="#293d55"
+                android:scaleType="matrix"
+                tools:ignore="ContentDescription" />
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1.2px"
+            android:layout_alignParentBottom="true"
+            android:background="#dedede" />
+    </RelativeLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="6dp"
+        android:layout_weight="1.0"
+        android:background="@null"
+        android:persistentDrawingCache="animation" />
+</LinearLayout>

@@ -112,12 +112,21 @@ public class VendGoodsEntity implements Serializable {
             this.selected = selected;
         }
 
+        public String getUnits() {
+            return Units;
+        }
+
+        public void setUnits(String units) {
+            Units = units;
+        }
+
         private String GoodsAttr;
         private String GoodsId;
         private String GoodsImg;
         private String GoodsName;
         private String GoodsNumber;
         private String ShopPrice;
+        private String Units;
         private boolean selected = false;
     }
 }

@@ -1,7 +1,11 @@
 package com.atgc.cotton.activity.vendingRack;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +21,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,6 +31,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -34,10 +41,14 @@ import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseCompatActivity;
 import com.atgc.cotton.adapter.VendUploadGoodsAdapter;
 import com.atgc.cotton.entity.GoodsDetailEntity;
+import com.atgc.cotton.entity.UnitEntity;
 import com.atgc.cotton.entity.VendGoodsAttrEntity;
+import com.atgc.cotton.http.BaseDataRequest;
+import com.atgc.cotton.http.request.UnityRequest;
 import com.atgc.cotton.listener.PermissionListener;
 import com.atgc.cotton.presenter.VendUploadPresenter;
 import com.atgc.cotton.presenter.view.IVendUploadView;
+import com.atgc.cotton.util.CommonDialogUtils;
 import com.atgc.cotton.util.FileUtils;
 import com.atgc.cotton.util.KeyboardUtils;
 import com.atgc.cotton.util.PermissonUtil.PermissionUtil;
@@ -47,6 +58,9 @@ import com.atgc.cotton.util.ToastUtil;
 import com.atgc.cotton.util.UIUtils;
 import com.atgc.cotton.widget.ActionSheet;
 import com.atgc.cotton.widget.GlideRoundTransform;
+import com.atgc.cotton.widget.region.OnWheelChangedListener;
+import com.atgc.cotton.widget.region.WheelView;
+import com.atgc.cotton.widget.region.adapters.ArrayWheelAdapter;
 import com.bumptech.glide.Glide;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
@@ -69,6 +83,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class VendUploadGoodsActivity extends BaseCompatActivity<VendUploadPresenter> implements
         View.OnClickListener, ActionSheet.OnSheetItemClickListener, IVendUploadView {
+    private static final String TAG = VendUploadGoodsActivity.class.getSimpleName();
     private LRecyclerView rv_content;
     private TextView tv_back, tv_title;
     private Toolbar toolbar;
@@ -79,7 +94,9 @@ public class VendUploadGoodsActivity extends BaseCompatActivity<VendUploadPresen
     private int attrSize = 1;
     private LinearLayout ll_img;
     private View v_add_img;
+    private TextView tv_unit;
     private EditText et_repertory, et_price;
+    private PopupWindow popupWindow;
     private int sceenW, sceenH, repertoryNum = 0;
     private int addSize = 0, addTag;
     private HashMap<Integer, View> imgMap;
@@ -207,6 +224,51 @@ public class VendUploadGoodsActivity extends BaseCompatActivity<VendUploadPresen
                 mPresenter.getGoodsDetail(goodsid);
             }
         }
+        requestUnits();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            showTipsDialog2();
+            return false;
+        } else {
+            return super.onKeyDown(keyCode, event);
+        }
+    }
+
+    protected void showTipsDialog2() {
+        String msg = "你确定退出当前页面么?";
+        CommonDialogUtils.showDialog(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CommonDialogUtils.dismiss();
+            }
+        }, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CommonDialogUtils.dismiss();
+                finish();
+            }
+        }, context, msg);
+    }
+
+
+    private void requestUnits() {
+        UnityRequest request = new UnityRequest(TAG);
+        request.send(new BaseDataRequest.RequestCallback<UnitEntity>() {
+            @Override
+            public void onSuccess(UnitEntity pojo) {
+                if (pojo != null) {
+                    mUnits = pojo.getData();
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                showToast(msg, true);
+            }
+        });
     }
 
     private void initFootView(View view) {
@@ -216,6 +278,7 @@ public class VendUploadGoodsActivity extends BaseCompatActivity<VendUploadPresen
         ImageView iv_add = (ImageView) view.findViewById(R.id.iv_add);
         ll_img = (LinearLayout) view.findViewById(R.id.ll_img);
         TextView tv_add_attr = (TextView) view.findViewById(R.id.tv_add_attr);
+        tv_unit = (TextView) view.findViewById(R.id.tv_unit);
         v_add_img = View.inflate(this, R.layout.item_vend_add_img, null);
         TextView tv_add_img = (TextView) v_add_img.findViewById(R.id.tv_add_img);
 
@@ -254,14 +317,80 @@ public class VendUploadGoodsActivity extends BaseCompatActivity<VendUploadPresen
                 showActionSheet();
             }
         });
+        tv_unit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (popupWindow == null) {
+                    showRegion(getWindow().getDecorView());
+                } else {
+                    if (!popupWindow.isShowing()) {
+                        showRegion(getWindow().getDecorView());
+                    }
+                }
+            }
+        });
         tv_add_attr.setOnClickListener(this);
+    }
+
+    private WheelView wvUnit;
+    private ArrayList<String> mUnits;
+    private String mCurrentUnit;
+
+    private void showRegion(View parent) {
+        View view = View.inflate(context, R.layout.dialog_unit_select, null);
+        popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.FILL_PARENT,
+                ViewGroup.LayoutParams.FILL_PARENT, false);
+        popupWindow.setAnimationStyle(R.style.popwin_anim_style);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setTouchable(true);
+        popupWindow.setFocusable(true);
+        popupWindow.setBackgroundDrawable(getDrawableFromRes(R.drawable.bg_popwindow));
+
+        wvUnit = (WheelView) view.findViewById(R.id.id_unit);
+
+        TextView cancel = (TextView) view.findViewById(R.id.tv_cancel);
+        TextView option = (TextView) view.findViewById(R.id.tv_ok);
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+        option.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!TextUtils.isEmpty(mCurrentUnit)) {
+                    tv_unit.setText(mCurrentUnit);
+                }
+                popupWindow.dismiss();
+            }
+        });
+        wvUnit.setViewAdapter(new ArrayWheelAdapter(context, mUnits));
+        wvUnit.addChangingListener(new wheelChangedListener());
+        wvUnit.setVisibleItems(5);
+        popupWindow.showAtLocation(parent, 0, 0, Gravity.END);
+    }
+
+    private class wheelChangedListener implements OnWheelChangedListener {
+        @Override
+        public void onChanged(WheelView wheel, int oldValue, int newValue) {
+            mCurrentUnit = mUnits.get(newValue);
+        }
+    }
+
+    private Drawable getDrawableFromRes(int resId) {
+        Resources res = getResources();
+        Bitmap bmp = BitmapFactory.decodeResource(res, resId);
+        return new BitmapDrawable(bmp);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_back:
-                finish();
+//                finish();
+                showTipsDialog2();
                 break;
             case R.id.tv_add_attr:
                 KeyboardUtils.hideSoftInput(VendUploadGoodsActivity.this);
@@ -301,6 +430,14 @@ public class VendUploadGoodsActivity extends BaseCompatActivity<VendUploadPresen
                     return;
                 }
                 parmMap.put("price", price);
+
+                String unit = tv_unit.getText().toString().trim();
+                if (TextUtils.isEmpty(unit) || unit.equals("计量单位")) {
+                    showToast("计量单位不能为空", false);
+                    return;
+                }
+                parmMap.put("units", unit);
+
                 List<VendGoodsAttrEntity> attrList = adapter.getDataList();
                 int attrSize = attrList.size();
                 if (attrSize > 0) {

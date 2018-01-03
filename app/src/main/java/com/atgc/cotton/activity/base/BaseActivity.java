@@ -186,6 +186,7 @@ public class BaseActivity extends FragmentActivity {
         }
     }
 
+
     protected void showTipsDialog() {
         String msg = "应用未登录,你确定登录么?";
         CommonDialogUtils.showDialog(new View.OnClickListener() {

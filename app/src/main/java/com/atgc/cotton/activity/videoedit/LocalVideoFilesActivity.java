@@ -5,10 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -28,7 +30,10 @@ import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.adapter.BaseRecycleViewAdapter;
 import com.atgc.cotton.domain.VideoEntity;
+import com.atgc.cotton.listener.PermissionListener;
 import com.atgc.cotton.util.ImageResizer;
+import com.atgc.cotton.util.PermissonUtil.PermissionUtil;
+import com.atgc.cotton.util.ToastUtil;
 import com.atgc.cotton.util.UIUtils;
 import com.atgc.cotton.widget.RecyclingImageView;
 import com.bumptech.glide.Glide;
@@ -54,12 +59,47 @@ public class LocalVideoFilesActivity extends BaseActivity {
     private int mImageThumbSpacing;
     private RecyclerView rv_video;
     private RImageAdapter rImageAdapter;
+    private PermissionListener permissionListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_list);
-        initView();
+        //6.0以下系统，取消请求权限
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            initView();
+        } else {
+            getPermission();
+        }
+    }
+
+    private void getPermission() {
+        permissionListener = new PermissionListener() {
+            @Override
+            public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+                PermissionUtil.onRequestPermissionsResult(this, requestCode, permissions, permissionListener);
+            }
+
+            @Override
+            public void onRequestPermissionSuccess() {
+                initView();
+            }
+
+            @Override
+            public void onRequestPermissionError() {
+                ToastUtil.showShort(context, "请给予定位权限");
+            }
+        };
+        PermissionUtil
+                .with(this)
+                .permissions(
+                        PermissionUtil.PERMISSIONS_SD_READ_WRITE //
+                ).request(permissionListener);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        PermissionUtil.onRequestPermissionsResult(this, requestCode, permissions, permissionListener);
     }
 
     private void initView() {
@@ -187,7 +227,10 @@ public class LocalVideoFilesActivity extends BaseActivity {
                 // 大小：MediaStore.Audio.Media.SIZE
                 int size = (int) cursor.getLong(cursor
                         .getColumnIndexOrThrow(MediaStore.Video.Media.SIZE));
-                if (size > 0 && size <= 1024 * 1024 * 20 && (url.endsWith(".mp4") || url.endsWith(".MP4"))) {
+//                && duration <= 30 * 1000
+                if (size > 0 && size <= 1024 * 1024 * 35 &&
+                        (url.endsWith(".mp4") || url.endsWith(".MP4")) &&
+                        duration <= 5 * 60 * 1000) {
                     VideoEntity entty = new VideoEntity();
                     entty.ID = id;
                     entty.title = title;

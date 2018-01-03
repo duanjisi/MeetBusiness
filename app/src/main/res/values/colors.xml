@@ -6,6 +6,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="white">#ffffff</color>
     <color name="golden_color">#F5CD13</color>
+    <color name="top_bar_color">#fd2741</color>
     <color name="bg_rectangle">#CCCCCC</color>
     <color name="bg_pannel">#f0eff4</color>
     <color name="gray_normal">#666667</color>
@@ -120,4 +121,6 @@
     <color name="color_bai_8">#ffffffff</color>
     <color name="color_lan">#ff067bb1</color>
     <color name="chat_time">#ffffffff</color>
+
+    <color name="bg_main_panel">#f0eff4</color>
 </resources>

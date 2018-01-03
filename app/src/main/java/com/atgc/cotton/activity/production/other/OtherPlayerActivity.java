@@ -2,6 +2,7 @@ package com.atgc.cotton.activity.production.other;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Handler;
@@ -80,6 +81,7 @@ public class OtherPlayerActivity extends BaseActivity implements
         View.OnClickListener,
         SharePopup.OnItemSelectedListener,
         MorePopup.OnItemdListener {
+    private static final String SHARE_URL = "http://wx.66boss.com/feed/";
     private static final String TAG = OtherPlayerActivity.class.getSimpleName();
     private GLSurfaceView mEditPreviewView;
     private KSYEditKit mEditKit;
@@ -107,6 +109,7 @@ public class OtherPlayerActivity extends BaseActivity implements
     private Resources resources;
     public final static String SRC_URL = "srcurl";
     private VideoEntity videoEntity;
+    private int praiseNum = 0;
     private boolean hasLike = false;
     private boolean isFocus = false;
     private Handler handler = new Handler();
@@ -167,13 +170,14 @@ public class OtherPlayerActivity extends BaseActivity implements
         iv_more.setOnClickListener(this);
         iv_like.setOnClickListener(this);
         iv_share.setOnClickListener(this);
+        tv_like.setOnClickListener(this);
         tv_focus.setOnClickListener(this);
         tv_focus2.setOnClickListener(this);
         tv_qure_more.setOnClickListener(this);
         btn_comment.setOnClickListener(this);
         iv_header.setOnClickListener(this);
         tv_nick.setOnClickListener(this);
-
+        tv_qure_more.setTag(false);
         scrollView = (MyScrollView) findViewById(R.id.scrollview);
         middle = findViewById(R.id.item_midle);
         scrollView.setScrollViewListener(this);
@@ -193,6 +197,12 @@ public class OtherPlayerActivity extends BaseActivity implements
         if (bundle != null) {
             videoEntity = (VideoEntity) bundle.getSerializable("obj");
             feedId = getIntent().getExtras().getString("feedid", "");
+            if (videoEntity != null) {
+                String Num = videoEntity.getLikeCount();
+                if (!TextUtils.isEmpty(Num)) {
+                    praiseNum = Integer.parseInt(Num);
+                }
+            }
         }
         initEditKit();
         if (!TextUtils.isEmpty(feedId)) {
@@ -205,15 +215,20 @@ public class OtherPlayerActivity extends BaseActivity implements
     }
 
     private void initShareData() {
-        shareContent = getResources().getString(R.string.live_share_content);
-        title = videoEntity.getUserName();
+//        shareContent = getResources().getString(R.string.live_share_content);
+        shareContent = videoEntity.getContent();
+        if (TextUtils.isEmpty(shareContent)) {
+            shareContent = getResources().getString(R.string.live_share_content);
+        }
+        title = videoEntity.getUserName() + "向您推荐视频";
         String videoPath = videoEntity.getMediaPath();
         if (videoPath.contains(".mp4")) {
             imageUrl = videoPath.replace(".mp4", ".jpg");
         } else if (videoPath.contains(".mov")) {
             imageUrl = videoPath.replace(".mov", ".jpg");
         }
-        targetUrl = videoEntity.getMediaPath();
+//        targetUrl = videoEntity.getMediaPath();
+        targetUrl = SHARE_URL + videoEntity.getId();
     }
 
     private void initEditKit() {
@@ -262,9 +277,34 @@ public class OtherPlayerActivity extends BaseActivity implements
         requestLike();
     }
 
+
+    private void changeState() {
+        if (videoEntity != null) {
+//            String praiseNum = videoEntity.getLikeCount();
+//            int num = 0;
+            Drawable nav_up = null;
+//            if (!TextUtils.isEmpty(praiseNum)) {
+//                num = Integer.parseInt(praiseNum);
+//            }
+            if (hasLike) {
+                praiseNum++;
+                nav_up = getResources().getDrawable(R.drawable.play_like_press);
+                nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+            } else {
+                praiseNum--;
+                nav_up = getResources().getDrawable(R.drawable.play_like_default);
+                nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
+            }
+            tv_like.setText("" + praiseNum);
+            tv_like.setCompoundDrawables(nav_up, null, null, null);
+        }
+    }
+
     private void startEditPreview() {
         //设置预览的音量
-        mEditKit.setVolume(0.4f);
+//        mEditKit.setVolume(0.4f);
+        //设置预览的原始音频的音量
+        mEditKit.setOriginAudioVolume(0.4f);
         //设置是否循环预览
         mEditKit.setLooping(true);
         //开启预览
@@ -294,6 +334,10 @@ public class OtherPlayerActivity extends BaseActivity implements
     private void initVideo(VideoEntity video) {
         if (video != null) {
             this.videoEntity = video;
+            String Num = videoEntity.getLikeCount();
+            if (!TextUtils.isEmpty(Num)) {
+                praiseNum = Integer.parseInt(Num);
+            }
             initData();
             bindData();
             startEditPreview();
@@ -315,6 +359,7 @@ public class OtherPlayerActivity extends BaseActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        baseComment = null;
         mEditKit.stopEditPreview();
         mEditKit.release();
     }
@@ -392,12 +437,20 @@ public class OtherPlayerActivity extends BaseActivity implements
                     praiseUnRequest();
                 }
                 break;
-            case R.id.tv_qure_more:
-                if (videoEntity != null) {
-                    Intent intent = new Intent(context, CommentDetailsActivity.class);
-                    intent.putExtra("obj", videoEntity);
-                    startActivity(intent);
+            case R.id.tv_like:
+                if (!hasLike) {
+                    praiseRequest();
+                } else {
+                    praiseUnRequest();
                 }
+                break;
+            case R.id.tv_qure_more:
+//                if (videoEntity != null) {
+//                    Intent intent = new Intent(context, CommentDetailsActivity.class);
+//                    intent.putExtra("obj", videoEntity);
+//                    startActivity(intent);
+//                }
+                expandList(tv_qure_more);
                 break;
             case R.id.btn_comment:
                 requestCommentStr();
@@ -405,6 +458,22 @@ public class OtherPlayerActivity extends BaseActivity implements
         }
     }
 
+    private void expandList(TextView view) {
+        if (baseComment != null) {
+            ArrayList<Comment> comments = baseComment.getData();
+            if (comments != null && comments.size() != 0) {
+                boolean expanded = (boolean) view.getTag();
+                if (!expanded) {//展开
+                    adapter.initData(comments);
+                    view.setText("收回");
+                } else {//收回
+                    adapter.initData(getBefore(comments));
+                    view.setText("查看更多");
+                }
+                view.setTag(!expanded);
+            }
+        }
+    }
 
     @Override
     public void onScrollChanged(ScrollView scrollView, int x, int y, int oldx, int oldy) {
@@ -745,8 +814,11 @@ public class OtherPlayerActivity extends BaseActivity implements
         });
     }
 
+    private BaseComment baseComment;
+
     private void initList(BaseComment baseComment) {
         if (baseComment != null) {
+            this.baseComment = baseComment;
             ArrayList<Comment> comments = baseComment.getData();
             if (comments != null && comments.size() != 0) {
                 adapter.initData(getBefore(comments));
@@ -761,9 +833,11 @@ public class OtherPlayerActivity extends BaseActivity implements
             for (int i = 0; i < 5; i++) {
                 comments.add(list.get(i));
             }
+            tv_qure_more.setText("查看更多");
             tv_qure_more.setVisibility(View.VISIBLE);
             return comments;
         } else {
+            tv_qure_more.setVisibility(View.GONE);
             return list;
         }
     }
@@ -782,6 +856,7 @@ public class OtherPlayerActivity extends BaseActivity implements
             public void onSuccess(String pojo) {
                 hasLike = true;
                 iv_like.setImageResource(R.drawable.full_play_like_press);
+                changeState();
             }
 
             @Override
@@ -805,6 +880,7 @@ public class OtherPlayerActivity extends BaseActivity implements
             public void onSuccess(String pojo) {
                 hasLike = false;
                 iv_like.setImageResource(R.drawable.full_play_like_default);
+                changeState();
             }
 
             @Override
@@ -837,11 +913,17 @@ public class OtherPlayerActivity extends BaseActivity implements
             try {
                 JSONObject object = new JSONObject(json);
                 hasLike = object.getBoolean("IsLike");
+                Drawable nav_up = null;
                 if (hasLike) {
                     iv_like.setImageResource(R.drawable.full_play_like_press);
+                    nav_up = getResources().getDrawable(R.drawable.play_like_press);
+                    nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
                 } else {
                     iv_like.setImageResource(R.drawable.full_play_like_default);
+                    nav_up = getResources().getDrawable(R.drawable.play_like_default);
+                    nav_up.setBounds(0, 0, nav_up.getMinimumWidth(), nav_up.getMinimumHeight());
                 }
+                tv_like.setCompoundDrawables(nav_up, null, null, null);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

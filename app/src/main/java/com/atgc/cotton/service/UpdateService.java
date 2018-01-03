@@ -16,6 +16,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.FileProvider;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -62,48 +63,48 @@ public class UpdateService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Intent jumpIntent = new Intent(this, MainActivity.class);
-        intent.setAction(Constants.Action.SHOW_HOME_ACTION);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, jumpIntent, 0);
+        if (jumpIntent != null) {
+            intent.setAction(Constants.Action.SHOW_HOME_ACTION);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, jumpIntent, 0);
+            // 设置任务栏中下载进程显示的views
+            views = new RemoteViews(getPackageName(), R.layout.common_service_download);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                notification = new NotificationCompat.Builder(this)
+                        .setContent(views)
+                        .setSmallIcon(android.R.drawable.stat_sys_download)
+                        .setLargeIcon(getAppIcon(this))
+                        .setContentTitle(getString(R.string.app_name) + "更新")
+                        .setTicker(getString(R.string.app_name) + "更新")
+                        .setContentIntent(pendingIntent)
+                        .setWhen(System.currentTimeMillis())
+                        .setDefaults(Notification.DEFAULT_LIGHTS)
+                        .build();
+            } else {
+                notification = new Notification.Builder(this)
+                        .setContent(views)
+                        .setSmallIcon(android.R.drawable.stat_sys_download)
+                        .setLargeIcon(getAppIcon(this))
+                        .setContentTitle(getString(R.string.app_name) + "更新")
+                        .setTicker(getString(R.string.app_name) + "更新")
+                        .setContentIntent(pendingIntent)
+                        .setDefaults(Notification.DEFAULT_LIGHTS)
+                        .setWhen(System.currentTimeMillis())
+                        .build();
+            }
+            notification.flags = Notification.FLAG_NO_CLEAR;
 
-        // 设置任务栏中下载进程显示的views
-        views = new RemoteViews(getPackageName(), R.layout.common_service_download);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-            notification = new NotificationCompat.Builder(this)
-                    .setContent(views)
-                    .setSmallIcon(android.R.drawable.stat_sys_download)
-                    .setLargeIcon(getAppIcon(this))
-                    .setContentTitle(getString(R.string.app_name) + "更新")
-                    .setTicker(getString(R.string.app_name) + "更新")
-                    .setContentIntent(pendingIntent)
-                    .setWhen(System.currentTimeMillis())
-                    .setDefaults(Notification.DEFAULT_LIGHTS)
-                    .build();
-        } else {
-            notification = new Notification.Builder(this)
-                    .setContent(views)
-                    .setSmallIcon(android.R.drawable.stat_sys_download)
-                    .setLargeIcon(getAppIcon(this))
-                    .setContentTitle(getString(R.string.app_name) + "更新")
-                    .setTicker(getString(R.string.app_name) + "更新")
-                    .setContentIntent(pendingIntent)
-                    .setDefaults(Notification.DEFAULT_LIGHTS)
-                    .setWhen(System.currentTimeMillis())
-                    .build();
+            // 将下载任务添加到任务栏中
+            nm.notify(notificationId, notification);
+            myHandler = new MyHandler(Looper.myLooper(), this);
+
+            // 初始化下载任务内容views
+            Message message = myHandler.obtainMessage(3, 0);
+            myHandler.sendMessage(message);
+
+            // 启动线程开始执行下载任务
+            downFile(intent.getStringExtra("url"));
         }
-        notification.flags = Notification.FLAG_NO_CLEAR;
-
-        // 将下载任务添加到任务栏中
-        nm.notify(notificationId, notification);
-
-        myHandler = new MyHandler(Looper.myLooper(), this);
-
-        // 初始化下载任务内容views
-        Message message = myHandler.obtainMessage(3, 0);
-        myHandler.sendMessage(message);
-
-        // 启动线程开始执行下载任务
-        downFile(intent.getStringExtra("url"));
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -127,27 +128,22 @@ public class UpdateService extends Service {
                     if (is != null) {
                         File rootFile = new File(
                                 Environment.getExternalStorageDirectory(),
-                                "/mycs/apk");
+                                "/66boss/apk");
                         if (!rootFile.exists() && !rootFile.isDirectory())
                             rootFile.mkdirs();
-
                         tempFile = new File(
                                 Environment.getExternalStorageDirectory(),
-
-                                "/mycs/apk/"
+                                "/66boss/apk/"
                                         + url.substring(url.lastIndexOf("/") + 1));
                         if (tempFile.exists())
                             tempFile.delete();
                         tempFile.createNewFile();
-
                         // 已读出流作为参数创建一个带有缓冲的输出流
                         BufferedInputStream bis = new BufferedInputStream(is);
-
                         // 创建一个新的写入流，讲读取到的图像数据写入到文件中
                         FileOutputStream fos = new FileOutputStream(tempFile);
                         // 已写入流作为参数创建一个带有缓冲的写入流
                         BufferedOutputStream bos = new BufferedOutputStream(fos);
-
                         int read;
                         long count = 0;
                         int precent = 0;
@@ -196,13 +192,33 @@ public class UpdateService extends Service {
         }.start();
     }
 
-    // 安装下载后的apk文件
+    //    // 安装下载后的apk文件
+//    private void installApk(File file, Context context) {
+//        Intent intent = new Intent(Intent.ACTION_VIEW);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        intent.setAction(Intent.ACTION_VIEW);
+//        intent.setDataAndType(Uri.fromFile(file),
+//                "application/vnd.android.package-archive");
+//        context.startActivity(intent);
+//    }
+// 安装下载后的apk文件
     private void installApk(File file, Context context) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(file),
-                "application/vnd.android.package-archive");
+//        intent.setAction(Intent.ACTION_VIEW);
+//        intent.setDataAndType(Uri.fromFile(file),
+//                "application/vnd.android.package-archive");
+        if (Build.VERSION.SDK_INT >= 24) { //判读版本是否在7.0以上
+            //参数1 上下文, 参数2 Provider主机地址 和配置文件中保持一致   参数3  共享的文件
+            Uri apkUri =
+                    FileProvider.getUriForFile(context, "com.atgc.cotton.fileProvider", file);
+            //添加这一句表示对目标应用临时授权该Uri所代表的文件
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setDataAndType(apkUri, "application/vnd.android.package-archive");
+        } else {
+            intent.setDataAndType(Uri.fromFile(file),
+                    "application/vnd.android.package-archive");
+        }
         context.startActivity(intent);
     }
 

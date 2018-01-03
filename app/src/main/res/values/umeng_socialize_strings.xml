@@ -75,6 +75,10 @@
     <string name="main_hot">热门</string>
     <string name="main_near">附近</string>
 
+    <string name="main_user">用户</string>
+    <string name="main_videos">视频</string>
+    <string name="main_good">商品</string>
+
     <string name="im_friend">好友动态</string>
     <string name="im_info">消息</string>
     <string name="im_msg">私信</string>

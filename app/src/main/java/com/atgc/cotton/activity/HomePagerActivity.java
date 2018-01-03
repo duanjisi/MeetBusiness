@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
@@ -44,7 +45,6 @@ import com.atgc.cotton.fragment.MainDiscoverFragment;
 import com.atgc.cotton.fragment.MainFocusFragment;
 import com.atgc.cotton.fragment.MainFragment;
 import com.atgc.cotton.fragment.MainHotFragment;
-import com.atgc.cotton.fragment.MainNearFragment;
 import com.atgc.cotton.service.ChatService;
 import com.atgc.cotton.util.ImageLoaderUtils;
 import com.atgc.cotton.util.PreferenceUtils;
@@ -68,7 +68,7 @@ import de.greenrobot.event.ThreadMode;
  */
 public class HomePagerActivity extends BaseActivity implements View.OnClickListener {
     private DrawerLayout drawerLayout;
-    private ImageView ivSwitch;
+    private ImageView ivSwitch, ivSearch;
     private RelativeLayout rl_left, rl_line;
     private ImageLoader imageLoader;
     private CircleImageView ivAvatar;
@@ -76,15 +76,15 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
     private static final int VIEW_PAGER_PAGE_1 = 0;
     private static final int VIEW_PAGER_PAGE_2 = 1;
     private static final int VIEW_PAGER_PAGE_3 = 2;
-    private static final int VIEW_PAGER_PAGE_4 = 3;
-    private static final int PAGE_COUNT = 4;
+    //    private static final int VIEW_PAGER_PAGE_4 = 3;
+    private static final int PAGE_COUNT = 3;
     private RadioGroup mRadioGroup, mRadioMenu;
     private ImageView mCursorIm;
     private int mCursorImWidth;
     private ViewPager mViewPager;
     private ArrayList<Fragment> mFragments = new ArrayList<Fragment>();
-    private MainFragment mainFocusFragment, mainDiscoverFragment, mainNearFragment, mainHotFragment;
-    private RadioButton mFocus, mDiscover, mHot, mNear;
+    private MainFragment mainFocusFragment, mainDiscoverFragment, mainHotFragment;
+    private RadioButton mFocus, mDiscover, mHot;
     private RadioButton rb_setting, rb_production, rb_video, rb_shopping, rb_price, rb_order;
     private Handler handler;
     private Button btn_login;
@@ -136,7 +136,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
         mFocus = (RadioButton) findViewById(R.id.rb_focus);
         mDiscover = (RadioButton) findViewById(R.id.rb_discover);
         mHot = (RadioButton) findViewById(R.id.rb_hot);
-        mNear = (RadioButton) findViewById(R.id.rb_near);
+//        mNear = (RadioButton) findViewById(R.id.rb_near);
 
         ivAvatar = (CircleImageView) findViewById(R.id.iv_avatar);
         tvActive = (TextView) findViewById(R.id.tv_active);
@@ -152,10 +152,24 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
 
         rl_left = (RelativeLayout) findViewById(R.id.rl_left);
         ivSwitch = (ImageView) findViewById(R.id.iv_switch);
+        ivSearch = (ImageView) findViewById(R.id.iv_search);
+        rl_left.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return true;
+            }
+        });
         ivSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 drawerLayout.openDrawer(rl_left, true);
+            }
+        });
+
+        ivSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openActivity(SearchActivity.class);
             }
         });
 
@@ -233,12 +247,12 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
         mainFocusFragment = new MainFocusFragment();
         mainDiscoverFragment = new MainDiscoverFragment();
         mainHotFragment = new MainHotFragment();
-        mainNearFragment = new MainNearFragment();
+//        mainNearFragment = new MainNearFragment();
 
         mFragments.add(mainFocusFragment);
         mFragments.add(mainDiscoverFragment);
         mFragments.add(mainHotFragment);
-        mFragments.add(mainNearFragment);
+//        mFragments.add(mainNearFragment);
     }
 
     private class PagerAdapter extends FragmentPagerAdapter {
@@ -296,9 +310,9 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
                 case VIEW_PAGER_PAGE_3:
                     mHot.setChecked(true);
                     break;
-                case VIEW_PAGER_PAGE_4:
-                    mNear.setChecked(true);
-                    break;
+//                case VIEW_PAGER_PAGE_4:
+//                    mNear.setChecked(true);
+//                    break;
                 default:
                     break;
             }
@@ -383,9 +397,9 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
                 case R.id.rb_hot:
                     mViewPager.setCurrentItem(VIEW_PAGER_PAGE_3);
                     break;
-                case R.id.rb_near:
-                    mViewPager.setCurrentItem(VIEW_PAGER_PAGE_4);
-                    break;
+//                case R.id.rb_near:
+//                    mViewPager.setCurrentItem(VIEW_PAGER_PAGE_4);
+//                    break;
                 default:
                     break;
             }

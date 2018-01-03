@@ -145,7 +145,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     private List<FilterEntity> datas;
 
     private ImgBeautyToneCurveFilter acvFilter;
-
+    private boolean isEdited = false;
     private boolean isOriginalVoice = false;
     private BottomSheetDialog sheetDialog;
     private boolean mIsRecord = false;
@@ -223,6 +223,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void initViews() {
+//        stickerView = new StickerView(EditVideoActivity.this, true);
         ivClose = (ImageView) findViewById(R.id.iv_close);
         tvNext = (TextView) findViewById(R.id.tv_next);
         tvSwitcher = (TextView) findViewById(R.id.tv_switcher_voice);
@@ -291,6 +292,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                     case 0:
                         break;
                     case 1:
+                        isEdited = true;
                         acvFilter = new ImgBeautyToneCurveFilter(mEditKit
                                 .getGLRender());
                         acvFilter.setFromCurveFileInputStream(
@@ -298,6 +300,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                         mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
                         break;
                     case 2:
+                        isEdited = true;
                         acvFilter = new ImgBeautyToneCurveFilter(mEditKit
                                 .getGLRender());
                         acvFilter.setFromCurveFileInputStream(
@@ -305,6 +308,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                         mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
                         break;
                     case 3:
+                        isEdited = true;
                         acvFilter = new ImgBeautyToneCurveFilter(mEditKit
                                 .getGLRender());
                         acvFilter.setFromCurveFileInputStream(
@@ -312,6 +316,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                         mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
                         break;
                     case 4:
+                        isEdited = true;
                         acvFilter = new ImgBeautyToneCurveFilter(mEditKit
                                 .getGLRender());
                         acvFilter.setFromCurveFileInputStream(
@@ -319,6 +324,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                         mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
                         break;
                     case 5:
+                        isEdited = true;
                         acvFilter = new ImgBeautyToneCurveFilter(mEditKit
                                 .getGLRender());
                         acvFilter.setFromCurveFileInputStream(
@@ -326,6 +332,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                         mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
                         break;
                     case 6:
+                        isEdited = true;
                         acvFilter = new ImgBeautyToneCurveFilter(mEditKit
                                 .getGLRender());
                         acvFilter.setFromCurveFileInputStream(
@@ -333,6 +340,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                         mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
                         break;
                     case 7:
+                        isEdited = true;
                         acvFilter = new ImgBeautyToneCurveFilter(mEditKit
                                 .getGLRender());
                         acvFilter.setFromCurveFileInputStream(
@@ -340,6 +348,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                         mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
                         break;
                     case 8:
+                        isEdited = true;
                         acvFilter = new ImgBeautyToneCurveFilter(mEditKit
                                 .getGLRender());
                         acvFilter.setFromCurveFileInputStream(
@@ -347,19 +356,16 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                         mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
                         break;
                     case 9:
+                        isEdited = true;
                         acvFilter = new ImgBeautyToneCurveFilter(mEditKit
                                 .getGLRender());
                         acvFilter.setFromCurveFileInputStream(
                                 EditVideoActivity.this.getResources().openRawResource(R.raw.yinyue));
                         mEditKit.getImgTexFilterMgt().setFilter(acvFilter);
                         break;
-
-
                 }
             }
         });
-
-
     }
 
     private void initData() {
@@ -393,7 +399,9 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
 
     private void startEditPreview() {
         //设置预览的音量
-        mEditKit.setVolume(0.4f);
+//        mEditKit.setVolume(0.4f);
+        //设置预览的原始音频的音量
+        mEditKit.setOriginAudioVolume(0.4f);
         //设置是否循环预览
         mEditKit.setLooping(true);
         //开启预览
@@ -535,8 +543,11 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                 nowTime = 0;
                 pb_progress_bar.setProgress(0);
                 resolveStopRecord();
-                if (!TextUtils.isEmpty(filePath))
-                    mEditKit.changeBgmMusic(filePath);
+                if (!TextUtils.isEmpty(filePath)) {
+                    isEdited = true;
+//                    mEditKit.changeBgmMusic(filePath);
+                    mEditKit.startBgm(filePath, true);
+                }
                 break;
             case R.id.tv00:
                 tvContent.setBackgroundColor(getResources().getColor(R.color.bg_color00));
@@ -570,28 +581,35 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         } else {
             getBitmapsFromVideo();
         }
-//        showComposingDialog();
-        mEditKit.setTargetResolution(VIDEO_RESOLUTION);
-        mEditKit.setVideoFps(FRAME_RATE);
-        mEditKit.setVideoCodecId(ENCODE_TYPE);
-        mEditKit.setVideoEncodeProfile(ENCODE_PROFILE);
-        mEditKit.setAudioKBitrate(AUDIO_BITRATE);
-        mEditKit.setVideoKBitrate(VIDEO_BITRATE);
-        //关闭上一次合成窗口
-        if (mComposeAlertDialog != null) {
-            mComposeAlertDialog.closeDialog();
-        }
+        if (!isEdited) {
+            Intent intent = new Intent(context, ShareVideoActivity.class);
+            intent.putExtra("BgPath", img_path);
+            intent.putExtra("videoPath", url);
+            startActivity(intent);
+        } else {
+            showComposingDialog();
 
-        mComposeAlertDialog = new ComposeAlertDialog(context, R.style.dialog);
-        //设置合成路径
-        String fileFolder = "/sdcard/MeetBus";
-        File file = new File(fileFolder);
-        if (!file.exists()) {
-            file.mkdir();
+            mEditKit.setTargetResolution(VIDEO_RESOLUTION);
+            mEditKit.setVideoFps(FRAME_RATE);
+            mEditKit.setVideoCodecId(ENCODE_TYPE);
+            mEditKit.setVideoEncodeProfile(ENCODE_PROFILE);
+            mEditKit.setAudioKBitrate(AUDIO_BITRATE);
+            mEditKit.setVideoKBitrate(VIDEO_BITRATE);
+            //关闭上一次合成窗口
+            if (mComposeAlertDialog != null) {
+                mComposeAlertDialog.closeDialog();
+            }
+            mComposeAlertDialog = new ComposeAlertDialog(context, R.style.dialog);
+            //设置合成路径
+            String fileFolder = "/sdcard/MeetBus";
+            File file = new File(fileFolder);
+            if (!file.exists()) {
+                file.mkdir();
+            }
+            composeUrl = fileFolder + "/" + System.currentTimeMillis() + ".mp4";
+            //开始合成
+            mEditKit.startCompose(composeUrl);
         }
-        composeUrl = fileFolder + "/" + System.currentTimeMillis() + ".mp4";
-        //开始合成
-        mEditKit.startCompose(composeUrl);
     }
 
 
@@ -753,7 +771,8 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                     mEditKit.setOriginAudioVolume(val);
                     break;
                 case R.id.music_audio_volume:
-                    mEditKit.setBgmMusicVolume(val);
+//                    mEditKit.setBgmMusicVolume(val);
+                    mEditKit.setBgmVolume(val);
                     break;
                 default:
                     break;
@@ -974,8 +993,11 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                 case 1:
                     if (nowTime >= allTime) {
 //                        resolveStopRecord();
-                        if (!TextUtils.isEmpty(filePath))
-                            mEditKit.changeBgmMusic(filePath);
+                        if (!TextUtils.isEmpty(filePath)) {
+                            isEdited = true;
+//                            mEditKit.changeBgmMusic(filePath);
+                            mEditKit.startBgm(filePath, true);
+                        }
                         nowTime = 0;
                         pb_progress_bar.setProgress(0);
                         Log.i("nowTime:", "filepath" + filePath);
@@ -998,7 +1020,9 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 101 && resultCode == RESULT_OK && data != null) {
             filePath = data.getStringExtra("filePath");
-            mEditKit.changeBgmMusic(filePath);
+            isEdited = true;
+//            mEditKit.changeBgmMusic(filePath);
+            mEditKit.startBgm(filePath, true);
         }
     }
 
@@ -1264,8 +1288,16 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             if (content_layout.getChildCount() == 2) {
                 content_layout.removeView(stickerView);
             }
+
+            String string = "";
+            if (stickerView != null) {
+                string = stickerView.getText();
+            }
             stickerView = new StickerView(EditVideoActivity.this, true);
             stickerView.setOnStickerTouchListener(EditVideoActivity.this);
+            if (!TextUtils.isEmpty(string)) {
+                stickerView.resetText(string);
+            }
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), res);
             RelativeLayout.LayoutParams rl = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                     RelativeLayout.LayoutParams.WRAP_CONTENT);
