@@ -75,6 +75,14 @@ public class HttpUrl {
     public static final String VEND_CHANGE_GOODS = BASE_URL + "goods/";//修改商品 or 删除商品
     public static final String VEND_GOODS = BASE_URL + "goods/mine";//修改商品 or 删除商品
 
+    /**
+     * Agent申请代理
+     */
+    public static final String AGENT_CHECK_USER = BASE_URL + "agent/checkuser";
+    public static final String AGENT_INFO = BASE_URL + "agent/info";
+    public static final String AGENT_SAVE = BASE_URL + "agent/save";
+    public static final String AGENT_SENDSMS = BASE_URL + "agent/sendsms";
+
     //退出登录
     public static final String LOGOUT = BASE_URL + "public/logout";
 
