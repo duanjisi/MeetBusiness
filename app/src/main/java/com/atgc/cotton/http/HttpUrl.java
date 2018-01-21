@@ -74,7 +74,15 @@ public class HttpUrl {
     public static final String VEND_GET_MY_GOODS = BASE_URL + "goods/mine?";//获取我的售货架列表
     public static final String VEND_CHANGE_GOODS = BASE_URL + "goods/";//修改商品 or 删除商品
     public static final String VEND_GOODS = BASE_URL + "goods/mine";//修改商品 or 删除商品
+/**
+ * 1.代理申请协议地址  http://wx.66boss.com/protocol/agent
+ 2.选择代理商品跳转地址 http://wx.66boss.com/allcate/index
 
+ 跳转到选择代理商品地址前，需要先调   http://wx.66boss.com/login/web?token=Bearer
+ eyJhbGciOiJIUzI1Nixxxxx
+ 接口登录h5页面，登录成功后才跳转到选择代理商品地址，webview 需要支持cookie
+
+ */
     /**
      * Agent申请代理
      */
@@ -82,6 +90,9 @@ public class HttpUrl {
     public static final String AGENT_INFO = BASE_URL + "agent/info";
     public static final String AGENT_SAVE = BASE_URL + "agent/save";
     public static final String AGENT_SENDSMS = BASE_URL + "agent/sendsms";
+    public static final String AGENT_APPLY_AGREEMENT = "http://wx.66boss.com/protocol/agent";//代理申请协议地址
+    public static final String AGENT_APPLY_GOOD = "http://wx.66boss.com/allcate/index";//选择代理商品跳转地址
+
 
     //退出登录
     public static final String LOGOUT = BASE_URL + "public/logout";

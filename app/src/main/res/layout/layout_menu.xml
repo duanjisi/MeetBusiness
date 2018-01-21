@@ -70,6 +70,16 @@
             android:text="消息" />
 
         <TextView
+            android:id="@+id/tv_agent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:drawablePadding="13.5dp"
+            android:drawableTop="@drawable/sel_main_msg"
+            android:gravity="center_horizontal"
+            android:text="申请代理" />
+
+        <TextView
             android:id="@+id/tv_info"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

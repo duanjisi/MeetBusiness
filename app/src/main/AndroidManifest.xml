@@ -205,6 +205,18 @@
         <activity
             android:name=".activity.goodsDetail.EditAddressActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AgentApplyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AgentBindActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AgentCertificateActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AgentCertifyActivity"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".service.UpdateService"

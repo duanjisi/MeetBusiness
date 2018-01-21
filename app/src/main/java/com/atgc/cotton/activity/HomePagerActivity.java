@@ -72,7 +72,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
     private RelativeLayout rl_left, rl_line;
     private ImageLoader imageLoader;
     private CircleImageView ivAvatar;
-    private TextView tvActive, tvMsg, tvInfo;
+    private TextView tvActive, tvMsg, tvAgent, tvInfo;
     private static final int VIEW_PAGER_PAGE_1 = 0;
     private static final int VIEW_PAGER_PAGE_2 = 1;
     private static final int VIEW_PAGER_PAGE_3 = 2;
@@ -141,11 +141,13 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
         ivAvatar = (CircleImageView) findViewById(R.id.iv_avatar);
         tvActive = (TextView) findViewById(R.id.tv_active);
         tvMsg = (TextView) findViewById(R.id.tv_msg);
+        tvAgent = (TextView) findViewById(R.id.tv_agent);
         tvInfo = (TextView) findViewById(R.id.tv_info);
 
         ivAvatar.setOnClickListener(this);
         tvActive.setOnClickListener(this);
         tvMsg.setOnClickListener(this);
+        tvAgent.setOnClickListener(this);
         tvInfo.setOnClickListener(this);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -230,6 +232,9 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
 //                startActivity(intent);
                 openActivity(MessageActivity.class);
                 break;
+            case R.id.tv_agent:
+                openActivity(MessageActivity.class);
+                break;
             case R.id.tv_info:
 //                intent = new Intent(context, MainImActivity.class);
 //                intent.putExtra("currentIndex", 1);
@@ -288,7 +293,6 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
         @Override
         public void onPageScrollStateChanged(int arg0) {
             // TODO Auto-generated method stub
-
         }
 
         @Override

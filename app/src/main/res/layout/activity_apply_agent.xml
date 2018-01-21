@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/top_navigation_bar_height"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/dp_11"
+            android:paddingRight="@dimen/dp_11"
+            android:src="@drawable/nav_return" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="申请代理"
+            android:textColor="@color/main_default_color"
+            android:textSize="22sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_auth_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_top_bar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:text="你的申请资料已提交!"
+        android:textSize="@dimen/text_size_32" />
+
+    <TextView
+        android:id="@+id/tv_apply_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="30dp"
+        android:text="你的申请资料已提交!"
+        android:textColor="@color/record_progress_red"
+        android:textSize="@dimen/text_size_32"
+        android:visibility="gone" />
+
+    <WebView
+        android:id="@+id/wb"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_top_bar"
+        android:visibility="gone">
+
+    </WebView>
+
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/record_progress_red"
+        android:text="下一步"
+        android:textColor="@color/white"
+        android:textSize="25sp" />
+</RelativeLayout>
