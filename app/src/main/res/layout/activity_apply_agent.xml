@@ -26,6 +26,12 @@
             android:text="申请代理"
             android:textColor="@color/main_default_color"
             android:textSize="22sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="@color/line_color_gray_d1"></View>
     </RelativeLayout>
 
     <TextView
@@ -36,6 +42,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:text="你的申请资料已提交!"
+        android:textColor="@color/record_progress_red"
         android:textSize="@dimen/text_size_32" />
 
     <TextView
@@ -43,8 +50,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_marginTop="30dp"
-        android:text="你的申请资料已提交!"
         android:textColor="@color/record_progress_red"
         android:textSize="@dimen/text_size_32"
         android:visibility="gone" />

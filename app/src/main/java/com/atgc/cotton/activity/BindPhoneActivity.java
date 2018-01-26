@@ -22,7 +22,7 @@ import com.atgc.cotton.http.request.BindSMSCodeRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
@@ -33,15 +33,15 @@ import de.greenrobot.event.EventBus;
 public class BindPhoneActivity extends BaseActivity {
     private static final String TAG = BindPhoneActivity.class.getSimpleName();
     private static final int DELAY_MILlIS = 1000;
-    @Bind(R.id.iv_back)
+    @BindView(R.id.iv_back)
     ImageView ivBack;
-    @Bind(R.id.tv_option)
+    @BindView(R.id.tv_option)
     TextView tvOption;
-    @Bind(R.id.et_num)
+    @BindView(R.id.et_num)
     EditText etNum;
-    @Bind(R.id.et_code)
+    @BindView(R.id.et_code)
     EditText etCode;
-    @Bind(R.id.tv_qrCode)
+    @BindView(R.id.tv_qrCode)
     TextView tvQrCode;
 
     private int interval = 0;
@@ -79,7 +79,7 @@ public class BindPhoneActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_option:
-                bindRequest();
+                BindViewRequest();
                 break;
             case R.id.tv_qrCode:
                 sendCode();
@@ -87,7 +87,7 @@ public class BindPhoneActivity extends BaseActivity {
         }
     }
 
-    private void bindRequest() {
+    private void BindViewRequest() {
         final String phone = getText(etNum);
         String qrCode = getText(etCode);
         if (TextUtils.isEmpty(phone)) {
@@ -132,7 +132,7 @@ public class BindPhoneActivity extends BaseActivity {
             @Override
             public void onSuccess(String pojo) {
                 cancelLoadingDialog();
-                bindData(pojo);
+                BindViewData(pojo);
             }
 
             @Override
@@ -143,7 +143,7 @@ public class BindPhoneActivity extends BaseActivity {
         });
     }
 
-    private void bindData(String string) {
+    private void BindViewData(String string) {
         try {
             Log.i("info", "=====json:" + string);
             JSONObject obj = new JSONObject(string);

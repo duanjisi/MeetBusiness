@@ -50,7 +50,7 @@ import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
@@ -61,41 +61,41 @@ import de.greenrobot.event.ThreadMode;
  * Created by Johnny on 2017-08-26.
  */
 public class OrderDetailsActivity extends BaseCompatActivity<MyOrderPresenter> implements IMyOrderView {
-    @Bind(R.id.img_back)
+    @BindView(R.id.img_back)
     ImageView imgBack;
-    @Bind(R.id.tv_receiver)
+    @BindView(R.id.tv_receiver)
     TextView tvReceiver;
-    @Bind(R.id.container)
+    @BindView(R.id.container)
     LinearLayout container;
-    @Bind(R.id.tv_phone)
+    @BindView(R.id.tv_phone)
     TextView tvPhone;
-    @Bind(R.id.tv_address)
+    @BindView(R.id.tv_address)
     TextView tvAddress;
-    @Bind(R.id.tv_order_num)
+    @BindView(R.id.tv_order_num)
     TextView tvOrderNum;
-    @Bind(R.id.tv_store_name)
+    @BindView(R.id.tv_store_name)
     TextView tvStoreName;
-    @Bind(R.id.tv_order_state)
+    @BindView(R.id.tv_order_state)
     TextView tvOrderState;
-    //    @Bind(R.id.iv_icon)
+    //    @BindView(R.id.iv_icon)
 //    RoundImageView ivIcon;
-//    @Bind(R.id.tv_goods_name)
+//    @BindView(R.id.tv_goods_name)
 //    TextView tvGoodsName;
-//    @Bind(R.id.tv_goods_content)
+//    @BindView(R.id.tv_goods_content)
 //    TextView tvGoodsContent;
-//    @Bind(R.id.tv_goods_price)
+//    @BindView(R.id.tv_goods_price)
 //    TextView tvGoodsPrice;
-//    @Bind(R.id.tv_goods_num)
+//    @BindView(R.id.tv_goods_num)
 //    TextView tvGoodsNum;
-    @Bind(R.id.tv_all_price)
+    @BindView(R.id.tv_all_price)
     TextView tvAllPrice;
-    @Bind(R.id.tv_all_num)
+    @BindView(R.id.tv_all_num)
     TextView tvAllNum;
-    @Bind(R.id.bt_1)
+    @BindView(R.id.bt_1)
     Button bt1;
-    @Bind(R.id.bt_2)
+    @BindView(R.id.bt_2)
     Button bt2;
-    @Bind(R.id.bt_3)
+    @BindView(R.id.bt_3)
     Button bt3;
     private int sceenW;
     private ImageLoader imageLoader;
@@ -290,7 +290,7 @@ public class OrderDetailsActivity extends BaseCompatActivity<MyOrderPresenter> i
     @Override
     public void alipaySuccess(AlipayOrder order) {
         //TODO 调起支付宝支付
-        bindDataAlipay(order);
+        BindViewDataAlipay(order);
     }
 
     @Override
@@ -616,7 +616,7 @@ public class OrderDetailsActivity extends BaseCompatActivity<MyOrderPresenter> i
         deleteDialog.show();
     }
 
-    private void bindDataAlipay(AlipayOrder order) {
+    private void BindViewDataAlipay(AlipayOrder order) {
         if (order != null) {
             cancelLoadingDialog();
             /**

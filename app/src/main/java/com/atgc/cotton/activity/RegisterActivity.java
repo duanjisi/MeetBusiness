@@ -35,7 +35,7 @@ import com.atgc.cotton.util.UIUtils;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
@@ -45,22 +45,22 @@ import de.greenrobot.event.EventBus;
  * Created by liw on 2017/7/7.
  */
 public class RegisterActivity extends MvpActivity<RegisterPresenter> implements IRegisterView {
-    @Bind(R.id.img_back)
+    @BindView(R.id.img_back)
     ImageView imgBack;
-    @Bind(R.id.img_head)
+    @BindView(R.id.img_head)
     ImageView imgHead;
-    @Bind(R.id.et_acconut)
+    @BindView(R.id.et_acconut)
     EditText etAcconut;
-    @Bind(R.id.et_pw)
+    @BindView(R.id.et_pw)
     EditText etPw;
-    @Bind(R.id.et_code)
+    @BindView(R.id.et_code)
     EditText etCode;
-    @Bind(R.id.btn_code)
+    @BindView(R.id.btn_code)
     Button btnCode;
-    @Bind(R.id.rl_code)
+    @BindView(R.id.rl_code)
     RelativeLayout rlCode;
 
-    @Bind(R.id.btn_register)
+    @BindView(R.id.btn_register)
     Button btnRegister;
     private HashMap<String, String> map;
 
@@ -91,9 +91,9 @@ public class RegisterActivity extends MvpActivity<RegisterPresenter> implements 
                 break;
             case R.id.btn_code:     //验证码
                 time.start();
-                Map<String,String> map =new HashMap<>();
+                Map<String, String> map = new HashMap<>();
                 String phone = etAcconut.getText().toString();
-                map.put("mobilephone",phone);
+                map.put("mobilephone", phone);
                 mPresenter.sendCode(map);
                 break;
 
@@ -102,6 +102,7 @@ public class RegisterActivity extends MvpActivity<RegisterPresenter> implements 
                 break;
         }
     }
+
     class TimeCount extends CountDownTimer {
 
         public TimeCount(long millisInFuture, long countDownInterval) {
@@ -111,7 +112,7 @@ public class RegisterActivity extends MvpActivity<RegisterPresenter> implements 
         @Override
         public void onTick(long millisUntilFinished) {
             btnCode.setClickable(false);
-            btnCode.setText("("+millisUntilFinished / 1000 +") 秒后可重新发送");
+            btnCode.setText("(" + millisUntilFinished / 1000 + ") 秒后可重新发送");
         }
 
         @Override
@@ -121,8 +122,6 @@ public class RegisterActivity extends MvpActivity<RegisterPresenter> implements 
 
         }
     }
-
-
 
 
     private void register() {
@@ -155,7 +154,7 @@ public class RegisterActivity extends MvpActivity<RegisterPresenter> implements 
         map = new HashMap<>();
         map.put("mobilephone", phone);
         map.put("password", psw);
-        map.put("verifycode",code);
+        map.put("verifycode", code);
         mPresenter.register(map);
         //我的ok请求框架
 //        OkManager.getInstance().doPost(ApiStores.API_SERVER_URL+"public/register", map, new OkManager.Funcl() {
@@ -179,7 +178,7 @@ public class RegisterActivity extends MvpActivity<RegisterPresenter> implements 
         BaseResult result = JSON.parseObject(s, BaseResult.class);
         if (result.getCode() == 0) {
             showToast("已发送");
-        }else if(result.getCode()==1){
+        } else if (result.getCode() == 1) {
             showToast(result.getMessage());
         }
     }
@@ -191,7 +190,7 @@ public class RegisterActivity extends MvpActivity<RegisterPresenter> implements 
         if (result.getCode() == 0) {
             showToast("注册成功");
             finish();
-        }else if(result.getCode()==1){
+        } else if (result.getCode() == 1) {
             showToast(result.getMessage());
 
         }

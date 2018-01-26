@@ -19,7 +19,7 @@ import com.atgc.cotton.http.request.MemberFocusRequest;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -28,11 +28,11 @@ import butterknife.OnClick;
  */
 public class ListActivity extends BaseActivity {
     private static final String TAG = ListActivity.class.getSimpleName();
-    @Bind(R.id.iv_back)
+    @BindView(R.id.iv_back)
     ImageView ivBack;
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @Bind(R.id.listview)
+    @BindView(R.id.listview)
     ListView listview;
     private int page = 1;
     private int pageNum = 10;

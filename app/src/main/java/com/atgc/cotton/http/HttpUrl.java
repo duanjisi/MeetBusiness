@@ -92,7 +92,7 @@ public class HttpUrl {
     public static final String AGENT_SENDSMS = BASE_URL + "agent/sendsms";
     public static final String AGENT_APPLY_AGREEMENT = "http://wx.66boss.com/protocol/agent";//代理申请协议地址
     public static final String AGENT_APPLY_GOOD = "http://wx.66boss.com/allcate/index";//选择代理商品跳转地址
-
+    public static final String AGENT_LOGIN = "http://wx.66boss.com/login/web";//接口登录h5页面
 
     //退出登录
     public static final String LOGOUT = BASE_URL + "public/logout";

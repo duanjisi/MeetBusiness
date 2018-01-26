@@ -233,7 +233,7 @@ public class HomePagerActivity extends BaseActivity implements View.OnClickListe
                 openActivity(MessageActivity.class);
                 break;
             case R.id.tv_agent:
-                openActivity(MessageActivity.class);
+                openActivity(AgentApplyActivity.class);
                 break;
             case R.id.tv_info:
 //                intent = new Intent(context, MainImActivity.class);

@@ -16,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.MvpActivity;
 import com.atgc.cotton.presenter.LoginPresenter;
@@ -28,11 +27,10 @@ import com.atgc.cotton.widget.InputDetector;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.controller.listener.SocializeListeners;
 import com.umeng.socialize.exception.SocializeException;
-
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -40,32 +38,31 @@ import butterknife.OnClick;
  * 登录
  * Created by liw on 2017/7/6.
  */
-
 public class LoginActivity extends MvpActivity<LoginPresenter> implements INormalView {
 
-    @Bind(R.id.img_back)
+    @BindView(R.id.img_back)
     ImageView img_back;
-    @Bind(R.id.img_logo)
+    @BindView(R.id.img_logo)
     ImageView im_logo;
-    @Bind(R.id.et_acconut)
+    @BindView(R.id.et_acconut)
     EditText et_account;
-    @Bind(R.id.et_pw)
+    @BindView(R.id.et_pw)
     EditText et_pw;
-    @Bind(R.id.tv_Reset)
+    @BindView(R.id.tv_Reset)
     TextView tv_reset;
-    @Bind(R.id.btn_login)
+    @BindView(R.id.btn_login)
     Button btn_login;
-    @Bind(R.id.tv_register)
+    @BindView(R.id.tv_register)
     TextView tv_register;
-    @Bind(R.id.img_qq)
+    @BindView(R.id.img_qq)
     ImageView imgQq;
-    @Bind(R.id.img_wx)
+    @BindView(R.id.img_wx)
     ImageView imgWx;
-    @Bind(R.id.ll_bottom)
+    @BindView(R.id.ll_bottom)
     LinearLayout llBottom;
-    @Bind(R.id.tv_bottom)
+    @BindView(R.id.tv_bottom)
     TextView tvBottom;
-    @Bind(R.id.rl_root)
+    @BindView(R.id.rl_root)
     RelativeLayout rootLayout;
 
     private InputDetector detector;
@@ -84,7 +81,7 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
         sizeHeight();
         initUI();
         initData();
-//        detector.with(this).bindToET(et_account).build();
+//        detector.with(this).BindViewToET(et_account).build();
     }
 
     private int maxHeight = 0;

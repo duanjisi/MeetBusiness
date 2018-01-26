@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -18,17 +18,17 @@ import butterknife.OnClick;
  */
 public class WalletActivity extends BaseActivity {
 
-    @Bind(R.id.iv_back)
+    @BindView(R.id.iv_back)
     ImageView ivBack;
-    @Bind(R.id.tv_money)
+    @BindView(R.id.tv_money)
     TextView tvMoney;
-    @Bind(R.id.et_name)
+    @BindView(R.id.et_name)
     EditText etName;
-    @Bind(R.id.et_acconut)
+    @BindView(R.id.et_acconut)
     EditText etAcconut;
-    @Bind(R.id.et_amount)
+    @BindView(R.id.et_amount)
     EditText etAmount;
-    @Bind(R.id.tv_take_out)
+    @BindView(R.id.tv_take_out)
     TextView tvTakeOut;
 
     @Override

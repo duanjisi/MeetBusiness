@@ -31,7 +31,7 @@ import com.umeng.socialize.media.UMediaObject;
 import com.umeng.socialize.weixin.media.CircleShareContent;
 import com.umeng.socialize.weixin.media.WeiXinShareContent;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
@@ -41,31 +41,31 @@ import de.greenrobot.event.Subscribe;
  * Created by liw on 2017/7/8.
  */
 public class PersonalSetActivity extends BaseActivity implements SharePopup.OnItemSelectedListener {
-    @Bind(R.id.iv_back)
+    @BindView(R.id.iv_back)
     ImageView ivBack;
-    @Bind(R.id.rl_top_bar)
+    @BindView(R.id.rl_top_bar)
     RelativeLayout rlTopBar;
-    @Bind(R.id.tv_volum)
+    @BindView(R.id.tv_volum)
     TextView tvVolum;
-    @Bind(R.id.rl_cache)
+    @BindView(R.id.rl_cache)
     RelativeLayout rlCache;
-    //    @Bind(R.id.tv_auth_state)
+    //    @BindView(R.id.tv_auth_state)
 //    TextView tvAuthState;
-//    @Bind(R.id.rl_auth)
+//    @BindView(R.id.rl_auth)
 //    RelativeLayout rlAuth;
-    @Bind(R.id.tv_bind)
-    TextView tvBind;
-    @Bind(R.id.rl_phone)
+    @BindView(R.id.tv_bind)
+    TextView tvBindView;
+    @BindView(R.id.rl_phone)
     RelativeLayout rlPhone;
-    @Bind(R.id.rl_pws)
+    @BindView(R.id.rl_pws)
     RelativeLayout rlPws;
-    //    @Bind(R.id.rl_wallet)
+    //    @BindView(R.id.rl_wallet)
 //    RelativeLayout rlWallet;
-    @Bind(R.id.rl_tuijian)
+    @BindView(R.id.rl_tuijian)
     RelativeLayout rl_tuijian;
-    @Bind(R.id.rl_about)
+    @BindView(R.id.rl_about)
     RelativeLayout rlAbout;
-    @Bind(R.id.tv_exit_login)
+    @BindView(R.id.tv_exit_login)
     TextView tvExitLogin;
 
     private SharePopup sharePopup;
@@ -146,17 +146,17 @@ public class PersonalSetActivity extends BaseActivity implements SharePopup.OnIt
     private void initView() {
         String mbilePhone = account.getMobilePhone();
         if (TextUtils.isEmpty(mbilePhone)) {
-            tvBind.setText("未绑定");
-            tvBind.setTextColor(resources.getColor(R.color.text_color_gray_a));
-            isBind = false;
+            tvBindView.setText("未绑定");
+            tvBindView.setTextColor(resources.getColor(R.color.text_color_gray_a));
+            isBindView = false;
         } else {
-            tvBind.setText("已绑定");
-            tvBind.setTextColor(resources.getColor(R.color.red_fuwa));
-            isBind = true;
+            tvBindView.setText("已绑定");
+            tvBindView.setTextColor(resources.getColor(R.color.red_fuwa));
+            isBindView = true;
         }
     }
 
-    private boolean isBind = false;
+    private boolean isBindView = false;
 
     @OnClick({R.id.iv_back, R.id.rl_cache, R.id.rl_phone, R.id.rl_pws, R.id.rl_tuijian, R.id.rl_about, R.id.tv_exit_login})
     public void onViewClicked(View view) {
@@ -169,7 +169,7 @@ public class PersonalSetActivity extends BaseActivity implements SharePopup.OnIt
 //            case R.id.rl_auth:
 //                break;
             case R.id.rl_phone:
-                if (isBind) {
+                if (isBindView) {
                     openActivity(VerifyPhoneActivity.class);
                 } else {
                     openActivity(BindPhoneActivity.class);

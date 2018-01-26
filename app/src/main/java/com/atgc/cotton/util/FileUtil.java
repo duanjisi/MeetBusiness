@@ -116,7 +116,6 @@ public final class FileUtil {
 
     /**
      * 把文件转换为byte数据
-     *
      * @param file 文件实例
      * @return
      */

@@ -42,7 +42,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
@@ -54,21 +54,21 @@ import de.greenrobot.event.Subscribe;
  */
 public class WriteOrderActivity extends MvpActivity<PutOrderPresenter> implements ISingleView {
 
-    @Bind(R.id.img_back)
+    @BindView(R.id.img_back)
     ImageView imgBack;
-    @Bind(R.id.rl_add_address)
+    @BindView(R.id.rl_add_address)
     RelativeLayout rlAddAddress;
-    @Bind(R.id.btn_order)
+    @BindView(R.id.btn_order)
     Button btnOrder;
-    @Bind(R.id.rv_content)
+    @BindView(R.id.rv_content)
     RecyclerView rvContent;
-    @Bind(R.id.tv_price)
+    @BindView(R.id.tv_price)
     TextView tvPrice;
-    @Bind(R.id.rl_has_address)
+    @BindView(R.id.rl_has_address)
     RelativeLayout rlHasAddress;
-    @Bind(R.id.tv_name)
+    @BindView(R.id.tv_name)
     TextView tvName;
-    @Bind(R.id.tv_content)
+    @BindView(R.id.tv_content)
     TextView tvContent;
 
     private String goodsJson;

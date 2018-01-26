@@ -52,7 +52,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
@@ -65,15 +65,15 @@ public class ChatActivity extends BaseActivity implements
         MsgListView.IXListViewListener,
         ChatService.receiveMessageCallback {
     public static final int NEW_MESSAGE = 0x001;// 收到消息
-    @Bind(R.id.iv_back)
+    @BindView(R.id.iv_back)
     ImageView ivBack;
-    @Bind(R.id.iv_more)
+    @BindView(R.id.iv_more)
     ImageView ivMore;
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @Bind(R.id.tv_write)
+    @BindView(R.id.tv_write)
     TextView tvWrite;
-    @Bind(R.id.msg_listView)
+    @BindView(R.id.msg_listView)
     MsgListView mMsgListView;
     private MoreChatPop moreChatPop;
 
@@ -342,11 +342,11 @@ public class ChatActivity extends BaseActivity implements
 //    private void initDetector() {
 //        mDetector = InputDetector.with(this)
 //                .setEmotionView(viewFace)
-//                .bindToContent(findViewById(R.id.fl_content))
-//                .bindToEditText(mEtMsg)
-//                .bindToEmotionButton(ibFace)
+//                .BindViewToContent(findViewById(R.id.fl_content))
+//                .BindViewToEditText(mEtMsg)
+//                .BindViewToEmotionButton(ibFace)
 //                .setMoreView(ll_other)
-//                .bindMoreButton(mBtnAffix)
+//                .BindViewMoreButton(mBtnAffix)
 //                .build();
 //    }
 
@@ -387,9 +387,9 @@ public class ChatActivity extends BaseActivity implements
         final GridView gridView = (GridView) view.findViewById(R.id.grid);
 //        mDetector = InputDetector.with(this)
 //                .setEmotionView(gridView)
-//                .bindToContent(findViewById(R.id.fl_content))
-//                .bindToEditText(editText)
-//                .bindToEmotionButton(iv_chat_face)
+//                .BindViewToContent(findViewById(R.id.fl_content))
+//                .BindViewToEditText(editText)
+//                .BindViewToEmotionButton(iv_chat_face)
 //                .build();
         int softHeight = PreferenceUtils.getInt(context, PrefKey.SORFT_HEIGHT_KEY, 0);
         if (softHeight == 0) {

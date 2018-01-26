@@ -217,6 +217,9 @@
         <activity
             android:name=".activity.AgentCertifyActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AgentGoodsActivity"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".service.UpdateService"

@@ -12,7 +12,7 @@ import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.http.BaseDataRequest;
 import com.atgc.cotton.http.request.ChangePwsRequest;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -23,15 +23,15 @@ import butterknife.OnClick;
 public class ChangePwsActivity extends BaseActivity {
     private static final String TAG = ChangePwsActivity.class.getSimpleName();
     private static final int DELAY_MILlIS = 1000;
-    @Bind(R.id.iv_back)
+    @BindView(R.id.iv_back)
     ImageView ivBack;
-    @Bind(R.id.tv_option)
+    @BindView(R.id.tv_option)
     TextView tvOption;
-    @Bind(R.id.et_older_pws)
+    @BindView(R.id.et_older_pws)
     EditText etOlderPws;
-    @Bind(R.id.et_new_pws)
+    @BindView(R.id.et_new_pws)
     EditText etNewPws;
-    @Bind(R.id.et_confirm_pws)
+    @BindView(R.id.et_confirm_pws)
     EditText etConfirmPws;
 
     @Override

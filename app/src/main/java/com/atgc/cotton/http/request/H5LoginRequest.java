@@ -1,38 +1,38 @@
 package com.atgc.cotton.http.request;
 
-import com.atgc.cotton.entity.AgentInfo;
 import com.atgc.cotton.http.BaseDataRequest;
 import com.atgc.cotton.http.HttpUrl;
 
 import java.util.Map;
 
 /**
- * Created by Johnny on 2018-01-20.
+ * <p>描述：
+ * <p>作者：duanjisi 2018年 01月 25日
  */
-public class AgentSaveRequest extends BaseDataRequest<AgentInfo> {
 
-    public AgentSaveRequest(String tag, Object... params) {
+public class H5LoginRequest extends BaseDataRequest<String> {
+
+    public H5LoginRequest(String tag, Object... params) {
         super(tag, params);
     }
 
     @Override
     protected boolean isParse() {
-        return true;
+        return false;
     }
 
     @Override
     protected Map<String, String> getParams() {
-        Map<String, String> map = (Map<String, String>) mParams[0];
-        return map;
+        return null;
     }
 
     @Override
     protected String getApiPath() {
-        return HttpUrl.AGENT_SAVE;
+        return HttpUrl.AGENT_LOGIN;
     }
 
     @Override
     protected int getRequestMethod() {
-        return REQUEST_METHOD_POST;
+        return REQUEST_METHOD_GET;
     }
 }

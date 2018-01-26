@@ -27,7 +27,7 @@ import com.github.jdsjlzx.recyclerview.ProgressStyle;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -36,9 +36,9 @@ import butterknife.OnClick;
  */
 
 public class GoodsEvaluateActivity extends MvpActivity<GoodsEvaluatePresenter> implements ISingleView {
-    @Bind(R.id.tv_back)
+    @BindView(R.id.tv_back)
     TextView tvBack;
-    @Bind(R.id.rv_content)
+    @BindView(R.id.rv_content)
     LRecyclerView rvContent;
     private GoodsEvaluateAdapter adapter;
 

@@ -54,7 +54,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -65,37 +65,37 @@ import butterknife.OnClick;
 
 public class GoodsDetailActivity extends MvpActivity<GoodsDetailPresenter> implements IGoodsDetailView {
 
-    @Bind(R.id.tv_name)
+    @BindView(R.id.tv_name)
     TextView tvName;
-    @Bind(R.id.tv_price)
+    @BindView(R.id.tv_price)
     TextView tvPrice;
-    @Bind(R.id.tv_location)
+    @BindView(R.id.tv_location)
     TextView tvLocation;
-    @Bind(R.id.rl_classify)
+    @BindView(R.id.rl_classify)
     RelativeLayout rlClassify;
-    @Bind(R.id.img_more)
+    @BindView(R.id.img_more)
     ImageView imgMore;
-    @Bind(R.id.img_back)
+    @BindView(R.id.img_back)
     ImageView imgBack;
-    @Bind(R.id.vp_img)
+    @BindView(R.id.vp_img)
     ViewPager vpImg;
-    @Bind(R.id.ll_oval)
+    @BindView(R.id.ll_oval)
     LinearLayout llOval;
-    @Bind(R.id.line)
+    @BindView(R.id.line)
     View line;
-    @Bind(R.id.tv_evaluate)
+    @BindView(R.id.tv_evaluate)
     TextView tvEvaluate;
-    @Bind(R.id.img_head)
+    @BindView(R.id.img_head)
     ImageView imgHead;
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @Bind(R.id.tv_content)
+    @BindView(R.id.tv_content)
     TextView tvContent;
-    @Bind(R.id.multiImagView)
+    @BindView(R.id.multiImagView)
     MultiImageView multiImagView;
-    @Bind(R.id.ll_evaluate)
+    @BindView(R.id.ll_evaluate)
     LinearLayout llEvaluate;
-    @Bind(R.id.tv_more)
+    @BindView(R.id.tv_more)
     TextView tvMore;
 
     private Dialog dialog;

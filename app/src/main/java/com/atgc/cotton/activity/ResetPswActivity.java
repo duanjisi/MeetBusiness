@@ -17,7 +17,7 @@ import com.atgc.cotton.presenter.view.IResetView;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -27,17 +27,17 @@ import butterknife.OnClick;
  */
 public class ResetPswActivity extends MvpActivity<ResetPwsPresenter> implements IResetView {
 
-    @Bind(R.id.img_back)
+    @BindView(R.id.img_back)
     ImageView imgBack;
-    @Bind(R.id.et_acconut)
+    @BindView(R.id.et_acconut)
     EditText etAcconut;
-    @Bind(R.id.et_pw)
+    @BindView(R.id.et_pw)
     EditText etPw;
-    @Bind(R.id.et_code)
+    @BindView(R.id.et_code)
     EditText etCode;
-    @Bind(R.id.btn_code)
+    @BindView(R.id.btn_code)
     Button btnCode;
-    @Bind(R.id.btn_register)
+    @BindView(R.id.btn_register)
     Button btnRegister;
 
     @Override
@@ -86,7 +86,6 @@ public class ResetPswActivity extends MvpActivity<ResetPwsPresenter> implements 
      */
     @Override
     public void getCodeSucess(String s) {
-
         BaseResult result = JSON.parseObject(s, BaseResult.class);
         if (result != null) {
             showToast(result.getMessage());
