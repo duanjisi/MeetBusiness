@@ -1,4 +1,5 @@
 package com.atgc.cotton.activity;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,15 +9,19 @@ import android.webkit.CookieSyncManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
+
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.http.BaseDataRequest;
 import com.atgc.cotton.http.request.H5LoginRequest;
 import com.loopj.android.http.PersistentCookieStore;
+
 import org.apache.http.cookie.Cookie;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 /**
  * <p>描述：选择商品界面
  * <p>作者：duanjisi 2018年 01月 24日
@@ -45,6 +50,10 @@ public class AgentGoodsActivity extends BaseActivity {
 
                 break;
         }
+    }
+
+    private void loadView() {
+        myWebView.loadUrl("");
     }
 
     /**
