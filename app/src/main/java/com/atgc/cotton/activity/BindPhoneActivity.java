@@ -22,7 +22,7 @@ import com.atgc.cotton.http.request.BindSMSCodeRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import butterknife.BindView;
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
@@ -33,15 +33,15 @@ import de.greenrobot.event.EventBus;
 public class BindPhoneActivity extends BaseActivity {
     private static final String TAG = BindPhoneActivity.class.getSimpleName();
     private static final int DELAY_MILlIS = 1000;
-    @BindView(R.id.iv_back)
+    @Bind(R.id.iv_back)
     ImageView ivBack;
-    @BindView(R.id.tv_option)
+    @Bind(R.id.tv_option)
     TextView tvOption;
-    @BindView(R.id.et_num)
+    @Bind(R.id.et_num)
     EditText etNum;
-    @BindView(R.id.et_code)
+    @Bind(R.id.et_code)
     EditText etCode;
-    @BindView(R.id.tv_qrCode)
+    @Bind(R.id.tv_qrCode)
     TextView tvQrCode;
 
     private int interval = 0;
@@ -79,7 +79,7 @@ public class BindPhoneActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_option:
-                BindViewRequest();
+                BindRequest();
                 break;
             case R.id.tv_qrCode:
                 sendCode();
@@ -87,7 +87,7 @@ public class BindPhoneActivity extends BaseActivity {
         }
     }
 
-    private void BindViewRequest() {
+    private void BindRequest() {
         final String phone = getText(etNum);
         String qrCode = getText(etCode);
         if (TextUtils.isEmpty(phone)) {
@@ -126,13 +126,18 @@ public class BindPhoneActivity extends BaseActivity {
             showToast("手机号不能为空!", true);
             return;
         }
+
+        if (!isMobile(phone)) {
+            showToast("手机号格式不对", true);
+            return;
+        }
         showLoadingDialog();
         BindSMSCodeRequest request = new BindSMSCodeRequest(TAG, phone);
         request.send(new BaseDataRequest.RequestCallback<String>() {
             @Override
             public void onSuccess(String pojo) {
                 cancelLoadingDialog();
-                BindViewData(pojo);
+                BindData(pojo);
             }
 
             @Override
@@ -143,9 +148,10 @@ public class BindPhoneActivity extends BaseActivity {
         });
     }
 
-    private void BindViewData(String string) {
+    private void BindData(String string) {
         try {
             Log.i("info", "=====json:" + string);
+//        String value = string.substring(string.indexOf(":") + 1, string.indexOf("}"));
             JSONObject obj = new JSONObject(string);
             interval = obj.getInt("interval");
             Log.i("info", "=====interval:" + interval);
@@ -153,7 +159,26 @@ public class BindPhoneActivity extends BaseActivity {
             handler.sendEmptyMessageDelayed(0, DELAY_MILlIS);
         } catch (JSONException e) {
             e.printStackTrace();
+            Log.i("info", "=====JSONException:" + e.getMessage());
         }
     }
 
+    /**
+     * 验证手机格式
+     */
+    public static boolean isMobile(String number) {
+    /*
+    移动：134、135、136、137、138、139、150、151、157(TD)、158、159、187、188
+    联通：130、131、132、152、155、156、185、186
+    电信：133、153、180、189、（1349卫通）
+    总结起来就是第一位必定为1，第二位必定为3或5或8，其他位置的可以为0-9
+    */
+        String num = "[1][3578]\\d{9}";//"[1]"代表第1位为数字1，"[358]"代表第二位可以为3、5、8中的一个，"\\d{9}"代表后面是可以是0～9的数字，有9位。
+        if (TextUtils.isEmpty(number)) {
+            return false;
+        } else {
+            //matches():字符串是否在给定的正则表达式匹配
+            return number.matches(num);
+        }
+    }
 }

@@ -21,7 +21,7 @@ import com.atgc.cotton.http.request.PhoneVerifyRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import butterknife.BindView;
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -31,15 +31,15 @@ import butterknife.OnClick;
 public class VerifyPhoneActivity extends BaseActivity {
     private static final String TAG = VerifyPhoneActivity.class.getSimpleName();
     private static final int DELAY_MILlIS = 1000;
-    @BindView(R.id.iv_back)
+    @Bind(R.id.iv_back)
     ImageView ivBack;
-    @BindView(R.id.tv_option)
+    @Bind(R.id.tv_option)
     TextView tvOption;
-    @BindView(R.id.tv_num)
+    @Bind(R.id.tv_num)
     TextView tvNum;
-    @BindView(R.id.et_code)
+    @Bind(R.id.et_code)
     EditText etCode;
-    @BindView(R.id.tv_qrCode)
+    @Bind(R.id.tv_qrCode)
     TextView tvQrCode;
     private AccountEntity account;
     private int interval = 0;
@@ -101,7 +101,7 @@ public class VerifyPhoneActivity extends BaseActivity {
             @Override
             public void onSuccess(String pojo) {
                 cancelLoadingDialog();
-                BindViewData(pojo);
+                BindData(pojo);
             }
 
             @Override
@@ -112,7 +112,7 @@ public class VerifyPhoneActivity extends BaseActivity {
         });
     }
 
-    private void BindViewData(String string) {
+    private void BindData(String string) {
         try {
             Log.i("info", "=====json:" + string);
             JSONObject obj = new JSONObject(string);

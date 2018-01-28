@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-import butterknife.BindView;
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -32,11 +32,11 @@ import butterknife.OnClick;
  */
 public class PrivateLetterActivity extends BaseActivity implements Observer {
 
-    @BindView(R.id.iv_back)
+    @Bind(R.id.iv_back)
     ImageView ivBack;
-    @BindView(R.id.iv_msg)
+    @Bind(R.id.iv_msg)
     ImageView ivMsg;
-    @BindView(R.id.listView)
+    @Bind(R.id.listView)
     ListView listView;
     private ConversationAdapter adapter;
     private Handler handler = new Handler();

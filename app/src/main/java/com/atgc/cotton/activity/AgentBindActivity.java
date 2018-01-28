@@ -7,13 +7,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.atgc.cotton.Constants;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
+import com.atgc.cotton.entity.ActionEntity;
 import com.atgc.cotton.entity.AgentParam;
 
-import butterknife.BindView;
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
+import de.greenrobot.event.Subscribe;
 
 /**
  * Created by Johnny on 2018-01-20.
@@ -21,15 +25,15 @@ import butterknife.OnClick;
  */
 public class AgentBindActivity extends BaseActivity {
 
-    @BindView(R.id.iv_back)
+    @Bind(R.id.iv_back)
     ImageView ivBack;
-    @BindView(R.id.et_bank_account)
+    @Bind(R.id.et_bank_account)
     EditText etBankAccount;
-    @BindView(R.id.et_bank_num)
+    @Bind(R.id.et_bank_num)
     EditText etBankNum;
-    @BindView(R.id.et_bank_name)
+    @Bind(R.id.et_bank_name)
     EditText etBankName;
-    @BindView(R.id.btn_next)
+    @Bind(R.id.btn_next)
     Button btnNext;
     private AgentParam param;
 
@@ -38,6 +42,7 @@ public class AgentBindActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agent_bind_card);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         param = (AgentParam) getIntent().getExtras().getSerializable("obj");
     }
 
@@ -52,6 +57,23 @@ public class AgentBindActivity extends BaseActivity {
                 nextStep();
                 break;
         }
+    }
+
+    @Subscribe
+    public void onMessageEvent(ActionEntity event) {
+        if (event != null) {
+            String action = event.getAction();
+            String tag = (String) event.getData();
+            if (action.equals(Constants.Action.AGENT_ACTIVITY_CLOSE)) {
+                finish();
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     private void nextStep() {

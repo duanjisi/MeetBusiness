@@ -19,5 +19,6 @@ public class Constants {
         public static final String PHONE_BIND_STATE = "com.atgc.cotton.phone.bind.state";
         public static final String SELECTED_CURRENT_MUSIC = "com.atgc.cotton.selected.current.music";
         public static final String NET_CONENECT_CHANGE = "android.net.conn.CONNECTIVITY_CHANGE";
+        public static final String AGENT_ACTIVITY_CLOSE = "com.atgc.cotton.AGENT_ACTIVITY_CLOSE";
     }
 }

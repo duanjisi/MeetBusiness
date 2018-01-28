@@ -29,7 +29,7 @@ import com.atgc.cotton.http.request.MemberFocusRequest;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -45,15 +45,15 @@ public class ContactsActivity extends BaseActivity implements AbsListView.OnScro
     private int pageNum = 10;
     private MemberAdapter adapter;
 
-    @BindView(R.id.iv_back)
+    @Bind(R.id.iv_back)
     ImageView ivBack;
-    @BindView(R.id.tv_title)
+    @Bind(R.id.tv_title)
     TextView title;
-    @BindView(R.id.et_keywords)
+    @Bind(R.id.et_keywords)
     EditText etKeywords;
-    @BindView(R.id.search_clear)
+    @Bind(R.id.search_clear)
     ImageButton clearSearch;
-    @BindView(R.id.listview)
+    @Bind(R.id.listview)
     ListView listview;
 
     @Override

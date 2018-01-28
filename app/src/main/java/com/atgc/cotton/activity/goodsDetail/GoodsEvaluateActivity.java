@@ -9,13 +9,10 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.atgc.cotton.App;
 import com.atgc.cotton.R;
-import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.activity.base.MvpActivity;
 import com.atgc.cotton.adapter.GoodsEvaluateAdapter;
-import com.atgc.cotton.adapter.MsgAdapter;
 import com.atgc.cotton.entity.BaseResult;
 import com.atgc.cotton.entity.GoodsEvaluateEntity;
-import com.atgc.cotton.entity.MsgEntity;
 import com.atgc.cotton.presenter.GoodsEvaluatePresenter;
 import com.atgc.cotton.presenter.view.ISingleView;
 import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
@@ -27,7 +24,7 @@ import com.github.jdsjlzx.recyclerview.ProgressStyle;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -36,9 +33,9 @@ import butterknife.OnClick;
  */
 
 public class GoodsEvaluateActivity extends MvpActivity<GoodsEvaluatePresenter> implements ISingleView {
-    @BindView(R.id.tv_back)
+    @Bind(R.id.tv_back)
     TextView tvBack;
-    @BindView(R.id.rv_content)
+    @Bind(R.id.rv_content)
     LRecyclerView rvContent;
     private GoodsEvaluateAdapter adapter;
 

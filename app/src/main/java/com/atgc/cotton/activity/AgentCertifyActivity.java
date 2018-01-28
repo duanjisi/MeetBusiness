@@ -11,8 +11,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.atgc.cotton.Constants;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
+import com.atgc.cotton.entity.ActionEntity;
 import com.atgc.cotton.entity.AgentParam;
 import com.atgc.cotton.http.BaseDataRequest;
 import com.atgc.cotton.http.request.AgentSmsRequest;
@@ -23,9 +25,11 @@ import org.json.JSONObject;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import butterknife.BindView;
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
+import de.greenrobot.event.Subscribe;
 
 /**
  * Created by Johnny on 2018-01-20.
@@ -33,19 +37,19 @@ import butterknife.OnClick;
 public class AgentCertifyActivity extends BaseActivity {
     private static final String TAG = AgentApplyActivity.class.getSimpleName();
     private static final int DELAY_MILlIS = 1000;
-    @BindView(R.id.iv_back)
+    @Bind(R.id.iv_back)
     ImageView ivBack;
-    @BindView(R.id.et_name)
+    @Bind(R.id.et_name)
     EditText etName;
-    @BindView(R.id.et_card_num)
+    @Bind(R.id.et_card_num)
     EditText etCardNum;
-    @BindView(R.id.et_phone_num)
+    @Bind(R.id.et_phone_num)
     EditText etPhoneNum;
-    @BindView(R.id.et_code)
+    @Bind(R.id.et_code)
     EditText etCode;
-    @BindView(R.id.tv_qrCode)
+    @Bind(R.id.tv_qrCode)
     TextView tvQrCode;
-    @BindView(R.id.btn_next)
+    @Bind(R.id.btn_next)
     Button btnNext;
     private int interval = 0;
     private Handler handler = new Handler() {
@@ -73,6 +77,24 @@ public class AgentCertifyActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agent_certify);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe
+    public void onMessageEvent(ActionEntity event) {
+        if (event != null) {
+            String action = event.getAction();
+            String tag = (String) event.getData();
+            if (action.equals(Constants.Action.AGENT_ACTIVITY_CLOSE)) {
+                finish();
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     private void requestQrCode() {
@@ -81,7 +103,7 @@ public class AgentCertifyActivity extends BaseActivity {
             showToast("手机号为空", true);
             return;
         }
-        if (!matcher(phoneNum, getString(R.string.phone))) {
+        if (!isMobile(phoneNum)) {
             showToast("手机号格式不对", true);
             return;
         }
@@ -106,7 +128,7 @@ public class AgentCertifyActivity extends BaseActivity {
         try {
             Log.i("info", "=====json:" + string);
             JSONObject obj = new JSONObject(string);
-            interval = obj.getInt("interval");
+            interval = obj.getInt("Interval");
             Log.i("info", "=====interval:" + interval);
             tvQrCode.setEnabled(false);
             handler.sendEmptyMessageDelayed(0, DELAY_MILlIS);
@@ -123,6 +145,24 @@ public class AgentCertifyActivity extends BaseActivity {
         return matcher.matches();
     }
 
+    /**
+     * 验证手机格式
+     */
+    public static boolean isMobile(String number) {
+    /*
+    移动：134、135、136、137、138、139、150、151、157(TD)、158、159、187、188
+    联通：130、131、132、152、155、156、185、186
+    电信：133、153、180、189、（1349卫通）
+    总结起来就是第一位必定为1，第二位必定为3或5或8，其他位置的可以为0-9
+    */
+        String num = "[1][3578]\\d{9}";//"[1]"代表第1位为数字1，"[358]"代表第二位可以为3、5、8中的一个，"\\d{9}"代表后面是可以是0～9的数字，有9位。
+        if (TextUtils.isEmpty(number)) {
+            return false;
+        } else {
+            //matches():字符串是否在给定的正则表达式匹配
+            return number.matches(num);
+        }
+    }
 
     @OnClick({R.id.iv_back, R.id.tv_qrCode, R.id.btn_next})
     public void onViewClicked(View view) {
@@ -155,10 +195,10 @@ public class AgentCertifyActivity extends BaseActivity {
             return;
         }
 
-        if (matcher(num, getString(R.string.num))) {
-            showToast("身份证号码格式不对！");
-            return;
-        }
+//        if (matcher(num, getString(R.string.num))) {
+//            showToast("身份证号码格式不对！");
+//            return;
+//        }
 
         if (TextUtils.isEmpty(phoneNum)) {
             showToast("手机号为空！");
@@ -171,7 +211,7 @@ public class AgentCertifyActivity extends BaseActivity {
         }
         AgentParam param = new AgentParam();
         param.setTruename(name);
-        param.setIdcartno(num);
+        param.setIdcardno(num);
         param.setMobilephone(phoneNum);
         param.setSmscode(code);
 

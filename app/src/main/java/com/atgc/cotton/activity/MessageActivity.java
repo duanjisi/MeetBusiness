@@ -28,7 +28,7 @@ import com.github.jdsjlzx.recyclerview.ProgressStyle;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -37,9 +37,9 @@ import butterknife.OnClick;
  */
 
 public class MessageActivity extends MvpActivity<MsgPresenter> implements IMsgView {
-    @BindView(R.id.img_back)
+    @Bind(R.id.img_back)
     ImageView imgBack;
-    @BindView(R.id.rv_content)
+    @Bind(R.id.rv_content)
     LRecyclerView rvContent;
     private MsgAdapter adapter;
 

@@ -30,7 +30,7 @@ import com.umeng.socialize.exception.SocializeException;
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.BindView;
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -40,29 +40,29 @@ import butterknife.OnClick;
  */
 public class LoginActivity extends MvpActivity<LoginPresenter> implements INormalView {
 
-    @BindView(R.id.img_back)
+    @Bind(R.id.img_back)
     ImageView img_back;
-    @BindView(R.id.img_logo)
+    @Bind(R.id.img_logo)
     ImageView im_logo;
-    @BindView(R.id.et_acconut)
+    @Bind(R.id.et_acconut)
     EditText et_account;
-    @BindView(R.id.et_pw)
+    @Bind(R.id.et_pw)
     EditText et_pw;
-    @BindView(R.id.tv_Reset)
+    @Bind(R.id.tv_Reset)
     TextView tv_reset;
-    @BindView(R.id.btn_login)
+    @Bind(R.id.btn_login)
     Button btn_login;
-    @BindView(R.id.tv_register)
+    @Bind(R.id.tv_register)
     TextView tv_register;
-    @BindView(R.id.img_qq)
+    @Bind(R.id.img_qq)
     ImageView imgQq;
-    @BindView(R.id.img_wx)
+    @Bind(R.id.img_wx)
     ImageView imgWx;
-    @BindView(R.id.ll_bottom)
+    @Bind(R.id.ll_bottom)
     LinearLayout llBottom;
-    @BindView(R.id.tv_bottom)
+    @Bind(R.id.tv_bottom)
     TextView tvBottom;
-    @BindView(R.id.rl_root)
+    @Bind(R.id.rl_root)
     RelativeLayout rootLayout;
 
     private InputDetector detector;
@@ -81,7 +81,7 @@ public class LoginActivity extends MvpActivity<LoginPresenter> implements INorma
         sizeHeight();
         initUI();
         initData();
-//        detector.with(this).BindViewToET(et_account).build();
+//        detector.with(this).BindToET(et_account).build();
     }
 
     private int maxHeight = 0;

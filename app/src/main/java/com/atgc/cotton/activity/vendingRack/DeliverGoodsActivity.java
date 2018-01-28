@@ -12,7 +12,7 @@ import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.http.BaseDataRequest;
 import com.atgc.cotton.http.request.DeliverGoodsRequest;
 
-import butterknife.BindView;
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -21,13 +21,13 @@ import butterknife.OnClick;
  */
 public class DeliverGoodsActivity extends BaseActivity {
     private static final String TAG = DeliverGoodsActivity.class.getSimpleName();
-    @BindView(R.id.img_back)
+    @Bind(R.id.img_back)
     ImageView imgBack;
-    @BindView(R.id.tv_deliver)
+    @Bind(R.id.tv_deliver)
     TextView tvDeliver;
-    @BindView(R.id.et_name)
+    @Bind(R.id.et_name)
     EditText etName;
-    @BindView(R.id.et_num)
+    @Bind(R.id.et_num)
     EditText etNum;
 
     private int orderid = 0;

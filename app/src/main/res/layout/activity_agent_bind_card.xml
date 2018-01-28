@@ -152,5 +152,5 @@
         android:background="@color/record_progress_red"
         android:text="下一步"
         android:textColor="@color/white"
-        android:textSize="25sp" />
+        android:textSize="22sp" />
 </RelativeLayout>

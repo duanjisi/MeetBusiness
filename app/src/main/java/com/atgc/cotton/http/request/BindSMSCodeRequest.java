@@ -17,7 +17,7 @@ public class BindSMSCodeRequest extends BaseDataRequest<String> {
 
     @Override
     protected boolean isParse() {
-        return false;
+        return true;
     }
 
     @Override

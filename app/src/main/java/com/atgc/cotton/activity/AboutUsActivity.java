@@ -8,7 +8,7 @@ import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.util.AppUtil;
 
-import butterknife.BindView;
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -17,9 +17,9 @@ import butterknife.OnClick;
  */
 public class AboutUsActivity extends BaseActivity {
 
-    @BindView(R.id.iv_back)
+    @Bind(R.id.iv_back)
     ImageView ivBack;
-    @BindView(R.id.tv_version)
+    @Bind(R.id.tv_version)
     TextView tvVersion;
 
     @Override

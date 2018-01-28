@@ -1,66 +1,51 @@
 package com.atgc.cotton.activity;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
-import com.atgc.cotton.App;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.MvpActivity;
-import com.atgc.cotton.entity.AccountEntity;
 import com.atgc.cotton.entity.BaseResult;
-import com.atgc.cotton.http.BaseDataRequest;
-import com.atgc.cotton.http.request.LoginRequest;
-import com.atgc.cotton.http.request.RegisterRequst;
 import com.atgc.cotton.presenter.RegisterPresenter;
-import com.atgc.cotton.presenter.view.IBaseView;
 import com.atgc.cotton.presenter.view.IRegisterView;
-import com.atgc.cotton.retrofit.ApiStores;
-import com.atgc.cotton.util.L;
-import com.atgc.cotton.util.OkManager;
-import com.atgc.cotton.util.ToastUtil;
 import com.atgc.cotton.util.UIUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import butterknife.BindView;
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.greenrobot.event.EventBus;
 
 /**
  * 注册
  * Created by liw on 2017/7/7.
  */
 public class RegisterActivity extends MvpActivity<RegisterPresenter> implements IRegisterView {
-    @BindView(R.id.img_back)
+    @Bind(R.id.img_back)
     ImageView imgBack;
-    @BindView(R.id.img_head)
+    @Bind(R.id.img_head)
     ImageView imgHead;
-    @BindView(R.id.et_acconut)
+    @Bind(R.id.et_acconut)
     EditText etAcconut;
-    @BindView(R.id.et_pw)
+    @Bind(R.id.et_pw)
     EditText etPw;
-    @BindView(R.id.et_code)
+    @Bind(R.id.et_code)
     EditText etCode;
-    @BindView(R.id.btn_code)
+    @Bind(R.id.btn_code)
     Button btnCode;
-    @BindView(R.id.rl_code)
+    @Bind(R.id.rl_code)
     RelativeLayout rlCode;
 
-    @BindView(R.id.btn_register)
+    @Bind(R.id.btn_register)
     Button btnRegister;
     private HashMap<String, String> map;
 

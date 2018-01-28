@@ -7,16 +7,20 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.atgc.cotton.Constants;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
+import com.atgc.cotton.entity.ActionEntity;
 import com.atgc.cotton.entity.AgentCheck;
 import com.atgc.cotton.http.BaseDataRequest;
 import com.atgc.cotton.http.HttpUrl;
 import com.atgc.cotton.http.request.AgentCheckRequest;
 
-import butterknife.BindView;
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
+import de.greenrobot.event.Subscribe;
 
 /**
  * Created by Johnny on 2018-01-20.
@@ -24,15 +28,15 @@ import butterknife.OnClick;
 public class AgentApplyActivity extends BaseActivity {
     private static final String TAG = AgentApplyActivity.class.getSimpleName();
 
-    @BindView(R.id.iv_back)
+    @Bind(R.id.iv_back)
     ImageView ivBack;
-    @BindView(R.id.tv_auth_state)
+    @Bind(R.id.tv_auth_state)
     TextView tvAuthState;
-    @BindView(R.id.tv_apply_msg)
+    @Bind(R.id.tv_apply_msg)
     TextView tvApplyMsg;
-    @BindView(R.id.wb)
+    @Bind(R.id.wb)
     WebView wb;
-    @BindView(R.id.btn_next)
+    @Bind(R.id.btn_next)
     Button btnNext;
 
     @Override
@@ -40,7 +44,24 @@ public class AgentApplyActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apply_agent);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         requestCheck();
+    }
+
+    @Subscribe
+    public void onMessageEvent(ActionEntity event) {
+        if (event != null) {
+            String action = event.getAction();
+            if (action.equals(Constants.Action.AGENT_ACTIVITY_CLOSE)) {
+                requestCheck();
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     private void requestCheck() {
@@ -50,7 +71,7 @@ public class AgentApplyActivity extends BaseActivity {
             @Override
             public void onSuccess(AgentCheck pojo) {
                 cancelLoadingDialog();
-                BindViewData(pojo);
+                BindData(pojo);
             }
 
             @Override
@@ -61,7 +82,7 @@ public class AgentApplyActivity extends BaseActivity {
         });
     }
 
-    private void BindViewData(AgentCheck agent) {
+    private void BindData(AgentCheck agent) {
         if (agent != null) {
             int type = agent.getType();
             btnNext.setTag(type);
@@ -77,6 +98,7 @@ public class AgentApplyActivity extends BaseActivity {
                     hindeView(tvApplyMsg);
                     showView(tvAuthState);
                     hindeView(wb);
+                    tvAuthState.setText("你的申请资料已提交!");
                     btnNext.setText("确定");
                     break;
                 case 1://审核通过

@@ -123,5 +123,5 @@
         android:background="@color/record_progress_red"
         android:text="提交"
         android:textColor="@color/white"
-        android:textSize="25sp" />
+        android:textSize="22sp" />
 </RelativeLayout>

@@ -10,34 +10,46 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
+import com.atgc.cotton.App;
+import com.atgc.cotton.Constants;
 import com.atgc.cotton.R;
 import com.atgc.cotton.activity.base.BaseActivity;
 import com.atgc.cotton.activity.production.mine.ClipImageActivity;
-import com.atgc.cotton.entity.AgentInfo;
+import com.atgc.cotton.entity.AccountEntity;
+import com.atgc.cotton.entity.ActionEntity;
 import com.atgc.cotton.entity.AgentParam;
-import com.atgc.cotton.http.BaseDataRequest;
-import com.atgc.cotton.http.request.AgentSaveRequest;
+import com.atgc.cotton.entity.ChangeAvatarEntity;
+import com.atgc.cotton.http.HttpUrl;
 import com.atgc.cotton.listener.PermissionListener;
 import com.atgc.cotton.util.PermissonUtil.PermissionUtil;
 import com.atgc.cotton.util.PhotoAlbumUtil.MultiImageSelector;
 import com.atgc.cotton.util.PhotoAlbumUtil.MultiImageSelectorActivity;
+import com.atgc.cotton.util.ToastUtil;
 import com.atgc.cotton.util.Utils;
 import com.atgc.cotton.widget.ActionSheet;
 import com.bumptech.glide.Glide;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
-import butterknife.BindView;
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by Johnny on 2018-01-21.
@@ -57,15 +69,15 @@ public class AgentCertificateActivity extends BaseActivity implements ActionShee
     private int selectType = 0;//0:正面,1：反面
     private String positivePath, reversePath, handlePath;
     private String savePath;
-    @BindView(R.id.iv_back)
+    @Bind(R.id.iv_back)
     ImageView ivBack;
-    @BindView(R.id.iv_positive)
+    @Bind(R.id.iv_positive)
     ImageView ivPositive;
-    @BindView(R.id.iv_reverse)
+    @Bind(R.id.iv_reverse)
     ImageView ivReverse;
-    @BindView(R.id.iv_handheld)
+    @Bind(R.id.iv_handheld)
     ImageView ivHandheld;
-    @BindView(R.id.btn_next)
+    @Bind(R.id.btn_next)
     Button btnNext;
     private AgentParam param;
 
@@ -107,53 +119,53 @@ public class AgentCertificateActivity extends BaseActivity implements ActionShee
         }
     }
 
-    private void submit() {
-        if (param != null) {
-            if (TextUtils.isEmpty(positivePath)) {
-                showToast("正面照尚未传");
-                return;
-            }
-            if (TextUtils.isEmpty(reversePath)) {
-                showToast("反面照尚未传");
-                return;
-            }
-            if (TextUtils.isEmpty(handlePath)) {
-                showToast("手持身份证照尚未传");
-                return;
-            }
-            param.setIdcardp(positivePath);
-            param.setIdcardo(reversePath);
-            param.setIdcardm(handlePath);
-
-            HashMap<String, String> map = new HashMap<>();
-            map.put("id", String.valueOf(param.getId()));
-            map.put("truename", param.getTruename());
-            map.put("idcartno", param.getIdcartno());
-            map.put("mobilephone", param.getMobilephone());
-            map.put("smscode", param.getSmscode());
-            map.put("idcardp", param.getIdcardp());
-            map.put("idcardo", param.getIdcardo());
-            map.put("idcardm", param.getIdcardm());
-            map.put("account_user", param.getAccount_user());
-            map.put("account", param.getAccount());
-            map.put("bank", param.getBank());
-            showLoadingDialog();
-            AgentSaveRequest request = new AgentSaveRequest(TAG, map);
-            request.send(new BaseDataRequest.RequestCallback<AgentInfo>() {
-                @Override
-                public void onSuccess(AgentInfo agentInfo) {
-                    cancelLoadingDialog();
-                    showToast("提交资料成功！");
-                }
-
-                @Override
-                public void onFailure(String msg) {
-                    cancelLoadingDialog();
-                    showToast(msg);
-                }
-            });
-        }
-    }
+//    private void submit() {
+//        if (param != null) {
+//            if (TextUtils.isEmpty(positivePath)) {
+//                showToast("正面照尚未传");
+//                return;
+//            }
+//            if (TextUtils.isEmpty(reversePath)) {
+//                showToast("反面照尚未传");
+//                return;
+//            }
+//            if (TextUtils.isEmpty(handlePath)) {
+//                showToast("手持身份证照尚未传");
+//                return;
+//            }
+//            param.setIdcardp(positivePath);
+//            param.setIdcardo(reversePath);
+//            param.setIdcardm(handlePath);
+//
+//            HashMap<String, String> map = new HashMap<>();
+//            map.put("id", String.valueOf(param.getId()));
+//            map.put("truename", param.getTruename());
+//            map.put("idcardno", param.getIdcardno());
+//            map.put("mobilephone", param.getMobilephone());
+//            map.put("smscode", param.getSmscode());
+//            map.put("idcardp", param.getIdcardp());
+//            map.put("idcardo", param.getIdcardo());
+//            map.put("idcardm", param.getIdcardm());
+//            map.put("account_user", param.getAccount_user());
+//            map.put("account", param.getAccount());
+//            map.put("bank", param.getBank());
+//            showLoadingDialog();
+//            AgentSaveRequest request = new AgentSaveRequest(TAG, map);
+//            request.send(new BaseDataRequest.RequestCallback<AgentInfo>() {
+//                @Override
+//                public void onSuccess(AgentInfo agentInfo) {
+//                    cancelLoadingDialog();
+//                    showToast("提交资料成功！");
+//                }
+//
+//                @Override
+//                public void onFailure(String msg) {
+//                    cancelLoadingDialog();
+//                    showToast(msg);
+//                }
+//            });
+//        }
+//    }
 
     private void showActionSheet() {
         actionSheet = new ActionSheet(AgentCertificateActivity.this)
@@ -321,5 +333,105 @@ public class AgentCertificateActivity extends BaseActivity implements ActionShee
                         crossFade().into(ivHandheld);
                 break;
         }
+    }
+
+
+    private void submit() {
+        if (param != null) {
+            if (TextUtils.isEmpty(positivePath)) {
+                showToast("正面照尚未传");
+                return;
+            }
+            if (TextUtils.isEmpty(reversePath)) {
+                showToast("反面照尚未传");
+                return;
+            }
+            if (TextUtils.isEmpty(handlePath)) {
+                showToast("手持身份证照尚未传");
+                return;
+            }
+
+            param.setIdcardp(positivePath);
+            param.setIdcardo(reversePath);
+            param.setIdcardm(handlePath);
+            String main = HttpUrl.AGENT_SAVE;
+            HttpUtils httpUtils = new HttpUtils(60 * 1000);//实例化RequestParams对象
+            com.lidroid.xutils.http.RequestParams params = new com.lidroid.xutils.http.RequestParams();
+            AccountEntity account = App.getInstance().getAccountEntity();
+            String accsToken = account.getToken();
+            params.addHeader("Authorization", accsToken);
+
+            params.addBodyParameter("id", String.valueOf(param.getId()));
+            params.addBodyParameter("truename", param.getTruename());
+            params.addBodyParameter("mobilephone", param.getMobilephone());
+            params.addBodyParameter("idcardno", param.getIdcardno());
+            params.addBodyParameter("smscode", param.getSmscode());
+            params.addBodyParameter("account_user", param.getAccount_user());
+            params.addBodyParameter("account", param.getAccount());
+            params.addBodyParameter("bank", param.getBank());
+
+            File file1 = new File(param.getIdcardp());
+            if (file1.exists() && file1.length() > 0) {
+                params.addBodyParameter("idcardp", file1);
+            }
+
+            File file2 = new File(param.getIdcardo());
+            if (file2.exists() && file2.length() > 0) {
+                params.addBodyParameter("idcardo", file2);
+            }
+
+            File file3 = new File(param.getIdcardm());
+            if (file3.exists() && file3.length() > 0) {
+                params.addBodyParameter("idcardm", file3);
+            }
+            showLoadingDialog();
+            httpUtils.send(HttpRequest.HttpMethod.POST, main, params, new RequestCallBack<String>() {
+                @Override
+                public void onSuccess(ResponseInfo<String> responseInfo) {
+                    try {
+                        cancelLoadingDialog();
+                        Log.i("info", "==============responseInfo:" + responseInfo.result);
+                        ChangeAvatarEntity entity = JSON.parseObject(responseInfo.result, ChangeAvatarEntity.class);
+                        if (entity != null) {
+                            if (entity.Status == 401) {
+                                Intent intent = new Intent();
+                                intent.setAction(Constants.ACTION_LOGOUT_RESETING);
+                                App.getInstance().sendBroadcast(intent);
+                            } else if (entity.Code == 0) {
+                                showToast("上传成功!", true);
+                                EventBus.getDefault().post(new ActionEntity(Constants.Action.AGENT_ACTIVITY_CLOSE));
+                            }
+//                        else {
+//                            ChangeAvatarEntity.Data result = entity.getData();
+//                            if (result != null) {
+//
+//                            }
+//                        }
+                        }
+                    } catch (JSONException e) {
+                        ToastUtil.showShort(context, "上传失败");
+                    }
+                }
+
+                @Override
+                public void onFailure(HttpException e, String s) {
+                    Log.i("info", "==============HttpException:" + e.getMessage());
+                    int code = e.getExceptionCode();
+                    if (code == 401) {
+                        goLogin();
+                    } else {
+                        cancelLoadingDialog();
+                        showToast(s, false);
+                    }
+                }
+            });
+        }
+    }
+
+
+    private void goLogin() {
+        Intent intent = new Intent();
+        intent.setAction(Constants.ACTION_LOGOUT_RESETING);
+        App.getInstance().sendBroadcast(intent);
     }
 }

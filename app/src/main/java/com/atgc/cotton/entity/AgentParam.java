@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class AgentParam implements Serializable {
     private int id = 0;
     private String truename = "";
-    private String idcartno = "";
+    private String idcardno = "";
     private String mobilephone = "";
     private String smscode = "";
     private String idcardp = "";
@@ -36,12 +36,12 @@ public class AgentParam implements Serializable {
         this.truename = truename;
     }
 
-    public String getIdcartno() {
-        return idcartno;
+    public String getIdcardno() {
+        return idcardno;
     }
 
-    public void setIdcartno(String idcartno) {
-        this.idcartno = idcartno;
+    public void setIdcardno(String idcardno) {
+        this.idcardno = idcardno;
     }
 
     public String getMobilephone() {
